@@ -110,8 +110,8 @@ buildStructureModels <- function(model, experiments, all, dataPath){
 #' Generate list of file structure for an experiment
 #'
 #' @param model Character string of climate model name
-#' @param experiments Character vector of the experiment(s) of interest.
-#'    Possible variables are "historical", "rcp85", or both.
+#' @param experiment Character string of the experiment of interest.
+#'    Possible variables are "historical" or "rcp85".
 #' @param all Character vectors with the relative pathnames of all
 #'    climate projection files of interest from the directory
 #'    specified in dataPath
@@ -120,7 +120,7 @@ buildStructureModels <- function(model, experiments, all, dataPath){
 #'
 #' @examples
 #' model <- "bcc1"
-#' experiments <- c("rcp85")
+#' experiment <- "rcp85"
 #' all <- c("rcp85/bcc1/r1i1p1/latitude_longitude_NorthAmerica_12mo.csv",
 #'          "rcp85/bcc1/r1i1p1/tas_NorthAmerica_12mo.csv",
 #'          "rcp85/bcc1/r1i1p1/time_NorthAmerica_12mo.csv")
@@ -133,6 +133,15 @@ buildStructureExperiments <- function(model, experiment, all, dataPath){
         return(ret)
 }
 
+#' List all files for a single ensemble member
+#'
+#' @param ensemble Character string that gives the absolute file path
+#'    for the directory with a particular ensemble member of a climate
+#'    model projection.
+#'
+#' @examples
+#' ensemble <- "/Users/brookeanderson/Downloads/sample/cmip5/rcp85/bcc1/r1i1p1"
+#' buildStructureEnsembles(ensemble)
 buildStructureEnsembles <- function(ensemble){
         hold <<- ensemble
         ensembleName <- strsplit(ensemble, "/")[[1]][8]
@@ -143,6 +152,15 @@ buildStructureEnsembles <- function(ensemble){
         return(c(ensembleName, files))
 }
 
+#' Paste second element before first, separated by /
+#'
+#' @param second Character string with element to paste second in output.
+#' @param first Character string with element to paste first in output.
+#'
+#' @examples
+#' second <- "latitude_longitude_NorthAmerica_12mo.csv"
+#' first <- "/Users/brookeanderson/Downloads/sample/cmip5/rcp85/bcc1/r1i1p1"
+#' swapPaste(second, first)
 swapPaste <- function(second, first){
         return(paste0(first, "/", second))
 }

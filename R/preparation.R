@@ -1,3 +1,5 @@
+#` This title
+#`
 parseModel <- function(model){
         modelName <- model[1]
 
@@ -28,7 +30,7 @@ parseModel <- function(model){
 #` dataFolder <- "~/Downloads/sample/cmip5/"
 #` finalList <- acquireDirectoryStructure(dataFolder)
 #` str(finalList[[1]][[1]])
-#` str(finalList[[1]][[2]])
+#` str(finalList[[1]][[2]][1])
 acquireDirectoryStructure <- function(dataPath){
 
         # Acquire all directories to all files rooted at dataPath
@@ -80,6 +82,14 @@ acquireDirectoryStructure <- function(dataPath){
         return(finalList)
 }
 
+#` Generate list of file structure from model, experiment, and path
+#`
+#` @param model Character string of climate model name
+#` @param experiments Character vector of the experiment(s) of interest.
+#`    Possible variables are "historical", "rcp85", or both.
+#` @param all
+#` @param dataPath Character string of the file path to the directory
+#`    containing the climate projections. Must include the final `\`.
 buildStructureModels <- function(model, experiments, all, dataPath){
         return(list(model,
                     buildStructureExperiments(model, experiments[1], all, dataPath),

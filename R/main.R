@@ -202,7 +202,18 @@ listGlobal <- function(out = FALSE,
                     "RorCPP" = RorCPP))
 }
 
-
+#' Create list of custom settings.
+#'
+#' @param IDheatwavesReplacement Either FALSE, to use the default
+#'    heatwave definition, or a user-specified custom function to
+#'    use to identify heatwaves.
+#' @param dataBoundaries Custom time boundaries for extracting data
+#'    from the ensembles. Format: c(historical low bound, historical
+#'    high bound, reference low bound, reference high bound).
+#'    Restrictions: Bounds cannot span multiple experiments
+#' @param referenceBoundaries Reference boundaries.
+#'
+#' @return A list with slots for custom settings specified by the user.
 listCustom <- function(IDheatwavesReplacement = FALSE,
                        dataBoundaries = FALSE,
                        referenceBoundaries = FALSE){

@@ -12,3 +12,25 @@ vignette: >
 ## What the package does
 
 The `futureheatwaves` package can process climate data files that you have stored locally to generate a list of heatwaves in each projection as well as characteristics of each heatwave (e.g., length, intensity, timing in the year). 
+
+## A basic example of using the package
+
+For these functions to work correctly, you must have the climate projections saved in a specific structure locally on your computer. 
+
+Define the following variables: 
+- `dataFolder`: Pathway to the directory that contains your climate projections (Note: these will need to be saved within this directory in a specific way, as explained later in this vignette.)
+- `citycsv`: Pathway to a comma-separated file with latitude and longitude coordinates for each community for which you want to generate heatwave files. (Note: This file will need to have specific column names for latitude and longitude, as explained later.)
+
+For example, if I'm using climate projections and a city characteristics file that are saved in a subdirectory called `inst` of my current directory, I would specify `dataFolder` and `citycsv` as: 
+
+```{r}
+dataFolder <- "inst/cmip5/" # Note-- final `/` is required for this to work
+citycsv <- "inst/cities.csv"
+```
+
+You will also need to specify where the output files should be locally saved. Save this as the object `out`: 
+
+```{r}
+out <- "inst/results"
+```
+

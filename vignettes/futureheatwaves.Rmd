@@ -1,0 +1,14 @@
+---
+title: "`futureheatwaves` package vignette"
+author: "G. Brooke Anderson and Colin Eason"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## What the package does
+
+The `futureheatwaves` package can process climate data files that you have stored locally to generate a list of heatwaves in each projection as well as characteristics of each heatwave (e.g., length, intensity, timing in the year). 

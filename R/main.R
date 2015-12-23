@@ -16,6 +16,8 @@
 #'    high bound, reference low bound, reference high bound).
 #'    Restrictions: Bounds cannot span multiple experiments
 #' @param referenceBoundaries Reference boundaries.
+#'
+#' @return [What does this function return?]
 create.heatwave.dataset <- function(out, dataFolder, citycsv,
                                     RorCPP = 1,
                                     IDheatwavesReplacement = FALSE,
@@ -52,8 +54,37 @@ create.heatwave.dataset <- function(out, dataFolder, citycsv,
         cat("All operations completed. Exiting.", "\n")
 }
 
-# ~~parameterErrorChecking~~
-# Basic error checking for parameters of create.heatwave.dataframe function
+#' Error check for parameters of create.heatwave.dataframe
+#'
+#' @param out Character string with pathway to directory to which
+#'    heatwave files will be written.
+#' @param dataFolder Character string with pathway to directory that
+#'    contains climate projections. Must include the final backslash.
+#' @param citycsv Character string giving the filepath to a .csv
+#'    file with latitude and longitude values for each city.
+#' @param RorCPP 0 /1 flag that indicates whether to use R (1) or
+#'    CPP (0) functions
+#' @param IDheatwavesReplacement Either FALSE, to use the default
+#'    heatwave definition, or a user-specified custom function to
+#'    use to identify heatwaves.
+#' @param dataBoundaries Custom time boundaries for extracting data
+#'    from the ensembles. Format: c(historical low bound, historical
+#'    high bound, reference low bound, reference high bound).
+#'    Restrictions: Bounds cannot span multiple experiments
+#' @param referenceBoundaries Reference boundaries.
+#'
+#' @return Stops and returns an error if any parameters are incorrect.
+#'
+#' @note Does not check if the data exists in the proper structure or
+#'    if any data exists within the directory at all.
+#'
+#' @examples
+#' out <- "~/Downloads/sample/results"
+#' dataFolder <- "~/Downloads/sample/cmip5/"
+#' citycsv <- "inst/cities.csv"
+#' referenceBoundaries <- FALSE
+#' parameterErrorChecking(out, dataFolder, citycsv,
+#'    referenceBoundaries = referenceBoundaries)
 parameterErrorChecking <- function(out,
                                    dataFolder,
                                    citycsv,
@@ -64,7 +95,6 @@ parameterErrorChecking <- function(out,
 
         # TODO: ERROR CHECKING!!!!!!!!
         # Check to see if the folder that holds the climate data exists.
-        # Note: Does not check if the data exists in the proper structure or if any data exists within the directory at all.
         workingDirectory <- getwd()
         tryCatch(
                 setwd(dataFolder),

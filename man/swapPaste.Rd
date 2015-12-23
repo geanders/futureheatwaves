@@ -2,7 +2,7 @@
 % Please edit documentation in R/preparation.R
 \name{swapPaste}
 \alias{swapPaste}
-\title{Paste second element before first, separated by /}
+\title{Paste second element before first, separated by a backslash}
 \usage{
 swapPaste(second, first)
 }
@@ -12,7 +12,7 @@ swapPaste(second, first)
 \item{first}{Character string with element to paste first in output.}
 }
 \description{
-Paste second element before first, separated by /
+Paste second element before first, separated by a backslash
 }
 \examples{
 second <- "latitude_longitude_NorthAmerica_12mo.csv"

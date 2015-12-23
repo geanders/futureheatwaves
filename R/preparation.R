@@ -1,4 +1,4 @@
-#' This title
+#'
 #'
 parseModel <- function(model){
         modelName <- model[1]
@@ -152,7 +152,7 @@ buildStructureEnsembles <- function(ensemble){
         return(c(ensembleName, files))
 }
 
-#' Paste second element before first, separated by /
+#' Paste second element before first, separated by a backslash
 #'
 #' @param second Character string with element to paste second in output.
 #' @param first Character string with element to paste first in output.

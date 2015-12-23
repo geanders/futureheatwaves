@@ -12,7 +12,23 @@ parseModel <- function(model){
         return(list(modelName, hDirs, rcpDirs))
 }
 
+#` Determine climate projection directory structure
+#`
+#` @param dataPath A character string giving the file path to the
+#`    directory with the climate projection data.
 
+#` @return A list object outlining the file structure of the directory
+#`    containing the climate projections.This list has an element
+#`    for each climate model (e.g. ,"bcc1"). The first element within each
+#`    of these elements is the name of the model. The second element with
+#`    the first level element gives the file paths for location grids,
+#`    `tas` and `time` for each ensemble run of the model.
+#`
+#` @examples
+#` dataFolder <- "~/Downloads/sample/cmip5/"
+#` finalList <- acquireDirectoryStructure(dataFolder)
+#` str(finalList[[1]][[1]])
+#` str(finalList[[1]][[2]])
 acquireDirectoryStructure <- function(dataPath){
 
         # Acquire all directories to all files rooted at dataPath

@@ -1,11 +1,18 @@
 Package: futureheatwaves
 Type: Package
-Title: What the Package Does (Title Case)
-Version: 0.1
+Title: Functions to Identify and Characterize Heatwaves in Climate Projections
+Version: 0.1.0
 Date: 2015-12-23
-Author: Who wrote it
-Maintainer: Who to complain to <yourfault@somewhere.net>
-Description: More about what it does (maybe more than one line)
+Authors@R: c(
+    person("Colin", "Eason", , "colinae@rams.colostate.edu", c("aut")),
+    person("Brooke", "Anderson", , "brooke.anderson@colostate.edu", c("aut", "cre"))
+    )
+Maintainer: Brooke Anderson <brooke.anderson@colostate.edu>
+Description: Takes locally saved climate projections and identifies and
+    characterizes heatwaves in those projections. Heatwaves are defined
+    based on a definition frequently used in climate epidemiology.
+    Characterizations include several metrics of heatwave length,
+    intensity, and timing in the summer.
 License: What license is it under?
 LazyData: TRUE
 Suggests: knitr,

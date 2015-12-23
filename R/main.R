@@ -230,10 +230,11 @@ listCustom <- function(IDheatwavesReplacement = FALSE,
                     "createHwDataframe" = boolflag))
 }
 
-# ~~createAccumulators~~
-# Creates a closure that maintains data structures that track
-# information about the models and the location vectors for each
-# ensemble respectively.
+#' Create accumulators
+#'
+#' @return A closure that maintains data structures that track
+#' information about the models and the location vectors for each
+#' ensemble respectively.
 createAccumulators <- function(){
         modelInfoAccumulator <- data.frame(c(), c())
         locationList <- list()

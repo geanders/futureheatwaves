@@ -14,6 +14,10 @@ longitude, in that order.}
 climate grid cell location, with latitudes in the first column and
 longitudes in the second column.}
 }
+\value{
+An index corresponding to the coordinates in the dataframe
+   that is closest to the city coordinates.
+}
 \description{
 Identify the closest grid points for a climate model to a
 city based on the city's latitude and longitude. Use the

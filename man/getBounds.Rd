@@ -2,11 +2,30 @@
 % Please edit documentation in R/process.R
 \name{getBounds}
 \alias{getBounds}
-\title{end' index of the historical experiment has to be matched from back to front.}
+\title{Acquire boundaries of time series data}
 \usage{
 getBounds(times, experiment, custom)
 }
+\arguments{
+\item{times}{A dataframe containing the time data for one of the
+climate model ensemble's projection.}
+
+\item{experiment}{experiment Character string of the experiment of
+interest. Possible variables are "historical" or "rcp85".}
+
+\item{custom}{[What is this?]}
+}
+\value{
+A numeric vector containing an upper bound of the experiment
+   time period as an index; the lower bound of the experiment time
+   period as an index; and the number of days spanned.
+   Format: c(start, end, size)
+}
 \description{
+Acquire boundaries of time series data
+}
+\note{
+This function is customizable.
 end' index of the historical experiment has to be matched from back to front.
 }
 

@@ -13,6 +13,11 @@ makeMap <- function(locationsList, cities, sampleEnsemble){
         }
 }
 
+#' [Short title for function]
+#'
+#' @param locationList [Whis is this?]
+#'
+#' @return [What does this return?]
 checkLocations <- function(locationsList){
         identical <- sapply(locationsList, function(locations, locationsList){
                 identical2 <- sapply(locationsList, function(locations2, locations){

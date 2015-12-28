@@ -33,12 +33,9 @@ parseModel <- function(model){
 #' str(finalList[[1]][[2]][1])
 acquireDirectoryStructure <- function(dataPath){
 
-        # Acquire all directories to all files rooted at dataPath
-        all <- list.files(dataPath, recursive = TRUE)
-
-        # Filter out the "Icon" files.
-        # Note: I don't know what the "Icon" files within the data folders actually are, except that they have no use.
-        all <- all[grepl("\\.csv", all)]
+        # Acquire all directories to all csv files rooted at dataPath
+        all <- list.files(dataPath, recursive = TRUE,
+                          pattern = "\\.csv$")
 
         latlong <- all[grepl("latitude_longitude_NorthAmerica_12mo.csv", all)]
         tas <- all[grepl("tas_NorthAmerica_12mo.csv", all)]

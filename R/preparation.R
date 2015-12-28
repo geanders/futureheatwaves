@@ -36,32 +36,27 @@ acquireDirectoryStructure <- function(dataPath){
         # Acquire all pathnames to csv files rooted at dataPath
         all <- list.files(dataPath, recursive = TRUE,
                           pattern = "\\.csv$")
+
         split_all <- strsplit(all, "/")
+        df_all <- as.data.frame(matrix(unlist(split_all),
+                                        ncol = 4, byrow = TRUE))
+        colnames(df_all) <- c("exp", "model", "ens", "type")
 
-        all <- all[sapply(split_all, "[", 4) %in%
-                           c("latitude_longitude_NorthAmerica_12mo.csv",
-                             "tas_NorthAmerica_12mo.csv",
-                             "time_NorthAmerica_12mo.csv")]
+        df_all <- group_by(df_all, model) %>%
+                summarize(check_1 = "historical" %in% exp,
+                          check_2 = "rcp85" %in% exp,
+                          check_3 = "historical r1i1p1" %in%
+                                  paste(exp, ens)) %>%
+                left_join(df_all, by = "model") %>%
+                filter(check_1 & check_2 & check_3 &
+                               type %in% c("latitude_longitude_NorthAmerica_12mo.csv",
+                                           "tas_NorthAmerica_12mo.csv",
+                                           "time_NorthAmerica_12mo.csv")) %>%
+                select(-starts_with("check"))
 
-        # Filter out models that are not common to both experiments
-        histModels <- sapply(split_all[sapply(split_all, "[", 1) ==
-                                               "historical"],
-                             "[", 2)
-        rcpModels <- sapply(split_all[sapply(split_all, "[", 1) ==
-                                               "rcp85"],
-                             "[", 2)
-        models <- intersect(histModels, rcpModels)
-
-        # Separate the directories for each experiment
-        histDirs <- subset(all, grepl("historical", all))
-        rcpDirs <- subset(all, grepl("rcp85", all))
-
-        # Filter out models within the historical eperiment that do not have an ensemble named r1i1p1
-        mask <- lapply(paste0("historical/", models, "/r1i1p1"), grepl, histDirs)
-        models <- models[unlist(lapply(mask, any))]
-
-        # Generate the list structure
-        experiments <- c("historical", "rcp85")
+        all <- apply(df_all, 1, paste, collapse = "/")
+        models <- as.character(unique(df_all$model))
+        experiments <- as.character(unique(df_all$exp))
 
         # Generate the nested lists that will be used for the processing step
         # Structure: model -> experiment -> ensemble

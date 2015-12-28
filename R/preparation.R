@@ -37,11 +37,14 @@ acquireDirectoryStructure <- function(dataPath){
         all <- list.files(dataPath, recursive = TRUE,
                           pattern = "\\.csv$")
 
+        # Convert list to a dataframe
         split_all <- strsplit(all, "/")
         df_all <- as.data.frame(matrix(unlist(split_all),
                                         ncol = 4, byrow = TRUE))
         colnames(df_all) <- c("exp", "model", "ens", "type")
 
+        # Only get climate models with (a) both historical and
+        # rcp85 results and (b) r1i1p1 ensemble historical results
         df_all <- group_by(df_all, model) %>%
                 summarize(check_1 = "historical" %in% exp,
                           check_2 = "rcp85" %in% exp,

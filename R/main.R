@@ -106,7 +106,7 @@ parameterErrorChecking <- function(out,
         tryCatch(
                 setwd(dataFolder),
                 error = function(){
-                        stop("Pathway containing cmip5 data invalid. Stopping")
+                        stop("Pathway containing cmip5 data (`dataFolder`) invalid. Stopping")
                 },
                 finally = {
                         setwd(workingDirectory)

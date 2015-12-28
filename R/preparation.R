@@ -38,8 +38,7 @@ acquireDirectoryStructure <- function(dataPath){
 
         # Filter out the "Icon" files.
         # Note: I don't know what the "Icon" files within the data folders actually are, except that they have no use.
-        all <- all[!grepl("Icon", all)]
-        all <- all[!grepl(".mat", all)]
+        all <- all[grepl("\\.csv", all)]
 
         latlong <- all[grepl("latitude_longitude_NorthAmerica_12mo.csv", all)]
         tas <- all[grepl("tas_NorthAmerica_12mo.csv", all)]

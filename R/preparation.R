@@ -26,6 +26,14 @@ parseModel <- function(model){
 #'    the first level element gives the file paths for location grids,
 #'    `tas` and `time` for each ensemble run of the model.
 #'
+#' @note The files in the bottom directory must all have a .csv extension
+#'    and must have one of the following names:
+#'    "latitude_longitude_NorthAmerica_12mo.csv" for the file with grid
+#'    point locations for the climate model,
+#'    "tas_NorthAmerica_12mo.csv" for the file with ...,
+#'    and "time_NorthAmerica_12mo.csv" for the file with ... .
+#'    All other files will be removed when creating the directory structure.
+#'
 #' @examples
 #' dataFolder <- "~/Downloads/sample/cmip5/"
 #' finalList <- acquireDirectoryStructure(dataFolder)

@@ -40,8 +40,12 @@ create.heatwave.dataset <- function(out, dataFolder, citycsv,
         # Read the cities data file
         cities <- read.csv(citycsv)
 
-        # Create "global" list object that will hold variables that all functions that need then will have access to
-        global <- listGlobal(out, dataFolder, cities, RorCPP)
+        # Create "global" list object that will hold variables that all
+        # functions that need then will have access to
+        global <- list("output" = out,
+                       "data" = dataFolder,
+                       "cities" = citycsv,
+                       "RorCPP" = RorCPP)
 
         # Create the "custom" list object that will hold all of the user's custom settings.
         custom <- listCustom(IDheatwavesReplacement, dataBoundaries, referenceBoundaries)
@@ -170,43 +174,6 @@ checkCustomBounds <- function(boundList){
                         }
                 }
         }
-}
-
-#' Creates lists for 'global' variables and custom data respectively.
-#'
-#' @param out Character string with pathway to directory to which
-#'    heatwave files will be written.
-#' @param dataFolder Character string with pathway to directory that
-#'    contains climate projections. Must include the final backslash.
-#' @param citycsv Character string giving the filepath to a .csv
-#'    file with latitude and longitude values for each city.
-#' @param RorCPP 0 /1 flag that indicates whether to use R (1) or
-#'    CPP (0) functions.
-#'
-#' @return A list with slots for the output directory pathname,
-#'    the pathname for the directory with the climate projections,
-#'    the pathname with the csv with city latitudes and longitudes,
-#'    and the RorCPP choices.
-#'
-#' @note These functions exist to give the user a way to create the
-#'    required "global" and "custom" parameters required by the rest
-#'    of the program without running the entire program.
-#'
-#' @examples
-#' out <- "~/Downloads/sample/results"
-#' dataFolder <- "~/Downloads/sample/cmip5/"
-#' citycsv <- "inst/cities.csv"
-#' RorCPP <- FALSE
-#' listGlobal(out, dataFolder, citycsv, RorCPP)
-listGlobal <- function(out = FALSE,
-                       dataFolder = FALSE,
-                       citycsv = FALSE,
-                       RorCPP = FALSE){
-
-        return(list("output" = out,
-                    "data" = dataFolder,
-                    "cities" = citycsv,
-                    "RorCPP" = RorCPP))
 }
 
 #' Create list of custom settings.

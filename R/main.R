@@ -32,7 +32,9 @@ create.heatwave.dataset <- function(out, dataFolder, citycsv,
         }
 
         # Check the parameters for errors
-        parameterErrorChecking(out, dataFolder, citycsv, RorCPP, dataBoundaries, IDheatwavesReplacement, referenceBoundaries)
+        parameterErrorChecking(out, dataFolder, citycsv, RorCPP,
+                               dataBoundaries, IDheatwavesReplacement,
+                               referenceBoundaries)
 
         # Put the directories into nested list form
         models <- acquireDirectoryStructure(dataFolder)
@@ -47,14 +49,19 @@ create.heatwave.dataset <- function(out, dataFolder, citycsv,
                        "cities" = citycsv,
                        "RorCPP" = RorCPP)
 
-        # Create the "custom" list object that will hold all of the user's custom settings.
-        custom <- listCustom(IDheatwavesReplacement, dataBoundaries, referenceBoundaries)
+        # Create the "custom" list object that will hold all of the user's
+        # custom settings.
+        custom <- list("IDheatwaves" = IDheatwavesReplacement,
+                       "getBounds" = dataBoundaries,
+                       "processModel" = referenceBoundaries,
+                       "createHwDataframe" = referenceBoundaries != FALSE)
 
         # TODO Think of a better name for these variables.
         accumulators <- createAccumulators()
 
         # Process the entire dataset
-        referenceEnsembles <- sapply(models, processModel, global, custom, accumulators)
+        referenceEnsembles <- sapply(models, processModel, global, custom,
+                                     accumulators)
 
         # Write the model information from the model information accumulator
         writeAccumulator(accumulators("return model information"))
@@ -174,34 +181,6 @@ checkCustomBounds <- function(boundList){
                         }
                 }
         }
-}
-
-#' Create list of custom settings.
-#'
-#' @param IDheatwavesReplacement Either FALSE, to use the default
-#'    heatwave definition, or a user-specified custom function to
-#'    use to identify heatwaves.
-#' @param dataBoundaries Custom time boundaries for extracting data
-#'    from the ensembles. Format: c(historical low bound, historical
-#'    high bound, reference low bound, reference high bound).
-#'    Restrictions: Bounds cannot span multiple experiments
-#' @param referenceBoundaries Reference boundaries.
-#'
-#' @return A list with slots for custom settings specified by the user.
-listCustom <- function(IDheatwavesReplacement = FALSE,
-                       dataBoundaries = FALSE,
-                       referenceBoundaries = FALSE){
-
-        # TODO: can't remember what boolflag is/does. Review.
-        boolflag <- FALSE
-        if(referenceBoundaries != FALSE){
-                boolflag <- TRUE
-        }
-
-        return(list("IDheatwaves" = IDheatwavesReplacement,
-                    "getBounds" = dataBoundaries,
-                    "processModel" = referenceBoundaries,
-                    "createHwDataframe" = boolflag))
 }
 
 #' Create accumulators

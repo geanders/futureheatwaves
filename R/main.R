@@ -24,6 +24,13 @@ create.heatwave.dataset <- function(out, dataFolder, citycsv,
                                     dataBoundaries = FALSE,
                                     referenceBoundaries = FALSE){
 
+        # If `dataFolder` does not end in "/", add it.
+        split_dataFolder <- unlist(strsplit(dataFolder, split = ""))
+        last_char <- split_dataFolder[length(split_dataFolder)]
+        if(last_char != "/"){
+                dataFolder <- paste0(dataFolder, "/")
+        }
+
         # Check the parameters for errors
         parameterErrorChecking(out, dataFolder, citycsv, RorCPP, dataBoundaries, IDheatwavesReplacement, referenceBoundaries)
 

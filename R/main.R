@@ -119,7 +119,7 @@ parameterErrorChecking <- function(out,
         tryCatch(
                 read.csv(citycsv, header = TRUE),
                 error = function(x){
-                        stop("City information .csv invalid. Stopping")
+                        stop("Cannot read city information .csv (`citycsv`). Stopping")
                 }
         )
 

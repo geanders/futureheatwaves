@@ -14,7 +14,8 @@ processModel <- function(model, global, custom, accumulators){
         # Get reference period if one exists
         reference <- custom["processModel"]
 
-        # Acquire vector of threshold temperatures using the historical ensemble for this model which possesses the name r1i1p1
+        # Acquire vector of threshold temperatures using the historical
+        # ensemble for this model which possesses the name r1i1p1
         ret <- processHistorical(model, global, custom, reference)
         thresholds <- ret[[1]]
         reference <- ret[[2]]

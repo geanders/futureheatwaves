@@ -63,7 +63,7 @@ acquireDirectoryStructure <- function(dataPath){
                                type %in% c("latitude_longitude_NorthAmerica_12mo.csv",
                                            "tas_NorthAmerica_12mo.csv",
                                            "time_NorthAmerica_12mo.csv")) %>%
-                select(-starts_with("check"))
+                select(exp, model, ens, type)
 
         all <- apply(df_all, 1, paste, collapse = "/")
         models <- as.character(unique(df_all$model))
@@ -139,7 +139,10 @@ buildStructureExperiments <- function(model, experiment, all, dataPath){
 #' buildStructureEnsembles(ensemble)
 buildStructureEnsembles <- function(ensemble){
         hold <<- ensemble
-        ensembleName <- strsplit(ensemble, "/")[[1]][8]
+        model_name_index <- which(sapply(strsplit(ensemble, "/"),
+                                         function(x) x %in%
+                                                 c("historical", "rcp85"))) + 2
+        ensembleName <- strsplit(ensemble, "/")[[1]][model_name_index]
         files <- list.files(ensemble)
         files <- files[!grepl("Icon", files)]
         files <- files[!grepl(".mat", files)]

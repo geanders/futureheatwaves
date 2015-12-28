@@ -46,7 +46,7 @@ create.heatwave.dataset <- function(out, dataFolder, citycsv,
         # functions that need then will have access to
         global <- list("output" = out,
                        "data" = dataFolder,
-                       "cities" = citycsv,
+                       "cities" = cities,
                        "RorCPP" = RorCPP)
 
         # Create the "custom" list object that will hold all of the user's

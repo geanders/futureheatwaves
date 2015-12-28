@@ -33,35 +33,28 @@ parseModel <- function(model){
 #' str(finalList[[1]][[2]][1])
 acquireDirectoryStructure <- function(dataPath){
 
-        # Acquire all directories to all csv files rooted at dataPath
+        # Acquire all pathnames to csv files rooted at dataPath
         all <- list.files(dataPath, recursive = TRUE,
                           pattern = "\\.csv$")
+        split_all <- strsplit(all, "/")
 
-        latlong <- all[grepl("latitude_longitude_NorthAmerica_12mo.csv", all)]
-        tas <- all[grepl("tas_NorthAmerica_12mo.csv", all)]
-        time <- all[grepl("time_NorthAmerica_12mo.csv", all)]
+        all <- all[sapply(split_all, "[", 4) %in%
+                           c("latitude_longitude_NorthAmerica_12mo.csv",
+                             "tas_NorthAmerica_12mo.csv",
+                             "time_NorthAmerica_12mo.csv")]
 
-        all <- c(latlong, tas, time)
+        # Filter out models that are not common to both experiments
+        histModels <- sapply(split_all[sapply(split_all, "[", 1) ==
+                                               "historical"],
+                             "[", 2)
+        rcpModels <- sapply(split_all[sapply(split_all, "[", 1) ==
+                                               "rcp85"],
+                             "[", 2)
+        models <- intersect(histModels, rcpModels)
 
         # Separate the directories for each experiment
         histDirs <- subset(all, grepl("historical", all))
         rcpDirs <- subset(all, grepl("rcp85", all))
-
-        # Acquire the models for each experiment
-        histModels <- c()
-        splitted <- strsplit(histDirs, "/")
-        for(i in 1:length(splitted)){
-                histModels <- c(histModels, splitted[[i]][2])
-        }
-
-        rcpModels <- c()
-        splitted <- strsplit(rcpDirs, "/")
-        for(i in 1:length(splitted)){
-                rcpModels <- c(rcpModels, splitted[[i]][2])
-        }
-
-        # Filter out models that are not common to both experiments
-        models <- intersect(histModels, rcpModels)
 
         # Filter out models within the historical eperiment that do not have an ensemble named r1i1p1
         mask <- lapply(paste0("historical/", models, "/r1i1p1"), grepl, histDirs)

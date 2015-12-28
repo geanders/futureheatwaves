@@ -11,6 +11,9 @@
 #'
 #' @return Returns the dataframe entered as \code{datafr}, but with new
 #'    columns providing heatwave idendifiers.
+#'
+#' @useDynLib futureheatwaves
+#' @importFrom Rcpp sourceCpp
 IDheatwaves <- function(city, threshold, days = 2, datafr, global, custom){
         # Initialize return value
         heatwaveDataframe <- c()

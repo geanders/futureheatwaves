@@ -15,13 +15,14 @@ Description: Takes locally saved climate projections and identifies and
     intensity, and timing in the summer.
 License: What license is it under?
 LazyData: TRUE
-Imports:
+Imports: 
     dplyr,
     Rcpp,
     ggplot2,
     maps
-Suggests:
+Suggests: 
     knitr,
     rmarkdown
 VignetteBuilder: knitr
 RoxygenNote: 5.0.1
+LinkingTo: Rcpp

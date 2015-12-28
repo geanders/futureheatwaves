@@ -1,3 +1,7 @@
+#' @useDynLib futureheatwaves
+#' @importFrom Rcpp sourceCpp
+NULL
+
 #' Identify all heatwaves within a given city's time series
 #'
 #' @param city Character string with city ID.
@@ -12,8 +16,6 @@
 #' @return Returns the dataframe entered as \code{datafr}, but with new
 #'    columns providing heatwave idendifiers.
 #'
-#' @useDynLib futureheatwaves
-#' @importFrom Rcpp sourceCpp
 IDheatwaves <- function(city, threshold, days = 2, datafr, global, custom){
         # Initialize return value
         heatwaveDataframe <- c()

@@ -138,7 +138,8 @@ processEnsemble <- function(ensemble, experiment, modelName, global,
         locations <- apply(global$cities, 1, findClosest, latlong = latlong)
 
         # Acquire the boundaries for the time series
-        # Structure: c(start index, end index, # of elements spanning from start to end)
+        # Structure: c(start index, end index, # of elements spanning
+        # from start to end)
         bounds <- getBounds(times, experiment, custom)
         start <- bounds[1]
         end <- bounds[2]
@@ -237,8 +238,6 @@ getBounds <- function(times, experiment, custom){
         if (experiment == 'historical'){
                 if(custom["getBounds"] == FALSE){
                         start <- match(1981, times[,2])
-
-                        cat("hello")
 
                         #'end' index of the historical experiment has to be matched from back to front.
                         # This is because the data does/may not exceed year 2005.

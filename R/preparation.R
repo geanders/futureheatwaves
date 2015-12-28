@@ -143,19 +143,8 @@ buildStructureEnsembles <- function(ensemble){
         files <- list.files(ensemble)
         files <- files[!grepl("Icon", files)]
         files <- files[!grepl(".mat", files)]
-        files <- unlist(lapply(files, swapPaste, ensemble))
+        files <- unlist(lapply(files, function(x){
+                paste(ensemble, x, sep = "/")
+        }))
         return(c(ensembleName, files))
-}
-
-#' Paste second element before first, separated by a backslash
-#'
-#' @param second Character string with element to paste second in output.
-#' @param first Character string with element to paste first in output.
-#'
-#' @examples
-#' second <- "latitude_longitude_NorthAmerica_12mo.csv"
-#' first <- "/Users/brookeanderson/Downloads/sample/cmip5/rcp85/bcc1/r1i1p1"
-#' swapPaste(second, first)
-swapPaste <- function(second, first){
-        return(paste0(first, "/", second))
 }

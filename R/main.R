@@ -22,7 +22,21 @@ create.heatwave.dataset <- function(out, dataFolder, citycsv,
                                     RorCPP = 1,
                                     IDheatwavesReplacement = FALSE,
                                     dataBoundaries = FALSE,
-                                    referenceBoundaries = FALSE){
+                                    referenceBoundaries = FALSE,
+                                    printWarning = TRUE){
+
+        # Add warning for user that this will write new files
+        if(printWarning){
+                cat("\n", "Warning: This function will write new files",
+                    "to your computer in the ", "\n", out,
+                    "directory of your computer.", "\n",
+                    "Do you want to continue (y / n):", "\n")
+                user_prompt <- scan(n = 1, what = "character")
+                user_prompt <- tolower(user_prompt)
+                if(user_prompt %in% c("n", "no")){
+                        stop("User chose to exit function run.")
+                }
+        }
 
         # If `dataFolder` does not end in "/", add it.
         split_dataFolder <- unlist(strsplit(dataFolder, split = ""))

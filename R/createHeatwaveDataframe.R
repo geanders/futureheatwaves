@@ -5,9 +5,9 @@
 #' @param threshold Threshold temperature for this city
 #' @param heatwaves data.frame(dates, thresholds)
 #' @param percentile Percentile for threshold)
-createHwDataframe <- function(city = stop("Error: unspecified city"),
-                              threshold = stop("Error: unspecified threshold"),
-                              heatwaves = stop("Error: 'heatwaves' unspecified"),
+createHwDataframe <- function(city = stop("Unspecified city"),
+                              threshold = stop("Unspecified threshold"),
+                              heatwaves = stop("'heatwaves' unspecified"),
                               percentile = .98,
                               ensemble,
                               i,
@@ -19,7 +19,8 @@ createHwDataframe <- function(city = stop("Error: unspecified city"),
 
         if(custom["createHwDataframe"] != FALSE){
                 datafr <- data.frame(ensemble$dates, ensemble$reference[,i])
-                heatwaves <- IDheatwaves(city, threshold, 2, datafr, global, custom)
+                heatwaves <- IDheatwaves(city, threshold, 2, datafr,
+                                         global, custom)
         }
 
         bloodhound <<- heatwaves2
@@ -43,7 +44,8 @@ createHwDataframe <- function(city = stop("Error: unspecified city"),
 
         hw.frame$first.in.season <- c(1, rep(NA, nrow(hw.frame) - 1))
         for(i in 2:nrow(hw.frame)){
-                if(as.POSIXlt(hw.frame$start.date)$year[i] != as.POSIXlt(hw.frame$start.date)$year[i - 1]){
+                if(as.POSIXlt(hw.frame$start.date)$year[i] !=
+                   as.POSIXlt(hw.frame$start.date)$year[i - 1]){
                         hw.frame$first.in.season[i] <- 1
                 } else {
                         hw.frame$first.in.season[i] <- 0

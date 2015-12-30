@@ -18,9 +18,9 @@ License: What license is it under?
 LazyData: TRUE
 Imports:
     dplyr,
-    Rcpp,
     ggplot2,
-    maps
+    maps,
+    Rcpp
 Suggests:
     knitr,
     rmarkdown

@@ -6,7 +6,7 @@
 \usage{
 create.heatwave.dataset(out, dataFolder, citycsv, RorCPP = 1,
   IDheatwavesReplacement = FALSE, dataBoundaries = FALSE,
-  referenceBoundaries = FALSE)
+  referenceBoundaries = FALSE, printWarning = TRUE)
 }
 \arguments{
 \item{out}{Character string with pathway to directory to which

@@ -1,10 +1,11 @@
 #' Aggregate by heatwave
 #'
-#' Result is a dataframe where each row represents a heatwave.
 #' @param city Index of cities global
 #' @param threshold Threshold temperature for this city
 #' @param heatwaves data.frame(dates, thresholds)
 #' @param percentile Percentile for threshold)
+#'
+#' @return Result is a dataframe where each row represents a heatwave.
 createHwDataframe <- function(city = stop("Unspecified city"),
                               threshold = stop("Unspecified threshold"),
                               heatwaves = stop("'heatwaves' unspecified"),
@@ -26,8 +27,8 @@ createHwDataframe <- function(city = stop("Unspecified city"),
         bloodhound <<- heatwaves2
         bark <<- heatwaves
 
-        hw.frame <- group_by(heatwaves2, hw.number) %>%
-                summarize(mean.temp = mean(tmpd),
+        hw.frame <- dplyr::group_by(heatwaves2, hw.number) %>%
+                dplyr::summarize(mean.temp = mean(tmpd),
                           max.temp = max(tmpd),
                           min.temp = min(tmpd),
                           length = length(unique(date)),

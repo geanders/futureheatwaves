@@ -4,10 +4,10 @@
 \alias{createHwDataframe}
 \title{Aggregate by heatwave}
 \usage{
-createHwDataframe(city = stop("Error: unspecified city"),
-  threshold = stop("Error: unspecified threshold"),
-  heatwaves = stop("Error: 'heatwaves' unspecified"), percentile = 0.98,
-  ensemble, i, global, custom)
+createHwDataframe(city = stop("Unspecified city"),
+  threshold = stop("Unspecified threshold"),
+  heatwaves = stop("'heatwaves' unspecified"), percentile = 0.98, ensemble,
+  i, global, custom)
 }
 \arguments{
 \item{city}{Index of cities global}
@@ -18,7 +18,10 @@ createHwDataframe(city = stop("Error: unspecified city"),
 
 \item{percentile}{Percentile for threshold)}
 }
-\description{
+\value{
 Result is a dataframe where each row represents a heatwave.
+}
+\description{
+Aggregate by heatwave
 }
 

@@ -14,7 +14,7 @@ Description: Takes locally saved climate projections and identifies and
     based on a definition frequently used in climate epidemiology.
     Characterizations include several metrics of heatwave length,
     intensity, and timing in the summer.
-License: What license is it under?
+License: MIT + file LICENSE
 LazyData: TRUE
 Imports:
     dplyr,

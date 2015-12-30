@@ -5,6 +5,7 @@ Version: 0.1.0.8000
 Date: 2015-12-23
 Authors@R: c(
     person("Colin", "Eason", , "colinae@rams.colostate.edu", c("aut")),
+    person("Elizabeth", "Barnes", , "eabarnes@atmos.colostate.edu", c("aut")),
     person("Brooke", "Anderson", , "brooke.anderson@colostate.edu", c("aut", "cre"))
     )
 Maintainer: Brooke Anderson <brooke.anderson@colostate.edu>
@@ -15,12 +16,12 @@ Description: Takes locally saved climate projections and identifies and
     intensity, and timing in the summer.
 License: What license is it under?
 LazyData: TRUE
-Imports: 
+Imports:
     dplyr,
     Rcpp,
     ggplot2,
     maps
-Suggests: 
+Suggests:
     knitr,
     rmarkdown
 VignetteBuilder: knitr

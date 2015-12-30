@@ -1,7 +1,7 @@
 Package: futureheatwaves
 Type: Package
 Title: Functions to Identify and Characterize Heatwaves in Climate Projections
-Version: 0.1.0.8000
+Version: 0.0.0.9000
 Date: 2015-12-23
 Authors@R: c(
     person("Colin", "Eason", , "colinae@rams.colostate.edu", c("aut")),

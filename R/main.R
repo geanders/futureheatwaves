@@ -46,7 +46,7 @@ create.heatwave.dataset <- function(out, dataFolder, citycsv,
         }
 
         # Check the parameters for errors
-        parameterErrorChecking(out, dataFolder, citycsv, RorCPP,
+        check_params(out, dataFolder, citycsv, RorCPP,
                                dataBoundaries, IDheatwavesReplacement,
                                referenceBoundaries)
 
@@ -115,14 +115,14 @@ create.heatwave.dataset <- function(out, dataFolder, citycsv,
 #' dataFolder <- "~/Downloads/sample/cmip5/"
 #' citycsv <- "inst/cities.csv"
 #' referenceBoundaries <- FALSE
-#' parameterErrorChecking(out, dataFolder, citycsv,
+#' check_params(out, dataFolder, citycsv,
 #'    referenceBoundaries = referenceBoundaries)
-parameterErrorChecking <- function(out,
+check_params <- function(out,
                                    dataFolder,
                                    citycsv,
-                                   RorCPP = 1,
-                                   IDheatwavesReplacement = FALSE,
-                                   dataBoundaries = FALSE,
+                                   RorCPP,
+                                   IDheatwavesReplacement,
+                                   dataBoundaries,
                                    referenceBoundaries){
 
         # TODO: ERROR CHECKING!!!!!!!!
@@ -199,7 +199,7 @@ checkCustomBounds <- function(boundList){
 
 #' Create accumulators
 #'
-#' @return A closure that maintains data structures that track
+#' @return Creates a closure that maintains data structures that track
 #' information about the models and the location vectors for each
 #' ensemble respectively.
 createAccumulators <- function(){

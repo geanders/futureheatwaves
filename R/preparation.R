@@ -1,18 +1,3 @@
-#'
-#'
-parseModel <- function(model){
-        modelName <- model[1]
-
-        # Get ensemble directories for one model.
-        hDirs <- toString(unlist(model[2]))
-        hDirs <- unlist(strsplit(hDirs, "@"))
-        hDirs <- strsplit(hDirs, "#")
-        rcpDirs <- toString(unlist(model[3]))
-        rcpDirs <- unlist(strsplit(rcpDirs, "@"))
-        rcpDirs <- strsplit(rcpDirs, "#")
-
-        return(list(modelName, hDirs, rcpDirs))
-}
 
 #' Determine climate projection directory structure
 #'

@@ -18,13 +18,21 @@
 #' @param referenceBoundaries Reference boundaries.
 #'
 #' @return [What does this function return?]
-create.heatwave.dataset <- function(out, dataFolder, citycsv,
+gen_hw_set <- function(out, dataFolder, citycsv,
                                     RorCPP = 1,
                                     IDheatwavesReplacement = FALSE,
                                     dataBoundaries = FALSE,
                                     referenceBoundaries = FALSE,
-                                    printWarning = TRUE){
-
+                                    printWarning = TRUE,
+                                    coordinateFilenames, 
+                                    tasFilenames, 
+                                    timeFilenames){
+  
+  #~
+  # TODO: Note for later. Will delete
+  # "latitude_longitude_NorthAmerica_12mo.csv",  "tas_NorthAmerica_12mo.csv",  "time_NorthAmerica_12mo.csv"
+  #
+  # ~
         # Add warning for user that this will write new files
         if(printWarning){
                 cat("\n", "Warning: This function will write new files",
@@ -38,6 +46,7 @@ create.heatwave.dataset <- function(out, dataFolder, citycsv,
                 }
         }
 
+        # TODO: Fix the program such that this block is not required
         # If `dataFolder` does not end in "/", add it.
         split_dataFolder <- unlist(strsplit(dataFolder, split = ""))
         last_char <- split_dataFolder[length(split_dataFolder)]
@@ -46,12 +55,12 @@ create.heatwave.dataset <- function(out, dataFolder, citycsv,
         }
 
         # Check the parameters for errors
-        parameterErrorChecking(out, dataFolder, citycsv, RorCPP,
+        check_params(out, dataFolder, citycsv, RorCPP,
                                dataBoundaries, IDheatwavesReplacement,
                                referenceBoundaries)
 
         # Put the directories into nested list form
-        models <- acquireDirectoryStructure(dataFolder)
+        models <- acquireDirectoryStructure(dataFolder, coordinateFilenames, tasFilenames, timeFilenames)
 
         # Read the cities data file
         cities <- read.csv(citycsv)
@@ -86,7 +95,7 @@ create.heatwave.dataset <- function(out, dataFolder, citycsv,
         cat("All operations completed. Exiting.", "\n")
 }
 
-#' Error check for parameters of create.heatwave.dataframe
+#' Error check for parameters of gen_hw_set
 #'
 #' @param out Character string with pathway to directory to which
 #'    heatwave files will be written.
@@ -115,20 +124,21 @@ create.heatwave.dataset <- function(out, dataFolder, citycsv,
 #' dataFolder <- "~/Downloads/sample/cmip5/"
 #' citycsv <- "inst/cities.csv"
 #' referenceBoundaries <- FALSE
-#' parameterErrorChecking(out, dataFolder, citycsv,
+#' check_params(out, dataFolder, citycsv,
 #'    referenceBoundaries = referenceBoundaries)
-parameterErrorChecking <- function(out,
+check_params <- function(out,
                                    dataFolder,
                                    citycsv,
-                                   RorCPP = 1,
-                                   IDheatwavesReplacement = FALSE,
-                                   dataBoundaries = FALSE,
+                                   RorCPP,
+                                   IDheatwavesReplacement,
+                                   dataBoundaries,
                                    referenceBoundaries){
 
         # TODO: ERROR CHECKING!!!!!!!!
         # Check to see if the folder that holds the climate data exists.
         workingDirectory <- getwd()
         tryCatch(
+                # TODO: Replace setwd with Dr. Anderson's suggestion
                 setwd(dataFolder),
                 error = function(){
                         stop("Pathway containing cmip5 data (`dataFolder`) invalid. Stopping")
@@ -197,28 +207,37 @@ checkCustomBounds <- function(boundList){
         }
 }
 
-#' Create accumulators
+# TODO: It may be possible to make the accumulator system extremely robust. Consider this possibility
+#       after all else is finished.
+#' Create accumulator closure
+#' This closure holds data structures that the user wishes to grow at various
+#' points in the execution of the package. It exists to couple these structures together
+#' in order to lower the number of parameters of this nature the user would have to pass down
+#' the the program otherwise.
 #'
-#' @return A closure that maintains data structures that track
-#' information about the models and the location vectors for each
-#' ensemble respectively.
+#' @return A closure that accepts commands to access and append new data onto 
+#' data structures as the program executes.
 createAccumulators <- function(){
         modelInfoAccumulator <- data.frame(c(), c())
         locationList <- list()
 
         function(command, newElement = FALSE){
 
+                # Commands for model information accumulator
                 if(command == "return model information"){
                         return(modelInfoAccumulator)
 
                 } else if(command == "append model information"){
                         modelInfoAccumulator <<- rbind(modelInfoAccumulator, newElement)
 
+                # Commands for location list accumulator
                 } else if(command == "return locations"){
                         return(locationList)
 
                 } else if(command == "append location list"){
                         locationList <<- list(locationList, newElement)
                 }
+          
+          
         }
 }

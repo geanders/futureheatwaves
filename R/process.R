@@ -144,16 +144,19 @@ processEnsemble <- function(ensemble, experiment, modelName, global,
         start <- bounds[1]
         end <- bounds[2]
 
-        if(debug){
-                print("Process Ensemble Bounds: ")
-                cat("start: ", start, "\n")
-                cat("end: ", end, "\n")
-        }
+#         if(debug){
+#                 print("Process Ensemble Bounds: ")
+#                 cat("start: ", start, "\n")
+#                 cat("end: ", end, "\n")
+#         }
         bloodhound <<- ensemble
         bark <<- times
         hold <<- tas
 
-        subCustom <- listCustom(dataBoundaries = reference)
+        subCustom <- list("IDheatwaves" = FALSE,
+                          "getBounds" = reference,
+                          "processModel" = FALSE,
+                          "createHwDataframe" = FALSE)
         # Get a vector containing the dates of days we are dealing with
         dates <- formDates(times, bounds)
 
@@ -168,9 +171,9 @@ processEnsemble <- function(ensemble, experiment, modelName, global,
         # CUSTOM BLOCK
         # Extract and store the reference period data
         if(reference != FALSE && length(reference) != 1){
-                if(debug){
-                        cat("CUSTOM REFERENCE BLOCK")
-                }
+#                 if(debug){
+#                         cat("CUSTOM REFERENCE BLOCK")
+#                 }
                 rbounds <- getBounds(times, experiment, subCustom)
                 reference <- data.frame(tas[rbounds[1]:rbounds[2], locations])
                 reference <- apply(series, 1:2, function(element){
@@ -287,11 +290,11 @@ getBounds <- function(times, experiment, custom){
 #' @return A vector of dates formatted as year-month-day (%Y-%m-%d) spanning
 #'    the desired time boundaries.
 formDates <- function(times, bounds){
-        if(debug){
-                print("formDates bounds: ")
-                cat("start: ", bounds[1], "\n")
-                cat("end: ", bounds[2], "\n")
-        }
+#         if(debug){
+#                 print("formDates bounds: ")
+#                 cat("start: ", bounds[1], "\n")
+#                 cat("end: ", bounds[2], "\n")
+#         }
         start <- bounds[1]
         end <- bounds[2]
         #bark <<- times

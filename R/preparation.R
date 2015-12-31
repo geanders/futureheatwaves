@@ -34,6 +34,7 @@ parseModel <- function(model){
 #'    and "time_NorthAmerica_12mo.csv" for the file with ... .
 #'    All other files will be removed when creating the directory structure.
 #'
+#' @importFrom dplyr %>%
 #' @examples
 #' dataFolder <- "~/Downloads/sample/cmip5/"
 #' finalList <- acquireDirectoryStructure(dataFolder)
@@ -53,17 +54,17 @@ acquireDirectoryStructure <- function(dataPath){
 
         # Only get climate models with (a) both historical and
         # rcp85 results and (b) r1i1p1 ensemble historical results
-        df_all <- group_by(df_all, model) %>%
-                summarize(check_1 = "historical" %in% exp,
+        df_all <- dplyr::group_by(df_all, model) %>%
+                dplyr::summarize(check_1 = "historical" %in% exp,
                           check_2 = "rcp85" %in% exp,
                           check_3 = "historical r1i1p1" %in%
                                   paste(exp, ens)) %>%
-                left_join(df_all, by = "model") %>%
-                filter(check_1 & check_2 & check_3 &
+                dplyr::left_join(df_all, by = "model") %>%
+                dplyr::filter(check_1 & check_2 & check_3 &
                                type %in% c("latitude_longitude_NorthAmerica_12mo.csv",
                                            "tas_NorthAmerica_12mo.csv",
                                            "time_NorthAmerica_12mo.csv")) %>%
-                select(exp, model, ens, type)
+                dplyr::select(exp, model, ens, type)
 
         all <- apply(df_all, 1, paste, collapse = "/")
         models <- as.character(unique(df_all$model))

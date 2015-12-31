@@ -6,6 +6,8 @@
 #' @param percentile Percentile for threshold)
 #'
 #' @return Result is a dataframe where each row represents a heatwave.
+#'
+#' @importFrom dplyr %>%
 createHwDataframe <- function(city = stop("Unspecified city"),
                               threshold = stop("Unspecified threshold"),
                               heatwaves = stop("'heatwaves' unspecified"),

@@ -21,11 +21,13 @@
 #'
 #' @importFrom dplyr %>%
 #' @examples
+# TODO: the directory structure requires more explanation.
+# TODO: change the comment below when the '/' problem is resolved
 #' dataFolder <- "~/Downloads/sample/cmip5/"
 #' finalList <- acquireDirectoryStructure(dataFolder)
 #' str(finalList[[1]][[1]])
 #' str(finalList[[1]][[2]][1])
-acquireDirectoryStructure <- function(dataPath){
+acquireDirectoryStructure <- function(dataPath, coordinateFilenames, tasFilenames, timeFilenames){
 
         # Acquire all pathnames to csv files rooted at dataPath
         all <- list.files(dataPath, recursive = TRUE,
@@ -46,9 +48,11 @@ acquireDirectoryStructure <- function(dataPath){
                                   paste(exp, ens)) %>%
                 dplyr::left_join(df_all, by = "model") %>%
                 dplyr::filter(check_1 & check_2 & check_3 &
-                               type %in% c("latitude_longitude_NorthAmerica_12mo.csv",
-                                           "tas_NorthAmerica_12mo.csv",
-                                           "time_NorthAmerica_12mo.csv")) %>%
+                               type %in% c(coordinateFilenames, 
+                                           tasFilenames, 
+                                           timeFilenames)) %>%
+                                 
+                                 )) %>%
                 dplyr::select(exp, model, ens, type)
 
         all <- apply(df_all, 1, paste, collapse = "/")
@@ -107,6 +111,8 @@ buildStructureModels <- function(model, experiments, all, dataPath){
 #'          "rcp85/bcc1/r1i1p1/time_NorthAmerica_12mo.csv")
 #' dataPath <- "~/Downloads/sample/cmip5/"
 #' buildStructureExperiments(model, experiments, all, dataPath)
+
+# TODO: This looks like garbage. Make comments.
 buildStructureExperiments <- function(model, experiment, all, dataPath){
         ensembles <- list.dirs(paste0(dataPath, experiment, "/", model))
         ensembles <- ensembles[-1]
@@ -123,6 +129,8 @@ buildStructureExperiments <- function(model, experiment, all, dataPath){
 #' @examples
 #' ensemble <- "/Users/brookeanderson/Downloads/sample/cmip5/rcp85/bcc1/r1i1p1"
 #' buildStructureEnsembles(ensemble)
+
+# TODO: This is even worse
 buildStructureEnsembles <- function(ensemble){
         hold <<- ensemble
         model_name_index <- which(sapply(strsplit(ensemble, "/"),
@@ -130,6 +138,7 @@ buildStructureEnsembles <- function(ensemble){
                                                  c("historical", "rcp85"))) + 2
         ensembleName <- strsplit(ensemble, "/")[[1]][model_name_index]
         files <- list.files(ensemble)
+        # TODO: remove need to grepl out the "Icon" and ".mat" files
         files <- files[!grepl("Icon", files)]
         files <- files[!grepl(".mat", files)]
         files <- unlist(lapply(files, function(x){

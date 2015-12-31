@@ -38,13 +38,13 @@ createEnsembleWriter <- function(modelName, global, custom){
 
         function(hwFrame){
 
-                cat("Writing ", modelName, " r", i, "i", i, "p", i, "\n", sep = "")
+                cat("Writing ", modelName, ": r", i, "i", i, "p", i, "\n", sep = "")
 
                 # TODO: Check this!
                 # Write minimum threshold temperatures of each city to a file
                 writeThresholds(modelName, 'minimums',
                                 plyr::ddply(hwFrame, "city", summarize,
-                                      min = min(min.temp)), global)
+                                      min = min(min.temp)), global, custom)
 
                 # Create the directory that the file will be written to
                 dir.create(paste(writePath, modelName, sep = ""), showWarnings = FALSE, recursive = TRUE, mode = "0777")

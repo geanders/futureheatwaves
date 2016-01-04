@@ -3,7 +3,12 @@
 #'
 #' @param dataPath A character string giving the file path to the
 #'    directory with the climate projection data.
-
+#' @param Names of the files containing the latitude and longitude coordinates
+#'    corresponding to the columns of the time series data.
+#' @param Names of files containing the time series data.
+#' @param Names of the files containing the date information corresponding,
+#'    to the rows of the time series data.
+#'    
 #' @return A list object outlining the file structure of the directory
 #'    containing the climate projections.This list has an element
 #'    for each climate model (e.g. ,"bcc1"). The first element within each
@@ -12,11 +17,7 @@
 #'    `tas` and `time` for each ensemble run of the model.
 #'
 #' @note The files in the bottom directory must all have a .csv extension
-#'    and must have one of the following names:
-#'    "latitude_longitude_NorthAmerica_12mo.csv" for the file with grid
-#'    point locations for the climate model,
-#'    "tas_NorthAmerica_12mo.csv" for the file with ...,
-#'    and "time_NorthAmerica_12mo.csv" for the file with ... .
+#'    and must names corresponding to the "Filenames" parameters of this function.
 #'    All other files will be removed when creating the directory structure.
 #'
 #' @importFrom dplyr %>%
@@ -76,7 +77,7 @@ acquireDirectoryStructure <- function(dataPath, coordinateFilenames, tasFilename
 #'    climate projection files of interest from the directory
 #'    specified in dataPath
 #' @param dataPath Character string of the file path to the directory
-#'    containing the climate projections. Must include the final `\`.
+#'    containing the climate projections. Must include the final `/`.
 #'
 #' @examples
 #' model <- "bcc1"
@@ -101,7 +102,7 @@ buildStructureModels <- function(model, experiments, all, dataPath){
 #'    climate projection files of interest from the directory
 #'    specified in dataPath
 #' @param dataPath Character string of the file path to the directory
-#'    containing the climate projections. Must include the final `\`.
+#'    containing the climate projections. Must include the final `/`.
 #'
 #' @examples
 #' model <- "bcc1"
@@ -111,36 +112,45 @@ buildStructureModels <- function(model, experiments, all, dataPath){
 #'          "rcp85/bcc1/r1i1p1/time_NorthAmerica_12mo.csv")
 #' dataPath <- "~/Downloads/sample/cmip5/"
 #' buildStructureExperiments(model, experiments, all, dataPath)
-
-# TODO: This looks like garbage. Make comments.
+#  TODO: write note about return format
 buildStructureExperiments <- function(model, experiment, all, dataPath){
+  
+        # List all ensembles in the given experiment
         ensembles <- list.dirs(paste0(dataPath, experiment, "/", model))
+        
+        # TODO: Figure out what this line does
         ensembles <- ensembles[-1]
+        
+        # Build the directory structure of each ensemble
         ret <- lapply(ensembles, buildStructureEnsembles)
         return(ret)
 }
 
 #' List all files for a single ensemble member
 #'
-#' @param ensemble Character string that gives the absolute file path
+#' @param Ensemble character string that gives the absolute file path
 #'    for the directory with a particular ensemble member of a climate
 #'    model projection.
 #'
 #' @examples
 #' ensemble <- "/Users/brookeanderson/Downloads/sample/cmip5/rcp85/bcc1/r1i1p1"
 #' buildStructureEnsembles(ensemble)
-
-# TODO: This is even worse
+# TODO: write note about return format
 buildStructureEnsembles <- function(ensemble){
-        hold <<- ensemble
-        model_name_index <- which(sapply(strsplit(ensemble, "/"),
+
+        # Extract name of the ensemble
+        splist = strsplit(ensemble, "/")
+        model_name_index <- which(sapply(splist,
                                          function(x) x %in%
                                                  c("historical", "rcp85"))) + 2
-        ensembleName <- strsplit(ensemble, "/")[[1]][model_name_index]
+        ensembleName <- splist[[1]][model_name_index]
+        
+        # remove any irrelevant files from the file structure
         files <- list.files(ensemble)
-        # TODO: remove need to grepl out the "Icon" and ".mat" files
-        files <- files[!grepl("Icon", files)]
-        files <- files[!grepl(".mat", files)]
+        coor <- files[grep(coordinateFilenames, files)]
+        tas <- files[grep(tasFilenames, files)]
+        time <- files[grep(timefilesnames, files)]
+        files <- c(coor, tas, time)
         files <- unlist(lapply(files, function(x){
                 paste(ensemble, x, sep = "/")
         }))

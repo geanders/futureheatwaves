@@ -62,12 +62,12 @@ processHistorical <- function(model, global, custom, reference = FALSE){
         thresholds <- apply(historicalEnsemble$series, 2, quantile, probs = .98)
 
         # Acquire the reference series. Will be false if reference period unspecified
-        reference <- historicalEnsemble$reference
+        reference_series <- historicalEnsemble$reference
 
         # Save thresholds to file
         writeThresholds(name, 'thresholds', thresholds, global, custom)
 
-        ret <- list(thresholds, reference)
+        ret <- list(thresholds, reference_series)
         return(ret)
 }
 
@@ -135,7 +135,7 @@ processEnsemble <- function(ensemble, experiment, modelName, global,
         cat("Read operation complete", "\n")
 
         # Find indices of the closest points of measurement
-        locations <- apply(global$cities, 1, findClosest, latlong = latlong)
+        locations <- apply(global$cities, 1, closest_point, latlong = latlong)
 
         # Acquire the boundaries for the time series
         # Structure: c(start index, end index, # of elements spanning
@@ -143,23 +143,23 @@ processEnsemble <- function(ensemble, experiment, modelName, global,
         bounds <- getBounds(times, experiment, custom)
         start <- bounds[1]
         end <- bounds[2]
-
-#         if(debug){
-#                 print("Process Ensemble Bounds: ")
-#                 cat("start: ", start, "\n")
-#                 cat("end: ", end, "\n")
-#         }
+        
+        #         if(debug){
+        #                 print("Process Ensemble Bounds: ")
+        #                 cat("start: ", start, "\n")
+        #                 cat("end: ", end, "\n")
+        #         }
         bloodhound <<- ensemble
         bark <<- times
         hold <<- tas
-
+        
         subCustom <- list("IDheatwaves" = FALSE,
                           "getBounds" = reference,
                           "processModel" = FALSE,
                           "createHwDataframe" = FALSE)
         # Get a vector containing the dates of days we are dealing with
         dates <- formDates(times, bounds)
-
+        
         # Acquire time series for every city
         series <- data.frame(tas[start:end, locations])
 
@@ -171,9 +171,6 @@ processEnsemble <- function(ensemble, experiment, modelName, global,
         # CUSTOM BLOCK
         # Extract and store the reference period data
         if(reference != FALSE && length(reference) != 1){
-#                 if(debug){
-#                         cat("CUSTOM REFERENCE BLOCK")
-#                 }
                 rbounds <- getBounds(times, experiment, subCustom)
                 reference <- data.frame(tas[rbounds[1]:rbounds[2], locations])
                 reference <- apply(series, 1:2, function(element){
@@ -205,7 +202,7 @@ processEnsemble <- function(ensemble, experiment, modelName, global,
 #'
 #' @return An index corresponding to the coordinates in the dataframe
 #'    that is closest to the city coordinates.
-findClosest <- function(city, latlong){
+closest_point <- function(city, latlong){
         latitude <- as.double(city[2])
         longitude <- 360 - as.double(city[3])
         aSQ <- abs(latlong[,1] - latitude) ^ 2
@@ -231,9 +228,8 @@ findClosest <- function(city, latlong){
 #'    Format: c(start, end, size)
 #'
 #' @note This function is customizable.
-#
-# Precondition: A dataframe containing the cmip5 date data.
-#
+# TODO: See if it is possible to simplify this function by using data from the global carrier instead
+# of custom
 getBounds <- function(times, experiment, custom){
         # Set boundaries
         start <- 0
@@ -253,9 +249,6 @@ getBounds <- function(times, experiment, custom){
                         customizeHistorical <- custom["getBounds"]
                         lower <- customizeHistorical[1]
                         upper <- customizeHistorical[2]
-                        if(lower < 1981 || upper > 2004){
-                                stop("custom boundaries for historical ensemble fall out of acceptable range. Stopping")
-                        }
                         start <- match(lower, times[,2])
                         end <- length(times[,1]) - (match(upper, rev(times[,2])) - 1)
                 }
@@ -267,9 +260,6 @@ getBounds <- function(times, experiment, custom){
                         customizeRCP <- custom["getBounds"]
                         lower <- customizeRCP[3]
                         upper <- customizeRCP[4]
-                        if(lower < 2061 || upper > 2080){
-                                stop("custom bounds for rcp ensemble fall out of acceptable range. Stopping")
-                        }
                         start <- match(lower, times[,2])
                         end <- match((upper + 1), times[,2]) - 1
                 }
@@ -290,15 +280,8 @@ getBounds <- function(times, experiment, custom){
 #' @return A vector of dates formatted as year-month-day (%Y-%m-%d) spanning
 #'    the desired time boundaries.
 formDates <- function(times, bounds){
-#         if(debug){
-#                 print("formDates bounds: ")
-#                 cat("start: ", bounds[1], "\n")
-#                 cat("end: ", bounds[2], "\n")
-#         }
         start <- bounds[1]
         end <- bounds[2]
-        #bark <<- times
-        #hold <<- bounds
         dateComponents <- data.frame(times[start:end, 2:4])
         dates <- paste(dateComponents[,1],
                        dateComponents[,2],

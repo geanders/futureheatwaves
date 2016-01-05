@@ -2,13 +2,32 @@
 #
 # All functions that partake in I/O are here.
 
-# Read the ensemble
+#' Read the latitude and longitude data for a given ensemble
+#' 
+#' @param ensemble Ensemble component of the directory structure that contains the path
+#' to the latitude and longitude data to be read
+#' 
+#' @return A dataframe of the latitude and longitude data of the ensemble
 readLatLong <- function(ensemble){
         return(read.csv(ensemble[2], header = FALSE))
 }
+
+#' Read the time series data for a given ensemble
+#' 
+#' @param ensemble Ensemble component of the directory structure that contains the path
+#' to the time series data to be read
+#' 
+#' @return A dataframe of the time series data of the ensemble
 readtas <- function(ensemble){
         return(read.csv(ensemble[3], header = FALSE))
 }
+
+#' Read the date data for a given ensemble
+#' 
+#' @param ensemble Ensemble component of the directory structure that contains the path
+#' to the date data to be read
+#' 
+#' @return A dataframe of the date data of the ensemble
 readTimes <- function(ensemble){
         return(read.csv(ensemble[4], header = FALSE))
 }

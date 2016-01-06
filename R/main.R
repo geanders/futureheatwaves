@@ -6,11 +6,13 @@
 #'    contains climate projections. Must include the final backslash.
 #' @param citycsv Character string giving the filepath to a .csv
 #'    file with latitude and longitude values for each city.
-#' @param Names of the files containing the latitude and longitude coordinates
+#' @param coordinateFilenames Character string with name of the files
+#'    containing the latitude and longitude coordinates
 #'    corresponding to the columns of the time series data.
-#' @param Names of files containing the time series data.
-#' @param Names of the files containing the date information corresponding,
-#'    to the rows of the time series data.
+#' @param tasFilenames Character sting with name of files containing the
+#'    time series data.
+#' @param timeFilenames Character string with name of the files containing
+#'    the date information corresponding to the rows of the time series data.
 #' @param RorCPP 0 /1 flag that indicates whether to use R (1) or
 #'    CPP (0) functions
 #' @param IDheatwavesReplacement Either FALSE, to use the default
@@ -23,18 +25,18 @@
 #' @param referenceBoundaries Reference boundaries.
 #'
 #' @return [What does this function return?]
-gen_hw_set <- function(out, 
-                       dataFolder, 
+gen_hw_set <- function(out,
+                       dataFolder,
                        citycsv,
-                       coordinateFilenames, 
-                       tasFilenames, 
+                       coordinateFilenames,
+                       tasFilenames,
                        timeFilenames,
                        RorCPP = 1,
                        IDheatwavesReplacement = FALSE,
                        dataBoundaries = FALSE,
                        referenceBoundaries = FALSE,
                        printWarning = TRUE){
-  
+
   #~
   # TODO: Note for later. Will delete
   # "latitude_longitude_NorthAmerica_12mo.csv",  "tas_NorthAmerica_12mo.csv",  "time_NorthAmerica_12mo.csv"
@@ -62,24 +64,24 @@ gen_hw_set <- function(out,
         if(last_char != "/"){
           dataFolder <- paste0(dataFolder, "/")
         }
-        
+
         # Check the parameters for errors
-        check_params(out, 
-                     dataFolder, 
-                     citycsv, 
+        check_params(out,
+                     dataFolder,
+                     citycsv,
                      coordinateFilenames,
                      tasFilenames,
                      timeFilenames,
                      RorCPP,
                      dataBoundaries, IDheatwavesReplacement,
                      referenceBoundaries)
-        
+
         # Put the directories into nested list form
         models <- acquireDirectoryStructure(dataFolder, coordinateFilenames, tasFilenames, timeFilenames)
-        
+
         # Read the cities data file
         cities <- read.csv(citycsv)
-        
+
         # Create "global" list object that will hold variables that all
         # functions that need then will have access to
         global <- list("output" = out,
@@ -118,11 +120,13 @@ gen_hw_set <- function(out,
 #'    contains climate projections. Must include the final backslash.
 #' @param citycsv Character string giving the filepath to a .csv
 #'    file with latitude and longitude values for each city.
-#' @param Names of the files containing the latitude and longitude coordinates
+#' @param coordinateFilenames Character string with name of the files
+#'    containing the latitude and longitude coordinates
 #'    corresponding to the columns of the time series data.
-#' @param Names of files containing the time series data.
-#' @param Names of the files containing the date information corresponding,
-#'    to the rows of the time series data.
+#' @param tasFilenames Character sting with name of files containing the
+#'    time series data.
+#' @param timeFilenames Character string with name of the files containing
+#'    the date information corresponding to the rows of the time series data.
 #' @param RorCPP 0 /1 flag that indicates whether to use R (1) or
 #'    CPP (0) functions
 #' @param IDheatwavesReplacement Either FALSE, to use the default
@@ -183,12 +187,12 @@ check_params <- function(out,
         if( RorCPP != 1 & RorCPP != 0){
                 stop("Invalid RorCPP flag value. Must enter 1 or 0. Stopping")
         }
-  
+
         # Check 'Filenames' parameters for .csv extension.
         if(grepl(".csv", coordinateFilenames)){
                 stop("Invalid format: coordinateFilenames. Stopping")
         }
-        
+
         if(grepl(".csv", tasFilenames)){
                 stop("Invalid format: tasFilenames. Stoppping")
         }
@@ -205,23 +209,23 @@ check_params <- function(out,
 }
 
 #' Error checking for user-specified custom boundaries
-#' 
-#' @param boundList: A set of boundaries in the format c(historical period low bound, historical period high bound, 
+#'
+#' @param boundList: A set of boundaries in the format c(historical period low bound, historical period high bound,
 #' rcp period low bound, rcp period high bound)
 #' @param Length: The required length of the boundaries list. Defaulted to 4.
 checkCustomBounds <- function(boundList, length = 4){
-  
+
   # Check to make sure the user entered a list of the correct length
   if(boundList != FALSE & length(boundList) != length){
     stop("boundList length not equal to length of user-specified boundary list. Stopping.")
-  
-  # All other bounds error checking  
+
+  # All other bounds error checking
   } else if(boundList != FALSE){
     histLow <- boundList[1]
     histHigh <- boundList[2]
     rcpLow <- boundList[3]
     rcpHigh <- boundList[4]
-    
+
     # Check to make sure both upper and lower boundaries exist for the historical and rcp boundary sets
     if(typeof(histLow) != typeof(histHigh)){
       stop("One of the required boundaries of boundaries variable unspecified. Stopping")
@@ -229,7 +233,7 @@ checkCustomBounds <- function(boundList, length = 4){
     if(typeof(rcpLow) != typeof(rcpHigh)){
       stop("One of the required boundaries of boundaries variable unspecified. Stopping")
     }
-    
+
     # Check if bounds are the correct type
     if(typeof(histLow) != "double" | typeof(histHigh) != "double"){
       stop("Invalid type: histLow or histHigh. Stopping")
@@ -237,26 +241,26 @@ checkCustomBounds <- function(boundList, length = 4){
     if(typeof(rcpLow) != "double" | typeof(rcpHigh) != "double"){
       stop("Invalid type: rcpLow or rcpHigh. Stopping")
     }
-    
+
     # Check if bounds are in the correct range
     if(histLow != FALSE){
       if(histLow < 1981){
         stop("Custom boundaries for threshold calculation fall out of acceptable range. Stopping")
       }
     }
-    
+
     if(histHigh != FALSE){
       if(histHigh > 2004){
         stop("Custom boundaries for threshold calculation fall out of acceptable range. Stopping")
       }
     }
-    
+
     if(rcpLow != FALSE){
       if(rcpLow < 2061){
         stop("Custom boundaries for threshold calculation fall out of acceptable range. Stopping")
       }
     }
-    
+
     if(rcpHigh != FALSE){
       if(rcpHigh > 2080){
         stop("Custom boundaries for threshold calculation fall out of acceptable range. Stopping")
@@ -274,7 +278,7 @@ checkCustomBounds <- function(boundList, length = 4){
 #' in order to lower the number of parameters of this nature the user would have to pass down
 #' the the program otherwise. It is a closure instead of a list as a pre-emptive measure
 #'
-#' @return A closure that accepts commands to access and append new data onto 
+#' @return A closure that accepts commands to access and append new data onto
 #' data structures as the program executes.
 createAccumulators <- function(){
         modelInfoAccumulator <- data.frame(c(), c())
@@ -296,7 +300,7 @@ createAccumulators <- function(){
                 } else if(command == "append location list"){
                         locationList <<- list(locationList, newElement)
                 }
-          
-          
+
+
         }
 }

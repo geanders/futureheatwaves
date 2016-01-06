@@ -189,14 +189,14 @@ check_params <- function(out,
         }
 
         # Check 'Filenames' parameters for .csv extension.
-        if(grepl(".csv", coordinateFilenames)){
+        if(!grepl(".csv", coordinateFilenames)){
                 stop("Invalid format: coordinateFilenames. Stopping")
         }
 
-        if(grepl(".csv", tasFilenames)){
+        if(!grepl(".csv", tasFilenames)){
                 stop("Invalid format: tasFilenames. Stoppping")
         }
-        if(grepl(".csv", timeFilenames)){
+        if(!grepl(".csv", timeFilenames)){
                 stop("Invalid format: timeFilenames. Stopping")
         }
 

@@ -147,7 +147,7 @@ buildStructureEnsembles <- function(ensemble){
         files <- list.files(ensemble)
         coor <- files[grep(coordinateFilenames, files)]
         tas <- files[grep(tasFilenames, files)]
-        time <- files[grep(timefilesnames, files)]
+        time <- files[grep(timeFilesnames, files)]
         files <- c(coor, tas, time)
         files <- unlist(lapply(files, function(x){
                 paste(ensemble, x, sep = "/")

@@ -2,16 +2,23 @@
 % Please edit documentation in R/main.R
 \name{createAccumulators}
 \alias{createAccumulators}
-\title{Create accumulators}
+\title{Create accumulator closure
+This closure holds data structures that the user wishes to grow at various
+points in the execution of the package. It exists to couple these structures together
+in order to lower the number of parameters of this nature the user would have to pass down
+the the program otherwise. It is a closure instead of a list as a pre-emptive measure}
 \usage{
 createAccumulators()
 }
 \value{
-A closure that maintains data structures that track
-information about the models and the location vectors for each
-ensemble respectively.
+A closure that accepts commands to access and append new data onto 
+data structures as the program executes.
 }
 \description{
-Create accumulators
+Create accumulator closure
+This closure holds data structures that the user wishes to grow at various
+points in the execution of the package. It exists to couple these structures together
+in order to lower the number of parameters of this nature the user would have to pass down
+the the program otherwise. It is a closure instead of a list as a pre-emptive measure
 }
 

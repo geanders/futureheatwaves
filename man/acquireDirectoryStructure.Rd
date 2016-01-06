@@ -4,11 +4,20 @@
 \alias{acquireDirectoryStructure}
 \title{Determine climate projection directory structure}
 \usage{
-acquireDirectoryStructure(dataPath)
+acquireDirectoryStructure(dataPath, coordinateFilenames, tasFilenames,
+  timeFilenames)
 }
 \arguments{
 \item{dataPath}{A character string giving the file path to the
 directory with the climate projection data.}
+
+\item{Names}{of the files containing the latitude and longitude coordinates
+corresponding to the columns of the time series data.}
+
+\item{Names}{of files containing the time series data.}
+
+\item{Names}{of the files containing the date information corresponding,
+to the rows of the time series data.}
 }
 \value{
 A list object outlining the file structure of the directory
@@ -23,11 +32,7 @@ Determine climate projection directory structure
 }
 \note{
 The files in the bottom directory must all have a .csv extension
-   and must have one of the following names:
-   "latitude_longitude_NorthAmerica_12mo.csv" for the file with grid
-   point locations for the climate model,
-   "tas_NorthAmerica_12mo.csv" for the file with ...,
-   and "time_NorthAmerica_12mo.csv" for the file with ... .
+   and must names corresponding to the "Filenames" parameters of this function.
    All other files will be removed when creating the directory structure.
 }
 \examples{

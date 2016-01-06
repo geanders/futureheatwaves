@@ -107,7 +107,7 @@ gen_hw_set <- function(out,
         writeAccumulator(accumulators("return model information"), global)
 
         # Make the map
-        makeMap(accumulators("return locations"), cities)
+        # makeMap(accumulators("return locations"), cities)
 
         cat("All operations completed. Exiting.", "\n")
 }

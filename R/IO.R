@@ -52,6 +52,8 @@ writeThresholds <- function(modelName, threshLow, thresholds, global, custom){
 #' Produces a function that writes a single heatwave list to a .csv
 #' Closes over an incrementer variable for ensembles that advances forward
 #' each time the produced function is called.
+#'
+#' @importFrom dplyr %>%
 createEnsembleWriter <- function(modelName, global, custom){
         # Incrementer
         i <- 1
@@ -64,9 +66,10 @@ createEnsembleWriter <- function(modelName, global, custom){
 
                 # TODO: Check this!
                 # Write minimum threshold temperatures of each city to a file
+                thresholds <- dplyr::group_by(hwFrame, city) %>%
+                        dplyr::summarize(min = min(min.temp))
                 writeThresholds(modelName, 'minimums',
-                                plyr::ddply(hwFrame, "city", summarize,
-                                      min = min(min.temp)), global, custom)
+                                thresholds, global, custom)
 
                 # Create the directory that the file will be written to
                 dir.create(paste(writePath, modelName, sep = ""), showWarnings = FALSE, recursive = TRUE, mode = "0777")

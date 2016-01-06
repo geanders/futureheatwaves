@@ -84,7 +84,10 @@ createEnsembleWriter <- function(modelName, global, custom){
 
 # Output the variable that accumulates information on the models and ensemble counts
 writeAccumulator <- function(modelInfoAccumulator, global){
+        colnames(modelInfoAccumulator)[2] <- "number_ensembles"
         cat("Writing accumulator", "\n")
-        writePath <- global("output")
-        write.csv(modelInfoAccumulator, file = paste0(writePath, "hwModelInfo", ".csv"), row.names = FALSE)
+        writePath <- global$output
+        write.csv(modelInfoAccumulator,
+                  file = paste0(writePath, "hwModelInfo", ".csv"),
+                  row.names = FALSE)
 }

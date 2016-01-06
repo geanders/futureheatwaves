@@ -104,7 +104,7 @@ gen_hw_set <- function(out,
                                      accumulators)
 
         # Write the model information from the model information accumulator
-        writeAccumulator(accumulators("return model information"))
+        writeAccumulator(accumulators("return model information"), global)
 
         # Make the map
         makeMap(accumulators("return locations"), cities)

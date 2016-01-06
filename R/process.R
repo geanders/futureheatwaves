@@ -34,7 +34,8 @@ processModel <- function(model, global, custom, accumulators){
                                reference)
 
         # Add entry to the modelInfoAccumulator
-        accumulators("append model information", data.frame(modelName, length(rcpDirs)))
+        accumulators("append model information",
+                     data.frame(modelName, length(ensembles)))
 
         return(rcpEnsembles)
 }
@@ -143,7 +144,7 @@ processEnsemble <- function(ensemble, experiment, modelName, global,
         bounds <- getBounds(times, experiment, custom)
         start <- bounds[1]
         end <- bounds[2]
-        
+
         #         if(debug){
         #                 print("Process Ensemble Bounds: ")
         #                 cat("start: ", start, "\n")
@@ -152,14 +153,14 @@ processEnsemble <- function(ensemble, experiment, modelName, global,
         bloodhound <<- ensemble
         bark <<- times
         hold <<- tas
-        
+
         subCustom <- list("IDheatwaves" = FALSE,
                           "getBounds" = reference,
                           "processModel" = FALSE,
                           "createHwDataframe" = FALSE)
         # Get a vector containing the dates of days we are dealing with
         dates <- formDates(times, bounds)
-        
+
         # Acquire time series for every city
         series <- data.frame(tas[start:end, locations])
 

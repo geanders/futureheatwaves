@@ -5,7 +5,6 @@ using namespace std;
 
 // Function prototypes. Still not 100% sure I need these.
 void addHeatwaveEntry(int, int, vector<int>&, vector<int>&, vector<int>&);
-DataFrame IDHeatwavesCPP(int, NumericVector);
 
 // [[Rcpp::export]]
 DataFrame IDHeatwavesCPP(int heatwaveLength, NumericVector tempsExceedingCutoff){
@@ -43,6 +42,8 @@ DataFrame IDHeatwavesCPP(int heatwaveLength, NumericVector tempsExceedingCutoff)
                         potentialHeatwave.clear();
                 }
         }
+
+        // wrap the C++ datastructures to analogous R forms
         NumericVector heat = wrap(hw);
         NumericVector hwNum = wrap(hwNumber);
         NumericVector firstDay = wrap(firstHwDay);

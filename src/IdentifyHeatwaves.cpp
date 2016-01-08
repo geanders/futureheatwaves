@@ -5,6 +5,8 @@ using namespace std;
 
 //TODO: TEST
 
+// [[Rcpp::interfaces(r, cpp)]]
+
 //Prototypes
 //Note: The code may work without prototypes on certain systems, but not on systems like Solaris. It
 //is best to keep the prototypes in.

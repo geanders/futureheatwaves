@@ -8,7 +8,7 @@
 #' @param Names of files containing the time series data.
 #' @param Names of the files containing the date information corresponding,
 #'    to the rows of the time series data.
-#'    
+#'
 #' @return A list object outlining the file structure of the directory
 #'    containing the climate projections.This list has an element
 #'    for each climate model (e.g. ,"bcc1"). The first element within each
@@ -49,11 +49,9 @@ acquireDirectoryStructure <- function(dataPath, coordinateFilenames, tasFilename
                                   paste(exp, ens)) %>%
                 dplyr::left_join(df_all, by = "model") %>%
                 dplyr::filter(check_1 & check_2 & check_3 &
-                               type %in% c(coordinateFilenames, 
-                                           tasFilenames, 
+                               type %in% c(coordinateFilenames,
+                                           tasFilenames,
                                            timeFilenames)) %>%
-                                 
-                                 )) %>%
                 dplyr::select(exp, model, ens, type)
 
         all <- apply(df_all, 1, paste, collapse = "/")
@@ -62,7 +60,6 @@ acquireDirectoryStructure <- function(dataPath, coordinateFilenames, tasFilename
 
         # Generate the nested lists that will be used for the processing step
         # Structure: model -> experiment -> ensemble
-        # See Flow.Rmd for more details.
         finalList <- lapply(models, buildStructureModels, experiments, all, dataPath)
 
         return(finalList)
@@ -114,13 +111,13 @@ buildStructureModels <- function(model, experiments, all, dataPath){
 #' buildStructureExperiments(model, experiments, all, dataPath)
 #  TODO: write note about return format
 buildStructureExperiments <- function(model, experiment, all, dataPath){
-  
+
         # List all ensembles in the given experiment
         ensembles <- list.dirs(paste0(dataPath, experiment, "/", model))
-        
+
         # TODO: Figure out what this line does
         ensembles <- ensembles[-1]
-        
+
         # Build the directory structure of each ensemble
         ret <- lapply(ensembles, buildStructureEnsembles)
         return(ret)
@@ -144,7 +141,7 @@ buildStructureEnsembles <- function(ensemble){
                                          function(x) x %in%
                                                  c("historical", "rcp85"))) + 2
         ensembleName <- splist[[1]][model_name_index]
-        
+
         # remove any irrelevant files from the file structure
         files <- list.files(ensemble)
         coor <- files[grep(coordinateFilenames, files)]

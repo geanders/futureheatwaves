@@ -4,7 +4,7 @@ Title: Identify and Characterize Heatwaves in Climate Projections
 Version: 0.0.0.9000
 Date: 2015-12-23
 Authors@R: c(
-    person("Colin", "Eason", , "colinae@rams.colostate.edu", c("aut", "cre")),
+    person("Colin", "Eason", , "aimesce@gmail.com", c("aut", "cre")),
     person("Elizabeth", "Barnes", , "eabarnes@atmos.colostate.edu", c("aut")),
     person("Brooke", "Anderson", , "brooke.anderson@colostate.edu", c("aut"))
     )

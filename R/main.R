@@ -6,13 +6,11 @@
 #'    contains climate projections. Must include the final backslash.
 #' @param citycsv Character string giving the filepath to a .csv
 #'    file with latitude and longitude values for each city.
-#' @param coordinateFilenames Character string with name of the files
-#'    containing the latitude and longitude coordinates
+#' @param coordinateFilenames Character string with name of the files containing the latitude and longitude coordinates
 #'    corresponding to the columns of the time series data.
-#' @param tasFilenames Character sting with name of files containing the
-#'    time series data.
-#' @param timeFilenames Character string with name of the files containing
-#'    the date information corresponding to the rows of the time series data.
+#' @param tasFilenames Character sting with name of files containing the time series data.
+#' @param timeFilenames Character string with name of the files containing the date information corresponding,
+#'    to the rows of the time series data.
 #' @param RorCPP 0 /1 flag that indicates whether to use R (1) or
 #'    CPP (0) functions
 #' @param IDheatwavesReplacement Either FALSE, to use the default
@@ -87,6 +85,9 @@ gen_hw_set <- function(out,
         global <- list("output" = out,
                        "data" = dataFolder,
                        "cities" = cities,
+                       "coordinateFilenames" = coordinateFilenames,
+                       "tasFilenames" = tasFilenames,
+                       "timeFilenames" = timeFilenames,
                        "RorCPP" = RorCPP)
 
         # Create the "custom" list object that will hold all of the user's
@@ -121,13 +122,11 @@ gen_hw_set <- function(out,
 #'    contains climate projections. Must include the final backslash.
 #' @param citycsv Character string giving the filepath to a .csv
 #'    file with latitude and longitude values for each city.
-#' @param coordinateFilenames Character string with name of the files
-#'    containing the latitude and longitude coordinates
+#' @param coordinateFilenames Character string with name of the files containing the latitude and longitude coordinates
 #'    corresponding to the columns of the time series data.
-#' @param tasFilenames Character sting with name of files containing the
-#'    time series data.
-#' @param timeFilenames Character string with name of the files containing
-#'    the date information corresponding to the rows of the time series data.
+#' @param tasFilenames Character sting with name of files containing the time series data.
+#' @param timeFilenames Character string with name of the files containing the date information corresponding,
+#'    to the rows of the time series data.
 #' @param RorCPP 0 /1 flag that indicates whether to use R (1) or
 #'    CPP (0) functions
 #' @param IDheatwavesReplacement Either FALSE, to use the default

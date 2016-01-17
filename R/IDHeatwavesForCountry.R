@@ -26,17 +26,18 @@ IDheatwaves <- function(city, threshold, days = 2, datafr, global, custom){
                 customHeatwaveFunction <- custom["IDheatwaves"]
                 heatwaveDataframe <- customHeatwaveFunction(city, threshold, days, datafr)
         }
+
         # Acquire heatwave dataframe using the R or C++ functions
         # R
         else if(RorCPP == 0){
                 heatwaveDataframe <- IDHeatwavesR(city, threshold, days, datafr)
 
-                # C++
+        # C++
         } else if (RorCPP == 1){
                 # Add names to the dataframe
                 colnames(datafr) <- c("date", "tmpd")
 
-                # Find temperatures that exceed the threshold
+                # Find temperatures that exceed the threshold. One means the measurement equals or exceeds threshold.
                 tempsExceedingthreshold <- ifelse(datafr[,2] >= threshold, 1, 0)
 
                 # Add zero onto the end of the vector. The CPP routine needs this to work properly.
@@ -71,19 +72,19 @@ IDHeatwavesR <- function(city = stop("Error: unspecified city"),
         # Add names to the dataframe
         colnames(datafr) <- c("date", "tmpd")
 
-        # Vector of ones or zeroes. One means the measurement equals or exceeds threshold.
+        # Find temperatures that exceed the threshold. One means the measurement equals or exceeds threshold.
         tempsExceedingthreshold <- ifelse(datafr[,2] >= threshold, 1, 0)
 
         # Add zero to end of vector so that the match function below
         tempsExceedingthreshold <- c(tempsExceedingthreshold, 0)
 
-        # What a heatwave looks like in a dataframe
+        # What a heatwave looks like in a vector
         heatwaveForm <- rep(1, days)
 
         # Counter for heatwave number
         counter <- 1
 
-        # hwBound i sused to extract a vector to compare against heatwaveForm
+        # hwBound is used to extract a vector of data from the series to compare against heatwaveForm
         hwBound <- days - 1
 
         # Initialize dataframe containing the columns that will be added to datafr

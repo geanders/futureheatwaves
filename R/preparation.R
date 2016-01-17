@@ -61,7 +61,6 @@ acquireDirectoryStructure <- function(dataPath, coordinateFilenames,
 
         # Generate the nested lists that will be used for the processing step
         # Structure: model -> experiment -> ensemble
-        # See Flow.Rmd for more details.
         finalList <- lapply(models, buildStructureModels, experiments, all, dataPath)
 
         return(finalList)

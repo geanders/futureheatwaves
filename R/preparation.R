@@ -21,9 +21,6 @@
 #'    All other files will be removed when creating the directory structure.
 #'
 #' @importFrom dplyr %>%
-#' @examples
-# TODO: the directory structure requires more explanation.
-# TODO: change the comment below when the '/' problem is resolved
 #' dataFolder <- "~/Downloads/sample/cmip5/"
 #' finalList <- acquireDirectoryStructure(dataFolder)
 #' str(finalList[[1]][[1]])
@@ -61,7 +58,7 @@ acquireDirectoryStructure <- function(dataPath, coordinateFilenames,
 
         # Generate the nested lists that will be used for the processing step
         # Structure: model -> experiment -> ensemble
-        finalList <- lapply(models, buildStructureModels, experiments, all, dataPath)
+        finalList <- lapply(models, buildStructureModels, experiments, all, dataPath, coordinateFilenames, tasFilenames, timeFilenames)
 
         return(finalList)
 }
@@ -77,6 +74,10 @@ acquireDirectoryStructure <- function(dataPath, coordinateFilenames,
 #' @param dataPath Character string of the file path to the directory
 #'    containing the climate projections. Must include the final `/`.
 #'
+#' @return A list of length 3. The first element is the name of the model whose structure was being built.
+#' The second element is the historical experiment hierarchy. The third element is the rcp85 experiment hierarchy. The
+#' second and third elements are return values of buildStructureExperiments.
+#'
 #' @examples
 #' model <- "bcc1"
 #' experiments <- c("rcp85")
@@ -85,10 +86,10 @@ acquireDirectoryStructure <- function(dataPath, coordinateFilenames,
 #'          "rcp85/bcc1/r1i1p1/time_NorthAmerica_12mo.csv")
 #' dataPath <- "~/Downloads/sample/cmip5/"
 #' buildStructureModels(model, experiments, all, dataPath)
-buildStructureModels <- function(model, experiments, all, dataPath){
+buildStructureModels <- function(model, experiments, all, dataPath, coordinateFilenames, tasFilenames, timeFilenames){
         return(list(model,
-                    buildStructureExperiments(model, experiments[1], all, dataPath),
-                    buildStructureExperiments(model, experiments[2], all, dataPath)))
+                    buildStructureExperiments(model, experiments[1], all, dataPath, coordinateFilenames, tasFilenames, timeFilenames),
+                    buildStructureExperiments(model, experiments[2], all, dataPath, coordinateFilenames, tasFilenames, timeFilenames)))
 }
 
 #' Generate list of file structure for an experiment
@@ -102,6 +103,9 @@ buildStructureModels <- function(model, experiments, all, dataPath){
 #' @param dataPath Character string of the file path to the directory
 #'    containing the climate projections. Must include the final `/`.
 #'
+#' @return A list that is the length of the number of ensembles. Each element is a return value
+#' of the buildStructureEnsembles function.
+#'
 #' @examples
 #' model <- "bcc1"
 #' experiment <- "rcp85"
@@ -110,17 +114,17 @@ buildStructureModels <- function(model, experiments, all, dataPath){
 #'          "rcp85/bcc1/r1i1p1/time_NorthAmerica_12mo.csv")
 #' dataPath <- "~/Downloads/sample/cmip5/"
 #' buildStructureExperiments(model, experiments, all, dataPath)
-#  TODO: write note about return format
-buildStructureExperiments <- function(model, experiment, all, dataPath){
+#'
+buildStructureExperiments <- function(model, experiment, all, dataPath, coordinateFilenames, tasFilenames, timeFilenames){
 
         # List all ensembles in the given experiment
         ensembles <- list.dirs(paste0(dataPath, experiment, "/", model))
 
-        # TODO: Figure out what this line does
+        # Trim off the first element of 'ensembles' list, since it does not contain information about an ensemblest
         ensembles <- ensembles[-1]
 
         # Build the directory structure of each ensemble
-        ret <- lapply(ensembles, buildStructureEnsembles)
+        ret <- lapply(ensembles, buildStructureEnsembles, coordinateFilenames, tasFilenames, timeFilenames)
         return(ret)
 }
 
@@ -130,15 +134,17 @@ buildStructureExperiments <- function(model, experiment, all, dataPath){
 #'    for the directory with a particular ensemble member of a climate
 #'    model projection.
 #'
+#' @return A list of length 2. First element is the name of the ensemble that was processed. Second element is
+#' a list containing the coordinate .csv, the time series data .csv, and the time data .csv respectively.
+#'
 #' @examples
 #' ensemble <- "/Users/brookeanderson/Downloads/sample/cmip5/rcp85/bcc1/r1i1p1"
 #' buildStructureEnsembles(ensemble)
-# TODO: write note about return format
-buildStructureEnsembles <- function(ensemble){
+buildStructureEnsembles <- function(ensemble, coordinateFilenames, tasFilenames, timeFilenames){
 
         # Extract name of the ensemble
         splist = strsplit(ensemble, "/")
-        model_name_index <- which(sapply(splist,
+        ensemble_name_index <- which(sapply(splist,
                                          function(x) x %in%
                                                  c("historical", "rcp85"))) + 2
         ensembleName <- splist[[1]][model_name_index]

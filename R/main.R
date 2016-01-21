@@ -23,6 +23,7 @@
 #' @param referenceBoundaries Reference boundaries.
 #'
 #' @return [What does this function return?]
+gar <- c()
 gen_hw_set <- function(out,
                        dataFolder,
                        citycsv,
@@ -42,6 +43,7 @@ gen_hw_set <- function(out,
   # TODO: Analyze the dataBoundaries and referenceBoundaries variables to make sure they are consistent with
   # program requirements.
   # ~
+
   # Add warning for user that this will write new files
         if(printWarning){
                 cat("\n", "Warning: This function will write new files",
@@ -55,7 +57,6 @@ gen_hw_set <- function(out,
                 }
         }
 
-        # TODO: Fix the program such that this block is not required
         # If `dataFolder` does not end in "/", add it.
         split_dataFolder <- unlist(strsplit(dataFolder, split = ""))
         last_char <- split_dataFolder[length(split_dataFolder)]
@@ -76,6 +77,7 @@ gen_hw_set <- function(out,
 
         # Put the directories into nested list form
         models <- acquireDirectoryStructure(dataFolder, coordinateFilenames, tasFilenames, timeFilenames)
+        gar <- models
 
         # Read the cities data file
         cities <- read.csv(citycsv)
@@ -105,7 +107,7 @@ gen_hw_set <- function(out,
                                      accumulators)
 
         # Write the model information from the model information accumulator
-        writeAccumulator(accumulators("return model information"))
+        writeAccumulator(accumulators("return model information"), global)
 
         # Make the map
         makeMap(accumulators("return locations"), cities)
@@ -188,14 +190,15 @@ check_params <- function(out,
         }
 
         # Check 'Filenames' parameters for .csv extension.
-        if(grepl(".csv", coordinateFilenames)){
+        cat(coordinateFilenames)
+        if(!grepl(".csv", coordinateFilenames)){
                 stop("Invalid format: coordinateFilenames. Stopping")
         }
 
-        if(grepl(".csv", tasFilenames)){
+        if(!grepl(".csv", tasFilenames)){
                 stop("Invalid format: tasFilenames. Stoppping")
         }
-        if(grepl(".csv", timeFilenames)){
+        if(!grepl(".csv", timeFilenames)){
                 stop("Invalid format: timeFilenames. Stopping")
         }
 
@@ -270,7 +273,6 @@ checkCustomBounds <- function(boundList, length = 4){
 
 # TODO: It may be possible to make the accumulator system extremely robust. Consider this possibility
 #       after all else is finished.
-# TODO: Consider changing this closure to a list
 #' Create accumulator closure
 #' This closure holds data structures that the user wishes to grow at various
 #' points in the execution of the package. It exists to couple these structures together

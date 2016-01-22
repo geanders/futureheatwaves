@@ -280,7 +280,11 @@ checkCustomBounds <- function(boundList, length = 4){
 #' the the program otherwise. It is a closure instead of a list as a pre-emptive measure
 #'
 #' @return A closure that accepts commands to access and append new data onto
-#' data structures as the program executes.
+#' data structures as the program executes. The utility of this function may be expanded by
+#'
+#' @note First argument: The command
+#' Second argument: An element to be appended to the end of the data structure of the command
+#' This function contains no error checking for the types of elements input into the data structures it contains
 createAccumulators <- function(){
         modelInfoAccumulator <- data.frame(c(), c())
         locationList <- list()
@@ -300,6 +304,9 @@ createAccumulators <- function(){
 
                 } else if(command == "append location list"){
                         locationList <<- list(locationList, newElement)
+                }
+                else{
+                        stop("Accumulator closure: Bad command. Exiitng.")
                 }
 
 

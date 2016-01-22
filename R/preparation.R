@@ -119,7 +119,7 @@ buildStructureExperiments <- function(model, experiment, all, dataPath, coordina
         # List all ensembles in the given experiment
         ensembles <- list.dirs(paste0(dataPath, experiment, "/", model))
 
-        # Trim off the first element of 'ensembles' list, since it does not contain information about an ensemble's
+        # Trim off the first element of 'ensembles' list, since it does not contain information about an ensemble's data.
         ensembles <- ensembles[-1]
 
         # Build the directory structure of each ensemble

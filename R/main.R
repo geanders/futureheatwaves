@@ -306,7 +306,7 @@ createAccumulators <- function(){
                         locationList <<- list(locationList, newElement)
                 }
                 else{
-                        stop("Accumulator closure: Bad command. Exiitng.")
+                        stop("Accumulator closure: Bad command. Exiting.")
                 }
 
 

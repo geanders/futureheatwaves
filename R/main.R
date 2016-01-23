@@ -16,10 +16,10 @@ gar <- c()
 #'    contains climate projections. Must include the final backslash.
 #' @param citycsv Character string giving the filepath to a .csv
 #'    file with latitude and longitude values for each city.
-#' @param coordinateFilenames Names of the files containing the latitude and longitude coordinates
+#' @param coordinateFilenames Character string with name of the files containing the latitude and longitude coordinates
 #'    corresponding to the columns of the time series data.
-#' @param tasFilenames Names of files containing the time series data.
-#' @param timeFilenames Names of the files containing the date information corresponding,
+#' @param tasFilenames Character sting with name of files containing the time series data.
+#' @param timeFilenames Character string with name of the files containing the date information corresponding,
 #'    to the rows of the time series data.
 #' @param RorCPP 0 /1 flag that indicates whether to use R (1) or
 #'    CPP (0) functions
@@ -108,12 +108,13 @@ gen_hw_set <- function(out,
                                      accumulators)
 
         # Write the model information from the model information accumulator
+        out <- accumulators("return model information")
         writeAccumulator(accumulators("return model information"), global)
 
         # Make the map
-        makeMap(accumulators("return locations"), cities)
-
-        cat("All operations completed. Exiting.", "\n")
+        # makeMap(accumulators("return locations"), cities)
+        cat("All operations completed. Exiting.", "\n\n")
+        return(out)
 }
 
 #' Error checking for parameters of gen_hw_set
@@ -124,10 +125,10 @@ gen_hw_set <- function(out,
 #'    contains climate projections. Must include the final backslash.
 #' @param citycsv Character string giving the filepath to a .csv
 #'    file with latitude and longitude values for each city.
-#' @param coordinateFilenames Names of the files containing the latitude and longitude coordinates
+#' @param coordinateFilenames Character string with name of the files containing the latitude and longitude coordinates
 #'    corresponding to the columns of the time series data.
-#' @param tasFilenames Names of files containing the time series data.
-#' @param timeFilenames Names of the files containing the date information corresponding,
+#' @param tasFilenames Character sting with name of files containing the time series data.
+#' @param timeFilenames Character string with name of the files containing the date information corresponding,
 #'    to the rows of the time series data.
 #' @param RorCPP 0 /1 flag that indicates whether to use R (1) or
 #'    CPP (0) functions

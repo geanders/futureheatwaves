@@ -49,17 +49,25 @@ writeThresholds <- function(modelName, threshOut, thresholds, global, custom){
         write.csv(writeThis, file = paste(writePath, modelName, "/", threshOut, ".csv", sep = ''))
 }
 
-# createEnsembleWriter Produces a function that writes a single heatwave list to a .csv
-# Closes over an incrementer variable for ensembles that advances forward each time the produced function is called.
-#' Output the heatwave data of each model. Produces a closure that must be applied to a list of the
-#' heatwave dataframes corresponding to the ensembles of the model
+#' Ensemble writer factory function
+#'
+#' Produces a function that writes a single heatwave list to a .csv
+#'
+#' Closes over an incrementer variable for ensembles that advances forward
+#' each time the produced function is called.
+#' Output the heatwave data of each model. Produces a closure that must be
+#' applied to a list of the heatwave dataframes corresponding to the
+#' ensembles of the model
 #'
 #' @param modelName Name of the model
 #' @param global The global data list
 #' @param custom The custom parameter list
 #'
 #' @return A closure that writes heatwave dataframes
-#' Argument 1: A combined heatwave dataframe that contains all heatwave information for the ensemble being processed.
+#' Argument 1: A combined heatwave dataframe that contains all heatwave
+#' information for the ensemble being processed.
+#'
+#' #' @importFrom dplyr %>%
 createEnsembleWriter <- function(modelName, global, custom){
         # Incrementer
         i <- 1
@@ -74,9 +82,10 @@ createEnsembleWriter <- function(modelName, global, custom){
                 # even though the documentation for writeThresholds states it is only supposed to be called
                 # for the r1i1p1 ensemble. Make adjustments.
                 # Write minimum threshold temperatures of each city to a file
+                thresholds <- dplyr::group_by(hwFrame, city) %>%
+                        dplyr::summarize(min = min(min.temp))
                 writeThresholds(modelName, 'minimums',
-                                plyr::ddply(hwFrame, "city", summarize,
-                                      min = min(min.temp)), global, custom)
+                                thresholds, global, custom)
 
                 # Create the directory that the file will be written to
                 dir.create(paste(writePath, modelName, sep = ""), showWarnings = FALSE, recursive = TRUE, mode = "0777")
@@ -94,7 +103,10 @@ createEnsembleWriter <- function(modelName, global, custom){
 #' @param modelInfoAccumulator The dataframe that accumulates the number of ensembles for each model.
 #' @param global The global data list
 writeAccumulator <- function(modelInfoAccumulator, global){
+        colnames(modelInfoAccumulator)[2] <- "number_ensembles"
         cat("Writing accumulator", "\n")
-        writePath <- global("output")
-        write.csv(modelInfoAccumulator, file = paste0(writePath, "hwModelInfo", ".csv"), row.names = FALSE)
+        writePath <- global$output
+        write.csv(modelInfoAccumulator,
+                  file = paste0(writePath, "hwModelInfo", ".csv"),
+                  row.names = FALSE)
 }

@@ -7,7 +7,7 @@
 buildStructureEnsembles(ensemble)
 }
 \arguments{
-\item{ensemble}{Character string that gives the absolute file path
+\item{Ensemble}{character string that gives the absolute file path
 for the directory with a particular ensemble member of a climate
 model projection.}
 }

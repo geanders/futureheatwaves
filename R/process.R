@@ -36,7 +36,8 @@ processModel <- function(model, global, custom, accumulators){
                                reference)
 
         # Add entry to the modelInfoAccumulator
-        accumulators("append model information", data.frame(modelName, length(rcpDirs)))
+        accumulators("append model information",
+                     data.frame(modelName, length(ensembles)))
 
         return(rcpEnsembles)
 }
@@ -54,7 +55,8 @@ processModel <- function(model, global, custom, accumulators){
 #' @return Writes threshold temperatures to file and returns ... ?
 processHistorical <- function(model, global, custom, reference = FALSE){
         name <- model[[1]]
-        historicalDirs <- model[[2]][1][[1]]
+        r1i1p1_index <- grep("r1i1p1", model[[2]][1])
+        historicalDirs <- model[[2]][1][[r1i1p1_index]]
         cat("Processing historical ensemble for", name, "\n")
 
         # Acquire characteristics of the first historical ensemble
@@ -151,6 +153,12 @@ processEnsemble <- function(ensemble, experiment, modelName, global,
         #                 cat("start: ", start, "\n")
         #                 cat("end: ", end, "\n")
         #         }
+<<<<<<< HEAD
+        bloodhound <<- ensemble
+        bark <<- times
+        hold <<- tas
+=======
+>>>>>>> ffe07b73935ec50f8234a15eda714c2f9e9cfeb2
 
         subCustom <- list("IDheatwaves" = FALSE,
                           "getBounds" = reference,

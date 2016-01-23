@@ -1,4 +1,3 @@
-
 #' Determine climate projection directory structure
 #'
 #' @param dataPath A character string giving the file path to the
@@ -25,7 +24,8 @@
 #' finalList <- acquireDirectoryStructure(dataFolder)
 #' str(finalList[[1]][[1]])
 #' str(finalList[[1]][[2]][1])
-acquireDirectoryStructure <- function(dataPath, coordinateFilenames, tasFilenames, timeFilenames){
+acquireDirectoryStructure <- function(dataPath, coordinateFilenames,
+                                      tasFilenames, timeFilenames){
 
         # Acquire all pathnames to csv files rooted at dataPath
         all <- list.files(dataPath, recursive = TRUE,

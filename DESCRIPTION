@@ -4,11 +4,10 @@ Title: Identify and Characterize Heatwaves in Climate Projections
 Version: 0.0.0.9000
 Date: 2015-12-23
 Authors@R: c(
-    person("Colin", "Eason", , "aimesce@gmail.com", c("aut")),
+    person("Colin", "Eason", , "aimesce@gmail.com", c("aut", "cre")),
     person("Elizabeth", "Barnes", , "eabarnes@atmos.colostate.edu", c("aut")),
-    person("Brooke", "Anderson", , "brooke.anderson@colostate.edu", c("aut", "cre"))
+    person("Brooke", "Anderson", , "brooke.anderson@colostate.edu", c("aut"))
     )
-Maintainer: Brooke Anderson <brooke.anderson@colostate.edu>
 Description: Takes locally saved climate projections and identifies and
     characterizes heatwaves in those projections. Heatwaves are defined
     based on a definition frequently used in climate epidemiology.
@@ -20,7 +19,6 @@ Imports:
     dplyr,
     ggplot2,
     maps,
-    plyr,
     Rcpp
 Suggests:
     knitr,

@@ -17,7 +17,7 @@ climate projection files of interest from the directory
 specified in dataPath}
 
 \item{dataPath}{Character string of the file path to the directory
-containing the climate projections. Must include the final `\`.}
+containing the climate projections. Must include the final `/`.}
 }
 \description{
 Generate list of file structure from model, experiment, and path

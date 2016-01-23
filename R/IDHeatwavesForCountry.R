@@ -22,7 +22,7 @@ IDheatwaves <- function(city, threshold, days = 2, datafr, global, custom){
         RorCPP <- global["RorCPP"]
 
         # Check if user has specified their own replacement function for identifying heatwaves
-        if(custom["IDheatwaves"] != FALSE){
+        if(custom["IDheatwaves"] == TRUE){
                 customHeatwaveFunction <- custom["IDheatwaves"]
                 heatwaveDataframe <- customHeatwaveFunction(city, threshold, days, datafr)
         }

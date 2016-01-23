@@ -1,3 +1,13 @@
+#~
+# TODO: Note for later. Will delete
+# "latitude_longitude_NorthAmerica_12mo.csv",  "tas_NorthAmerica_12mo.csv",  "time_NorthAmerica_12mo.csv"
+#
+# TODO: Analyze the dataBoundaries and referenceBoundaries variables to make sure they are consistent with
+# program requirements.
+# ~
+gar <- c()
+
+
 #' Create heatwave dataset for a directory of climate projections
 #'
 #' @param out Character string with pathway to directory to which
@@ -23,7 +33,6 @@
 #' @param referenceBoundaries Reference boundaries.
 #'
 #' @return [What does this function return?]
-gar <- c()
 gen_hw_set <- function(out,
                        dataFolder,
                        citycsv,
@@ -36,13 +45,23 @@ gen_hw_set <- function(out,
                        referenceBoundaries = FALSE,
                        printWarning = TRUE){
 
-  #~
-  # TODO: Note for later. Will delete
-  # "latitude_longitude_NorthAmerica_12mo.csv",  "tas_NorthAmerica_12mo.csv",  "time_NorthAmerica_12mo.csv"
-  #
-  # TODO: Analyze the dataBoundaries and referenceBoundaries variables to make sure they are consistent with
-  # program requirements.
-  # ~
+        # If `dataFolder` does not end in "/", add it.
+        split_dataFolder <- unlist(strsplit(dataFolder, split = ""))
+        last_char <- split_dataFolder[length(split_dataFolder)]
+        if(last_char != "/"){
+                dataFolder <- paste0(dataFolder, "/")
+        }
+
+        # Check the parameters for errors
+        check_params(out,
+                     dataFolder,
+                     citycsv,
+                     coordinateFilenames,
+                     tasFilenames,
+                     timeFilenames,
+                     RorCPP,
+                     dataBoundaries, IDheatwavesReplacement,
+                     referenceBoundaries)
 
   # Add warning for user that this will write new files
         if(printWarning){
@@ -56,24 +75,6 @@ gen_hw_set <- function(out,
                         stop("User chose to exit function run.")
                 }
         }
-
-        # If `dataFolder` does not end in "/", add it.
-        split_dataFolder <- unlist(strsplit(dataFolder, split = ""))
-        last_char <- split_dataFolder[length(split_dataFolder)]
-        if(last_char != "/"){
-          dataFolder <- paste0(dataFolder, "/")
-        }
-
-        # Check the parameters for errors
-        check_params(out,
-                     dataFolder,
-                     citycsv,
-                     coordinateFilenames,
-                     tasFilenames,
-                     timeFilenames,
-                     RorCPP,
-                     dataBoundaries, IDheatwavesReplacement,
-                     referenceBoundaries)
 
         # Put the directories into nested list form
         models <- acquireDirectoryStructure(dataFolder, coordinateFilenames, tasFilenames, timeFilenames)

@@ -28,7 +28,6 @@ readTimes <- function(ensemble){
         return(read.csv(ensemble[4], header = FALSE))
 }
 
-# TODO: Investigate what this function does. I can't exactly remember.
 #' Write the temperature cutoffs acquired from the r1i1p1 ensemble for each model to a .csv
 #'
 #' @param modelName Name of the model.
@@ -53,15 +52,22 @@ writeThresholds <- function(modelName, threshOut, thresholds, global, custom){
 #' Ensemble writer factory function
 #'
 #' Produces a function that writes a single heatwave list to a .csv
-# Closes over an incrementer variable for ensembles that advances forward each time the produced function is called.
-#' Output the heatwave data of each model. Produces a closure that must be applied to a list of the
-#' heatwave dataframes corresponding to the ensembles of the model
+#'
+#' Closes over an incrementer variable for ensembles that advances forward
+#' each time the produced function is called.
+#' Output the heatwave data of each model. Produces a closure that must be
+#' applied to a list of the heatwave dataframes corresponding to the
+#' ensembles of the model
 #'
 #' @param modelName Name of the model
 #' @param global The global data list
 #' @param custom The custom parameter list
 #'
-#' @importFrom dplyr %>%
+#' @return A closure that writes heatwave dataframes
+#' Argument 1: A combined heatwave dataframe that contains all heatwave
+#' information for the ensemble being processed.
+#'
+#' #' @importFrom dplyr %>%
 createEnsembleWriter <- function(modelName, global, custom){
         # Incrementer
         i <- 1

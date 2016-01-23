@@ -1,4 +1,3 @@
-
 #' Determine climate projection directory structure
 #'
 #' @param dataPath A character string giving the file path to the
@@ -120,7 +119,7 @@ buildStructureExperiments <- function(model, experiment, all, dataPath, coordina
         # List all ensembles in the given experiment
         ensembles <- list.dirs(paste0(dataPath, experiment, "/", model))
 
-        # Trim off the first element of 'ensembles' list, since it does not contain information about an ensemblest
+        # Trim off the first element of 'ensembles' list, since it does not contain information about an ensemble's data.
         ensembles <- ensembles[-1]
 
         # Build the directory structure of each ensemble
@@ -155,8 +154,8 @@ buildStructureEnsembles <- function(ensemble, coordinateFilenames, tasFilenames,
         tas <- files[grep(tasFilenames, files)]
         time <- files[grep(timeFilenames, files)]
         files <- c(coor, tas, time)
-        files <- unlist(lapply(files, function(x){
-                paste(ensemble, x, sep = "/")
+        directories <- unlist(lapply(files, function(x){
+                return(paste(ensemble, x, sep = "/"))
         }))
-        return(c(ensembleName, files))
+        return(c(ensembleName, directories))
 }

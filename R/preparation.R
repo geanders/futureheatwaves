@@ -58,7 +58,6 @@ acquireDirectoryStructure <- function(dataPath, coordinateFilenames,
         # Generate the nested lists that will be used for the processing step
         # Structure: model -> experiment -> ensemble
         finalList <- lapply(models, buildStructureModels, experiments, all, dataPath, coordinateFilenames, tasFilenames, timeFilenames)
-
         return(finalList)
 }
 
@@ -146,7 +145,7 @@ buildStructureEnsembles <- function(ensemble, coordinateFilenames, tasFilenames,
         ensemble_name_index <- which(sapply(splist,
                                          function(x) x %in%
                                                  c("historical", "rcp85"))) + 2
-        ensembleName <- splist[[1]][model_name_index]
+        ensembleName <- splist[[1]][ensemble_name_index]
 
         # remove any irrelevant files from the file structure
         files <- list.files(ensemble)

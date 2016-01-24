@@ -153,12 +153,6 @@ processEnsemble <- function(ensemble, experiment, modelName, global,
         #                 cat("start: ", start, "\n")
         #                 cat("end: ", end, "\n")
         #         }
-<<<<<<< HEAD
-        bloodhound <<- ensemble
-        bark <<- times
-        hold <<- tas
-=======
->>>>>>> ffe07b73935ec50f8234a15eda714c2f9e9cfeb2
 
         subCustom <- list("IDheatwaves" = FALSE,
                           "getBounds" = reference,

@@ -27,8 +27,8 @@ corresponding to the columns of the time series data.}
 \item{timeFilenames}{Character string with name of the files containing the date information corresponding,
 to the rows of the time series data.}
 
-\item{RorCPP}{0 /1 flag that indicates whether to use R (1) or
-CPP (0) functions}
+\item{RorCPP}{0 /1 flag that indicates whether to use R (0) or
+C++ (1) function to identify heatwaves in the projections}
 
 \item{IDheatwavesReplacement}{Either FALSE, to use the default
 heatwave definition, or a user-specified custom function to

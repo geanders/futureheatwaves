@@ -2,7 +2,7 @@
 % Please edit documentation in R/main.R
 \name{check_params}
 \alias{check_params}
-\title{Error checking for parameters of gen_hw_set}
+\title{Check for input parameter errors}
 \usage{
 check_params(out, dataFolder, citycsv, coordinateFilenames, tasFilenames,
   timeFilenames, RorCPP, IDheatwavesReplacement, dataBoundaries,
@@ -44,21 +44,41 @@ Restrictions: Bounds cannot span multiple experiments}
 Stops and returns an error if any parameters are incorrect.
 }
 \description{
-Error checking for parameters of gen_hw_set
+This function goes through all parameter inputs for the main
+   functions, \code{gen_hw_set}, and makes sure all parameter
+   entries are in the appropriate format for following functions.
+   If any parameters are in an incorrect format, the function stops
+   and returns an error describing the problem.
 }
 \note{
-Does not check if the data is organized in the proper structure or
-   if any data exists within the directory at all.
+This function does not check if the data is organized in the proper
+   structure or if any data exists within the directory at all, so a
+   call to \code{gen_hw_set} could still pass through this check and
+   make it further through the function code with those mistakes.
 
-Does not check if the three ensemble .csv data files exist, only if they have
-   the .csv extension.
+Does not check if the three ensemble final .csv data files exist,
+   only if they have the .csv extension if they do exist. (Reminder:
+   the final subdirectory should have the following three csv files:
+   1. A file with the climate model projections, with grid points by
+   column and times by row; 2. A file with the longitude and latitude
+   of each grid point in the projection file and; 3. A file with the
+   date of each of the rows in the projection file.)
 }
 \examples{
-out <- "~/Downloads/sample/results"
-dataFolder <- "~/Downloads/sample/cmip5/"
+out <- "~/tmp/results"
+dataFolder <- "inst/cmip5/"
 citycsv <- "inst/cities.csv"
+coordinateFilenames <- "latitude_longitude_NorthAmerica_12mo.csv"
+tasFilenames <- "tas_NorthAmerica_12mo.csv"
+timeFilenames <- "time_NorthAmerica_12mo.csv"
+RorCPP <- 1
+IDheatwavesReplacement <- FALSE
+dataBoundaries <- FALSE
 referenceBoundaries <- FALSE
+
 check_params(out, dataFolder, citycsv,
-   referenceBoundaries = referenceBoundaries)
+   coordinateFilenames, tasFilenames, timeFilenames,
+   RorCPP, IDheatwavesReplacement,
+   dataBoundaries, referenceBoundaries)
 }
 

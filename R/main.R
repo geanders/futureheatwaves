@@ -19,8 +19,8 @@
 #' @param tasFilenames Character sting with name of files containing the time series data.
 #' @param timeFilenames Character string with name of the files containing the date information corresponding,
 #'    to the rows of the time series data.
-#' @param RorCPP 0 /1 flag that indicates whether to use R (1) or
-#'    CPP (0) functions
+#' @param RorCPP 0 /1 flag that indicates whether to use R (0) or
+#'    C++ (1) function to identify heatwaves in the projections
 #' @param IDheatwavesReplacement Either FALSE, to use the default
 #'    heatwave definition, or a user-specified custom function to
 #'    use to identify heatwaves.
@@ -122,7 +122,13 @@ gen_hw_set <- function(out,
         return(out)
 }
 
-#' Error checking for parameters of gen_hw_set
+#' Check for input parameter errors
+#'
+#' This function goes through all parameter inputs for the main
+#'    functions, \code{gen_hw_set}, and makes sure all parameter
+#'    entries are in the appropriate format for following functions.
+#'    If any parameters are in an incorrect format, the function stops
+#'    and returns an error describing the problem.
 #'
 #' @param out Character string with pathway to directory to which
 #'    heatwave files will be written.
@@ -148,18 +154,34 @@ gen_hw_set <- function(out,
 #'
 #' @return Stops and returns an error if any parameters are incorrect.
 #'
-#' @note Does not check if the data is organized in the proper structure or
-#'    if any data exists within the directory at all.
-#' @note Does not check if the three ensemble .csv data files exist, only if they have
-#'    the .csv extension.
+#' @note This function does not check if the data is organized in the proper
+#'    structure or if any data exists within the directory at all, so a
+#'    call to \code{gen_hw_set} could still pass through this check and
+#'    make it further through the function code with those mistakes.
+#' @note Does not check if the three ensemble final .csv data files exist,
+#'    only if they have the .csv extension if they do exist. (Reminder:
+#'    the final subdirectory should have the following three csv files:
+#'    1. A file with the climate model projections, with grid points by
+#'    column and times by row; 2. A file with the longitude and latitude
+#'    of each grid point in the projection file and; 3. A file with the
+#'    date of each of the rows in the projection file.)
 #'
 #' @examples
-#' out <- "~/Downloads/sample/results"
-#' dataFolder <- "~/Downloads/sample/cmip5/"
+#' out <- "~/tmp/results"
+#' dataFolder <- "inst/cmip5/"
 #' citycsv <- "inst/cities.csv"
+#' coordinateFilenames <- "latitude_longitude_NorthAmerica_12mo.csv"
+#' tasFilenames <- "tas_NorthAmerica_12mo.csv"
+#' timeFilenames <- "time_NorthAmerica_12mo.csv"
+#' RorCPP <- 1
+#' IDheatwavesReplacement <- FALSE
+#' dataBoundaries <- FALSE
 #' referenceBoundaries <- FALSE
+#'
 #' check_params(out, dataFolder, citycsv,
-#'    referenceBoundaries = referenceBoundaries)
+#'    coordinateFilenames, tasFilenames, timeFilenames,
+#'    RorCPP, IDheatwavesReplacement,
+#'    dataBoundaries, referenceBoundaries)
 check_params <- function(out,
                          dataFolder,
                          citycsv,

@@ -98,15 +98,19 @@ createEnsembleWriter <- function(modelName, global, custom){
         }
 }
 
+#TODO Check if row.names should be TRUE or FALSE
+
 #' Output the variable that accumulates information on the models and ensemble counts
 #'
 #' @param modelInfoAccumulator The dataframe that accumulates the number of ensembles for each model.
 #' @param global The global data list
 writeAccumulator <- function(modelInfoAccumulator, global){
-        colnames(modelInfoAccumulator)[2] <- "number_ensembles"
+        colnames(modelInfoAccumulator)[1] <- "Models"
+        colnames(modelInfoAccumulator)[2] <- "# of historical ensembles"
+        colnames(modelInfoAccumulator)[3] <- "# of rcp 8.5 ensembles"
         cat("Writing accumulator", "\n")
         writePath <- global$output
         write.csv(modelInfoAccumulator,
                   file = paste0(writePath, "hwModelInfo", ".csv"),
-                  row.names = FALSE)
+                  row.names = TRUE)
 }

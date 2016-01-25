@@ -5,8 +5,6 @@
 # TODO: Analyze the dataBoundaries and referenceBoundaries variables to make sure they are consistent with
 # program requirements.
 # ~
-gar <- c()
-
 
 #' Create heatwave dataset for a directory of climate projections
 #'
@@ -288,7 +286,7 @@ checkCustomBounds <- function(boundList, length = 4){
 #' Second argument: An element to be appended to the end of the data structure of the command
 #' This function contains no error checking for the types of elements input into the data structures it contains
 createAccumulators <- function(){
-        modelInfoAccumulator <- data.frame(c(), c())
+        modelInfoAccumulator <- data.frame(c(), c(), c())
         locationList <- list()
 
         function(command, newElement = FALSE){
@@ -307,10 +305,10 @@ createAccumulators <- function(){
                 } else if(command == "append location list"){
                         locationList <<- list(locationList, newElement)
                 }
+
+                # If user passes an invalid command, halt the program.
                 else{
                         stop("Accumulator closure: Bad command. Exiting.")
                 }
-
-
         }
 }

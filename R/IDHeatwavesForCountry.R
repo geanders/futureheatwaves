@@ -10,7 +10,7 @@ NULL
 #' @param days Numeric string specifying minimum number of days required
 #'    in heatwave definition.
 #' @param datafr Dataframe with daily temperatures in city of interest.
-#' @param global [Global holder-- what's that?]
+#' @param global The global
 #' @param custom [Custom data holder-- what's that?]
 #'
 #' @return Returns the dataframe entered as \code{datafr}, but with new
@@ -18,19 +18,25 @@ NULL
 #'
 IDheatwaves <- function(city, threshold, days = 2, datafr, global, custom){
         # Initialize return value
-        heatwaveDataframe <- c()
+        hwdata <- c()
         RorCPP <- global["RorCPP"]
 
         # Check if user has specified their own replacement function for identifying heatwaves
         if(custom["IDheatwaves"] == TRUE){
-                customHeatwaveFunction <- custom["IDheatwaves"]
-                heatwaveDataframe <- customHeatwaveFunction(city, threshold, days, datafr)
+                customidhw <- custom["IDheatwaves"]
+                tryCatch(
+                        hwdata <<- customidhw(city, threshold, days, datafr),
+                        error = function(){
+                                stop("Invalid function for identifying heatwaves specified. Exiting")
+                        },
+                        finally = {}
+                )
         }
 
         # Acquire heatwave dataframe using the R or C++ functions
         # R
         else if(RorCPP == 0){
-                heatwaveDataframe <- IDHeatwavesR(city, threshold, days, datafr)
+                hwdata <- IDHeatwavesR(city, threshold, days, datafr)
 
         # C++
         } else if (RorCPP == 1){
@@ -48,9 +54,9 @@ IDheatwaves <- function(city, threshold, days = 2, datafr, global, custom){
 
                 # Attach heatwaves columns onto the data in the datafr variable
                 # Note that the final row, which contains zeroes as placeholders, is excluded.
-                heatwaveDataframe <- data.frame(datafr, heatwaves[-(dim(heatwaves)[1]),])
+                hwdata <- data.frame(datafr, heatwaves[-(dim(heatwaves)[1]),])
         }
-        return(heatwaveDataframe)
+        return(hwdata)
 }
 
 #' [Short title for function]

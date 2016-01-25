@@ -18,13 +18,13 @@ Description: Takes locally saved climate projections and identifies and
 License: MIT + file LICENSE
 LazyData: TRUE
 Imports:
-    dplyr,
-    ggplot2,
-    maps,
-    Rcpp
+    dplyr (>= 0.4.3),
+    ggplot2 (>= 2.0.0),
+    ggmap (>= 2.5.2),
+    Rcpp (>= 0.12.3)
 Suggests:
-    knitr,
-    rmarkdown
+    knitr (>= 1.10.5),
+    rmarkdown (>= 0.7)
 VignetteBuilder: knitr
 RoxygenNote: 5.0.1
 LinkingTo: Rcpp

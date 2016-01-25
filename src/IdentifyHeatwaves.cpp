@@ -1,7 +1,6 @@
 #include <Rcpp.h>
 #include <vector>
 using namespace Rcpp;
-using namespace std;
 
 //TODO: TEST
 
@@ -11,8 +10,8 @@ using namespace std;
 //Note: The code may work without prototypes on certain systems, but not on systems like Solaris. It
 //is best to keep the prototypes in.
 DataFrame IDHeatwavesCPP(int, NumericVector);
-void storeHeatwaveEntry(int, int, int, vector<int> &, vector<int> &, vector<int> &);
-void storeZeroes(int, int, vector<int> &, vector<int> &, vector<int> &);
+void storeHeatwaveEntry(int, int, int, std::vector<int> &, std::vector<int> &, std::vector<int> &);
+void storeZeroes(int, int, std::vector<int> &, std::vector<int> &, std::vector<int> &);
 
 //' Identify heatwaves that are a certain number of days long
 //'
@@ -28,7 +27,7 @@ DataFrame IDHeatwavesCPP(int heatwaveLength, NumericVector tempsExceedingCutoff)
 
         // Declare vectors that will form columns of the dataframe; Allocate memory.
         int dataLength = tempsExceedingCutoff.size();
-        vector<int> hw(dataLength); vector<int> hwNumber(dataLength); vector<int> firstHwDay(dataLength);
+        std::vector<int> hw(dataLength); std::vector<int> hwNumber(dataLength); std::vector<int> firstHwDay(dataLength);
 
         // Holder variable for examining individual instances of cases that could be heatwaves
         int potentialHeatwave = 0;
@@ -80,7 +79,7 @@ DataFrame IDHeatwavesCPP(int heatwaveLength, NumericVector tempsExceedingCutoff)
 //'
 //' @export
 // [[Rcpp::export]]
-void storeHeatwaveEntry(int index, int hwSize, int hwCounter, vector<int>& hw, vector<int>& hwNumber, vector<int>& firstHwDay){
+void storeHeatwaveEntry(int index, int hwSize, int hwCounter, std::vector<int>& hw, std::vector<int>& hwNumber, std::vector<int>& firstHwDay){
 
         for(int i = 0; i < hwSize; i++){
                 // Push back 1 hwSize number of times onto hw.
@@ -109,7 +108,7 @@ void storeHeatwaveEntry(int index, int hwSize, int hwCounter, vector<int>& hw, v
 //'
 //' @export
 // [[Rcpp::export]]
-void storeZeroes(int index, int potentialHeatwave, vector<int>& hw, vector<int>& hwNumber, vector<int> & firstHwDay){
+void storeZeroes(int index, int potentialHeatwave, std::vector<int>& hw, std::vector<int>& hwNumber, std::vector<int> & firstHwDay){
 
         //Increment potentialHeatwave by 1, since we want to add potentialHeatwave + 1 number of zeroes to the column variables
         //This is because the potentialHeatwave variable counts only the rows that were a part of the potential

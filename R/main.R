@@ -6,7 +6,12 @@
 # program requirements.
 # ~
 
-#' Create heatwave dataset for a directory of climate projections
+#' Create and write heatwave projections
+#'
+#' This function creates heatwave projection datasets for all models and
+#'    ensemble members in a directory of climate projections for a specified
+#'    set of communities.The resulting heatwave projections are written out
+#'    to a specified directory on the user's local computer.
 #'
 #' @param out Character string with pathway to directory to which
 #'    heatwave files will be written.
@@ -30,7 +35,12 @@
 #'    Restrictions: Bounds cannot span multiple experiments
 #' @param referenceBoundaries Reference boundaries.
 #'
-#' @return [What does this function return?]
+#' @return This function returns a dataframe listing the name of each climate
+#'    model included in the directory of projection files inputted to the
+#'    function as well as the number of historical and future projection
+#'    ensembles included for each model. This output can be used as a check
+#'    that the function processed through the directory of input files
+#'    specified using the \code{dataFolder} argument.
 gen_hw_set <- function(out,
                        dataFolder,
                        citycsv,
@@ -222,7 +232,6 @@ check_params <- function(out,
         if(!grepl(".csv", coordinateFilenames)){
                 stop("Invalid format: coordinateFilenames. Stopping")
         }
-
         if(!grepl(".csv", tasFilenames)){
                 stop("Invalid format: tasFilenames. Stoppping")
         }

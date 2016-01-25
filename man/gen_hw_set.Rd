@@ -2,7 +2,7 @@
 % Please edit documentation in R/main.R
 \name{gen_hw_set}
 \alias{gen_hw_set}
-\title{Create heatwave dataset for a directory of climate projections}
+\title{Create and write heatwave projections}
 \usage{
 gen_hw_set(out, dataFolder, citycsv, coordinateFilenames, tasFilenames,
   timeFilenames, RorCPP = 1, IDheatwavesReplacement = FALSE,
@@ -42,9 +42,17 @@ Restrictions: Bounds cannot span multiple experiments}
 \item{referenceBoundaries}{Reference boundaries.}
 }
 \value{
-[What does this function return?]
+This function returns a dataframe listing the name of each climate
+   model included in the directory of projection files inputted to the
+   function as well as the number of historical and future projection
+   ensembles included for each model. This output can be used as a check
+   that the function processed through the directory of input files
+   specified using the \code{dataFolder} argument.
 }
 \description{
-Create heatwave dataset for a directory of climate projections
+This function creates heatwave projection datasets for all models and
+   ensemble members in a directory of climate projections for a specified
+   set of communities.The resulting heatwave projections are written out
+   to a specified directory on the user's local computer.
 }
 

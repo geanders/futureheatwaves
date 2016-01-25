@@ -17,7 +17,9 @@ The `futureheatwaves` package can process climate data files that you have store
 
 For these functions to work correctly, you must have the climate projections saved in a specific structure locally on your computer. An example of a directory with the required set-up is given as the `cmip5` directory in the `inst` directory of this package.
 
-You must have a directory that has within it separately subdirectories names "rcp85" and "historical" that contain, respectively, all files drawn from projections for future dates ("rcp85") and all for dates up to 2005 ("historical"). Within each of these subdirectories, you need a subdirectory for each climate model. Within each climate model directory, you need subdirectories for each ensemble member of the model (even if the model only has one ensemble member). Within each ensemble-member directory, you will need three comma-separated files: one file with the climate model output, with columns corresponding to climate grid point and rows corresponding to time, one file that gives the time values corresponding to each row in the climate model output file, and one file giving the latitude and longitude corresponding to the grid locations used in the columns of the climate model output file.
+You must have a directory that has within it separately subdirectories names "rcp85" and "historical" that contain, respectively, all files drawn from projections for future dates ("rcp85") and all for dates up to 2005 ("historical"). Within each of these subdirectories, you need a subdirectory for each climate model. Within each climate model directory, you need subdirectories for each ensemble member of the model (even if the model only has one ensemble member). Within each ensemble-member directory, you will need three comma-separated files: one file with the climate model output, with columns corresponding to climate grid point and rows corresponding to time, one file that gives the time values corresponding to each row in the climate model output file, and one file giving the latitude and longitude corresponding to the grid locations used in the columns of the climate model output file. 
+
+Throughout the directory, subdirectories should be named using names reflecting the climate model or ensemble members they contain. The output files will be written using the same type of directory structure and the same names, so this output will be easier to interpret and use if the directory uses meaningful names for subdirectories. 
 
 Once you have your files set up in this structure, define the following variables: 
 
@@ -95,6 +97,14 @@ All operations completed. Exiting.
 1      bcc1               1              1
 ```
 
-The function provides status reports on its progress in generating the heatwave projections, as this process can take a while if you include many cities and / or many climate model projections. 
+The function provides status reports on its progress in generating the heatwave projections, as this process can take a while if you include many cities and / or many climate model projections. If you do not want to generate this output when running the function, choose the option `printWarning = FALSE` when calling `gen_hw_set`.
 
 Once the function has completed running, you will have two new subdirectories in the directory you specified with the `out` variable. These will be called `Heatwaves` and `Thresholds`. The `Heatwaves` directory will contain dataframes with all identified heatwaves and their characteristics for each city, while the `Thresholds` folder will contain files with the temperature thresholds used for each city given. The `out` directory specified will also have a file called `hwModelInfo.csv` that contains some basic information about the climate models and the number of ensemble members included for each.
+
+## Using custom options
+
+## How it works
+
+### Parsing the directory structure
+
+After some preliminary checks, the function reads in the structure of the directory specified by `dataFolder` and uses the names of subdirectories to create a list of all of the climate models and their ensemble members within the directory. 

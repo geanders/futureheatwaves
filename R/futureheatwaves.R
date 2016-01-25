@@ -10,4 +10,4 @@
 #' @name futureheatwaves
 #' @useDynLib futureheatwaves
 #' @importFrom Rcpp sourceCpp
-#' NULL
+NULL

@@ -11,26 +11,42 @@ vignette: >
 
 ## What the package does
 
-The `futureheatwaves` package can process climate data files that you have stored locally to generate a list of heatwaves in each projection as well as characteristics of each heatwave (e.g., length, intensity, timing in the year). 
+The `futureheatwaves` package can process climate data files that you have stored locally to generate a list of heatwaves in each projection as well as characteristics of each heatwave (e.g., length, intensity, timing in the year). The package generates community-specific dataframes based on an input file listing each community and its latitude and longitude. Files with the heatwaves identified and characterized under each ensemble member of each climate model are output as files in a directory specified by the user.
 
 ## A basic example of using the package
 
-For these functions to work correctly, you must have the climate projections saved in a specific structure locally on your computer. 
+For these functions to work correctly, you must have the climate projections saved in a specific structure locally on your computer. An example of a directory with the required set-up is given as the `cmip5` directory in the `inst` directory of this package.
 
-Define the following variables: 
-- `dataFolder`: Pathway to the directory that contains your climate projections (Note: these will need to be saved within this directory in a specific way, as explained later in this vignette.)
-- `citycsv`: Pathway to a comma-separated file with latitude and longitude coordinates for each community for which you want to generate heatwave files. (Note: This file will need to have specific column names for latitude and longitude, as explained later.)
+You must have a directory that has within it separately subdirectories names "rcp85" and "historical" that contain, respectively, all files drawn from projections for future dates ("rcp85") and all for dates up to 2005 ("historical"). Within each of these subdirectories, you need a subdirectory for each climate model. Within each climate model directory, you need subdirectories for each ensemble member of the model (even if the model only has one ensemble member). Within each ensemble-member directory, you will need three comma-separated files: one file with the climate model output, with columns corresponding to climate grid point and rows corresponding to time, one file that gives the time values corresponding to each row in the climate model output file, and one file giving the latitude and longitude corresponding to the grid locations used in the columns of the climate model output file.
+
+Once you have your files set up in this structure, define the following variables: 
+
+- `dataFolder`: Character string with pathway to directory that contains climate projections. 
+- `citycsv`: Character string giving the filepath to a .csv file with latitude and longitude values for each city for which you would like to generate
+heatwave projections.
+- `coordinateFilenames`: Character string with name of the files containing the latitude and longitude coordinates corresponding to the columns of the time series data.
+- `tasFilenames`: Character sting with name of files containing the time series data.
+- `timeFilenames`: Character string with name of the files containing the date information corresponding to the rows of the time series data.
 
 For example, I can specify `dataFolder` and `citycsv` as: 
 
 ```{r}
-dataFolder <- "~/Downloads/sample/cmip5/" # Note-- final `/` is required for this to work
+dataFolder <- "~/inst/cmip5/" 
 citycsv <- "inst/cities.csv"
 ```
 
-You will also need to specify where the output files should be locally saved. Save this as the object `out`: 
+Within the ensemble subdirectories in my files structure, all of the files with climate model data are named "tas_NorthAmerica_12mo.csv", all the files with the corresponding time for rows in that data are in files named "time_NorthAmerica_12mo.csv", and all the files with locations of the grid points are named "latitude_longitude_NorthAmerica_12mo.csv". Therefore, I would specify: 
 
 ```{r}
-out <- "~/Downloads/sample/results"
+coordinateFilenames <- "latitude_longitude_NorthAmerica_12mo.csv"
+tasFilenames <- "tas_NorthAmerica_12mo.csv"
+timeFilenames <- "time_NorthAmerica_12mo.csv"
+```
+
+
+You will also need to specify where the output files should be locally saved. Save this as the object `out`. For example, if I wanted to write the output heatwave files to a directory called "example_results" in the `tmp` subdirectory of my home directory, I could specify:
+
+```{r}
+out <- "~/tmp/example_results"
 ```
 

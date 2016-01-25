@@ -1,7 +1,3 @@
-#' @useDynLib futureheatwaves
-#' @importFrom Rcpp sourceCpp
-NULL
-
 #' Identify all heatwaves within a given city's time series
 #'
 #' @param city Character string with city ID.

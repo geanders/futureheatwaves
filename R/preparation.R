@@ -20,6 +20,8 @@
 #'    All other files will be removed when creating the directory structure.
 #'
 #' @importFrom dplyr %>%
+#'
+#' @examples
 #' dataFolder <- "~/Downloads/sample/cmip5/"
 #' finalList <- acquireDirectoryStructure(dataFolder)
 #' str(finalList[[1]][[1]])

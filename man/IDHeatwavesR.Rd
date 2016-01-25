@@ -5,7 +5,7 @@
 \title{[Short title for function]}
 \usage{
 IDHeatwavesR(city = stop("Error: unspecified city"),
-  threshold = stop("Error: unspecified threshold"), days = 2,
+  threshold = stop("Error: unspecified threshold"), days = 1,
   datafr = stop("Error: 'datafr' unspecified"))
 }
 \arguments{

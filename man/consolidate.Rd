@@ -2,18 +2,17 @@
 % Please edit documentation in R/processHeatwaves.R
 \name{consolidate}
 \alias{consolidate}
-\title{Stitch all heatwave lists together}
+\title{Combine all identified heatwave dataframes together into one.}
 \usage{
 consolidate(hwDataframeList)
 }
 \arguments{
-\item{hwDataframeList}{[What is this?]}
+\item{A}{list of identified heatwave dataframes created by the closure of createCityProcessor}
 }
 \value{
-Dataframe with all heatwaves for the cities of interest
-   for a climate projection.
+A combined dataframe of identified heatwave dataframes from the dataframe list that was passed as an argument.
 }
 \description{
-Stitch all heatwave lists together
+Combine all identified heatwave dataframes together into one.
 }
 

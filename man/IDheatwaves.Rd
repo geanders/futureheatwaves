@@ -17,7 +17,7 @@ in heatwave definition.}
 
 \item{datafr}{Dataframe with daily temperatures in city of interest.}
 
-\item{global}{[Global holder-- what's that?]}
+\item{global}{The global}
 
 \item{custom}{[Custom data holder-- what's that?]}
 }

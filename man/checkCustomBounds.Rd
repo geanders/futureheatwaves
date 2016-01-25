@@ -7,7 +7,7 @@
 checkCustomBounds(boundList, length = 4)
 }
 \arguments{
-\item{boundList:}{A set of boundaries in the format c(historical period low bound, historical period high bound, 
+\item{boundList:}{A set of boundaries in the format c(historical period low bound, historical period high bound,
 rcp period low bound, rcp period high bound)}
 
 \item{Length:}{The required length of the boundaries list. Defaulted to 4.}

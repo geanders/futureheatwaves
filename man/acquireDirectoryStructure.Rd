@@ -36,9 +36,10 @@ The files in the bottom directory must all have a .csv extension
    All other files will be removed when creating the directory structure.
 }
 \examples{
-dataFolder <- "~/Downloads/sample/cmip5/"
+dataFolder <- "~/inst/cmip5/"
 finalList <- acquireDirectoryStructure(dataFolder)
 str(finalList[[1]][[1]])
 str(finalList[[1]][[2]][1])
+
 }
 

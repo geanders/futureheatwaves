@@ -4,12 +4,17 @@
 \alias{buildStructureEnsembles}
 \title{List all files for a single ensemble member}
 \usage{
-buildStructureEnsembles(ensemble)
+buildStructureEnsembles(ensemble, coordinateFilenames, tasFilenames,
+  timeFilenames)
 }
 \arguments{
 \item{Ensemble}{character string that gives the absolute file path
 for the directory with a particular ensemble member of a climate
 model projection.}
+}
+\value{
+A list of length 2. First element is the name of the ensemble that was processed. Second element is
+a list containing the coordinate .csv, the time series data .csv, and the time data .csv respectively.
 }
 \description{
 List all files for a single ensemble member

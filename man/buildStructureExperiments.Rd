@@ -4,7 +4,8 @@
 \alias{buildStructureExperiments}
 \title{Generate list of file structure for an experiment}
 \usage{
-buildStructureExperiments(model, experiment, all, dataPath)
+buildStructureExperiments(model, experiment, all, dataPath, coordinateFilenames,
+  tasFilenames, timeFilenames)
 }
 \arguments{
 \item{model}{Character string of climate model name}
@@ -19,6 +20,10 @@ specified in dataPath}
 \item{dataPath}{Character string of the file path to the directory
 containing the climate projections. Must include the final `/`.}
 }
+\value{
+A list that is the length of the number of ensembles. Each element is a return value
+of the buildStructureEnsembles function.
+}
 \description{
 Generate list of file structure for an experiment
 }
@@ -30,5 +35,6 @@ all <- c("rcp85/bcc1/r1i1p1/latitude_longitude_NorthAmerica_12mo.csv",
          "rcp85/bcc1/r1i1p1/time_NorthAmerica_12mo.csv")
 dataPath <- "~/Downloads/sample/cmip5/"
 buildStructureExperiments(model, experiments, all, dataPath)
+
 }
 

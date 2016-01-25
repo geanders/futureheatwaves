@@ -4,7 +4,8 @@
 \alias{buildStructureModels}
 \title{Generate list of file structure from model, experiment, and path}
 \usage{
-buildStructureModels(model, experiments, all, dataPath)
+buildStructureModels(model, experiments, all, dataPath, coordinateFilenames,
+  tasFilenames, timeFilenames)
 }
 \arguments{
 \item{model}{Character string of climate model name}
@@ -18,6 +19,11 @@ specified in dataPath}
 
 \item{dataPath}{Character string of the file path to the directory
 containing the climate projections. Must include the final `/`.}
+}
+\value{
+A list of length 3. The first element is the name of the model whose structure was being built.
+The second element is the historical experiment hierarchy. The third element is the rcp85 experiment hierarchy. The
+second and third elements are return values of buildStructureExperiments.
 }
 \description{
 Generate list of file structure from model, experiment, and path

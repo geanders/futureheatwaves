@@ -19,13 +19,13 @@
 #'    and must names corresponding to the "Filenames" parameters of this function.
 #'    All other files will be removed when creating the directory structure.
 #'
-#' @importFrom dplyr %>%
-#'
 #' @examples
-#' dataFolder <- "~/Downloads/sample/cmip5/"
+#' dataFolder <- "~/inst/cmip5/"
 #' finalList <- acquireDirectoryStructure(dataFolder)
 #' str(finalList[[1]][[1]])
 #' str(finalList[[1]][[2]][1])
+#'
+#' @importFrom dplyr %>%
 acquireDirectoryStructure <- function(dataPath, coordinateFilenames,
                                       tasFilenames, timeFilenames){
 

@@ -6,7 +6,9 @@ Date: 2015-12-23
 Authors@R: c(
     person("Colin", "Eason", , "aimesce@gmail.com", c("aut", "cre")),
     person("Elizabeth", "Barnes", , "eabarnes@atmos.colostate.edu", c("aut")),
-    person("Brooke", "Anderson", , "brooke.anderson@colostate.edu", c("aut"))
+    person("Brooke", "Anderson", , "brooke.anderson@colostate.edu", c("aut")),
+    person("National Institute of Environmental Health Sciences", c("fnd")),
+    person("Colorado State University Vice President for Research", c("fnd"))
     )
 Description: Takes locally saved climate projections and identifies and
     characterizes heatwaves in those projections. Heatwaves are defined

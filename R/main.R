@@ -50,6 +50,13 @@ gen_hw_set <- function(out,
                 dataFolder <- paste0(dataFolder, "/")
         }
 
+        # If `out` does not end in "/", add it.
+        split_out <- unlist(strsplit(out, split = ""))
+        last_char <- split_out[length(split_out)]
+        if(last_char != "/"){
+                out <- paste0(out, "/")
+        }
+
         # Check the parameters for errors
         check_params(out,
                      dataFolder,

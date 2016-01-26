@@ -2,24 +2,50 @@
 % Please edit documentation in R/process.R
 \name{processHistorical}
 \alias{processHistorical}
-\title{Calculate threshold temperatures from historical projections}
+\title{Calculate threshold temperatures}
 \usage{
 processHistorical(model, global, custom, reference = FALSE)
 }
 \arguments{
-\item{model}{Character string of the climate model (e.g., "bcc1").}
+\item{model}{Character string of climate model name (e.g., "bcc1"). This
+name is typically generated for use in this function from the subdirectory
+names for the climate model within the directory of projection data
+specified by the user in \code{gen_hw_set}.}
 
-\item{global}{The 'global' variable list.}
+\item{global}{An object name for the 'global' variable list. This
+parameter is passed through from \code{gen_hw_set} and includes user
+specifications for the path to the output directory, the path to the
+input climate projections, the dataframe with community locations, the
+format for the filenames of the coordinate, tas, and time files in the
+ensemble-specific subdirectories of the projection directory input by
+the user, and whether the user prefers to run the function using the R
+or C++ version of the function to identify heatwaves.}
 
-\item{custom}{The user-specified custom data list.}
+\item{custom}{An object name for the 'custom` data list. This parameter is
+passed through from \code{gen_hw_set} and includes user specifications
+for, if specified as other than the default, an alternative function to
+use to identify heatwaves, alternative upper and lower year boundaries
+for the projection period of the heatwave datasets being generated,
+and alternative upper and lower year boundaries for the reference period
+to be used when measuring all heatwave characteristics related to
+relative, rather than absolute, temperature.}
 
-\item{reference}{[What is this parameter?]}
+\item{reference}{FALSE, if the user has not specified custom reference
+boundaries through the \code{referenceBoundaries} argument in
+\code{gen_hw_set}, otherwise a vector with four elements
+(earliest historical year, latest historical year,
+earliest future projection year, latest future projection year)
+giving the user-specified custom date boundaries for the
+heatwave projections.}
 }
 \value{
 Writes threshold temperatures to file and returns ... ?
 }
 \description{
-Calculate the threshold temperatures for the model using the
-model's r1i1p1 historical ensemble and saves these to file.
+This function calculates the threshold temperatures required to identify
+   heatwaves in the climate projection data using each climate model's
+   first listed historical ensemble. These values are both used in later
+   functions to identify heatwaves in the projections and are also saved
+   to file through this function to have for future reference.
 }
 

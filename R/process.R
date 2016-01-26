@@ -357,15 +357,18 @@ getBounds <- function(times, experiment, custom){
         start <- 0
         end <- 0
         if (experiment == 'historical'){
-                if(custom["getBounds"] == FALSE){
+                if(FALSE %in% custom[["getBounds"]]){ # `dataBoundaries` choice
                         start <- match(1981, times[,2])
 
-                        #'end' index of the historical experiment has to be matched from back to front.
-                        # This is because the data does/may not exceed year 2005.
-                        # We wish to set the end bound to the first day of 2004 instead.
-                        # The match function alone will acquire the index of the first day of 2004,
-                        # even though we want all days in 2004.
-                        end <- length(times[,1]) - (match(2004, rev(times[,2])) - 1)
+                        #'end' index of the historical experiment has to be
+                        #' matched from back to front. This is because the
+                        #' data does/may not exceed year 2005. We wish to set
+                        #' the end bound to the first day of 2004 instead.
+                        # The match function alone will acquire the index of
+                        # the first day of 2004, even though we want all days
+                        # in 2004.
+                        end <- length(times[,1]) -
+                                (match(2004, rev(times[,2])) - 1)
 
                 } else {
                         customizeHistorical <- custom["getBounds"]

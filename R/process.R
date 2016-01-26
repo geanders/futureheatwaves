@@ -37,7 +37,8 @@
 processModel <- function(model, global, custom, accumulators){
 
         # Get reference period if one exists
-        reference <- custom["processModel"]
+        reference <- custom["processModel"] # referenceBoundaries argument
+                                            # from `gen_hw_set`
 
         # Acquire vector of threshold temperatures using the historical
         # ensemble for this model which possesses the name r1i1p1
@@ -122,8 +123,12 @@ processHistorical <- function(model, global, custom, reference = FALSE){
         cat("Processing historical ensemble for", name, "\n")
 
         # Acquire characteristics of the first historical ensemble
-        historicalEnsemble <- processEnsemble(historicalDirs, 'historical',
-                                              name, global, custom, reference)
+        historicalEnsemble <- processEnsemble(ensemble = historicalDirs,
+                                              experiment = 'historical',
+                                              modelName = name,
+                                              global = global,
+                                              custom = custom,
+                                              reference = reference)
 
         # Calculate threshold temperatures using the user-specified
         # threshold percentile (default: 0.98)
@@ -249,7 +254,9 @@ processEnsemble <- function(ensemble, experiment, modelName, global,
         # Acquire the boundaries for the time series
         # Structure: c(start index, end index, # of elements spanning
         # from start to end)
-        bounds <- getBounds(times, experiment, custom)
+        bounds <- getBounds(times = times,
+                            experiment = experiment,
+                            custom = custom)
         start <- bounds[1]
         end <- bounds[2]
 
@@ -324,10 +331,18 @@ closest_point <- function(city, latlong){
 #' Acquire boundaries of time series data
 #'
 #' @param times A dataframe containing the time data for one of the
-#'    climate model ensemble's projection.
-#' @param experiment experiment Character string of the experiment of
+#'    climate model ensemble's projection. Read in by \code{processEnsemble}.
+#' @param experiment Character string of the experiment of
 #'    interest. Possible variables are "historical" or "rcp85".
-#' @param custom [What is this?]
+#' @param custom An object name for the 'custom` data list. This parameter is
+#'    passed through from \code{gen_hw_set} and includes user specifications
+#'    for, if specified as other than the default, an alternative function to
+#'    use to identify heatwaves, alternative upper and lower year boundaries
+#'    for the projection period of the heatwave datasets being generated,
+#'    alternative upper and lower year boundaries for the reference period
+#'    to be used when measuring all heatwave characteristics related to
+#'    relative, rather than absolute, temperature, and the percentile
+#'    threshold to use when defining heatwaves.
 #'
 #' @return A numeric vector containing an upper bound of the experiment
 #'    time period as an index; the lower bound of the experiment time

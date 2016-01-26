@@ -8,12 +8,20 @@ getBounds(times, experiment, custom)
 }
 \arguments{
 \item{times}{A dataframe containing the time data for one of the
-climate model ensemble's projection.}
+climate model ensemble's projection. Read in by \code{processEnsemble}.}
 
-\item{experiment}{experiment Character string of the experiment of
+\item{experiment}{Character string of the experiment of
 interest. Possible variables are "historical" or "rcp85".}
 
-\item{custom}{[What is this?]}
+\item{custom}{An object name for the 'custom` data list. This parameter is
+passed through from \code{gen_hw_set} and includes user specifications
+for, if specified as other than the default, an alternative function to
+use to identify heatwaves, alternative upper and lower year boundaries
+for the projection period of the heatwave datasets being generated,
+alternative upper and lower year boundaries for the reference period
+to be used when measuring all heatwave characteristics related to
+relative, rather than absolute, temperature, and the percentile
+threshold to use when defining heatwaves.}
 }
 \value{
 A numeric vector containing an upper bound of the experiment

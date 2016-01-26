@@ -53,8 +53,8 @@ finalList <- acquireDirectoryStructure(dataFolder = dataFolder,
    tasFilenames = tasFilenames,
    timeFilenames = timeFilenames)
 
-str(finalList[[1]][[1]])
-str(finalList[[1]][[2]][1])
+finalList[[1]][[1]]
+finalList[[1]][[2]][1]
 
 }
 

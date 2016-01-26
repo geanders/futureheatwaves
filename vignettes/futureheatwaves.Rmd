@@ -125,7 +125,8 @@ finalList <- acquireDirectoryStructure(dataFolder = dataFolder,
    tasFilenames = tasFilenames,
    timeFilenames = timeFilenames)
 
-str(finalList[[1]][[1]])
-str(finalList[[1]][[2]][1])
+finalList[[1]][[1]]
+finalList[[1]][[2]][1]
 ```
 
+This parsed version of the directory structure helps the following functions walk through all of the climate projections for different models and ensembles within the specified projections directory.

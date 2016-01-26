@@ -1,9 +1,10 @@
 #~
 # TODO: Note for later. Will delete
-# "latitude_longitude_NorthAmerica_12mo.csv",  "tas_NorthAmerica_12mo.csv",  "time_NorthAmerica_12mo.csv"
+# "latitude_longitude_NorthAmerica_12mo.csv",  "tas_NorthAmerica_12mo.csv",
+# "time_NorthAmerica_12mo.csv"
 #
-# TODO: Analyze the dataBoundaries and referenceBoundaries variables to make sure they are consistent with
-# program requirements.
+# TODO: Analyze the dataBoundaries and referenceBoundaries variables to make
+# sure they are consistent with program requirements.
 # ~
 
 #' Create and write heatwave projections
@@ -19,11 +20,13 @@
 #'    contains climate projections. Must include the final backslash.
 #' @param citycsv Character string giving the filepath to a .csv
 #'    file with latitude and longitude values for each city.
-#' @param coordinateFilenames Character string with name of the files containing the latitude and longitude coordinates
+#' @param coordinateFilenames Character string with name of the files
+#'    containing the latitude and longitude coordinates
 #'    corresponding to the columns of the time series data.
-#' @param tasFilenames Character sting with name of files containing the time series data.
-#' @param timeFilenames Character string with name of the files containing the date information corresponding,
-#'    to the rows of the time series data.
+#' @param tasFilenames Character sting with name of files containing the time
+#'    series data.
+#' @param timeFilenames Character string with name of the files containing the
+#'    date information corresponding to the rows of the time series data.
 #' @param RorCPP 0 /1 flag that indicates whether to use R (0) or
 #'    C++ (1) function to identify heatwaves in the projections
 #' @param IDheatwavesReplacement Either FALSE, to use the default
@@ -146,11 +149,13 @@ gen_hw_set <- function(out,
 #'    contains climate projections. Must include the final backslash.
 #' @param citycsv Character string giving the filepath to a .csv
 #'    file with latitude and longitude values for each city.
-#' @param coordinateFilenames Character string with name of the files containing the latitude and longitude coordinates
+#' @param coordinateFilenames Character string with name of the files
+#'    containing the latitude and longitude coordinates
 #'    corresponding to the columns of the time series data.
-#' @param tasFilenames Character sting with name of files containing the time series data.
-#' @param timeFilenames Character string with name of the files containing the date information corresponding,
-#'    to the rows of the time series data.
+#' @param tasFilenames Character sting with name of files containing the time
+#'    series data.
+#' @param timeFilenames Character string with name of the files containing the
+#'    date information corresponding to the rows of the time series data.
 #' @param RorCPP 0 /1 flag that indicates whether to use R (1) or
 #'    CPP (0) functions
 #' @param IDheatwavesReplacement Either FALSE, to use the default
@@ -208,7 +213,8 @@ check_params <- function(out,
         tryCatch(
                 dir.exists(dataFolder),
                 error = function(){
-                        stop("Pathway containing cmip5 data (`dataFolder`) invalid. Stopping")
+                        stop(paste("Pathway containing cmip5 data",
+                                   "(`dataFolder`) invalid. Stopping"))
                 },
                 finally = {}
         )
@@ -219,13 +225,15 @@ check_params <- function(out,
         tryCatch(
                 read.csv(citycsv, header = TRUE),
                 error = function(x){
-                        stop("Cannot read city information .csv (`citycsv`). Stopping")
+                        stop(paste("Cannot read city information .csv",
+                                   "(`citycsv`). Stopping"))
                 }
         )
 
         # Check if the user has specified 1 or 0 for the RorCPP flag
         if( RorCPP != 1 & RorCPP != 0){
-                stop("Invalid RorCPP flag value. Must enter 1 or 0. Stopping")
+                stop(paste("Invalid RorCPP flag value. Must enter 1 or 0.",
+                           "Stopping"))
         }
 
         # Check 'Filenames' parameters for .csv extension.
@@ -242,7 +250,8 @@ check_params <- function(out,
         # TODO CHECK FOR BOUNDARY STRADDLING
         # STILL UNFINISHED!
         # The boundary checking still contains logical errors.
-        # Must make sure that both upper and lower bounds for a period are FALSE if unspecified
+        # Must make sure that both upper and lower bounds for a period are
+        # FALSE if unspecified
         checkCustomBounds(dataBoundaries)
         checkCustomBounds(referenceBoundaries)
 }
@@ -273,12 +282,15 @@ checkCustomBounds <- function(boundList, expected_length = 4){
     rcpLow <- boundList[3]
     rcpHigh <- boundList[4]
 
-    # Check to make sure both upper and lower boundaries exist for the historical and rcp boundary sets
+    # Check to make sure both upper and lower boundaries exist for the
+    # historical and rcp boundary sets
     if(typeof(histLow) != typeof(histHigh)){
-      stop("One of the required boundaries of boundaries variable unspecified. Stopping")
+      stop(paste("One of the required boundaries of boundaries variable",
+                 "unspecified. Stopping"))
     }
     if(typeof(rcpLow) != typeof(rcpHigh)){
-      stop("One of the required boundaries of boundaries variable unspecified. Stopping")
+      stop(paste("One of the required boundaries of boundaries variable",
+                 "unspecified. Stopping"))
     }
 
     # Check if bounds are the correct type
@@ -292,44 +304,54 @@ checkCustomBounds <- function(boundList, expected_length = 4){
     # Check if bounds are in the correct range
     if(histLow != FALSE){
       if(histLow < 1981){
-        stop("Custom boundaries for threshold calculation fall out of acceptable range. Stopping")
+        stop(paste("Custom boundaries for threshold calculation fall out",
+                   "of acceptable range. Stopping"))
       }
     }
 
     if(histHigh != FALSE){
       if(histHigh > 2004){
-        stop("Custom boundaries for threshold calculation fall out of acceptable range. Stopping")
+        stop(paste("Custom boundaries for threshold calculation fall out",
+                   "of acceptable range. Stopping"))
       }
     }
 
     if(rcpLow != FALSE){
       if(rcpLow < 2061){
-        stop("Custom boundaries for threshold calculation fall out of acceptable range. Stopping")
+        stop(paste("Custom boundaries for threshold calculation fall out of",
+                   "acceptable range. Stopping"))
       }
     }
 
     if(rcpHigh != FALSE){
       if(rcpHigh > 2080){
-        stop("Custom boundaries for threshold calculation fall out of acceptable range. Stopping")
+        stop(paste("Custom boundaries for threshold calculation fall out of",
+                   "acceptable range. Stopping"))
       }
     }
   }
 }
 
-# TODO: It may be possible to make the accumulator system extremely robust. Consider this possibility
-#       after all else is finished.
+# TODO: It may be possible to make the accumulator system extremely robust.
+# Consider this possibility after all else is finished.
+
 #' Create accumulator closure
+#'
 #' This closure holds data structures that the user wishes to grow at various
-#' points in the execution of the package. It exists to couple these structures together
-#' in order to lower the number of parameters of this nature the user would have to pass down
-#' the the program otherwise. It is a closure instead of a list as a pre-emptive measure
+#'    points in the execution of the package. It exists to couple these
+#'    structures together in order to lower the number of parameters of this
+#'    nature the user would have to pass down the the program otherwise. It is
+#'    a closure instead of a list as a pre-emptive measure
 #'
 #' @return A closure that accepts commands to access and append new data onto
-#' data structures as the program executes. The utility of this function may be expanded by
+#'    data structures as the program executes. The utility of this function may
+#'    be expanded by
 #'
 #' @note First argument: The command
-#' Second argument: An element to be appended to the end of the data structure of the command
-#' This function contains no error checking for the types of elements input into the data structures it contains
+#' Second argument: An element to be appended to the end of the data structure
+#' of the command
+#' This function contains no error checking for the types of elements input
+#' into the data structures it contains
 createAccumulators <- function(){
         modelInfoAccumulator <- data.frame(c(), c(), c())
         locationList <- list()
@@ -341,7 +363,8 @@ createAccumulators <- function(){
                         return(modelInfoAccumulator)
 
                 } else if(command == "append model information"){
-                        modelInfoAccumulator <<- rbind(modelInfoAccumulator, newElement)
+                        modelInfoAccumulator <<- rbind(modelInfoAccumulator,
+                                                       newElement)
 
                 # Commands for location list accumulator
                 } else if(command == "return locations"){

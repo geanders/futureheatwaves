@@ -371,18 +371,19 @@ getBounds <- function(times, experiment, custom){
                                 (match(2004, rev(times[,2])) - 1)
 
                 } else {
-                        customizeHistorical <- custom["getBounds"]
+                        customizeHistorical <- custom[["getBounds"]]
                         lower <- customizeHistorical[1]
                         upper <- customizeHistorical[2]
                         start <- match(lower, times[,2])
-                        end <- length(times[,1]) - (match(upper, rev(times[,2])) - 1)
+                        end <- length(times[,1]) -
+                                (match(upper, rev(times[,2])) - 1)
                 }
         } else if (experiment == 'rcp'){
                 if(FALSE %in% custom[["getBounds"]]){
                         start <- match(2061, times[,2])
                         end <- match(2081, times[,2]) - 1
                 } else {
-                        customizeRCP <- custom["getBounds"]
+                        customizeRCP <- custom[["getBounds"]]
                         lower <- customizeRCP[3]
                         upper <- customizeRCP[4]
                         start <- match(lower, times[,2])

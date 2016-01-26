@@ -154,16 +154,32 @@ buildStructureModels <- function(model, experiments,
                                               tasFilenames, timeFilenames)))
 }
 
-#' Generate list of file structure for an experiment
+#' Generate file structure for an experiment
 #'
-#' @param model Character string of climate model name
+#' This function generates a list object with the file structure of files
+#'    within the user-specified projection directory for a single experiment
+#'    (i.e., "historical" or "rcp85").
+#'
+#' @param model Character string of climate model name (e.g., "bcc1"). This
+#'    name is typically generated for use in this function from the subdirectory
+#'    names for the climate model within the directory of projection data
+#'    specified by the user in \code{gen_hw_set}.
 #' @param experiment Character string of the experiment of interest.
 #'    Possible variables are "historical" or "rcp85".
-#' @param dataPath Character string of the file path to the directory
+#' @param dataFolder Character string of the file path to the directory
 #'    containing the climate projections. Must include the final `/`.
+#' @param coordinateFilenames Character string with name of the files
+#'    containing the latitude and longitude coordinates
+#'    corresponding to the columns of the time series data.
+#' @param tasFilenames Character sting with name of files containing the time
+#'    series data.
+#' @param timeFilenames Character string with name of the files containing the
+#'    date information corresponding to the rows of the time series data.
 #'
-#' @return A list that is the length of the number of ensembles. Each element is a return value
-#' of the buildStructureEnsembles function.
+#' @return A list that is the length of the number of ensembles. Each element
+#'    is a return value of the \code{buildStructureEnsembles} function for
+#'    one of the ensemble members in that experiment of that climate model
+#'    within the user-specified projections directory.
 #'
 #' @examples
 #' model <- "bcc1"
@@ -201,26 +217,56 @@ buildStructureExperiments <- function(model, experiment,
         return(ret)
 }
 
-#' List all files for a single ensemble member
+#' List files for a single ensemble member
 #'
-#' @param Ensemble character string that gives the absolute file path
-#'    for the directory with a particular ensemble member of a climate
-#'    model projection.
+#' This function reads through the user-specified projections directory and
+#'    creates a list with all files in the subdirectory of a single
+#'    ensemble member subdirectory within a specific climate model
+#'    subdirectory.
 #'
-#' @return A list of length 2. First element is the name of the ensemble that was processed. Second element is
-#' a list containing the coordinate .csv, the time series data .csv, and the time data .csv respectively.
+#' @param ensemble A character string that gives the absolute file path
+#'    for the subdirectory for a particular ensemble member of a climate
+#'    model within the user-specified projection directory.
+#' @param coordinateFilenames Character string with name of the files
+#'    containing the latitude and longitude coordinates
+#'    corresponding to the columns of the time series data.
+#' @param tasFilenames Character sting with name of files containing the time
+#'    series data.
+#' @param timeFilenames Character string with name of the files containing the
+#'    date information corresponding to the rows of the time series data.
+#'
+#' @return A list of length 2. The first element is the name of the ensemble
+#' that was processed. The second element is a list containing the coordinate
+#' comma-separated file, the projection data comma-separated file,
+#' and the time data comma-separated file, respectively.
 #'
 #' @examples
-#' ensemble <- "/Users/brookeanderson/Downloads/sample/cmip5/rcp85/bcc1/r1i1p1"
-#' buildStructureEnsembles(ensemble)
+#'
+#' experiment <- "rcp85"
+#' model <- "bcc1"
+#' ensemble <- "r1i1p1"
+#' dataFolder <- system.file("cmip5", package = "futureheatwaves")
+#'
+#' ensemble <- paste(dataFolder, experiment, model, ensemble, sep = "/")
+#'
+#' coordinateFilenames <- "latitude_longitude_NorthAmerica_12mo.csv"
+#' tasFilenames <- "tas_NorthAmerica_12mo.csv"
+#' timeFilenames <- "time_NorthAmerica_12mo.csv"
+#'
+#' buildStructureEnsembles(ensemble = ensemble,
+#'                         coordinateFilenames = coordinateFilenames,
+#'                         tasFilenames = tasFilenames,
+#'                         timeFilenames = timeFilenames)
 buildStructureEnsembles <- function(ensemble, coordinateFilenames,
                                     tasFilenames, timeFilenames){
 
-        # Extract name of the ensemble
+        # Extract name of the ensemble (two directories below the
+        # one named for the experiment, "historical" or "rcp85").
         splist = strsplit(ensemble, "/")
         ensemble_name_index <- which(sapply(splist,
                                          function(x) x %in%
-                                                 c("historical", "rcp85"))) + 2
+                                                 c("historical", "rcp85")))
+        ensemble_name_index <- ensemble_name_index + 2
         ensembleName <- splist[[1]][ensemble_name_index]
 
         # remove any irrelevant files from the file structure

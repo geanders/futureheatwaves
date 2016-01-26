@@ -2,25 +2,54 @@
 % Please edit documentation in R/preparation.R
 \name{buildStructureEnsembles}
 \alias{buildStructureEnsembles}
-\title{List all files for a single ensemble member}
+\title{List files for a single ensemble member}
 \usage{
 buildStructureEnsembles(ensemble, coordinateFilenames, tasFilenames,
   timeFilenames)
 }
 \arguments{
-\item{Ensemble}{character string that gives the absolute file path
-for the directory with a particular ensemble member of a climate
-model projection.}
+\item{ensemble}{A character string that gives the absolute file path
+for the subdirectory for a particular ensemble member of a climate
+model within the user-specified projection directory.}
+
+\item{coordinateFilenames}{Character string with name of the files
+containing the latitude and longitude coordinates
+corresponding to the columns of the time series data.}
+
+\item{tasFilenames}{Character sting with name of files containing the time
+series data.}
+
+\item{timeFilenames}{Character string with name of the files containing the
+date information corresponding to the rows of the time series data.}
 }
 \value{
-A list of length 2. First element is the name of the ensemble that was processed. Second element is
-a list containing the coordinate .csv, the time series data .csv, and the time data .csv respectively.
+A list of length 2. The first element is the name of the ensemble
+that was processed. The second element is a list containing the coordinate
+comma-separated file, the projection data comma-separated file,
+and the time data comma-separated file, respectively.
 }
 \description{
-List all files for a single ensemble member
+This function reads through the user-specified projections directory and
+   creates a list with all files in the subdirectory of a single
+   ensemble member subdirectory within a specific climate model
+   subdirectory.
 }
 \examples{
-ensemble <- "/Users/brookeanderson/Downloads/sample/cmip5/rcp85/bcc1/r1i1p1"
-buildStructureEnsembles(ensemble)
+
+experiment <- "rcp85"
+model <- "bcc1"
+ensemble <- "r1i1p1"
+dataFolder <- system.file("cmip5", package = "futureheatwaves")
+
+ensemble <- paste(dataFolder, experiment, model, ensemble, sep = "/")
+
+coordinateFilenames <- "latitude_longitude_NorthAmerica_12mo.csv"
+tasFilenames <- "tas_NorthAmerica_12mo.csv"
+timeFilenames <- "time_NorthAmerica_12mo.csv"
+
+buildStructureEnsembles(ensemble = ensemble,
+                        coordinateFilenames = coordinateFilenames,
+                        tasFilenames = tasFilenames,
+                        timeFilenames = timeFilenames)
 }
 

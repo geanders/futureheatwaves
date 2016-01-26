@@ -2,26 +2,43 @@
 % Please edit documentation in R/preparation.R
 \name{buildStructureExperiments}
 \alias{buildStructureExperiments}
-\title{Generate list of file structure for an experiment}
+\title{Generate file structure for an experiment}
 \usage{
 buildStructureExperiments(model, experiment, dataFolder, coordinateFilenames,
   tasFilenames, timeFilenames)
 }
 \arguments{
-\item{model}{Character string of climate model name}
+\item{model}{Character string of climate model name (e.g., "bcc1"). This
+name is typically generated for use in this function from the subdirectory
+names for the climate model within the directory of projection data
+specified by the user in \code{gen_hw_set}.}
 
 \item{experiment}{Character string of the experiment of interest.
 Possible variables are "historical" or "rcp85".}
 
-\item{dataPath}{Character string of the file path to the directory
+\item{dataFolder}{Character string of the file path to the directory
 containing the climate projections. Must include the final `/`.}
+
+\item{coordinateFilenames}{Character string with name of the files
+containing the latitude and longitude coordinates
+corresponding to the columns of the time series data.}
+
+\item{tasFilenames}{Character sting with name of files containing the time
+series data.}
+
+\item{timeFilenames}{Character string with name of the files containing the
+date information corresponding to the rows of the time series data.}
 }
 \value{
-A list that is the length of the number of ensembles. Each element is a return value
-of the buildStructureEnsembles function.
+A list that is the length of the number of ensembles. Each element
+   is a return value of the \code{buildStructureEnsembles} function for
+   one of the ensemble members in that experiment of that climate model
+   within the user-specified projections directory.
 }
 \description{
-Generate list of file structure for an experiment
+This function generates a list object with the file structure of files
+   within the user-specified projection directory for a single experiment
+   (i.e., "historical" or "rcp85").
 }
 \examples{
 model <- "bcc1"

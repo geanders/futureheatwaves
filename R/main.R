@@ -84,18 +84,19 @@ gen_hw_set <- function(out,
   # Add warning for user that this will write new files
         if(printWarning){
                 cat("\n", "Warning: This function will write new files",
-                    "to your computer in the ", "\n", out,
-                    "directory of your computer.", "\n",
-                    "Do you want to continue (y / n):", "\n")
+                    "to your computer in the \n", out,
+                    "directory of your computer.\n",
+                    "Do you want to continue? (y / n): \n")
                 user_prompt <- scan(n = 1, what = "character")
                 user_prompt <- tolower(user_prompt)
                 if(user_prompt %in% c("n", "no")){
-                        stop("User chose to exit function run.")
+                        stop("User chose to exit at prompt.")
                 }
         }
 
         # Put the directories into nested list form
-        models <- acquireDirectoryStructure(dataFolder, coordinateFilenames, tasFilenames, timeFilenames)
+        models <- acquireDirectoryStructure(dataFolder, coordinateFilenames,
+                                            tasFilenames, timeFilenames)
         gar <- models
 
         # Read the cities data file

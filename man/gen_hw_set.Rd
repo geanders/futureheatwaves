@@ -14,7 +14,7 @@ gen_hw_set(out, dataFolder, citycsv, coordinateFilenames, tasFilenames,
 heatwave files will be written.}
 
 \item{dataFolder}{Character string with pathway to directory that
-contains climate projections. Must include the final backslash.}
+contains climate projection data.}
 
 \item{citycsv}{Character string giving the filepath to a .csv
 file with latitude and longitude values for each city.}

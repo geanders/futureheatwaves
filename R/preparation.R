@@ -1,23 +1,32 @@
-#' Determine climate projection directory structure
+#' Acquire structure of input directory
+#'
+#' This function walks through the directory structure of the user-provided
+#'    directory of climate projection files and parses out a list of the
+#'    climate models and ensemble members included in that directory based
+#'    on subdirectory names.
 #'
 #' @param dataPath A character string giving the file path to the
 #'    directory with the climate projection data.
-#' @param Names of the files containing the latitude and longitude coordinates
+#' @param coordinateFilenames Character string with name of the files
+#'    containing the latitude and longitude coordinates
 #'    corresponding to the columns of the time series data.
-#' @param Names of files containing the time series data.
-#' @param Names of the files containing the date information corresponding,
-#'    to the rows of the time series data.
+#' @param tasFilenames Character sting with name of files containing the time
+#'    series data.
+#' @param timeFilenames Character string with name of the files containing the
+#'    date information corresponding to the rows of the time series data.
 #'
 #' @return A list object outlining the file structure of the directory
 #'    containing the climate projections.This list has an element
 #'    for each climate model (e.g. ,"bcc1"). The first element within each
-#'    of these elements is the name of the model. The second element with
-#'    the first level element gives the file paths for location grids,
-#'    `tas` and `time` for each ensemble run of the model.
+#'    of these elements is the name of the model. The second element within
+#'    the first-level element gives the file paths for location grids,
+#'    climate projections, and projection times for each ensemble run of the
+#'    model.
 #'
 #' @note The files in the bottom directory must all have a .csv extension
-#'    and must names corresponding to the "Filenames" parameters of this function.
-#'    All other files will be removed when creating the directory structure.
+#'    and must have names corresponding to the relevant "*Filenames" parameter
+#'    of this function. All other files will be removed when creating the
+#'    directory structure.
 #'
 #' @examples
 #' dataFolder <- "~/inst/cmip5/"

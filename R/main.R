@@ -17,7 +17,7 @@
 #' @param out Character string with pathway to directory to which
 #'    heatwave files will be written.
 #' @param dataFolder Character string with pathway to directory that
-#'    contains climate projections. Must include the final backslash.
+#'    contains climate projection data.
 #' @param citycsv Character string giving the filepath to a .csv
 #'    file with latitude and longitude values for each city.
 #' @param coordinateFilenames Character string with name of the files

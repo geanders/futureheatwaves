@@ -36,7 +36,10 @@
 #'    from the ensembles. Format: c(historical low bound, historical
 #'    high bound, reference low bound, reference high bound).
 #'    Restrictions: Bounds cannot span multiple experiments
-#' @param referenceBoundaries Reference boundaries.
+#' @param referenceBoundaries Custom time boundaries for ... .
+#'    Format: c(historical low bound, historical
+#'    high bound, reference low bound, reference high bound).
+#'    Restrictions: Bounds cannot span multiple experiments
 #' @param probThreshold Numerical value between 0 and 1 specifying the threshold
 #'    of temperature to use when defining heatwaves. The default value is 0.98
 #'    (i.e., a heatwave is two or more days above the community's 98th
@@ -80,15 +83,16 @@ gen_hw_set <- function(out,
         }
 
         # Check the parameters for errors
-        check_params(out,
-                     dataFolder,
-                     citycsv,
-                     coordinateFilenames,
-                     tasFilenames,
-                     timeFilenames,
-                     RorCPP,
-                     dataBoundaries, IDheatwavesReplacement,
-                     referenceBoundaries)
+        check_params(out = out,
+                     dataFolder = dataFolder,
+                     citycsv = citycsv,
+                     coordinateFilenames = coordinateFilenames,
+                     tasFilenames = tasFilenames,
+                     timeFilenames = timeFilenames,
+                     RorCPP = RorCPP,
+                     IDheatwavesReplacement = IDheatwavesReplacement,
+                     dataBoundaries = dataBoundaries,
+                     referenceBoundaries = referenceBoundaries)
 
   # Add warning for user that this will write new files
         if(printWarning){

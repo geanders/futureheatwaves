@@ -41,7 +41,10 @@ from the ensembles. Format: c(historical low bound, historical
 high bound, reference low bound, reference high bound).
 Restrictions: Bounds cannot span multiple experiments}
 
-\item{referenceBoundaries}{Reference boundaries.}
+\item{referenceBoundaries}{Custom time boundaries for ... .
+Format: c(historical low bound, historical
+high bound, reference low bound, reference high bound).
+Restrictions: Bounds cannot span multiple experiments}
 
 \item{probThreshold}{Numerical value between 0 and 1 specifying the threshold
 of temperature to use when defining heatwaves. The default value is 0.98

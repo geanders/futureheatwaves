@@ -40,7 +40,16 @@ giving the user-specified custom date boundaries for the
 heatwave projections.}
 }
 \value{
-Writes threshold temperatures to file and returns ... ?
+A list with two elements: (1) a vector with one element for
+   each community included in the user-specified community location
+   file, with each element value giving the threshold temperature for the
+   heatwave definition for a community, in the same order that communities
+   are listed in the user-specificed \code{citycsv} file and (2) a
+   \code{processModel} object, which is FALSE if the user did not
+   specify custom year boundaries with \code{dataBoundaries} in
+   \code{gen_hw_set} and otherwise is ... .
+   This function also writes threshold temperatures to files within
+   the user-specified output directory for future reference.
 }
 \description{
 This function calculates the threshold temperatures required to identify

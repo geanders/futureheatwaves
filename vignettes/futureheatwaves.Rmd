@@ -130,3 +130,13 @@ finalList[[1]][[2]][1]
 ```
 
 This parsed version of the directory structure helps the following functions walk through all of the climate projections for different models and ensembles within the specified projections directory.
+
+### Aggregating heatwave projections
+
+Once the function has generated a list describing the climate models and ensemble members included in the user-specified `dataFolder` directory of climate projections, the function will run through all ensemble members of any climate model within this directory, identify and characterize the heatwaves for that ensemble member, and save the resulting dataframe to output. 
+
+The package uses closures to aggregate data over all the different ensemble members of all climate models included in the directory of projection data ...
+
+### Determining thresholds for heatwave definition
+
+### Creating ensemble-member specific projections

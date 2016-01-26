@@ -33,7 +33,7 @@ heatwave projections.
 For example, I can specify `dataFolder` and `citycsv` as: 
 
 ```{r}
-dataFolder <- "~/inst/cmip5/" 
+dataFolder <- "inst/cmip5" 
 citycsv <- "inst/cities.csv"
 ```
 
@@ -48,7 +48,7 @@ timeFilenames <- "time_NorthAmerica_12mo.csv"
 You will also need to specify where the output files should be locally saved. Save this as the object `out`. For example, if I wanted to write the output heatwave files to a directory called "example_results" in the `tmp` subdirectory of my home directory, I could specify:
 
 ```{r}
-out <- "~/tmp/example_results/"
+out <- "~/tmp/example_results"
 ```
 
 These selections will be sufficient to run the main function of this package, `gen_hw_set`, using a basic example with default values for things like the heatwave definition, years for which to generate the heatwave datasets (default is 2061--2080), and years to use as a reference for the relative temperature characteristics measured for the heatwaves (default is ...).
@@ -108,3 +108,16 @@ Once the function has completed running, you will have two new subdirectories in
 ### Parsing the directory structure
 
 After some preliminary checks, the function reads in the structure of the directory specified by `dataFolder` and uses the names of subdirectories to create a list of all of the climate models and their ensemble members within the directory. 
+
+The function that does this parsing, `acquireDirectoryStructure`, returns a list object outlining the file structure of the directory containing the climate projections.This list has an element for each climate model (e.g. ,"bcc1"). The first element within each of these elements is the name of the model. The second element within the first-level element gives the file paths for location grids, climate projections, and projection times for each ensemble run of the model.
+
+For example: 
+
+```{r}
+finalList <- acquireDirectoryStructure(dataFolder, coordinateFilenames,
+                                       tasFilenames, timeFilenames)
+
+str(finalList[[1]][[1]])
+str(finalList[[1]][[2]][1])
+```
+

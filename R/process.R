@@ -104,8 +104,10 @@ processModel <- function(model, global, custom, accumulators){
 #' @return Writes threshold temperatures to file and returns ... ?
 processHistorical <- function(model, global, custom, reference = FALSE){
         name <- model[[1]]
-        r1i1p1_index <- grep("r1i1p1", model[[2]][1])
-        historicalDirs <- model[[2]][1][[r1i1p1_index]]
+
+        # To find the threshold, use the first ensemble member within
+        # that historical directory
+        historicalDirs <- model[[2]][1][[1]]
         cat("Processing historical ensemble for", name, "\n")
 
         # Acquire characteristics of the first historical ensemble

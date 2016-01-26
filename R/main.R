@@ -99,7 +99,6 @@ gen_hw_set <- function(out,
         # Put the directories into nested list form
         models <- acquireDirectoryStructure(dataFolder, coordinateFilenames,
                                             tasFilenames, timeFilenames)
-        gar <- models
 
         # Read the cities data file
         cities <- read.csv(citycsv)

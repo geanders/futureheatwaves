@@ -202,7 +202,7 @@ processRCP <- function(ensemble, modelName, ensembleWriter, thresholds,
 #'    \code{acquireDirectoryStructure}.
 #' @param experiment Character string of the experiment of interest.
 #'    Possible variables are "historical" or "rcp85".
-#' @param model Character string of climate model name (e.g., "bcc1"). This
+#' @param modelName Character string of climate model name (e.g., "bcc1"). This
 #'    name is typically generated for use in this function from the subdirectory
 #'    names for the climate model within the directory of projection data
 #'    specified by the user in \code{gen_hw_set}.
@@ -235,9 +235,10 @@ processRCP <- function(ensemble, modelName, ensembleWriter, thresholds,
 #'
 #' @return Returns a list with...
 #'
-#' @note This function uses the Pythagorean theorem to calculate the distance
-#'    between each community given in the \code{citycsv} file and the nearest
-#'    grid point for the climate model for the specified ensemble member.
+#' @note This function calls another function that uses the Pythagorean
+#'    theorem to calculate the distance between each community given in the
+#'    \code{citycsv} file and the nearest grid point for the climate model
+#'    for the specified ensemble member.
 processEnsemble <- function(ensemble, experiment, modelName, global,
                             custom, reference){
 

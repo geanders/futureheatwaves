@@ -5,7 +5,7 @@
 #'    climate models and ensemble members included in that directory based
 #'    on subdirectory names.
 #'
-#' @param dataPath A character string giving the file path to the
+#' @param dataFolder A character string giving the file path to the
 #'    directory with the climate projection data.
 #' @param coordinateFilenames Character string with name of the files
 #'    containing the latitude and longitude coordinates
@@ -17,7 +17,7 @@
 #'
 #' @return A list object outlining the file structure of the directory
 #'    containing the climate projections.This list has an element
-#'    for each climate model (e.g. ,"bcc1"). The first element within each
+#'    for each climate model (e.g.,"bcc1"). The first element within each
 #'    of these elements is the name of the model. The second element within
 #'    the first-level element gives the file paths for location grids,
 #'    climate projections, and projection times for each ensemble run of the
@@ -32,15 +32,16 @@
 #' dataFolder <- "inst/cmip5/"
 #' finalList <- acquireDirectoryStructure(dataFolder, coordinateFilenames,
 #'    tasFilenames, timeFilenames)
+#'
 #' str(finalList[[1]][[1]])
 #' str(finalList[[1]][[2]][1])
 #'
 #' @importFrom dplyr %>%
-acquireDirectoryStructure <- function(dataPath, coordinateFilenames,
+acquireDirectoryStructure <- function(dataFolder, coordinateFilenames,
                                       tasFilenames, timeFilenames){
 
         # Acquire all pathnames to csv files rooted at dataPath
-        all <- list.files(dataPath, recursive = TRUE,
+        all <- list.files(dataFolder, recursive = TRUE,
                           pattern = "\\.csv$")
 
         # Convert list to a dataframe
@@ -69,7 +70,9 @@ acquireDirectoryStructure <- function(dataPath, coordinateFilenames,
 
         # Generate the nested lists that will be used for the processing step
         # Structure: model -> experiment -> ensemble
-        finalList <- lapply(models, buildStructureModels, experiments, all, dataPath, coordinateFilenames, tasFilenames, timeFilenames)
+        finalList <- lapply(models, buildStructureModels, experiments, all,
+                            dataFolder, coordinateFilenames, tasFilenames,
+                            timeFilenames)
         return(finalList)
 }
 

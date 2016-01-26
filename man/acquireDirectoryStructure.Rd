@@ -4,11 +4,11 @@
 \alias{acquireDirectoryStructure}
 \title{Acquire structure of input directory}
 \usage{
-acquireDirectoryStructure(dataPath, coordinateFilenames, tasFilenames,
+acquireDirectoryStructure(dataFolder, coordinateFilenames, tasFilenames,
   timeFilenames)
 }
 \arguments{
-\item{dataPath}{A character string giving the file path to the
+\item{dataFolder}{A character string giving the file path to the
 directory with the climate projection data.}
 
 \item{coordinateFilenames}{Character string with name of the files
@@ -24,7 +24,7 @@ date information corresponding to the rows of the time series data.}
 \value{
 A list object outlining the file structure of the directory
    containing the climate projections.This list has an element
-   for each climate model (e.g. ,"bcc1"). The first element within each
+   for each climate model (e.g.,"bcc1"). The first element within each
    of these elements is the name of the model. The second element within
    the first-level element gives the file paths for location grids,
    climate projections, and projection times for each ensemble run of the
@@ -46,6 +46,7 @@ The files in the bottom directory must all have a .csv extension
 dataFolder <- "inst/cmip5/"
 finalList <- acquireDirectoryStructure(dataFolder, coordinateFilenames,
    tasFilenames, timeFilenames)
+
 str(finalList[[1]][[1]])
 str(finalList[[1]][[2]][1])
 

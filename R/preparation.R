@@ -33,7 +33,7 @@
 #' finalList <- acquireDirectoryStructure(dataFolder = dataFolder,
 #'    coordinateFilenames = coordinateFilenames,
 #'    tasFilenames = tasFilenames,
-#'    timeFilenames = timeFilesnames)
+#'    timeFilenames = timeFilenames)
 #'
 #' str(finalList[[1]][[1]])
 #' str(finalList[[1]][[2]][1])

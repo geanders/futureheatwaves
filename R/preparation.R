@@ -93,7 +93,13 @@ acquireDirectoryStructure <- function(dataFolder, coordinateFilenames,
         return(finalList)
 }
 
-#' Generate list of file structure from model, experiment, and path
+#' Generate list of file structure
+#'
+#' This function takes input from \code{acquireDirectoryStructure} and
+#'    uses it to generate a list object with the projection directory
+#'    file structure. This parsed file structure is later used to lead other
+#'    code through all climate models and ensemble members in the input
+#'    projection directory.
 #'
 #' @param model Character string of climate model name
 #' @param experiments Character vector of the experiment(s) of interest.
@@ -104,18 +110,33 @@ acquireDirectoryStructure <- function(dataFolder, coordinateFilenames,
 #' @param dataPath Character string of the file path to the directory
 #'    containing the climate projections. Must include the final `/`.
 #'
-#' @return A list of length 3. The first element is the name of the model whose structure was being built.
-#' The second element is the historical experiment hierarchy. The third element is the rcp85 experiment hierarchy. The
-#' second and third elements are return values of buildStructureExperiments.
+#' @return A list of length 3. The first element is the name of the model
+#'    whose structure was being built. The second element is the historical
+#'    experiment hierarchy. The third element is the hierarchy of the future
+#'    projection directory for the model. The second and third elements are
+#'    return values of \code{buildStructureExperiments}.
 #'
 #' @examples
 #' model <- "bcc1"
-#' experiments <- c("rcp85")
+#' experiments <- c("historical", "rcp85")
 #' all <- c("rcp85/bcc1/r1i1p1/latitude_longitude_NorthAmerica_12mo.csv",
 #'          "rcp85/bcc1/r1i1p1/tas_NorthAmerica_12mo.csv",
 #'          "rcp85/bcc1/r1i1p1/time_NorthAmerica_12mo.csv")
-#' dataPath <- "~/Downloads/sample/cmip5/"
-#' buildStructureModels(model, experiments, all, dataPath)
+#'
+#' dataFolder <- system.file("cmip5", package = "futureheatwaves")
+#' dataFolder <- paste0(dataFolder, "/")
+#'
+#' coordinateFilenames <- "latitude_longitude_NorthAmerica_12mo.csv"
+#' tasFilenames <- "tas_NorthAmerica_12mo.csv"
+#' timeFilenames <- "time_NorthAmerica_12mo.csv"
+#'
+#' buildStructureModels(model = model,
+#'                      experiments = experiments,
+#'                      all = all,
+#'                      dataFolder,
+#'                      coordinateFilenames = coordinateFilenames,
+#'                      tasFilenames = tasFilenames,
+#'                      timeFilenames = timeFilenames)
 buildStructureModels <- function(model, experiments, all, dataFolder,
                                  coordinateFilenames, tasFilenames,
                                  timeFilenames){

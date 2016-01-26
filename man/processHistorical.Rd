@@ -26,9 +26,10 @@ passed through from \code{gen_hw_set} and includes user specifications
 for, if specified as other than the default, an alternative function to
 use to identify heatwaves, alternative upper and lower year boundaries
 for the projection period of the heatwave datasets being generated,
-and alternative upper and lower year boundaries for the reference period
+alternative upper and lower year boundaries for the reference period
 to be used when measuring all heatwave characteristics related to
-relative, rather than absolute, temperature.}
+relative, rather than absolute, temperature, and the percentile
+threshold to use when defining heatwaves.}
 
 \item{reference}{FALSE, if the user has not specified custom reference
 boundaries through the \code{referenceBoundaries} argument in

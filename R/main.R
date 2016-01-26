@@ -37,6 +37,12 @@
 #'    high bound, reference low bound, reference high bound).
 #'    Restrictions: Bounds cannot span multiple experiments
 #' @param referenceBoundaries Reference boundaries.
+#' @param probThreshold Numerical value between 0 and 1 specifying the threshold
+#'    of temperature to use when defining heatwaves. The default value is 0.98
+#'    (i.e., a heatwave is two or more days above the community's 98th
+#'    percentile temperature).
+#' @param printWarning TRUE / FALSE specifying whether to print out the progress
+#'    of the function as it runs. Default is TRUE.
 #'
 #' @return This function returns a dataframe listing the name of each climate
 #'    model included in the directory of projection files inputted to the
@@ -56,6 +62,7 @@ gen_hw_set <- function(out,
                        IDheatwavesReplacement = FALSE,
                        dataBoundaries = FALSE,
                        referenceBoundaries = FALSE,
+                       probThreshold = 0.98,
                        printWarning = TRUE){
 
         # If `dataFolder` does not end in "/", add it.
@@ -118,7 +125,8 @@ gen_hw_set <- function(out,
         custom <- list("IDheatwaves" = IDheatwavesReplacement,
                        "getBounds" = dataBoundaries,
                        "processModel" = referenceBoundaries,
-                       "createHwDataframe" = referenceBoundaries != FALSE)
+                       "createHwDataframe" = referenceBoundaries != FALSE,
+                       "probThreshold" = probThreshold)
 
         # Create accumulator closure
         accumulators <- createAccumulators()

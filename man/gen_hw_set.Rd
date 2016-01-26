@@ -7,7 +7,7 @@
 gen_hw_set(out, dataFolder, citycsv, coordinateFilenames, tasFilenames,
   timeFilenames, RorCPP = 1, IDheatwavesReplacement = FALSE,
   dataBoundaries = FALSE, referenceBoundaries = FALSE,
-  printWarning = TRUE)
+  probThreshold = 0.98, printWarning = TRUE)
 }
 \arguments{
 \item{out}{Character string with pathway to directory to which
@@ -42,6 +42,14 @@ high bound, reference low bound, reference high bound).
 Restrictions: Bounds cannot span multiple experiments}
 
 \item{referenceBoundaries}{Reference boundaries.}
+
+\item{probThreshold}{Numerical value between 0 and 1 specifying the threshold
+of temperature to use when defining heatwaves. The default value is 0.98
+(i.e., a heatwave is two or more days above the community's 98th
+percentile temperature).}
+
+\item{printWarning}{TRUE / FALSE specifying whether to print out the progress
+of the function as it runs. Default is TRUE.}
 }
 \value{
 This function returns a dataframe listing the name of each climate

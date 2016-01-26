@@ -30,8 +30,10 @@
 #'
 #' @examples
 #' dataFolder <- "inst/cmip5/"
-#' finalList <- acquireDirectoryStructure(dataFolder, coordinateFilenames,
-#'    tasFilenames, timeFilenames)
+#' finalList <- acquireDirectoryStructure(dataFolder = dataFolder,
+#'    coordinateFilenames = coordinateFilenames,
+#'    tasFilenames = tasFilenames,
+#'    timeFilenames = timeFilesnames)
 #'
 #' str(finalList[[1]][[1]])
 #' str(finalList[[1]][[2]][1])

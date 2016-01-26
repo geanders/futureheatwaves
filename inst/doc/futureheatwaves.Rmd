@@ -35,7 +35,7 @@ heatwave projections.
 - `tasFilenames`: Character sting with name of files containing the time series data.
 - `timeFilenames`: Character string with name of the files containing the date information corresponding to the rows of the time series data.
 
-For example, if I had a directory called `cmip5` with the projection data and a file called `citycsv` with the community list and locations, both in the directory `inst`, I would specify `dataFolder` and `citycsv` as: 
+For example, I can specify `dataFolder` and `citycsv` as: 
 
 ```{r}
 dataFolder <- "inst/cmip5/" 

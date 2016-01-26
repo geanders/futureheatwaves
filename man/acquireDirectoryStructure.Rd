@@ -43,8 +43,9 @@ The files in the bottom directory must all have a .csv extension
    directory structure.
 }
 \examples{
-dataFolder <- "~/inst/cmip5/"
-finalList <- acquireDirectoryStructure(dataFolder)
+dataFolder <- "inst/cmip5/"
+finalList <- acquireDirectoryStructure(dataFolder, coordinateFilenames,
+   tasFilenames, timeFilenames)
 str(finalList[[1]][[1]])
 str(finalList[[1]][[2]][1])
 

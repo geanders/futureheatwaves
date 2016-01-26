@@ -247,16 +247,24 @@ check_params <- function(out,
         checkCustomBounds(referenceBoundaries)
 }
 
-#' Error checking for user-specified custom boundaries
+#' Check year boundaries for errors
 #'
-#' @param boundList: A set of boundaries in the format c(historical period low bound, historical period high bound,
-#' rcp period low bound, rcp period high bound)
-#' @param Length: The required length of the boundaries list. Defaulted to 4.
-checkCustomBounds <- function(boundList, length = 4){
+#' This function inputs the boundary lists specified in \code{gen_hw_set},
+#'    \code{dataBoundaries} and \code{referenceBoundaries}, and checks them
+#'    for errors in structure of the input or in the years selected.
+#'
+#' @param boundList Either FALSE, if user wishes to use the default
+#'    boundaries, or a set of boundary years in the format
+#'    c(historical period earliest year, historical period latest year,
+#'    future projection period earliest year, future projection period
+#'    latest year).
+#' @param expected_length The expected length of \code{boundList}.
+checkCustomBounds <- function(boundList, expected_length = 4){
 
   # Check to make sure the user entered a list of the correct length
-  if(boundList != FALSE & length(boundList) != length){
-    stop("boundList length not equal to length of user-specified boundary list. Stopping.")
+  if(boundList != FALSE & length(boundList) != expected_length){
+    stop(paste("boundList length not equal to length of user-specified",
+               "boundary list. Stopping."))
 
   # All other bounds error checking
   } else if(boundList != FALSE){

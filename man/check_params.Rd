@@ -18,13 +18,15 @@ contains climate projections. Must include the final backslash.}
 \item{citycsv}{Character string giving the filepath to a .csv
 file with latitude and longitude values for each city.}
 
-\item{coordinateFilenames}{Character string with name of the files containing the latitude and longitude coordinates
+\item{coordinateFilenames}{Character string with name of the files
+containing the latitude and longitude coordinates
 corresponding to the columns of the time series data.}
 
-\item{tasFilenames}{Character sting with name of files containing the time series data.}
+\item{tasFilenames}{Character sting with name of files containing the time
+series data.}
 
-\item{timeFilenames}{Character string with name of the files containing the date information corresponding,
-to the rows of the time series data.}
+\item{timeFilenames}{Character string with name of the files containing the
+date information corresponding to the rows of the time series data.}
 
 \item{RorCPP}{0 /1 flag that indicates whether to use R (1) or
 CPP (0) functions}

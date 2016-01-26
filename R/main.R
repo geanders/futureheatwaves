@@ -213,12 +213,11 @@ check_params <- function(out,
         tryCatch(
                 dir.exists(dataFolder),
                 error = function(){
-                        stop(paste("Pathway containing cmip5 data",
-                                   "(`dataFolder`) invalid. Stopping"))
+                        stop(paste("Pathway containing projection data",
+                                   "(`dataFolder`) invalid. Stopping."))
                 },
                 finally = {}
         )
-
 
         # Check if the city information .csv can be opened.
         # Note: Does not check if the city information is valid.
@@ -226,25 +225,25 @@ check_params <- function(out,
                 read.csv(citycsv, header = TRUE),
                 error = function(x){
                         stop(paste("Cannot read city information .csv",
-                                   "(`citycsv`). Stopping"))
+                                   "(`citycsv`). Stopping."))
                 }
         )
 
         # Check if the user has specified 1 or 0 for the RorCPP flag
         if( RorCPP != 1 & RorCPP != 0){
-                stop(paste("Invalid RorCPP flag value. Must enter 1 or 0.",
-                           "Stopping"))
+                stop(paste("Invalid RorCPP flag value. Must be 1 or 0.",
+                           "Stopping."))
         }
 
         # Check 'Filenames' parameters for .csv extension.
         if(!grepl(".csv", coordinateFilenames)){
-                stop("Invalid format: coordinateFilenames. Stopping")
+                stop("Invalid format: coordinateFilenames. Stopping.")
         }
         if(!grepl(".csv", tasFilenames)){
-                stop("Invalid format: tasFilenames. Stoppping")
+                stop("Invalid format: tasFilenames. Stopping.")
         }
         if(!grepl(".csv", timeFilenames)){
-                stop("Invalid format: timeFilenames. Stopping")
+                stop("Invalid format: timeFilenames. Stopping.")
         }
 
         # TODO CHECK FOR BOUNDARY STRADDLING
@@ -286,47 +285,47 @@ checkCustomBounds <- function(boundList, expected_length = 4){
     # historical and rcp boundary sets
     if(typeof(histLow) != typeof(histHigh)){
       stop(paste("One of the required boundaries of boundaries variable",
-                 "unspecified. Stopping"))
+                 "unspecified. Stopping."))
     }
     if(typeof(rcpLow) != typeof(rcpHigh)){
       stop(paste("One of the required boundaries of boundaries variable",
-                 "unspecified. Stopping"))
+                 "unspecified. Stopping."))
     }
 
     # Check if bounds are the correct type
     if(typeof(histLow) != "double" | typeof(histHigh) != "double"){
-      stop("Invalid type: histLow or histHigh. Stopping")
+      stop("Invalid type: histLow or histHigh. Stopping.")
     }
     if(typeof(rcpLow) != "double" | typeof(rcpHigh) != "double"){
-      stop("Invalid type: rcpLow or rcpHigh. Stopping")
+      stop("Invalid type: rcpLow or rcpHigh. Stopping.")
     }
 
     # Check if bounds are in the correct range
     if(histLow != FALSE){
       if(histLow < 1981){
         stop(paste("Custom boundaries for threshold calculation fall out",
-                   "of acceptable range. Stopping"))
+                   "of acceptable range. Stopping."))
       }
     }
 
     if(histHigh != FALSE){
       if(histHigh > 2004){
         stop(paste("Custom boundaries for threshold calculation fall out",
-                   "of acceptable range. Stopping"))
+                   "of acceptable range. Stopping."))
       }
     }
 
     if(rcpLow != FALSE){
       if(rcpLow < 2061){
         stop(paste("Custom boundaries for threshold calculation fall out of",
-                   "acceptable range. Stopping"))
+                   "acceptable range. Stopping."))
       }
     }
 
     if(rcpHigh != FALSE){
       if(rcpHigh > 2080){
         stop(paste("Custom boundaries for threshold calculation fall out of",
-                   "acceptable range. Stopping"))
+                   "acceptable range. Stopping."))
       }
     }
   }

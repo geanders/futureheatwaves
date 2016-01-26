@@ -2,28 +2,27 @@
 % Please edit documentation in R/main.R
 \name{createAccumulators}
 \alias{createAccumulators}
-\title{Create accumulator closure
-This closure holds data structures that the user wishes to grow at various
-points in the execution of the package. It exists to couple these structures together
-in order to lower the number of parameters of this nature the user would have to pass down
-the the program otherwise. It is a closure instead of a list as a pre-emptive measure}
+\title{Create accumulator closure}
 \usage{
 createAccumulators()
 }
 \value{
 A closure that accepts commands to access and append new data onto
-data structures as the program executes. The utility of this function may be expanded by
+   data structures as the program executes. The utility of this function may
+   be expanded by
 }
 \description{
-Create accumulator closure
 This closure holds data structures that the user wishes to grow at various
-points in the execution of the package. It exists to couple these structures together
-in order to lower the number of parameters of this nature the user would have to pass down
-the the program otherwise. It is a closure instead of a list as a pre-emptive measure
+   points in the execution of the package. It exists to couple these
+   structures together in order to lower the number of parameters of this
+   nature the user would have to pass down the the program otherwise. It is
+   a closure instead of a list as a pre-emptive measure
 }
 \note{
 First argument: The command
-Second argument: An element to be appended to the end of the data structure of the command
-This function contains no error checking for the types of elements input into the data structures it contains
+Second argument: An element to be appended to the end of the data structure
+of the command
+This function contains no error checking for the types of elements input
+into the data structures it contains
 }
 

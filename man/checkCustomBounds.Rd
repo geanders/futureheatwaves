@@ -2,17 +2,22 @@
 % Please edit documentation in R/main.R
 \name{checkCustomBounds}
 \alias{checkCustomBounds}
-\title{Error checking for user-specified custom boundaries}
+\title{Check year boundaries for errors}
 \usage{
-checkCustomBounds(boundList, length = 4)
+checkCustomBounds(boundList, expected_length = 4)
 }
 \arguments{
-\item{boundList:}{A set of boundaries in the format c(historical period low bound, historical period high bound,
-rcp period low bound, rcp period high bound)}
+\item{boundList}{Either FALSE, if user wishes to use the default
+boundaries, or a set of boundary years in the format
+c(historical period earliest year, historical period latest year,
+future projection period earliest year, future projection period
+latest year).}
 
-\item{Length:}{The required length of the boundaries list. Defaulted to 4.}
+\item{expected_length}{The expected length of \code{boundList}.}
 }
 \description{
-Error checking for user-specified custom boundaries
+This function inputs the boundary lists specified in \code{gen_hw_set},
+   \code{dataBoundaries} and \code{referenceBoundaries}, and checks them
+   for errors in structure of the input or in the years selected.
 }
 

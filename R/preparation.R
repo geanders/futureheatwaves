@@ -48,7 +48,6 @@
 acquireDirectoryStructure <- function(dataFolder, coordinateFilenames,
                                       tasFilenames, timeFilenames){
 
-
         # If `dataFolder` does not end in "/", add it.
         # (Only need to repeat here to use with in-package examples)
         split_dataFolder <- unlist(strsplit(dataFolder, split = ""))

@@ -4,7 +4,7 @@
 \alias{buildStructureModels}
 \title{Generate list of file structure from model, experiment, and path}
 \usage{
-buildStructureModels(model, experiments, all, dataPath, coordinateFilenames,
+buildStructureModels(model, experiments, all, dataFolder, coordinateFilenames,
   tasFilenames, timeFilenames)
 }
 \arguments{

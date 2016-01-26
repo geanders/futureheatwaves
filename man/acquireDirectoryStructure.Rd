@@ -43,7 +43,11 @@ The files in the bottom directory must all have a .csv extension
    directory structure.
 }
 \examples{
-dataFolder <- "inst/cmip5/"
+dataFolder <- system.file("cmip5", package = "futureheatwaves")
+coordinateFilenames <- "latitude_longitude_NorthAmerica_12mo.csv"
+tasFilenames <- "tas_NorthAmerica_12mo.csv"
+timeFilenames <- "time_NorthAmerica_12mo.csv"
+
 finalList <- acquireDirectoryStructure(dataFolder = dataFolder,
    coordinateFilenames = coordinateFilenames,
    tasFilenames = tasFilenames,

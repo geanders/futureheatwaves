@@ -29,7 +29,11 @@
 #'    directory structure.
 #'
 #' @examples
-#' dataFolder <- "inst/cmip5/"
+#' dataFolder <- system.file("cmip5", package = "futureheatwaves")
+#' coordinateFilenames <- "latitude_longitude_NorthAmerica_12mo.csv"
+#' tasFilenames <- "tas_NorthAmerica_12mo.csv"
+#' timeFilenames <- "time_NorthAmerica_12mo.csv"
+#'
 #' finalList <- acquireDirectoryStructure(dataFolder = dataFolder,
 #'    coordinateFilenames = coordinateFilenames,
 #'    tasFilenames = tasFilenames,
@@ -38,9 +42,20 @@
 #' str(finalList[[1]][[1]])
 #' str(finalList[[1]][[2]][1])
 #'
+#' @export
+#'
 #' @importFrom dplyr %>%
 acquireDirectoryStructure <- function(dataFolder, coordinateFilenames,
                                       tasFilenames, timeFilenames){
+
+
+        # If `dataFolder` does not end in "/", add it.
+        # (Only need to repeat here to use with in-package examples)
+        split_dataFolder <- unlist(strsplit(dataFolder, split = ""))
+        last_char <- split_dataFolder[length(split_dataFolder)]
+        if(last_char != "/"){
+                dataFolder <- paste0(dataFolder, "/")
+        }
 
         # Acquire all pathnames to csv files rooted at dataPath
         all <- list.files(dataFolder, recursive = TRUE,
@@ -101,10 +116,18 @@ acquireDirectoryStructure <- function(dataFolder, coordinateFilenames,
 #'          "rcp85/bcc1/r1i1p1/time_NorthAmerica_12mo.csv")
 #' dataPath <- "~/Downloads/sample/cmip5/"
 #' buildStructureModels(model, experiments, all, dataPath)
-buildStructureModels <- function(model, experiments, all, dataPath, coordinateFilenames, tasFilenames, timeFilenames){
+buildStructureModels <- function(model, experiments, all, dataFolder,
+                                 coordinateFilenames, tasFilenames,
+                                 timeFilenames){
         return(list(model,
-                    buildStructureExperiments(model, experiments[1], all, dataPath, coordinateFilenames, tasFilenames, timeFilenames),
-                    buildStructureExperiments(model, experiments[2], all, dataPath, coordinateFilenames, tasFilenames, timeFilenames)))
+                    buildStructureExperiments(model, experiments[1],
+                                              all, dataFolder,
+                                              coordinateFilenames,
+                                              tasFilenames, timeFilenames),
+                    buildStructureExperiments(model, experiments[2],
+                                              all, dataFolder,
+                                              coordinateFilenames,
+                                              tasFilenames, timeFilenames)))
 }
 
 #' Generate list of file structure for an experiment
@@ -124,22 +147,40 @@ buildStructureModels <- function(model, experiments, all, dataPath, coordinateFi
 #' @examples
 #' model <- "bcc1"
 #' experiment <- "rcp85"
+#'
 #' all <- c("rcp85/bcc1/r1i1p1/latitude_longitude_NorthAmerica_12mo.csv",
 #'          "rcp85/bcc1/r1i1p1/tas_NorthAmerica_12mo.csv",
 #'          "rcp85/bcc1/r1i1p1/time_NorthAmerica_12mo.csv")
-#' dataPath <- "~/Downloads/sample/cmip5/"
-#' buildStructureExperiments(model, experiments, all, dataPath)
 #'
-buildStructureExperiments <- function(model, experiment, all, dataPath, coordinateFilenames, tasFilenames, timeFilenames){
+#' dataFolder <- system.file("cmip5", package = "futureheatwaves")
+#' dataFolder <- paste0(dataFolder, "/")
+#'
+#' coordinateFilenames <- "latitude_longitude_NorthAmerica_12mo.csv"
+#' tasFilenames <- "tas_NorthAmerica_12mo.csv"
+#' timeFilenames <- "time_NorthAmerica_12mo.csv"
+#'
+#' buildStructureExperiments(model = model,
+#'                           experiment = experiment,
+#'                           all = all,
+#'                           dataFolder = dataFolder,
+#'                           coordinateFilenames = coordinateFilenames,
+#'                           tasFilenames = tasFilenames,
+#'                           timeFilenames = timeFilenames)
+#'
+buildStructureExperiments <- function(model, experiment, all, dataFolder,
+                                      coordinateFilenames, tasFilenames,
+                                      timeFilenames){
 
         # List all ensembles in the given experiment
-        ensembles <- list.dirs(paste0(dataPath, experiment, "/", model))
+        ensembles <- list.dirs(paste0(dataFolder, experiment, "/", model))
 
-        # Trim off the first element of 'ensembles' list, since it does not contain information about an ensemble's data.
+        # Trim off the first element of 'ensembles' list, since it does
+        # not contain information about an ensemble's data.
         ensembles <- ensembles[-1]
 
         # Build the directory structure of each ensemble
-        ret <- lapply(ensembles, buildStructureEnsembles, coordinateFilenames, tasFilenames, timeFilenames)
+        ret <- lapply(ensembles, buildStructureEnsembles, coordinateFilenames,
+                      tasFilenames, timeFilenames)
         return(ret)
 }
 

@@ -4,8 +4,8 @@
 \alias{buildStructureExperiments}
 \title{Generate list of file structure for an experiment}
 \usage{
-buildStructureExperiments(model, experiment, all, dataPath, coordinateFilenames,
-  tasFilenames, timeFilenames)
+buildStructureExperiments(model, experiment, all, dataFolder,
+  coordinateFilenames, tasFilenames, timeFilenames)
 }
 \arguments{
 \item{model}{Character string of climate model name}
@@ -30,11 +30,25 @@ Generate list of file structure for an experiment
 \examples{
 model <- "bcc1"
 experiment <- "rcp85"
+
 all <- c("rcp85/bcc1/r1i1p1/latitude_longitude_NorthAmerica_12mo.csv",
          "rcp85/bcc1/r1i1p1/tas_NorthAmerica_12mo.csv",
          "rcp85/bcc1/r1i1p1/time_NorthAmerica_12mo.csv")
-dataPath <- "~/Downloads/sample/cmip5/"
-buildStructureExperiments(model, experiments, all, dataPath)
+
+dataFolder <- system.file("cmip5", package = "futureheatwaves")
+dataFolder <- paste0(dataFolder, "/")
+
+coordinateFilenames <- "latitude_longitude_NorthAmerica_12mo.csv"
+tasFilenames <- "tas_NorthAmerica_12mo.csv"
+timeFilenames <- "time_NorthAmerica_12mo.csv"
+
+buildStructureExperiments(model = model,
+                          experiment = experiment,
+                          all = all,
+                          dataFolder = dataFolder,
+                          coordinateFilenames = coordinateFilenames,
+                          tasFilenames = tasFilenames,
+                          timeFilenames = timeFilenames)
 
 }
 

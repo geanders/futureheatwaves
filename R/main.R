@@ -271,8 +271,9 @@ checkCustomBounds <- function(boundList, expected_length = 4){
 
   # Check to make sure the user entered a list of the correct length
   if(boundList != FALSE & length(boundList) != expected_length){
-    stop(paste("boundList length not equal to length of user-specified",
-               "boundary list. Stopping."))
+    stop(paste0("User-specified boundary list not expected length. ",
+               "Expecting a vector of length ", expected_length,
+               ". Stopping."))
 
   # All other bounds error checking
   } else if(boundList != FALSE){

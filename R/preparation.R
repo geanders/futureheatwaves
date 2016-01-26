@@ -81,13 +81,12 @@ acquireDirectoryStructure <- function(dataFolder, coordinateFilenames,
                                            timeFilenames)) %>%
                 dplyr::select(exp, model, ens, type)
 
-        all <- apply(df_all, 1, paste, collapse = "/")
         models <- as.character(unique(df_all$model))
         experiments <- as.character(unique(df_all$exp))
 
         # Generate the nested lists that will be used for the processing step
         # Structure: model -> experiment -> ensemble
-        finalList <- lapply(models, buildStructureModels, experiments, all,
+        finalList <- lapply(models, buildStructureModels, experiments,
                             dataFolder, coordinateFilenames, tasFilenames,
                             timeFilenames)
         return(finalList)
@@ -101,14 +100,21 @@ acquireDirectoryStructure <- function(dataFolder, coordinateFilenames,
 #'    code through all climate models and ensemble members in the input
 #'    projection directory.
 #'
-#' @param model Character string of climate model name
+#' @param model Character string of climate model name (e.g., "bcc1"). This
+#'    name is typically generated for use in this function from the subdirectory
+#'    names for the climate model within the directory of projection data
+#'    specified by the user in \code{gen_hw_set}.
 #' @param experiments Character vector of the experiment(s) of interest.
 #'    Possible variables are "historical", "rcp85", or both.
-#' @param all Character vectors with the relative pathnames of all
-#'    climate projection files of interest from the directory
-#'    specified in dataPath
 #' @param dataPath Character string of the file path to the directory
 #'    containing the climate projections. Must include the final `/`.
+#' @param coordinateFilenames Character string with name of the files
+#'    containing the latitude and longitude coordinates
+#'    corresponding to the columns of the time series data.
+#' @param tasFilenames Character sting with name of files containing the time
+#'    series data.
+#' @param timeFilenames Character string with name of the files containing the
+#'    date information corresponding to the rows of the time series data.
 #'
 #' @return A list of length 3. The first element is the name of the model
 #'    whose structure was being built. The second element is the historical
@@ -119,9 +125,6 @@ acquireDirectoryStructure <- function(dataFolder, coordinateFilenames,
 #' @examples
 #' model <- "bcc1"
 #' experiments <- c("historical", "rcp85")
-#' all <- c("rcp85/bcc1/r1i1p1/latitude_longitude_NorthAmerica_12mo.csv",
-#'          "rcp85/bcc1/r1i1p1/tas_NorthAmerica_12mo.csv",
-#'          "rcp85/bcc1/r1i1p1/time_NorthAmerica_12mo.csv")
 #'
 #' dataFolder <- system.file("cmip5", package = "futureheatwaves")
 #' dataFolder <- paste0(dataFolder, "/")
@@ -132,21 +135,21 @@ acquireDirectoryStructure <- function(dataFolder, coordinateFilenames,
 #'
 #' buildStructureModels(model = model,
 #'                      experiments = experiments,
-#'                      all = all,
 #'                      dataFolder,
 #'                      coordinateFilenames = coordinateFilenames,
 #'                      tasFilenames = tasFilenames,
 #'                      timeFilenames = timeFilenames)
-buildStructureModels <- function(model, experiments, all, dataFolder,
+buildStructureModels <- function(model, experiments,
+                                 dataFolder,
                                  coordinateFilenames, tasFilenames,
                                  timeFilenames){
         return(list(model,
                     buildStructureExperiments(model, experiments[1],
-                                              all, dataFolder,
+                                              dataFolder,
                                               coordinateFilenames,
                                               tasFilenames, timeFilenames),
                     buildStructureExperiments(model, experiments[2],
-                                              all, dataFolder,
+                                              dataFolder,
                                               coordinateFilenames,
                                               tasFilenames, timeFilenames)))
 }
@@ -156,9 +159,6 @@ buildStructureModels <- function(model, experiments, all, dataFolder,
 #' @param model Character string of climate model name
 #' @param experiment Character string of the experiment of interest.
 #'    Possible variables are "historical" or "rcp85".
-#' @param all Character vectors with the relative pathnames of all
-#'    climate projection files of interest from the directory
-#'    specified in dataPath
 #' @param dataPath Character string of the file path to the directory
 #'    containing the climate projections. Must include the final `/`.
 #'
@@ -169,10 +169,6 @@ buildStructureModels <- function(model, experiments, all, dataFolder,
 #' model <- "bcc1"
 #' experiment <- "rcp85"
 #'
-#' all <- c("rcp85/bcc1/r1i1p1/latitude_longitude_NorthAmerica_12mo.csv",
-#'          "rcp85/bcc1/r1i1p1/tas_NorthAmerica_12mo.csv",
-#'          "rcp85/bcc1/r1i1p1/time_NorthAmerica_12mo.csv")
-#'
 #' dataFolder <- system.file("cmip5", package = "futureheatwaves")
 #' dataFolder <- paste0(dataFolder, "/")
 #'
@@ -182,13 +178,13 @@ buildStructureModels <- function(model, experiments, all, dataFolder,
 #'
 #' buildStructureExperiments(model = model,
 #'                           experiment = experiment,
-#'                           all = all,
 #'                           dataFolder = dataFolder,
 #'                           coordinateFilenames = coordinateFilenames,
 #'                           tasFilenames = tasFilenames,
 #'                           timeFilenames = timeFilenames)
 #'
-buildStructureExperiments <- function(model, experiment, all, dataFolder,
+buildStructureExperiments <- function(model, experiment,
+                                      dataFolder,
                                       coordinateFilenames, tasFilenames,
                                       timeFilenames){
 
@@ -217,7 +213,8 @@ buildStructureExperiments <- function(model, experiment, all, dataFolder,
 #' @examples
 #' ensemble <- "/Users/brookeanderson/Downloads/sample/cmip5/rcp85/bcc1/r1i1p1"
 #' buildStructureEnsembles(ensemble)
-buildStructureEnsembles <- function(ensemble, coordinateFilenames, tasFilenames, timeFilenames){
+buildStructureEnsembles <- function(ensemble, coordinateFilenames,
+                                    tasFilenames, timeFilenames){
 
         # Extract name of the ensemble
         splist = strsplit(ensemble, "/")

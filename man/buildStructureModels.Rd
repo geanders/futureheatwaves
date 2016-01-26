@@ -4,18 +4,27 @@
 \alias{buildStructureModels}
 \title{Generate list of file structure}
 \usage{
-buildStructureModels(model, experiments, all, dataFolder, coordinateFilenames,
+buildStructureModels(model, experiments, dataFolder, coordinateFilenames,
   tasFilenames, timeFilenames)
 }
 \arguments{
-\item{model}{Character string of climate model name}
+\item{model}{Character string of climate model name (e.g., "bcc1"). This
+name is typically generated for use in this function from the subdirectory
+names for the climate model within the directory of projection data
+specified by the user in \code{gen_hw_set}.}
 
 \item{experiments}{Character vector of the experiment(s) of interest.
 Possible variables are "historical", "rcp85", or both.}
 
-\item{all}{Character vectors with the relative pathnames of all
-climate projection files of interest from the directory
-specified in dataPath}
+\item{coordinateFilenames}{Character string with name of the files
+containing the latitude and longitude coordinates
+corresponding to the columns of the time series data.}
+
+\item{tasFilenames}{Character sting with name of files containing the time
+series data.}
+
+\item{timeFilenames}{Character string with name of the files containing the
+date information corresponding to the rows of the time series data.}
 
 \item{dataPath}{Character string of the file path to the directory
 containing the climate projections. Must include the final `/`.}
@@ -37,9 +46,6 @@ This function takes input from \code{acquireDirectoryStructure} and
 \examples{
 model <- "bcc1"
 experiments <- c("historical", "rcp85")
-all <- c("rcp85/bcc1/r1i1p1/latitude_longitude_NorthAmerica_12mo.csv",
-         "rcp85/bcc1/r1i1p1/tas_NorthAmerica_12mo.csv",
-         "rcp85/bcc1/r1i1p1/time_NorthAmerica_12mo.csv")
 
 dataFolder <- system.file("cmip5", package = "futureheatwaves")
 dataFolder <- paste0(dataFolder, "/")
@@ -50,7 +56,6 @@ timeFilenames <- "time_NorthAmerica_12mo.csv"
 
 buildStructureModels(model = model,
                      experiments = experiments,
-                     all = all,
                      dataFolder,
                      coordinateFilenames = coordinateFilenames,
                      tasFilenames = tasFilenames,

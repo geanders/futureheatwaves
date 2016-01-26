@@ -344,10 +344,11 @@ closest_point <- function(city, latlong){
 #'    relative, rather than absolute, temperature, and the percentile
 #'    threshold to use when defining heatwaves.
 #'
-#' @return A numeric vector containing an upper bound of the experiment
-#'    time period as an index; the lower bound of the experiment time
-#'    period as an index; and the number of days spanned.
-#'    Format: c(start, end, size)
+#' @return A numeric vector containing the number of days spanned by the
+#'    time period, the lower bound of the experiment time
+#'    period as an index specifying the relevant row of the climate projection
+#'    data; and an upper bound of the experiment time period as an index
+#'    specifying the relevant row of the climate projection data.
 #'
 #' @note This function is customizable.
 # TODO: See if it is possible to simplify this function by using data from the global carrier instead

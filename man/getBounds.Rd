@@ -24,16 +24,20 @@ relative, rather than absolute, temperature, and the percentile
 threshold to use when defining heatwaves.}
 }
 \value{
-A numeric vector containing an upper bound of the experiment
-   time period as an index; the lower bound of the experiment time
-   period as an index; and the number of days spanned.
-   Format: c(start, end, size)
+A numeric vector containing the number of days spanned by the
+   time period, the lower bound of the experiment time
+   period as an index specifying the relevant row of the climate projection
+   data; and an upper bound of the experiment time period as an index
+   specifying the relevant row of the climate projection data.
 }
 \description{
 Acquire boundaries of time series data
 }
 \note{
 This function is customizable.
-end' index of the historical experiment has to be matched from back to front.
+end' index of the historical experiment has to be
+matched from back to front. This is because the
+data does/may not exceed year 2005. We wish to set
+the end bound to the first day of 2004 instead.
 }
 

@@ -44,6 +44,8 @@
 #'    ensembles included for each model. This output can be used as a check
 #'    that the function processed through the directory of input files
 #'    specified using the \code{dataFolder} argument.
+#'
+#' @export
 gen_hw_set <- function(out,
                        dataFolder,
                        citycsv,

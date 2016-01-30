@@ -2,22 +2,51 @@
 % Please edit documentation in R/IO.R
 \name{writeThresholds}
 \alias{writeThresholds}
-\title{Write the temperature cutoffs acquired from the r1i1p1 ensemble for each model to a .csv}
+\title{Write temperature thresholds to file}
 \usage{
 writeThresholds(modelName, threshOut, thresholds, global, custom)
 }
 \arguments{
-\item{modelName}{Name of the model.}
+\item{modelName}{Character string of climate model name (e.g., "bcc1"). This
+name is typically generated for use in this function from the subdirectory
+names for the climate model within the directory of projection data
+specified by the user in \code{\link{gen_hw_set}}.}
 
-\item{threshOut}{Name of the .csv file to be written}
+\item{threshOut}{Character string with the file name to use for the file
+the function writes out with threshold temperatures for each community
+for the model.}
 
-\item{thresholds}{Minimum threshold temperatures of each city}
+\item{thresholds}{A vector with the thresholds to use within each community
+in that community's heatwave definition.These are typically automatically
+determine during the run of the \code{gen_hw_set} function based on
+historical climate projections within the community.}
 
-\item{global}{Global list.}
+\item{global}{An object name for the 'global' variable list. This
+parameter is passed through from \code{\link{gen_hw_set}} and includes user
+specifications for the path to the output directory, the path to the
+input climate projections, the dataframe with community locations, the
+format for the filenames of the coordinate, tas, and time files in the
+ensemble-specific subdirectories of the projection directory input by
+the user, and whether the user prefers to run the function using the R
+or C++ version of the function to identify heatwaves.}
 
-\item{custom}{Custom parameter list.}
+\item{custom}{An object name for the 'custom` data list. This parameter is
+passed through from \code{\link{gen_hw_set}} and includes user specifications
+for, if specified as other than the default, an alternative function to
+use to identify heatwaves, alternative upper and lower year boundaries
+for the projection period of the heatwave datasets being generated,
+alternative upper and lower year boundaries for the reference period
+to be used when measuring all heatwave characteristics related to
+relative, rather than absolute, temperature, and the percentile
+threshold to use when defining heatwaves.}
 }
 \description{
-Write the temperature cutoffs acquired from the r1i1p1 ensemble for each model to a .csv
+This function creates a dataframe with a column with names of each of the
+user-specified communities and a column with each community's threshold
+temperature, as determine from the climate projections for the reference
+period and the user-specified percentile threshold. These files are written
+out to a directory called "Thresholds" within the user-specified output
+directory (as specified in \code{\link{gen_hw_set}}). Within "Thresholds",
+there will be a subdirectory for each of the climate models.
 }
 

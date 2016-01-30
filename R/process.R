@@ -213,7 +213,10 @@ processRCP <- function(ensemble, modelName, ensembleWriter, thresholds,
         accumulators("append location list", ensemble$locations)
 
         # Acquire the heatwave dataframes for every rcp 8.5 ensemble in this model
-        hwFrame <- formHwFrame(ensemble, thresholds, global, custom)
+        hwFrame <- formHwFrame(ensemble = ensemble,
+                               thresholds = thresholds,
+                               global = global,
+                               custom = custom)
 
         # Write every heatwave frame to a .csv
         ensembleWriter(hwFrame)

@@ -109,9 +109,9 @@ Once the function has completed running, you will have two new subdirectories in
 
 The data for this example of includes climate projections for grid points near several major East Coast cities: New York, NY; Philadelphia, PA; Newark, NJ; Baltimore, MD, Providence, RI. For the example CMIP5 data we used, all of these communities could be linked to three grid points on the climate model.
 
-The historical projections range over the years 1980 to 2005, while the future projections range over the years ...
+The historical projections range over the years 1980 to 2005, while the future projections range over the years 2006 to 2099.
 
-Here is an example of the first few lines of a `times` file: 
+Here is an example of the first few lines of a `times` file for historical projection data: 
 
 ```{r echo = FALSE}
 my_dir <- system.file("cmip5", package = "futureheatwaves")
@@ -121,7 +121,7 @@ times <- read.csv(my_file, header = FALSE)
 head(times, 4)
 ```
 
-Here is an example of the first few lines of a `latlong` file: 
+Here is an example of the first few lines of a `latlong` file for historical projection data: 
 
 ```{r echo = FALSE}
 my_file <- paste0(my_dir, "/", 
@@ -130,7 +130,7 @@ latlongs <- read.csv(my_file, header = FALSE)
 head(latlongs, 4)
 ```
 
-Here is an example of the first few lines of a `tas` file for the three grid points that are included in our examples in the package documentation: 
+Here is an example of the first few lines of a `tas` file for historical projection data for the three grid points that are included in our examples in the package documentation: 
 
 ```{r echo = FALSE}
 my_file <- paste0(my_dir, "/", 

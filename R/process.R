@@ -282,7 +282,7 @@ processEnsemble <- function(ensemble, experiment, modelName, global,
                                      experiment = experiment,
                                      custom = subCustom)
                 reference <- data.frame(tas[rbounds[1]:rbounds[2], locations])
-                reference <- apply(series, 1:2, function(element){
+                reference <- apply(reference, 1:2, function(element){
                         return((element * 9/5) - 459.67)
                 })
         }

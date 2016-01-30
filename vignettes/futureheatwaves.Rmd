@@ -107,6 +107,9 @@ Once the function has completed running, you will have two new subdirectories in
 
 ## Example data
 
+We used, as an example, data from the Beijing Climate Center, China Meteorological Administration model projections included in CMIP5. See: [this link](http://cmip-pcmdi.llnl.gov/cmip5/availability.html). 
+)
+
 The data for this example of includes climate projections for grid points near several major East Coast cities: New York, NY; Philadelphia, PA; Newark, NJ; Baltimore, MD, Providence, RI. For the example CMIP5 data we used, all of these communities could be linked to three grid points on the climate model.
 
 The historical projections range over the years 1980 to 2005, while the future projections range over the years 2006 to 2099.

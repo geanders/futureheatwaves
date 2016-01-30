@@ -108,6 +108,30 @@ Once the function has completed running, you will have two new subdirectories in
 
 ## Using custom options
 
+### Using a custom heatwave definition
+
+The default is for this package to use the following definition to identify heatwaves: 
+
+> A heatwave is two or more days at or above a community-specific threshold temperature, with the threshold determined as the $98^{th}$ percentile of year-round temperature in the community during some reference period (by default, 1981--2004).
+
+Two components of this definition can be customized directly. 
+
+First, the percentile used to identify a heatwave can be changed using the `probThreshold` option when calling the `gen_hw_set` function. This option can take values between 0 and 1. The default value is 0.98, or a definition with a threshold of the $98^{th}$ percentile of the community's temperature.
+
+Second, it is possible to specify the range of years of data for the community that should be used when determining this threshold. For example, if you wanted to base the threshold for each community on current community climates, you could leave this option as its default, which uses climate projections from the years 1981 to 2004 to determine the thresholds. If you wanted to use a different set of years, you could set the start and end year
+bounds for this reference period within the first two values of the option `dataBoundaries` in the function `gen_hw_set`.
+
+It is also possible to use a completely customized heatwave definition. To do this, you will need to load a function, implementing the definition to identify heatwaves in a time series of temperature data, into your R session. You can then reference the custom function using the `IDheatwavesReplacement` option in `gen_hw_set`.
+
+To work correctly, this custom function for identifying heatwaves must allow specific inputs and generate specific outputs. The function must allow the following inputs (even if it does not use them within the function code):
+
+...
+
+The function most generate the following output: 
+
+...
+
+
 ## How it works
 
 ### Parsing the directory structure
@@ -138,5 +162,11 @@ Once the function has generated a list describing the climate models and ensembl
 The package uses closures to aggregate data over all the different ensemble members of all climate models included in the directory of projection data ...
 
 ### Determining thresholds for heatwave definition
+
+To determine the threshold value for each community, the function pulls climate projection data from either the default historical years (1981--2004) or from a customized range of dates, as specified by the first two values in the `dataBoundaries` option for the `gen_hw_set` function. This option allows the user to select years in the recent past to use when determining these threshold temperatures. [Can we use future years for this, too?]
+
+All climate projection data for the grid point closest to each community is pulled and use to estimate the community-specific thresholds. The percentile value calculated for each community is either a default of 0.98 or is specified by the user using the `probThreshold` option in the `gen_hw_set` function.
+
+These community-specific thresholds are then passed through to later calls in the function, where they are used to identify heatwaves in a time series of climate projection data. 
 
 ### Creating ensemble-member specific projections

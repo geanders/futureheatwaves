@@ -319,7 +319,7 @@ checkCustomBounds <- function(boundList, expected_length = 4){
 
     # Check if bounds are in the correct range
     if(histLow != FALSE){
-      if(histLow < 1981){
+      if(histLow < 1980){
         stop(paste("Custom boundaries for threshold calculation fall out",
                    "of acceptable range. Stopping."))
       }
@@ -333,14 +333,14 @@ checkCustomBounds <- function(boundList, expected_length = 4){
     }
 
     if(rcpLow != FALSE){
-      if(rcpLow < 2061){
+      if(rcpLow < 2006){
         stop(paste("Custom boundaries for threshold calculation fall out of",
                    "acceptable range. Stopping."))
       }
     }
 
     if(rcpHigh != FALSE){
-      if(rcpHigh > 2080){
+      if(rcpHigh > 2099){
         stop(paste("Custom boundaries for threshold calculation fall out of",
                    "acceptable range. Stopping."))
       }

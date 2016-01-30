@@ -202,8 +202,12 @@ processRCP <- function(ensemble, modelName, ensembleWriter, thresholds,
         cat("Processing rcp 8.5 ensemble", modelName, "\n")
 
         # Acquire desired characteristics of the RCP 8.5 ensembles
-        ensemble <- processEnsemble(ensemble, 'rcp', modelName, global,
-                                    custom, reference)
+        ensemble <- processEnsemble(ensemble = ensemble,
+                                    experiment = 'rcp',
+                                    modelName = modelName,
+                                    global = global,
+                                    custom = custom,
+                                    reference = reference)
 
         # Append locations vector to the locations vector accumulator
         accumulators("append location list", ensemble$locations)
@@ -336,7 +340,9 @@ processEnsemble <- function(ensemble, experiment, modelName, global,
         # CUSTOM BLOCK
         # Extract and store the reference period data
         if(reference != FALSE && length(reference) != 1){
-                rbounds <- getBounds(times, experiment, subCustom)
+                rbounds <- getBounds(times = times,
+                                     experiment = experiment,
+                                     custom = subCustom)
                 reference <- data.frame(tas[rbounds[1]:rbounds[2], locations])
                 reference <- apply(series, 1:2, function(element){
                         return((element * 9/5) - 459.67)

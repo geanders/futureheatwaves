@@ -2,22 +2,26 @@
 % Please edit documentation in R/process.R
 \name{formDates}
 \alias{formDates}
-\title{Determine dates for the requested time period.}
+\title{Create date vector for requested time period}
 \usage{
 formDates(times, bounds)
 }
 \arguments{
 \item{times}{A dataframe containing the time data for one of the
-climate model ensemble's projection.}
+climate model ensemble's projection. Each row in this dataframe
+corresponds to the row with the same row number in the climate
+projection dataframe.}
 
 \item{bounds}{A numeric vector with the desired time boundaries of the
-ensemble.}
+ensemble, in terms of indices referring to the first and last row
+in the climate projection data frame within the requested date range.}
 }
 \value{
 A vector of dates formatted as year-month-day (%Y-%m-%d) spanning
    the desired time boundaries.
 }
 \description{
-Acquire the dates spanning the desired time period of the ensemble
+Create a vector that includes all the dates spanning the requested
+   date range.
 }
 

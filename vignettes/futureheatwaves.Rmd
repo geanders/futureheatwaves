@@ -13,7 +13,6 @@ vignette: >
 library(futureheatwaves)
 ```
 
-
 ## What the package does
 
 The `futureheatwaves` package can process climate data files that you have stored locally to generate a list of heatwaves in each projection as well as characteristics of each heatwave (e.g., length, intensity, timing in the year). The package generates community-specific dataframes based on an input file listing each community and its latitude and longitude. Files with the heatwaves identified and characterized under each ensemble member of each climate model are output as files in a directory specified by the user.
@@ -105,6 +104,41 @@ All operations completed. Exiting.
 The function provides status reports on its progress in generating the heatwave projections, as this process can take a while if you include many cities and / or many climate model projections. If you do not want to generate this output when running the function, choose the option `printWarning = FALSE` when calling `gen_hw_set`.
 
 Once the function has completed running, you will have two new subdirectories in the directory you specified with the `out` variable. These will be called `Heatwaves` and `Thresholds`. The `Heatwaves` directory will contain dataframes with all identified heatwaves and their characteristics for each city, while the `Thresholds` folder will contain files with the temperature thresholds used for each city given. The `out` directory specified will also have a file called `hwModelInfo.csv` that contains some basic information about the climate models and the number of ensemble members included for each.
+
+## Example data
+
+The data for this example of includes climate projections for grid points near several major East Coast cities: New York, NY; Philadelphia, PA; Newark, NJ; Baltimore, MD, Providence, RI. For the example CMIP5 data we used, all of these communities could be linked to three grid points on the climate model.
+
+The historical projections range over the years 1980 to 2005, while the future projections range over the years ...
+
+Here is an example of the first few lines of a `times` file: 
+
+```{r echo = FALSE}
+my_dir <- system.file("cmip5", package = "futureheatwaves")
+my_file <- paste0(my_dir, "/", 
+                    "historical/bcc1/r1i1p1/time_NorthAmerica_12mo.csv")
+times <- read.csv(my_file, header = FALSE)
+head(times, 4)
+```
+
+Here is an example of the first few lines of a `latlong` file: 
+
+```{r echo = FALSE}
+my_file <- paste0(my_dir, "/", 
+                    "historical/bcc1/r1i1p1/latitude_longitude_NorthAmerica_12mo.csv")
+latlongs <- read.csv(my_file, header = FALSE)
+head(latlongs, 4)
+```
+
+Here is an example of the first few lines of a `tas` file for the three grid points that are included in our examples in the package documentation: 
+
+```{r echo = FALSE}
+my_file <- paste0(my_dir, "/", 
+                    "historical/bcc1/r1i1p1/tas_NorthAmerica_12mo.csv")
+tas2 <- read.csv(my_file, header = FALSE)
+head(tas2, 4)
+```
+
 
 ## Using custom options
 

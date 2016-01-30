@@ -34,7 +34,12 @@ A numeric vector containing the number of days spanned by the
 Acquire boundaries of time series data
 }
 \note{
-This function is customizable.
+This function is customizable. If data boundaries are not set
+   using \code{dataBoundaries} in the \code{gen_hw_set} function call,
+   the default is to pull Jan. 1, 1981, to Dec. 31, 2014 for a
+   historical experiment and Jan. 1, 2061 to Dec. 31, 2080(1?-- check) for
+   a future projection experiment.
+
 end' index of the historical experiment has to be
 matched from back to front. This is because the
 data does/may not exceed year 2005. We wish to set

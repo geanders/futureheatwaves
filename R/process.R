@@ -367,7 +367,12 @@ closest_point <- function(city, latlong){
 #'    data; and an upper bound of the experiment time period as an index
 #'    specifying the relevant row of the climate projection data.
 #'
-#' @note This function is customizable.
+#' @note This function is customizable. If data boundaries are not set
+#'    using \code{dataBoundaries} in the \code{gen_hw_set} function call,
+#'    the default is to pull Jan. 1, 1981, to Dec. 31, 2014 for a
+#'    historical experiment and Jan. 1, 2061 to Dec. 31, 2080(1?-- check) for
+#'    a future projection experiment.
+#'
 # TODO: See if it is possible to simplify this function by using data from the global carrier instead
 # of custom
 getBounds <- function(times, experiment, custom){

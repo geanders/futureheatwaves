@@ -75,8 +75,10 @@ processModel <- function(model, global, custom, accumulators){
                                reference = reference)
 
         # Add entry to the modelInfoAccumulator
-        accumulators("append model information",
-                     data.frame(modelName, length(histens), length(rcpens)))
+        accumulators(command = "append model information",
+                     newElement = data.frame(modelName,
+                                             length(histens),
+                                             length(rcpens)))
 
         return(rcpEnsembles)
 }
@@ -164,7 +166,7 @@ processHistorical <- function(model, global, custom, reference = FALSE){
 #'    used as the reference.
 processRCP <- function(ensemble, modelName, ensembleWriter, thresholds,
                        global, custom, accumulators, reference = FALSE){
-        cat("Processing rcp 8.5 ensemble", modelName, "\n")
+        cat("Processing projection ensemble", modelName, "\n")
 
         # Acquire desired characteristics of the RCP 8.5 ensembles
         ensemble <- processEnsemble(ensemble = ensemble,
@@ -348,8 +350,7 @@ closest_point <- function(city, latlong){
 # the global carrier instead of custom
 getBounds <- function(times, experiment, custom){
         # Set boundaries
-        start <- 0
-        end <- 0
+
         if (experiment == 'historical'){
                 if(FALSE %in% custom[["getBounds"]]){ # `dataBoundaries` choice
                         start <- match(1981, times[,2])

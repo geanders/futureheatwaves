@@ -110,8 +110,10 @@ gen_hw_set <- function(out,
         }
 
         # Put the directories into nested list form
-        models <- acquireDirectoryStructure(dataFolder, coordinateFilenames,
-                                            tasFilenames, timeFilenames)
+        models <- acquireDirectoryStructure(dataFolder = dataFolder,
+                                            coordinateFilenames = coordinateFilenames,
+                                            tasFilenames = tasFilenames,
+                                            timeFilenames = timeFilenames)
 
         # Read the cities data file
         cities <- read.csv(citycsv)
@@ -138,8 +140,9 @@ gen_hw_set <- function(out,
         accumulators <- createAccumulators()
 
         # Process the entire dataset
-        referenceEnsembles <- sapply(models, processModel, global, custom,
-                                     accumulators)
+        referenceEnsembles <- sapply(models, processModel,
+                                     global = global,custom = custom,
+                                     accumulators = accumulators)
 
         # Write the model information from the model information accumulator
         out <- accumulators("return model information")

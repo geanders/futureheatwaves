@@ -35,8 +35,6 @@ threshold to use when defining heatwaves.}
 A closure that writes heatwave dataframes
 Argument 1: A combined heatwave dataframe that contains all heatwave
 information for the ensemble being processed.
-
-#' @importFrom dplyr %>%
 }
 \description{
 Produces a function that writes a single heatwave list to a .csv

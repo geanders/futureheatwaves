@@ -141,7 +141,8 @@ gen_hw_set <- function(out,
 
         # Process the entire dataset
         referenceEnsembles <- sapply(models, processModel,
-                                     global = global,custom = custom,
+                                     global = global,
+                                     custom = custom,
                                      accumulators = accumulators)
 
         # Write the model information from the model information accumulator

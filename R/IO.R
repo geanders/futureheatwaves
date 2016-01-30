@@ -77,7 +77,7 @@ writeThresholds <- function(modelName, threshOut, thresholds, global, custom){
 #' Argument 1: A combined heatwave dataframe that contains all heatwave
 #' information for the ensemble being processed.
 #'
-#' #' @importFrom dplyr %>%
+#' @importFrom dplyr %>%
 createEnsembleWriter <- function(modelName, global, custom){
         # Incrementer
         i <- 1
@@ -104,7 +104,9 @@ createEnsembleWriter <- function(modelName, global, custom){
                            mode = "0777")
 
                 # Write the file
-                write.csv(hwFrame, file = paste0(writePath, modelName, "/", i, ".csv"), row.names = FALSE)
+                write.csv(hwFrame,
+                          file = paste0(writePath, modelName, "/", i, ".csv"),
+                          row.names = FALSE)
 
                 # Increment the ensemble number
                 i <<- i + 1
@@ -113,7 +115,7 @@ createEnsembleWriter <- function(modelName, global, custom){
 
 #' Write out model information
 #'
-#'  Output the variable that accumulates information on the models and
+#' Output the variable that accumulates information on the models and
 #' ensemble counts
 #'
 #' @param modelInfoAccumulator The dataframe that accumulates the number of

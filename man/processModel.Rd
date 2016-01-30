@@ -35,7 +35,19 @@ threshold to use when defining heatwaves.}
 \code{\link{createAccumulators}}.}
 }
 \value{
-A list of rcp 8.5 ensembles for the given model
+A list object with the following elements: \code{locations}:
+   A vector with the indices of the column of \code{tas} giving the
+   climate projections for the climate grid point closest to each
+   of the user-specified communities; \code{bounds}: indices linking
+   the selected time bounds to the corresponding rows in the climate
+   projection datafile, \code{tas} (first two values in the vector) as
+   well as the total number of days within the range (third value);
+   \code{series}: The climate projection data for the selected
+   communities and time range. Each row corresponds to a different date;
+   each column corresponds to a different community; \code{times}:
+   A dataframe with the dates corresponding to each row of \code{series};
+   \code{dates}: A vector with the dates, in Date format, corresponding
+   to each row in \code{series}; \code{reference}: ... .
 }
 \description{
 This function takes any models that are valid, identifies and characterizes

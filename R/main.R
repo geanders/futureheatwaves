@@ -10,9 +10,9 @@
 #' Create and write heatwave projections
 #'
 #' This function creates heatwave projection datasets for all models and
-#'    ensemble members in a directory of climate projections for a specified
-#'    set of communities.The resulting heatwave projections are written out
-#'    to a specified directory on the user's local computer.
+#' ensemble members in a directory of climate projections for a specified
+#' set of communities.The resulting heatwave projections are written out
+#' to a specified directory on the user's local computer.
 #'
 #' @param out Character string with pathway to directory to which
 #'    heatwave files will be written.
@@ -157,42 +157,21 @@ gen_hw_set <- function(out,
 #' Check for input parameter errors
 #'
 #' This function goes through all parameter inputs for the main
-#'    functions, \code{gen_hw_set}, and makes sure all parameter
-#'    entries are in the appropriate format for following functions.
-#'    If any parameters are in an incorrect format, the function stops
-#'    and returns an error describing the problem.
+#' functions, \code{\link{gen_hw_set}}, and makes sure all parameter
+#' entries are in the appropriate format for following functions.
+#' If any parameters are in an incorrect format, the function stops
+#' and returns an error describing the problem.
 #'
-#' @param out Character string with pathway to directory to which
-#'    heatwave files will be written.
-#' @param dataFolder Character string with pathway to directory that
-#'    contains climate projections. Must include the final backslash.
-#' @param citycsv Character string giving the filepath to a .csv
-#'    file with latitude and longitude values for each city.
-#' @param coordinateFilenames Character string with name of the files
-#'    containing the latitude and longitude coordinates
-#'    corresponding to the columns of the time series data.
-#' @param tasFilenames Character sting with name of files containing the time
-#'    series data.
-#' @param timeFilenames Character string with name of the files containing the
-#'    date information corresponding to the rows of the time series data.
-#' @param RorCPP 0 /1 flag that indicates whether to use R (1) or
-#'    CPP (0) functions
-#' @param IDheatwavesReplacement Either FALSE, to use the default
-#'    heatwave definition, or a user-specified custom function to
-#'    use to identify heatwaves.
-#' @param dataBoundaries Custom time boundaries for extracting data
-#'    from the ensembles. Format: c(historical low bound, historical
-#'    high bound, reference low bound, reference high bound).
-#'    Restrictions: Bounds cannot span multiple experiments
-#' @param referenceBoundaries Reference boundaries.
+#' @inheritParams gen_hw_set
 #'
 #' @return Stops and returns an error if any parameters are incorrect.
 #'
 #' @note This function does not check if the data is organized in the proper
 #'    structure or if any data exists within the directory at all, so a
-#'    call to \code{gen_hw_set} could still pass through this check and
+#'    call to \code{\link{gen_hw_set}} could still pass through this check and
 #'    make it further through the function code with those mistakes.
-#' @note Does not check if the three ensemble final .csv data files exist,
+#'
+#'  Does not check if the three ensemble final .csv data files exist,
 #'    only if they have the .csv extension if they do exist. (Reminder:
 #'    the final subdirectory should have the following three csv files:
 #'    1. A file with the climate model projections, with grid points by
@@ -276,9 +255,10 @@ check_params <- function(out,
 
 #' Check year boundaries for errors
 #'
-#' This function inputs the boundary lists specified in \code{gen_hw_set},
-#'    \code{dataBoundaries} and \code{referenceBoundaries}, and checks them
-#'    for errors in structure of the input or in the years selected.
+#' This function inputs the boundary lists specified in
+#' \code{\link{gen_hw_set}}, \code{dataBoundaries} and
+#' \code{referenceBoundaries}, and checks them for errors in structure of the
+#' input or in the years selected.
 #'
 #' @param boundList Either FALSE, if user wishes to use the default
 #'    boundaries, or a set of boundary years in the format
@@ -357,24 +337,24 @@ checkCustomBounds <- function(boundList, expected_length = 4){
 #' Create accumulator closure
 #'
 #' This closure holds, adds to, and returns data structures that the user
-#'    wishes to grow at various points in the execution of the package.
+#' wishes to grow at various points in the execution of the package.
 #'
 #' As an example, when the generated
-#'    closure is used with the command "append location list", it will add
-#'    information on the communities and closest grid point locations based
-#'    on the climate model it has just completed analyzing to a growing
-#'    dataframe with this information for all climate models. After the function
-#'    run to generate the heatwave projections is completed, this closure can
-#'    be used with the command "return locations" to output the completed
-#'    dataframe of this location information.The closure can be used in a
-#'    similar manner to aggregate and then return meta-data on the models
-#'    analyzed based on their inclusion in the user-specified projections
-#'    directory.
+#' closure is used with the command "append location list", it will add
+#' information on the communities and closest grid point locations based
+#' on the climate model it has just completed analyzing to a growing
+#' dataframe with this information for all climate models. After the function
+#' run to generate the heatwave projections is completed, this closure can
+#' be used with the command "return locations" to output the completed
+#' dataframe of this location information.The closure can be used in a
+#' similar manner to aggregate and then return meta-data on the models
+#' analyzed based on their inclusion in the user-specified projections
+#' directory.
 #'
 #' This function exists to couple these structures together in order to lower
-#'    the number of parameters of this nature the user would have to pass down
-#'    the the program otherwise. It is a closure instead of a list as a
-#'    pre-emptive measure.
+#' the number of parameters of this nature the user would have to pass down
+#' the the program otherwise. It is a closure instead of a list as a
+#' pre-emptive measure.
 #'
 #' @return A closure that accepts commands to access and append new data onto
 #'    data structures as the program executes. The closure created by this

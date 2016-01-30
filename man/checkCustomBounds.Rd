@@ -16,8 +16,9 @@ latest year).}
 \item{expected_length}{The expected length of \code{boundList}.}
 }
 \description{
-This function inputs the boundary lists specified in \code{gen_hw_set},
-   \code{dataBoundaries} and \code{referenceBoundaries}, and checks them
-   for errors in structure of the input or in the years selected.
+This function inputs the boundary lists specified in
+\code{\link{gen_hw_set}}, \code{dataBoundaries} and
+\code{referenceBoundaries}, and checks them for errors in structure of the
+input or in the years selected.
 }
 

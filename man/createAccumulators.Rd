@@ -19,25 +19,25 @@ A closure that accepts commands to access and append new data onto
 }
 \description{
 This closure holds, adds to, and returns data structures that the user
-   wishes to grow at various points in the execution of the package.
+wishes to grow at various points in the execution of the package.
 }
 \details{
 As an example, when the generated
-   closure is used with the command "append location list", it will add
-   information on the communities and closest grid point locations based
-   on the climate model it has just completed analyzing to a growing
-   dataframe with this information for all climate models. After the function
-   run to generate the heatwave projections is completed, this closure can
-   be used with the command "return locations" to output the completed
-   dataframe of this location information.The closure can be used in a
-   similar manner to aggregate and then return meta-data on the models
-   analyzed based on their inclusion in the user-specified projections
-   directory.
+closure is used with the command "append location list", it will add
+information on the communities and closest grid point locations based
+on the climate model it has just completed analyzing to a growing
+dataframe with this information for all climate models. After the function
+run to generate the heatwave projections is completed, this closure can
+be used with the command "return locations" to output the completed
+dataframe of this location information.The closure can be used in a
+similar manner to aggregate and then return meta-data on the models
+analyzed based on their inclusion in the user-specified projections
+directory.
 
 This function exists to couple these structures together in order to lower
-   the number of parameters of this nature the user would have to pass down
-   the the program otherwise. It is a closure instead of a list as a
-   pre-emptive measure.
+the number of parameters of this nature the user would have to pass down
+the the program otherwise. It is a closure instead of a list as a
+pre-emptive measure.
 }
 \note{
 This function contains no error checking for the types of elements

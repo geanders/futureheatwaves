@@ -4,18 +4,20 @@
 \alias{formHwFrame}
 \title{Create heatwave dataframe for the given ensemble}
 \usage{
-formHwFrame(ensemble, thresholds, global, custom)
+formHwFrame(ensemblePath, thresholds, global, custom)
 }
 \arguments{
-\item{ensemble}{Character string that gives the absolute file path
-for the directory with a particular ensemble member of a climate
-model projection.}
+\item{ensemblePath}{A character string that gives the absolute file path
+for the subdirectory for a particular ensemble member of a climate
+model within the user-specified projection directory.}
 
-\item{thresholds}{Vector of community-specific thresholds to use in
-identifying heatwaves.}
+\item{thresholds}{A vector with the thresholds to use within each community
+in that community's heatwave definition.These are typically automatically
+determine during the run of the \code{gen_hw_set} function based on
+historical climate projections within the community.}
 
 \item{global}{An object name for the 'global' variable list. This
-parameter is passed through from \code{gen_hw_set} and includes user
+parameter is passed through from \code{\link{gen_hw_set}} and includes user
 specifications for the path to the output directory, the path to the
 input climate projections, the dataframe with community locations, the
 format for the filenames of the coordinate, tas, and time files in the
@@ -24,7 +26,7 @@ the user, and whether the user prefers to run the function using the R
 or C++ version of the function to identify heatwaves.}
 
 \item{custom}{An object name for the 'custom` data list. This parameter is
-passed through from \code{gen_hw_set} and includes user specifications
+passed through from \code{\link{gen_hw_set}} and includes user specifications
 for, if specified as other than the default, an alternative function to
 use to identify heatwaves, alternative upper and lower year boundaries
 for the projection period of the heatwave datasets being generated,

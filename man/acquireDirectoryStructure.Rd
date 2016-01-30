@@ -8,8 +8,8 @@ acquireDirectoryStructure(dataFolder, coordinateFilenames, tasFilenames,
   timeFilenames)
 }
 \arguments{
-\item{dataFolder}{A character string giving the file path to the
-directory with the climate projection data.}
+\item{dataFolder}{Character string with pathway to directory that
+contains climate projection data.}
 
 \item{coordinateFilenames}{Character string with name of the files
 containing the latitude and longitude coordinates
@@ -32,9 +32,9 @@ A list object outlining the file structure of the directory
 }
 \description{
 This function walks through the directory structure of the user-provided
-   directory of climate projection files and parses out a list of the
-   climate models and ensemble members included in that directory based
-   on subdirectory names.
+directory of climate projection files and parses out a list of the
+climate models and ensemble members included in that directory based
+on subdirectory names.
 }
 \note{
 The files in the bottom directory must all have a .csv extension

@@ -4,19 +4,19 @@
 \alias{buildStructureExperiments}
 \title{Generate file structure for an experiment}
 \usage{
-buildStructureExperiments(model, experiment, dataFolder, coordinateFilenames,
+buildStructureExperiments(modelName, experiment, dataPath, coordinateFilenames,
   tasFilenames, timeFilenames)
 }
 \arguments{
-\item{model}{Character string of climate model name (e.g., "bcc1"). This
+\item{modelName}{Character string of climate model name (e.g., "bcc1"). This
 name is typically generated for use in this function from the subdirectory
 names for the climate model within the directory of projection data
-specified by the user in \code{gen_hw_set}.}
+specified by the user in \code{\link{gen_hw_set}}.}
 
 \item{experiment}{Character string of the experiment of interest.
 Possible variables are "historical" or "rcp85".}
 
-\item{dataFolder}{Character string of the file path to the directory
+\item{dataPath}{Character string of the file path to the directory
 containing the climate projections. Must include the final `/`.}
 
 \item{coordinateFilenames}{Character string with name of the files
@@ -31,29 +31,29 @@ date information corresponding to the rows of the time series data.}
 }
 \value{
 A list that is the length of the number of ensembles. Each element
-   is a return value of the \code{buildStructureEnsembles} function for
+   is a return value of the \code{\link{buildStructureEnsembles}} function for
    one of the ensemble members in that experiment of that climate model
    within the user-specified projections directory.
 }
 \description{
 This function generates a list object with the file structure of files
-   within the user-specified projection directory for a single experiment
-   (i.e., "historical" or "rcp85").
+within the user-specified projection directory for a single experiment
+(i.e., "historical" or "rcp85").
 }
 \examples{
-model <- "bcc1"
+modelName <- "bcc1"
 experiment <- "rcp85"
 
-dataFolder <- system.file("cmip5", package = "futureheatwaves")
-dataFolder <- paste0(dataFolder, "/")
+dataPath <- system.file("cmip5", package = "futureheatwaves")
+dataPath <- paste0(dataFolder, "/")
 
 coordinateFilenames <- "latitude_longitude_NorthAmerica_12mo.csv"
 tasFilenames <- "tas_NorthAmerica_12mo.csv"
 timeFilenames <- "time_NorthAmerica_12mo.csv"
 
-buildStructureExperiments(model = model,
+buildStructureExperiments(modelName = modelName,
                           experiment = experiment,
-                          dataFolder = dataFolder,
+                          dataPath = dataPath,
                           coordinateFilenames = coordinateFilenames,
                           tasFilenames = tasFilenames,
                           timeFilenames = timeFilenames)

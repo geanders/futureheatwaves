@@ -4,17 +4,20 @@
 \alias{buildStructureModels}
 \title{Generate list of file structure}
 \usage{
-buildStructureModels(model, experiments, dataFolder, coordinateFilenames,
+buildStructureModels(modelName, experiments, dataFolder, coordinateFilenames,
   tasFilenames, timeFilenames)
 }
 \arguments{
-\item{model}{Character string of climate model name (e.g., "bcc1"). This
+\item{modelName}{Character string of climate model name (e.g., "bcc1"). This
 name is typically generated for use in this function from the subdirectory
 names for the climate model within the directory of projection data
-specified by the user in \code{gen_hw_set}.}
+specified by the user in \code{\link{gen_hw_set}}.}
 
 \item{experiments}{Character vector of the experiment(s) of interest.
 Possible variables are "historical", "rcp85", or both.}
+
+\item{dataFolder}{Character string with pathway to directory that
+contains climate projection data.}
 
 \item{coordinateFilenames}{Character string with name of the files
 containing the latitude and longitude coordinates
@@ -34,17 +37,17 @@ A list of length 3. The first element is the name of the model
    whose structure was being built. The second element is the historical
    experiment hierarchy. The third element is the hierarchy of the future
    projection directory for the model. The second and third elements are
-   return values of \code{buildStructureExperiments}.
+   return values of \code{\link{buildStructureExperiments}}.
 }
 \description{
-This function takes input from \code{acquireDirectoryStructure} and
-   uses it to generate a list object with the projection directory
-   file structure. This parsed file structure is later used to lead other
-   code through all climate models and ensemble members in the input
-   projection directory.
+This function takes input from \code{\link{acquireDirectoryStructure}} and
+uses it to generate a list object with the projection directory
+file structure. This parsed file structure is later used to lead other
+code through all climate models and ensemble members in the input
+projection directory.
 }
 \examples{
-model <- "bcc1"
+modelName <- "bcc1"
 experiments <- c("historical", "rcp85")
 
 dataFolder <- system.file("cmip5", package = "futureheatwaves")
@@ -54,7 +57,7 @@ coordinateFilenames <- "latitude_longitude_NorthAmerica_12mo.csv"
 tasFilenames <- "tas_NorthAmerica_12mo.csv"
 timeFilenames <- "time_NorthAmerica_12mo.csv"
 
-buildStructureModels(model = model,
+buildStructureModels(model = modelName,
                      experiments = experiments,
                      dataFolder,
                      coordinateFilenames = coordinateFilenames,

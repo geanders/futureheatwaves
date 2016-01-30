@@ -21,7 +21,7 @@ An index corresponding to the column in the climate projections
 }
 \description{
 This function identifies the closest grid points in a climate model to a
-   community based on the community's latitude and longitude using the
-   Pythagorean theorem.
+community based on the community's latitude and longitude using the
+Pythagorean theorem.
 }
 

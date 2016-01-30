@@ -10,7 +10,8 @@ formDates(times, bounds)
 \item{times}{A dataframe containing the time data for one of the
 climate model ensemble's projection. Each row in this dataframe
 corresponds to the row with the same row number in the climate
-projection dataframe.}
+projection dataframe. Read in by
+\code{\link{processEnsemble}}.}
 
 \item{bounds}{A numeric vector with the desired time boundaries of the
 ensemble, in terms of indices referring to the first and last row
@@ -22,6 +23,6 @@ A vector of dates formatted as year-month-day (%Y-%m-%d) spanning
 }
 \description{
 Create a vector that includes all the dates spanning the requested
-   date range.
+date range.
 }
 

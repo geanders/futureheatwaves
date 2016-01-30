@@ -6,8 +6,7 @@
 \usage{
 createHwDataframe(city = stop("Unspecified city"),
   threshold = stop("Unspecified threshold"),
-  heatwaves = stop("'heatwaves' unspecified"), percentile = 0.98, ensemble,
-  i, global, custom)
+  heatwaves = stop("'heatwaves' unspecified"), ensemble, i, global, custom)
 }
 \arguments{
 \item{city}{Index of cities global}
@@ -16,7 +15,28 @@ createHwDataframe(city = stop("Unspecified city"),
 
 \item{heatwaves}{data.frame(dates, thresholds)}
 
-\item{percentile}{Percentile for threshold)}
+\item{ensemble}{...}
+
+\item{i}{...}
+
+\item{global}{An object name for the 'global' variable list. This
+parameter is passed through from \code{\link{gen_hw_set}} and includes user
+specifications for the path to the output directory, the path to the
+input climate projections, the dataframe with community locations, the
+format for the filenames of the coordinate, tas, and time files in the
+ensemble-specific subdirectories of the projection directory input by
+the user, and whether the user prefers to run the function using the R
+or C++ version of the function to identify heatwaves.}
+
+\item{custom}{An object name for the 'custom` data list. This parameter is
+passed through from \code{\link{gen_hw_set}} and includes user specifications
+for, if specified as other than the default, an alternative function to
+use to identify heatwaves, alternative upper and lower year boundaries
+for the projection period of the heatwave datasets being generated,
+alternative upper and lower year boundaries for the reference period
+to be used when measuring all heatwave characteristics related to
+relative, rather than absolute, temperature, and the percentile
+threshold to use when defining heatwaves.}
 }
 \value{
 Result is a dataframe where each row represents a heatwave.

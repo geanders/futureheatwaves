@@ -8,7 +8,7 @@ consolidate(hwDataframeList)
 }
 \arguments{
 \item{hwDataframeList}{A list of identified heatwave dataframes created by
-the closure of createCityProcessor}
+the closure of \code{\link{createCityProcessor}}.}
 }
 \value{
 A combined dataframe of identified heatwave dataframes from the

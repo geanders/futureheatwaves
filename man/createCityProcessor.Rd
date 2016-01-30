@@ -8,7 +8,7 @@ createCityProcessor(global, custom)
 }
 \arguments{
 \item{global}{An object name for the 'global' variable list. This
-parameter is passed through from \code{gen_hw_set} and includes user
+parameter is passed through from \code{\link{gen_hw_set}} and includes user
 specifications for the path to the output directory, the path to the
 input climate projections, the dataframe with community locations, the
 format for the filenames of the coordinate, tas, and time files in the
@@ -17,7 +17,7 @@ the user, and whether the user prefers to run the function using the R
 or C++ version of the function to identify heatwaves.}
 
 \item{custom}{An object name for the 'custom` data list. This parameter is
-passed through from \code{gen_hw_set} and includes user specifications
+passed through from \code{\link{gen_hw_set}} and includes user specifications
 for, if specified as other than the default, an alternative function to
 use to identify heatwaves, alternative upper and lower year boundaries
 for the projection period of the heatwave datasets being generated,
@@ -27,16 +27,18 @@ relative, rather than absolute, temperature, and the percentile
 threshold to use when defining heatwaves.}
 }
 \value{
-A closure that will find all heatwaves for a given ensemble. Each passed threshold corresponds to a particular
-city. The closure advances an incrementer every time it is called to get this effect.
-Argument 1: A threshold temperature
-Argument 2: The ensemble from which you wish to find heatwaves.
+A closure that will find all heatwaves for a given ensemble. Each
+   passed threshold corresponds to a particular city. The closure advances
+   an incrementer every time it is called to get this effect.
+   Argument 1: A threshold temperature
+   Argument 2: The ensemble from which you wish to find heatwaves.
 }
 \description{
 Identify and aggregate heatwaves for a particular city
 }
 \note{
-The closure encapsulates an incrementer varaible and advances it with every call. This variable is used to
-index into the cities vector from the "global" data list.
+The closure encapsulates an incrementer varaible and advances it
+   with every call. This variable is used to index into the cities vector
+   from the "global" data list.
 }
 

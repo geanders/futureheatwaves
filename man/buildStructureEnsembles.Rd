@@ -4,11 +4,11 @@
 \alias{buildStructureEnsembles}
 \title{List files for a single ensemble member}
 \usage{
-buildStructureEnsembles(ensemble, coordinateFilenames, tasFilenames,
+buildStructureEnsembles(ensemblePath, coordinateFilenames, tasFilenames,
   timeFilenames)
 }
 \arguments{
-\item{ensemble}{A character string that gives the absolute file path
+\item{ensemblePath}{A character string that gives the absolute file path
 for the subdirectory for a particular ensemble member of a climate
 model within the user-specified projection directory.}
 
@@ -30,24 +30,25 @@ and the time data comma-separated file, respectively.
 }
 \description{
 This function reads through the user-specified projections directory and
-   creates a list with all files in the subdirectory of a single
-   ensemble member subdirectory within a specific climate model
-   subdirectory.
+creates a list with all files in the subdirectory of a single
+ensemble member subdirectory within a specific climate model
+subdirectory.
 }
 \examples{
 
 experiment <- "rcp85"
-model <- "bcc1"
-ensemble <- "r1i1p1"
+modelName <- "bcc1"
+ensembleName <- "r1i1p1"
 dataFolder <- system.file("cmip5", package = "futureheatwaves")
 
-ensemble <- paste(dataFolder, experiment, model, ensemble, sep = "/")
+ensemblePath <- paste(dataFolder, experiment,
+                      modelName, ensembleName, sep = "/")
 
 coordinateFilenames <- "latitude_longitude_NorthAmerica_12mo.csv"
 tasFilenames <- "tas_NorthAmerica_12mo.csv"
 timeFilenames <- "time_NorthAmerica_12mo.csv"
 
-buildStructureEnsembles(ensemble = ensemble,
+buildStructureEnsembles(ensembleName = ensembleName,
                         coordinateFilenames = coordinateFilenames,
                         tasFilenames = tasFilenames,
                         timeFilenames = timeFilenames)

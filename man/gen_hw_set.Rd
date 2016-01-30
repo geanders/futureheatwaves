@@ -66,8 +66,8 @@ This function returns a dataframe listing the name of each climate
 }
 \description{
 This function creates heatwave projection datasets for all models and
-   ensemble members in a directory of climate projections for a specified
-   set of communities.The resulting heatwave projections are written out
-   to a specified directory on the user's local computer.
+ensemble members in a directory of climate projections for a specified
+set of communities.The resulting heatwave projections are written out
+to a specified directory on the user's local computer.
 }
 

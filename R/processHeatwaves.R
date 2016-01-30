@@ -1,35 +1,16 @@
 #' Create heatwave dataframe for the given ensemble
 #'
-#' @param ensemble Character string that gives the absolute file path
-#'    for the directory with a particular ensemble member of a climate
-#'    model projection.
-#' @param thresholds Vector of community-specific thresholds to use in
-#'    identifying heatwaves.
-#' @param global An object name for the 'global' variable list. This
-#'    parameter is passed through from \code{gen_hw_set} and includes user
-#'    specifications for the path to the output directory, the path to the
-#'    input climate projections, the dataframe with community locations, the
-#'    format for the filenames of the coordinate, tas, and time files in the
-#'    ensemble-specific subdirectories of the projection directory input by
-#'    the user, and whether the user prefers to run the function using the R
-#'    or C++ version of the function to identify heatwaves.
-#' @param custom An object name for the 'custom` data list. This parameter is
-#'    passed through from \code{gen_hw_set} and includes user specifications
-#'    for, if specified as other than the default, an alternative function to
-#'    use to identify heatwaves, alternative upper and lower year boundaries
-#'    for the projection period of the heatwave datasets being generated,
-#'    alternative upper and lower year boundaries for the reference period
-#'    to be used when measuring all heatwave characteristics related to
-#'    relative, rather than absolute, temperature, and the percentile
-#'    threshold to use when defining heatwaves.
+#' @inheritParams buildStructureEnsembles
+#' @inheritParams processRCP
+#' @inheritParams processModel
 #'
 #' @return The combined dataframe of identified and characterized heatwaves for
 #'    selected projection date range for all communities specified by the user.
-formHwFrame <- function(ensemble, thresholds, global, custom){
+formHwFrame <- function(ensemblePath, thresholds, global, custom){
         # Acquire list of heatwave dataframes for each city
         hwDataframeList <- apply(data.frame(thresholds), 1,
                                  createCityProcessor(global),
-                                 ensemble, custom)
+                                 ensemblePath, custom)
 
         # Combine the heatwave dataframes contained in hwDataframeList into
         # a single dataframe
@@ -40,31 +21,17 @@ formHwFrame <- function(ensemble, thresholds, global, custom){
 
 #' Identify and aggregate heatwaves for a particular city
 #'
-#' @param global An object name for the 'global' variable list. This
-#'    parameter is passed through from \code{gen_hw_set} and includes user
-#'    specifications for the path to the output directory, the path to the
-#'    input climate projections, the dataframe with community locations, the
-#'    format for the filenames of the coordinate, tas, and time files in the
-#'    ensemble-specific subdirectories of the projection directory input by
-#'    the user, and whether the user prefers to run the function using the R
-#'    or C++ version of the function to identify heatwaves.
-#' @param custom An object name for the 'custom` data list. This parameter is
-#'    passed through from \code{gen_hw_set} and includes user specifications
-#'    for, if specified as other than the default, an alternative function to
-#'    use to identify heatwaves, alternative upper and lower year boundaries
-#'    for the projection period of the heatwave datasets being generated,
-#'    alternative upper and lower year boundaries for the reference period
-#'    to be used when measuring all heatwave characteristics related to
-#'    relative, rather than absolute, temperature, and the percentile
-#'    threshold to use when defining heatwaves.
+#' @inheritParams processModel
 #'
-#' @return A closure that will find all heatwaves for a given ensemble. Each passed threshold corresponds to a particular
-#' city. The closure advances an incrementer every time it is called to get this effect.
-#' Argument 1: A threshold temperature
-#' Argument 2: The ensemble from which you wish to find heatwaves.
+#' @return A closure that will find all heatwaves for a given ensemble. Each
+#'    passed threshold corresponds to a particular city. The closure advances
+#'    an incrementer every time it is called to get this effect.
+#'    Argument 1: A threshold temperature
+#'    Argument 2: The ensemble from which you wish to find heatwaves.
 #'
-#' @note The closure encapsulates an incrementer varaible and advances it with every call. This variable is used to
-#' index into the cities vector from the "global" data list.
+#' @note The closure encapsulates an incrementer varaible and advances it
+#'    with every call. This variable is used to index into the cities vector
+#'    from the "global" data list.
 # TODO: There is a redefinition of the custom variable. Test if it is necessary.
 # TODO: Add documentation of the format of the return value
 # TODO: Eventually, figure out if there is an elegant way of getting the corresponding city without the need for a closure
@@ -94,7 +61,7 @@ createCityProcessor <- function(global, custom){
 #' Combine all identified heatwave dataframes together into one.
 #'
 #' @param hwDataframeList A list of identified heatwave dataframes created by
-#'    the closure of createCityProcessor
+#'    the closure of \code{\link{createCityProcessor}}.
 #'
 #' @return A combined dataframe of identified heatwave dataframes from the
 #'    dataframe list that was passed as an argument.
@@ -106,14 +73,14 @@ consolidate <- function(hwDataframeList){
         return(all)
 }
 
-
-
 #' Aggregate by heatwave
 #'
 #' @param city Index of cities global
 #' @param threshold Threshold temperature for this city
 #' @param heatwaves data.frame(dates, thresholds)
-#' @param percentile Percentile for threshold)
+#' @param ensemble ...
+#' @param i ...
+#' @inheritParams processModel
 #'
 #' @return Result is a dataframe where each row represents a heatwave.
 #'
@@ -121,10 +88,7 @@ consolidate <- function(hwDataframeList){
 createHwDataframe <- function(city = stop("Unspecified city"),
                               threshold = stop("Unspecified threshold"),
                               heatwaves = stop("'heatwaves' unspecified"),
-                              percentile = .98,
-                              ensemble,
-                              i,
-                              global, custom){
+                              ensemble, i, global, custom){
         hold <<- heatwaves
 
         intermediate <- heatwaves
@@ -132,8 +96,12 @@ createHwDataframe <- function(city = stop("Unspecified city"),
 
         if(custom["createHwDataframe"] != FALSE){
                 datafr <- data.frame(ensemble$dates, ensemble$reference[,i])
-                heatwaves <- IDheatwaves(city, threshold, 2, datafr,
-                                         global, custom)
+                heatwaves <- IDheatwaves(city = city,
+                                         threshold = threshold,
+                                         days = 2,
+                                         datafr = datafr,
+                                         global = global,
+                                         custom = custom)
         }
 
         bloodhound <<- heatwaves2

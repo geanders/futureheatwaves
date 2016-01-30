@@ -8,13 +8,16 @@ getBounds(times, experiment, custom)
 }
 \arguments{
 \item{times}{A dataframe containing the time data for one of the
-climate model ensemble's projection. Read in by \code{processEnsemble}.}
+climate model ensemble's projection. Each row in this dataframe
+corresponds to the row with the same row number in the climate
+projection dataframe. Read in by
+\code{\link{processEnsemble}}.}
 
-\item{experiment}{Character string of the experiment of
-interest. Possible variables are "historical" or "rcp85".}
+\item{experiment}{Character string of the experiment of interest.
+Possible variables are "historical" or "rcp85".}
 
 \item{custom}{An object name for the 'custom` data list. This parameter is
-passed through from \code{gen_hw_set} and includes user specifications
+passed through from \code{\link{gen_hw_set}} and includes user specifications
 for, if specified as other than the default, an alternative function to
 use to identify heatwaves, alternative upper and lower year boundaries
 for the projection period of the heatwave datasets being generated,
@@ -35,9 +38,9 @@ Acquire boundaries of time series data
 }
 \note{
 This function is customizable. If data boundaries are not set
-   using \code{dataBoundaries} in the \code{gen_hw_set} function call,
+   using \code{dataBoundaries} in the \code{\link{gen_hw_set}} function call,
    the default is to pull Jan. 1, 1981, to Dec. 31, 2014 for a
-   historical experiment and Jan. 1, 2061 to Dec. 31, 2080(1?-- check) for
+   historical experiment and Jan. 1, 2061 to Dec. 31, 2080 for
    a future projection experiment.
 
 end' index of the historical experiment has to be

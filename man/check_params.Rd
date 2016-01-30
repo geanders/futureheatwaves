@@ -13,7 +13,7 @@ check_params(out, dataFolder, citycsv, coordinateFilenames, tasFilenames,
 heatwave files will be written.}
 
 \item{dataFolder}{Character string with pathway to directory that
-contains climate projections. Must include the final backslash.}
+contains climate projection data.}
 
 \item{citycsv}{Character string giving the filepath to a .csv
 file with latitude and longitude values for each city.}
@@ -28,8 +28,8 @@ series data.}
 \item{timeFilenames}{Character string with name of the files containing the
 date information corresponding to the rows of the time series data.}
 
-\item{RorCPP}{0 /1 flag that indicates whether to use R (1) or
-CPP (0) functions}
+\item{RorCPP}{0 /1 flag that indicates whether to use R (0) or
+C++ (1) function to identify heatwaves in the projections}
 
 \item{IDheatwavesReplacement}{Either FALSE, to use the default
 heatwave definition, or a user-specified custom function to
@@ -40,25 +40,30 @@ from the ensembles. Format: c(historical low bound, historical
 high bound, reference low bound, reference high bound).
 Restrictions: Bounds cannot span multiple experiments}
 
-\item{referenceBoundaries}{Reference boundaries.}
+\item{referenceBoundaries}{Custom time boundaries for ... .
+The first two values give the year range of the dataset to use to
+determine the threshold temperatures of the heatwave definition.
+Format: c(historical low bound, historical
+high bound, reference low bound, reference high bound).
+Restrictions: Bounds cannot span multiple experiments}
 }
 \value{
 Stops and returns an error if any parameters are incorrect.
 }
 \description{
 This function goes through all parameter inputs for the main
-   functions, \code{gen_hw_set}, and makes sure all parameter
-   entries are in the appropriate format for following functions.
-   If any parameters are in an incorrect format, the function stops
-   and returns an error describing the problem.
+functions, \code{\link{gen_hw_set}}, and makes sure all parameter
+entries are in the appropriate format for following functions.
+If any parameters are in an incorrect format, the function stops
+and returns an error describing the problem.
 }
 \note{
 This function does not check if the data is organized in the proper
    structure or if any data exists within the directory at all, so a
-   call to \code{gen_hw_set} could still pass through this check and
+   call to \code{\link{gen_hw_set}} could still pass through this check and
    make it further through the function code with those mistakes.
 
-Does not check if the three ensemble final .csv data files exist,
+ Does not check if the three ensemble final .csv data files exist,
    only if they have the .csv extension if they do exist. (Reminder:
    the final subdirectory should have the following three csv files:
    1. A file with the climate model projections, with grid points by

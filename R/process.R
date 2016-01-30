@@ -233,7 +233,23 @@ processRCP <- function(ensemble, modelName, ensembleWriter, thresholds,
 #'    giving the user-specified custom date boundaries for the
 #'    heatwave projections.
 #'
-#' @return Returns a list with...
+#' @return Returns a list with the following:
+#'    \code{locations}: A numberical vector with the indices of the columns
+#'    in \code{tas} that correspond to the closest grid point in the climate
+#'    model for each of the selected cities;
+#'    \code{bounds}: Numerical vector of length three with the row number
+#'    in the \code{tas} dataset corresponding to the first date in the
+#'    selected time frame, the last date in the time frame, and the total
+#'    number of days of data between the starting and ending date
+#'    boundaries;
+#'    \code{series}: Data with the climate projections by day in the time
+#'    series (row) and community of analysis (column);
+#'    \code{times}: Vector of row in \code{tas}, year, month, and day of
+#'    all observations in the \code{tas} data;
+#'    \code{dates}: Vector of Date class with all the dates in the selected
+#'    time period;
+#'    \code{reference}: Either FALSE, if the ensemble was not drawn using
+#'    a custom time frame, or ...
 #'
 #' @note This function calls another function that uses the Pythagorean
 #'    theorem to calculate the distance between each community given in the

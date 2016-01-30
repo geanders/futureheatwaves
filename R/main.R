@@ -37,6 +37,8 @@
 #'    high bound, reference low bound, reference high bound).
 #'    Restrictions: Bounds cannot span multiple experiments
 #' @param referenceBoundaries Custom time boundaries for ... .
+#'    The first two values give the year range of the dataset to use to
+#'    determine the threshold temperatures of the heatwave definition.
 #'    Format: c(historical low bound, historical
 #'    high bound, reference low bound, reference high bound).
 #'    Restrictions: Bounds cannot span multiple experiments

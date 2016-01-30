@@ -168,6 +168,9 @@ The function most generate the following output:
 
 ...
 
+### Customizing projection dates
+
+By default, the function will generate heatwave projections for the selected communities for the years 2061 to 2080. This projection date range can be changed by specifying alternative starting and ending years as the third and fourth values of the `dataBoundaries` option in the `gen_hw_set` function. The starting year cannot be earlier than 2006 and the ending year cannot be later than 2099.
 
 ## How it works
 

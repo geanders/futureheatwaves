@@ -54,7 +54,7 @@ processModel <- function(model, global, custom, accumulators){
 
         # Acquire vector of threshold temperatures using the historical
         # ensemble for this model which possesses the name r1i1p1
-        ret <- processHistorical(model, global, custom, reference)
+        ret <- processThresholds(model, global, custom, reference)
         thresholds <- ret[[1]]
         reference <- ret[[2]]
 
@@ -110,17 +110,29 @@ processModel <- function(model, global, custom, accumulators){
 #'    \code{\link{gen_hw_set}} and otherwise is ... .
 #'    This function also writes threshold temperatures to files within
 #'    the user-specified output directory for future reference.
-processHistorical <- function(model, global, custom, reference = FALSE){
+processThreshold <- function(model, global, custom, reference = FALSE){
         name <- model[[1]]
 
+        # Determine relevant experiment for thresholds
+        if(custom$getBounds[1] < 2005){
+                experiment <- "historical"
+        } else {
+                experiment <- "rcp85"
+        }
+
         # To find the threshold, use the first ensemble member within
-        # that historical directory
-        historicalDirs <- model[[2]][1][[1]]
-        cat("Processing historical ensemble for", name, "\n")
+        # the relevant directory, historical or rcp
+        if(experiment == "historical"){
+                thresholdDirs <- model[[2]][1][[1]]
+        } else {
+                thresholdDirs <- model[[3]][1][[1]]
+        }
+
+        cat("Processing thresholds for", name, "\n")
 
         # Acquire characteristics of the first historical ensemble
-        historicalEnsemble <- processEnsemble(ensemble = historicalDirs,
-                                              experiment = 'historical',
+        thresholdEnsemble <- processEnsemble(ensemble = thresholdDirs,
+                                              experiment = experiment,
                                               modelName = name,
                                               global = global,
                                               custom = custom,
@@ -128,7 +140,7 @@ processHistorical <- function(model, global, custom, reference = FALSE){
 
         # Calculate threshold temperatures using the user-specified
         # threshold percentile (default: 0.98)
-        thresholds <- apply(historicalEnsemble$series, 2, quantile,
+        thresholds <- apply(thresholdEnsemble$series, 2, quantile,
                             probs = custom$probThreshold)
 
         # Acquire the reference series. Will be false if reference period

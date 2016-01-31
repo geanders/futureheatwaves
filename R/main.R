@@ -62,8 +62,8 @@ gen_hw_set <- function(out,
                        tasFilenames,
                        timeFilenames,
                        IDheatwavesReplacement = "IDHeatwavesR",
-                       dataBoundaries = FALSE,
-                       referenceBoundaries = FALSE,
+                       dataBoundaries = c(1981, 2004, 2061, 2080),
+                       referenceBoundaries = c(1981, 2004),
                        probThreshold = 0.98,
                        printWarning = TRUE){
 
@@ -237,8 +237,9 @@ check_params <- function(out,
         # The boundary checking still contains logical errors.
         # Must make sure that both upper and lower bounds for a period are
         # FALSE if unspecified
-        checkCustomBounds(dataBoundaries)
-        checkCustomBounds(referenceBoundaries)
+        checkCustomBounds2(dataBoundaries[1:2])
+        checkCustomBounds2(dataBoundaries[3:4])
+        checkCustomBounds2(referenceBoundaries)
 }
 
 #' Check year boundaries for errors

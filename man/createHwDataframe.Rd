@@ -2,7 +2,7 @@
 % Please edit documentation in R/processHeatwaves.R
 \name{createHwDataframe}
 \alias{createHwDataframe}
-\title{Aggregate by heatwave}
+\title{Characterize heatwaves}
 \usage{
 createHwDataframe(city = stop("Unspecified city"),
   threshold = stop("Unspecified threshold"),
@@ -10,9 +10,11 @@ createHwDataframe(city = stop("Unspecified city"),
   custom)
 }
 \arguments{
-\item{city}{Index of cities global}
+\item{city}{A numeric vector containing the city's ID, latitude, and
+longitude, in that order.}
 
-\item{threshold}{Threshold temperature for this city}
+\item{threshold}{Numeric string with threshold percentile used in
+heatwave definition.}
 
 \item{heatwaves}{data.frame(dates, thresholds)}
 
@@ -48,6 +50,6 @@ threshold to use when defining heatwaves.}
 Result is a dataframe where each row represents a heatwave.
 }
 \description{
-Aggregate by heatwave
+Characterize heatwaves
 }
 

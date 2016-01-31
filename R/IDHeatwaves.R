@@ -1,16 +1,25 @@
 #' Identify all heatwaves within a given city's time series
 #'
-#' @param city Character string with city ID.
 #' @param threshold Numeric string with threshold percentile used in
 #'    heatwave definition.
 #' @param days Numeric string specifying minimum number of days required
 #'    in heatwave definition.
-#' @param datafr Dataframe with daily temperatures in city of interest.
-#' @param global The global
-#' @param custom [Custom data holder-- what's that?]
+#' @param datafr A dataframe with daily temperature projections in the
+#'    the community being processed. This dataframe must have two columns:
+#'    (1) the first column must have the date of each observation, with
+#'    class "Date" and; (2) the second column must have temperatures, in
+#'    Fahrenheit. In the normal running of this package, this dataframe
+#'    will be generate by the closure created by
+#'    \code{\link{createCityProcessor}}.
+#' @inheritParams processModel
+#' @inheritParams closest_point
 #'
 #' @return Returns the dataframe entered as \code{datafr}, but with new
-#'    columns providing heatwave idendifiers.
+#'    columns providing heatwave identifiers. The returned dataframe will
+#'    have new columns for whether a day was part of a heatwave (\code{hw},
+#'    0 / 1), if it was part of a heatwave, the number of the heatwave
+#'    (\code{hw.number}), and whether the day was the first day in a heatwave
+#'    (\code{first.hw.day}, 0 /1).
 #'
 IDheatwaves <- function(city, threshold, days = 2, datafr, global, custom){
         # Initialize return value
@@ -58,8 +67,7 @@ IDheatwaves <- function(city, threshold, days = 2, datafr, global, custom){
 
 #' Identify heatwaves in a time series
 #'
-#' @param city Character string with community identifies, as set in the
-#'    \code{citycsv} file specified by the user in \code{\link{gen_hw_set}}
+#' @param city ...
 #' @param threshold Numeric string with threshold percentile used in
 #'    heatwave definition.
 #' @param days Numeric string specifying minimum number of days required
@@ -122,9 +130,12 @@ IDHeatwavesR <- function(city = stop("Error: unspecified city"),
         return(data.frame(datafr, hwInfo[-1,])) # Combine the original dataframe with the heatwave characteristics matrix. Notice the placeholder row is excluded.
 }
 
-#' Function to identify heatwaves with alternative definition
+#' Identify heatwaves with alternative definition
 #'
 #' @inheritParams IDHeatwavesR
+#'
+#' @return Returns the dataframe entered as \code{datafr}, but with new
+#'    columns providing heatwave identifiers.
 IDHeatwavesAlternative <- function(city = stop("Error: unspecified city"),
                            threshold = stop("Error: unspecified threshold"),
                            days = 1,

@@ -96,10 +96,8 @@ consolidate <- function(hwDataframeList){
         return(all)
 }
 
-#' Aggregate by heatwave
+#' Characterize heatwaves
 #'
-#' @param city Index of cities global
-#' @param threshold Threshold temperature for this city
 #' @param heatwaves data.frame(dates, thresholds)
 #' @param i An index specifying with community of the specified communities
 #'    is being processed. This corresponds to the order that the communities
@@ -107,6 +105,7 @@ consolidate <- function(hwDataframeList){
 #'    \code{\link{gen_hw_set}}.
 #' @inheritParams processModel
 #' @inheritParams formHwFrame
+#' @inheritParams IDheatwaves
 #'
 #' @return Result is a dataframe where each row represents a heatwave.
 #'

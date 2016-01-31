@@ -1,5 +1,5 @@
 #include <Rcpp.h>
-#include <vector>
+#include <vector.h>
 using namespace Rcpp;
 
 //TODO: TEST
@@ -15,12 +15,15 @@ void storeZeroes(int, int, std::vector<int> &, std::vector<int> &, std::vector<i
 
 //' Identify heatwaves that are a certain number of days long
 //'
-//' @param heatwaveLength Number of days that a heatwave lasts under the user's definition
-//' @param tempsExceedingCutoff A vector of 1s and 0s that is the size of the number of days in the time series.
-//' 1 means the temperature for that day exceeds the calculated threshold. 0 means it does not exceed the threshold.
+//' @param heatwaveLength Number of days that a heatwave lasts under the
+//'    user's definition
+//' @param tempsExceedingCutoff A vector of 1s and 0s that is the size of the
+//'     number of days in the time series. 1 means the temperature for that
+//'     day exceeds the calculated threshold. 0 means it does not exceed the
+//'     threshold.
 //'
 //' @return A dataframe containing information about the heatwaves for this series. It contains three columns with
-//' names "hw", "hw.number", and "first.hw.day" respectively.
+//'    names "hw", "hw.number", and "first.hw.day" respectively.
 //' @export
 // [[Rcpp::export]]
 DataFrame IDHeatwavesCPP(int heatwaveLength, NumericVector tempsExceedingCutoff){

@@ -7,12 +7,14 @@
 consolidate(hwDataframeList)
 }
 \arguments{
-\item{hwDataframeList}{A list of identified heatwave dataframes created by
-the closure of \code{\link{createCityProcessor}}.}
+\item{hwDataframeList}{A list object where each element is the dataframe
+of identified and characterized heatwaves, created by
+the closure created by \code{\link{createCityProcessor}},
+for a single community .}
 }
 \value{
-A combined dataframe of identified heatwave dataframes from the
-   dataframe list that was passed as an argument.
+A combined dataframe version of the list that was passed as an
+   argument.
 }
 \description{
 Combine all identified heatwave dataframes together into one.

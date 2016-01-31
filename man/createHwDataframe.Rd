@@ -20,7 +20,10 @@ createHwDataframe(city = stop("Unspecified city"),
 well as a variety of other information for a single ensemble member.
 This is the output of \code{\link{processEnsemble}}.}
 
-\item{i}{...}
+\item{i}{An index specifying with community of the specified communities
+is being processed. This corresponds to the order that the communities
+are given in the \code{citycsv} file specified in
+\code{\link{gen_hw_set}}.}
 
 \item{global}{An object name for the 'global' variable list. This
 parameter is passed through from \code{\link{gen_hw_set}} and includes user

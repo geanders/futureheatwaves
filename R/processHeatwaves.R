@@ -12,7 +12,7 @@ formHwFrame <- function(ensembleSeries, thresholds, global, custom){
         # Acquire list of heatwave dataframes for each city
         hwDataframeList <- apply(data.frame(thresholds), 1,
                                  createCityProcessor(global = global),
-                                 ensemble = ensembleSeries,
+                                 ensembleSeries = ensembleSeries,
                                  custom = custom)
 
         # Combine the heatwave dataframes contained in hwDataframeList into
@@ -51,7 +51,8 @@ createCityProcessor <- function(global){
 
         function(threshold, ensembleSeries, custom){
                 city <- as.character(global$cities[i,1])
-                cat("Creating heatwave dataframe ~~ City: ", city, " ~~ City Number: ", i, " ~~ Cutoff: ", threshold, "\n")
+                cat("Creating heatwave dataframe ~~ City: ", city,
+                    " ~~ City Number: ", i, " ~~ Cutoff: ", threshold, "\n")
 
                 datafr <- data.frame(ensembleSeries$dates,
                                      ensembleSeries$series[,i])
@@ -80,11 +81,13 @@ createCityProcessor <- function(global){
 
 #' Combine all identified heatwave dataframes together into one.
 #'
-#' @param hwDataframeList A list of identified heatwave dataframes created by
-#'    the closure of \code{\link{createCityProcessor}}.
+#' @param hwDataframeList A list object where each element is the dataframe
+#'    of identified and characterized heatwaves, created by
+#'    the closure created by \code{\link{createCityProcessor}},
+#'    for a single community .
 #'
-#' @return A combined dataframe of identified heatwave dataframes from the
-#'    dataframe list that was passed as an argument.
+#' @return A combined dataframe version of the list that was passed as an
+#'    argument.
 consolidate <- function(hwDataframeList){
         all <- hwDataframeList[[1]]
         for(i in 2:length(hwDataframeList)){
@@ -98,7 +101,10 @@ consolidate <- function(hwDataframeList){
 #' @param city Index of cities global
 #' @param threshold Threshold temperature for this city
 #' @param heatwaves data.frame(dates, thresholds)
-#' @param i ...
+#' @param i An index specifying with community of the specified communities
+#'    is being processed. This corresponds to the order that the communities
+#'    are given in the \code{citycsv} file specified in
+#'    \code{\link{gen_hw_set}}.
 #' @inheritParams processModel
 #' @inheritParams formHwFrame
 #'

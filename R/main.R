@@ -241,11 +241,6 @@ check_params <- function(out,
                 stop("Invalid format: timeFilenames. Stopping.")
         }
 
-        # TODO CHECK FOR BOUNDARY STRADDLING
-        # STILL UNFINISHED!
-        # The boundary checking still contains logical errors.
-        # Must make sure that both upper and lower bounds for a period are
-        # FALSE if unspecified
         checkCustomBounds(thresholdBoundaries)
         checkCustomBounds(projectionBoundaries)
         checkCustomBounds(referenceBoundaries)

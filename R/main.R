@@ -30,16 +30,21 @@
 #' @param IDheatwavesReplacement Either FALSE, to use the default
 #'    heatwave definition, or a user-specified custom function to
 #'    use to identify heatwaves.
-#' @param dataBoundaries Custom time boundaries for extracting data
-#'    from the ensembles. Format: c(historical low bound, historical
-#'    high bound, reference low bound, reference high bound).
-#'    Restrictions: Bounds cannot span multiple experiments
-#' @param referenceBoundaries Custom time boundaries for ... .
-#'    The first two values give the year range of the dataset to use to
-#'    determine the threshold temperatures of the heatwave definition.
-#'    Format: c(historical low bound, historical
-#'    high bound, reference low bound, reference high bound).
-#'    Restrictions: Bounds cannot span multiple experiments
+#' @param thresholdBoundaries Custom time boundaries for determining
+#'    threshold temperatures for the heatwave definition.
+#'    Format: c(earliest year, latest year).
+#'    Restrictions: Bounds must be between the years 1980 and 2099 and
+#'    cannot span 2005 (i.e., both must either be before 2005 or after 2005).
+#' @param thresholdBoundaries Custom time boundaries for projections.
+#'    Format: c(earliest year, latest year).
+#'    Restrictions: Bounds must be between the years 1980 and 2099 and
+#'    cannot span 2005 (i.e., both must either be before 2005 or after 2005).
+#' @param referenceBoundaries Custom time boundaries to use in calculating
+#'    relative characteristics for heatwaves (i.e., to use when exploring
+#'    the role of adaptation in projections).
+#'    Format: c(earliest year, latest year).
+#'    Restrictions: Bounds must be between the years 1980 and 2099 and
+#'    cannot span 2005 (i.e., both must either be before 2005 or after 2005).
 #' @param probThreshold Numerical value between 0 and 1 specifying the threshold
 #'    of temperature to use when defining heatwaves. The default value is 0.98
 #'    (i.e., a heatwave is two or more days above the community's 98th
@@ -62,7 +67,8 @@ gen_hw_set <- function(out,
                        tasFilenames,
                        timeFilenames,
                        IDheatwavesReplacement = "IDHeatwavesR",
-                       dataBoundaries = c(1981, 2004, 2061, 2080),
+                       thresholdBoundaries = c(1981, 2004),
+                       projectionBoundaries = c(2061, 2080),
                        referenceBoundaries = c(1981, 2004),
                        probThreshold = 0.98,
                        printWarning = TRUE){
@@ -89,7 +95,8 @@ gen_hw_set <- function(out,
                      tasFilenames = tasFilenames,
                      timeFilenames = timeFilenames,
                      IDheatwavesReplacement = IDheatwavesReplacement,
-                     dataBoundaries = dataBoundaries,
+                     thresholdBoundaries = thresholdBoundaries,
+                     projectionBoundaries = projectionBoundaries,
                      referenceBoundaries = referenceBoundaries)
 
   # Add warning for user that this will write new files
@@ -126,7 +133,8 @@ gen_hw_set <- function(out,
         # Create the "custom" list object that will hold all of the user's
         # custom settings.
         custom <- list("IDheatwaves" = IDheatwavesReplacement,
-                       "getBounds" = dataBoundaries,
+                       "getBounds" = c(thresholdBoundaries,
+                                       projectionBoundaries),
                        "processModel" = referenceBoundaries,
                        "createHwDataframe" = referenceBoundaries != FALSE,
                        "probThreshold" = probThreshold)
@@ -197,7 +205,8 @@ check_params <- function(out,
                          tasFilenames,
                          timeFilenames,
                          IDheatwavesReplacement,
-                         dataBoundaries,
+                         thresholdBoundaries,
+                         projectionBoundaries,
                          referenceBoundaries){
 
         # TODO: ERROR CHECKING!!!!!!!!
@@ -237,9 +246,9 @@ check_params <- function(out,
         # The boundary checking still contains logical errors.
         # Must make sure that both upper and lower bounds for a period are
         # FALSE if unspecified
-        checkCustomBounds2(dataBoundaries[1:2])
-        checkCustomBounds2(dataBoundaries[3:4])
-        checkCustomBounds2(referenceBoundaries)
+        checkCustomBounds(thresholdBoundaries)
+        checkCustomBounds(projectionBoundaries)
+        checkCustomBounds(referenceBoundaries)
 }
 
 #' Check year boundaries for errors
@@ -254,85 +263,7 @@ check_params <- function(out,
 #'    c(historical period earliest year, historical period latest year,
 #'    future projection period earliest year, future projection period
 #'    latest year).
-#' @param expected_length The expected length of \code{boundList}.
-checkCustomBounds <- function(boundList, expected_length = 4){
-
-  # Check to make sure the user entered a list of the correct length
-  if(boundList != FALSE & length(boundList) != expected_length){
-    stop(paste0("User-specified boundary list not expected length. ",
-               "Expecting a vector of length ", expected_length,
-               ". Stopping."))
-
-  # All other bounds error checking
-  } else if(boundList != FALSE){
-    histLow <- boundList[1]
-    histHigh <- boundList[2]
-    rcpLow <- boundList[3]
-    rcpHigh <- boundList[4]
-
-    # Check to make sure both upper and lower boundaries exist for the
-    # historical and rcp boundary sets
-    if(typeof(histLow) != typeof(histHigh)){
-      stop(paste("One of the required boundaries of boundaries variable",
-                 "unspecified. Stopping."))
-    }
-    if(typeof(rcpLow) != typeof(rcpHigh)){
-      stop(paste("One of the required boundaries of boundaries variable",
-                 "unspecified. Stopping."))
-    }
-
-    # Check if bounds are the correct type
-    if(typeof(histLow) != "double" | typeof(histHigh) != "double"){
-      stop("Invalid type: histLow or histHigh. Stopping.")
-    }
-    if(typeof(rcpLow) != "double" | typeof(rcpHigh) != "double"){
-      stop("Invalid type: rcpLow or rcpHigh. Stopping.")
-    }
-
-    # Check if bounds are in the correct range
-    if(histLow != FALSE){
-      if(histLow < 1980){
-        stop(paste("Custom boundaries for threshold calculation fall out",
-                   "of acceptable range. Stopping."))
-      }
-    }
-
-    if(histHigh != FALSE){
-      if(histHigh > 2004){
-        stop(paste("Custom boundaries for threshold calculation fall out",
-                   "of acceptable range. Stopping."))
-      }
-    }
-
-    if(rcpLow != FALSE){
-      if(rcpLow < 2006){
-        stop(paste("Custom boundaries for threshold calculation fall out of",
-                   "acceptable range. Stopping."))
-      }
-    }
-
-    if(rcpHigh != FALSE){
-      if(rcpHigh > 2099){
-        stop(paste("Custom boundaries for threshold calculation fall out of",
-                   "acceptable range. Stopping."))
-      }
-    }
-  }
-}
-
-#' Check year boundaries for errors
-#'
-#' This function inputs the boundary lists specified in
-#' \code{\link{gen_hw_set}}, \code{dataBoundaries} and
-#' \code{referenceBoundaries}, and checks them for errors in structure of the
-#' input or in the years selected.
-#'
-#' @param boundList Either FALSE, if user wishes to use the default
-#'    boundaries, or a set of boundary years in the format
-#'    c(historical period earliest year, historical period latest year,
-#'    future projection period earliest year, future projection period
-#'    latest year).
-checkCustomBounds2 <- function(boundList){
+checkCustomBounds <- function(boundList){
 
         if(class(boundList) != "numeric"){
                 stop("All date boundaries must have the class `numeric`.")

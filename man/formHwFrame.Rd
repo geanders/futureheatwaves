@@ -4,12 +4,12 @@
 \alias{formHwFrame}
 \title{Create heatwave dataframe for the given ensemble}
 \usage{
-formHwFrame(ensemblePath, thresholds, global, custom)
+formHwFrame(ensembleSeries, thresholds, global, custom)
 }
 \arguments{
-\item{ensemblePath}{A character string that gives the absolute file path
-for the subdirectory for a particular ensemble member of a climate
-model within the user-specified projection directory.}
+\item{ensembleSeries}{A list object giving the projection times series as
+well as a variety of other information for a single ensemble member.
+This is the output of \code{\link{processEnsemble}}.}
 
 \item{thresholds}{A vector with the thresholds to use within each community
 in that community's heatwave definition.These are typically automatically

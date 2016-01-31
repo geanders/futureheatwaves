@@ -6,7 +6,8 @@
 \usage{
 createHwDataframe(city = stop("Unspecified city"),
   threshold = stop("Unspecified threshold"),
-  heatwaves = stop("'heatwaves' unspecified"), ensemble, i, global, custom)
+  heatwaves = stop("'heatwaves' unspecified"), ensembleSeries, i, global,
+  custom)
 }
 \arguments{
 \item{city}{Index of cities global}
@@ -15,7 +16,9 @@ createHwDataframe(city = stop("Unspecified city"),
 
 \item{heatwaves}{data.frame(dates, thresholds)}
 
-\item{ensemble}{...}
+\item{ensembleSeries}{A list object giving the projection times series as
+well as a variety of other information for a single ensemble member.
+This is the output of \code{\link{processEnsemble}}.}
 
 \item{i}{...}
 

@@ -169,7 +169,7 @@ processRCP <- function(ensemble, modelName, ensembleWriter, thresholds,
         cat("Processing projection ensemble", modelName, "\n")
 
         # Acquire desired characteristics of the RCP 8.5 ensembles
-        ensemble <- processEnsemble(ensemble = ensemble,
+        ensembleSeries <- processEnsemble(ensemble = ensemble,
                                     experiment = 'rcp',
                                     modelName = modelName,
                                     global = global,
@@ -177,10 +177,11 @@ processRCP <- function(ensemble, modelName, ensembleWriter, thresholds,
                                     reference = reference)
 
         # Append locations vector to the locations vector accumulator
-        accumulators("append location list", ensemble$locations)
+        accumulators("append location list", ensembleSeries$locations)
 
-        # Acquire the heatwave dataframes for every rcp 8.5 ensemble in this model
-        hwFrame <- formHwFrame(ensemble = ensemble,
+        # Acquire the heatwave dataframes for every rcp 8.5 ensemble in this
+        # model
+        hwFrame <- formHwFrame(ensembleSeries = ensembleSeries,
                                thresholds = thresholds,
                                global = global,
                                custom = custom)
@@ -209,6 +210,7 @@ processRCP <- function(ensemble, modelName, ensembleWriter, thresholds,
 #' @inheritParams buildStructureExperiments
 #' @inheritParams buildStructureModels
 #' @inheritParams processHistorical
+#' @inheritParams processRCP
 #'
 #' @return Returns a list with the following:
 #'    \code{locations}: A numberical vector with the indices of the columns

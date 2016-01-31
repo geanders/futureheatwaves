@@ -2,7 +2,7 @@
 % Please edit documentation in R/IDHeatwaves.R
 \name{IDHeatwavesCPPwrapper}
 \alias{IDHeatwavesCPPwrapper}
-\title{Identify heatwaves using a C++ functions}
+\title{Identify heatwaves using a C++ function}
 \usage{
 IDHeatwavesCPPwrapper(datafr, threshold)
 }
@@ -23,6 +23,11 @@ Returns the dataframe entered as \code{datafr}, but with new
    columns providing heatwave identifiers.
 }
 \description{
-Identify heatwaves using a C++ functions
+This function identifies heatwaves as two or more days at or above
+   a user-defined threshold.
+}
+\note{
+This function gives identical results to the \link{\code{IDHeatwavesR}}
+   function, but should take less time to run.
 }
 

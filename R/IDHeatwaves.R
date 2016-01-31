@@ -190,12 +190,18 @@ IDHeatwavesAlternative <- function(threshold = stop("Error: unspecified threshol
         return(data.frame(datafr, hwInfo[-1,]))
 }
 
-#' Identify heatwaves using a C++ functions
+#' Identify heatwaves using a C++ function
+#'
+#' This function identifies heatwaves as two or more days at or above
+#'    a user-defined threshold.
 #'
 #' @inheritParams IDHeatwavesR
 #'
 #' @return Returns the dataframe entered as \code{datafr}, but with new
 #'    columns providing heatwave identifiers.
+#'
+#' @note This function gives identical results to the \link{\code{IDHeatwavesR}}
+#'    function, but should take less time to run.
 IDHeatwavesCPPwrapper <- function(datafr, threshold){
         colnames(datafr) <- c("date", "tmpd")
 

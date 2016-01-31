@@ -43,8 +43,9 @@ formHwFrame <- function(ensembleSeries, thresholds, global, custom){
 #'    \code{createHwDataframe} function.
 # TODO: There is a redefinition of the custom variable. Test if it is necessary.
 # TODO: Add documentation of the format of the return value
-# TODO: Eventually, figure out if there is an elegant way of getting the corresponding city without the need for a closure
-# to increment over the cities list.
+# TODO: Eventually, figure out if there is an elegant way of getting the
+# corresponding city without the need for a closure to increment over the
+# cities list.
 createCityProcessor <- function(global){
         # incrementer
         i <- 1
@@ -144,8 +145,12 @@ createHwDataframe <- function(city = stop("Unspecified city"),
                                  days.above.85 = length(date[tmpd > 85]),
                                  days.above.90 = length(date[tmpd > 90]),
                                  days.above.95 = length(date[tmpd > 95]),
-                                 days.above.99th = length(date[tmpd > quantile(heatwaves$tmpd, .99, na.rm = TRUE)]),
-                                 days.above.99.5th = length(date[tmpd > quantile(heatwaves$tmpd, .995, na.rm = TRUE)]))
+                                 days.above.99th = length(date[tmpd >
+                                                quantile(heatwaves$tmpd, .99,
+                                                         na.rm = TRUE)]),
+                                 days.above.99.5th = length(date[tmpd >
+                                                quantile(heatwaves$tmpd, .995,
+                                                         na.rm = TRUE)]))
 
         hw.frame$first.in.season <- c(1, rep(NA, nrow(hw.frame) - 1))
         for(i in 2:nrow(hw.frame)){

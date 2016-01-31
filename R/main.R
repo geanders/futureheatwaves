@@ -69,7 +69,7 @@ gen_hw_set <- function(out,
                        IDheatwavesReplacement = "IDHeatwavesR",
                        thresholdBoundaries = c(1981, 2004),
                        projectionBoundaries = c(2061, 2080),
-                       referenceBoundaries = c(1981, 2004),
+                       referenceBoundaries = c(2061, 2080),
                        probThreshold = 0.98,
                        printWarning = TRUE){
 
@@ -136,7 +136,8 @@ gen_hw_set <- function(out,
                        "getBounds" = c(thresholdBoundaries,
                                        projectionBoundaries),
                        "processModel" = referenceBoundaries,
-                       "createHwDataframe" = referenceBoundaries != FALSE,
+                       "createHwDataframe" = !identical(projectionBoundaries,
+                                                       referenceBoundaries),
                        "probThreshold" = probThreshold)
 
         # Create accumulator closure

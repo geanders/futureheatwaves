@@ -381,44 +381,24 @@ closest_point <- function(city, latlong){
 #'
 # TODO: See if it is possible to simplify this function by using data from
 # the global carrier instead of custom
-getBounds <- function(times, experiment, custom){
+getBounds <- function(times, custom, type){
         # Set boundaries
 
-        if (experiment == 'historical'){
-                if(FALSE %in% custom[["getBounds"]]){ # `dataBoundaries` choice
-                        start <- match(1981, times[,2])
-
-                        #'end' index of the historical experiment has to be
-                        #' matched from back to front. This is because the
-                        #' data does/may not exceed year 2005. We wish to set
-                        #' the end bound to the first day of 2004 instead.
-                        # The match function alone will acquire the index of
-                        # the first day of 2004, even though we want all days
-                        # in 2004.
-                        end <- length(times[,1]) -
-                                (match(2004, rev(times[,2])) - 1)
-
-                } else {
-                        customizeHistorical <- custom[["getBounds"]]
-                        lower <- customizeHistorical[1]
-                        upper <- customizeHistorical[2]
-                        start <- match(lower, times[,2])
-                        end <- length(times[,1]) -
-                                (match(upper, rev(times[,2])) - 1)
-                }
-        } else if (experiment == 'rcp'){
-                if(FALSE %in% custom[["getBounds"]]){
-                        start <- match(2061, times[,2])
-                        end <- match(2081, times[,2]) - 1
-                } else {
-                        customizeRCP <- custom[["getBounds"]]
-                        lower <- customizeRCP[3]
-                        upper <- customizeRCP[4]
-                        start <- match(lower, times[,2])
-                        end <- match((upper + 1), times[,2]) - 1
-                }
+        if(type == "threshold"){
+                start_time <- custom$getBounds[1]
+                end_time <- custom$getBounds[2] + 1
+        } else if (type == "projections") {
+                start_time <- custom$getBounds[3]
+                end_time <- custom$getBounds[4] + 1
+        } else if (type == "reference"){
+                start_time <- custom$processModel[1]
+                end_time <- custom$processModel[2] + 1
         }
+
+        start <- match(start_time, times[,2])
+        end <- match(end_time, times[,2]) - 1
         size <- end - (start - 1)
+
         return(c(start, end, size))
 }
 

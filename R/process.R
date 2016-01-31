@@ -48,6 +48,11 @@
 #'    to each row in \code{series}; \code{reference}: ... .
 processModel <- function(model, global, custom, accumulators){
 
+        # Acquire characteristics of each experiment of the model
+        modelName <- model[[1]]
+        histens <- model[[2]]
+        rcpens <- model[[3]]
+
         # Get reference period if one exists
         reference <- custom["processModel"] # referenceBoundaries argument
                                             # from `gen_hw_set`
@@ -58,12 +63,19 @@ processModel <- function(model, global, custom, accumulators){
         thresholds <- ret[[1]]
         reference <- ret[[2]]
 
-        # Acquire characteristics of each RCP 8.5 ensemble of the model
-        modelName <- model[[1]]
-        histens <- model[[2]]
-        rcpens <- model[[3]]
-        rcpEnsembles <- lapply(rcpens,
-                               processRCP,
+        # Process the projection data
+
+        # First, check whether this should process files from the "historical"
+        # or the "rcp85" directory for the model
+        if(custom$getBounds[3] < 2005){
+                proj_ens <- histens
+        } else {
+                proj_ens <- rcpens
+        }
+
+        # Process the projection data for the files in the relevant directory
+        rcpEnsembles <- lapply(proj_ens,
+                               processProjections,
                                modelName = modelName,
                                ensembleWriter = createEnsembleWriter(modelName,
                                                                      global,
@@ -117,7 +129,7 @@ processThreshold <- function(model, global, custom, reference = FALSE){
         if(custom$getBounds[1] < 2005){
                 experiment <- "historical"
         } else {
-                experiment <- "rcp85"
+                experiment <- "rcp"
         }
 
         # To find the threshold, use the first ensemble member within
@@ -176,13 +188,20 @@ processThreshold <- function(model, global, custom, reference = FALSE){
 #'
 #' @return Write every heatwave dataframe to a .csv and return the ensemble
 #'    used as the reference.
-processRCP <- function(ensemble, modelName, ensembleWriter, thresholds,
+processProjections <- function(ensemble, modelName, ensembleWriter, thresholds,
                        global, custom, accumulators, reference = FALSE){
-        cat("Processing projection ensemble", modelName, "\n")
+        cat("Processing projections for ", modelName, "\n")
+
+        # Determine if `experiment` is `historical` or `rcp85`
+        if(custom$getBounds[3] < 2005){
+                experiment <- "historical"
+        } else {
+                experiment <- "rcp"
+        }
 
         # Acquire desired characteristics of the RCP 8.5 ensembles
         ensembleSeries <- processEnsemble(ensemble = ensemble,
-                                    experiment = 'rcp',
+                                    experiment = experiment,
                                     modelName = modelName,
                                     global = global,
                                     custom = custom,
@@ -191,7 +210,7 @@ processRCP <- function(ensemble, modelName, ensembleWriter, thresholds,
         # Append locations vector to the locations vector accumulator
         accumulators("append location list", ensembleSeries$locations)
 
-        # Acquire the heatwave dataframes for every rcp 8.5 ensemble in this
+        # Acquire the heatwave dataframes for every ensemble in the
         # model
         hwFrame <- formHwFrame(ensembleSeries = ensembleSeries,
                                thresholds = thresholds,

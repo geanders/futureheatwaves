@@ -80,7 +80,7 @@ processModel <- function(model, global, custom, accumulators){
         }
 
         # Process the projection data for the files in the relevant directory
-        rcpEnsembles <- lapply(proj_ens,
+        projectionEnsembles <- lapply(proj_ens,
                                processProjections,
                                modelName = modelName,
                                ensembleWriter = createEnsembleWriter(modelName,
@@ -91,12 +91,12 @@ processModel <- function(model, global, custom, accumulators){
                                thresholds = thresholds,
                                accumulators = accumulators)
 
-        rcpEnsembles$thresholds <- thresholds
-        rcpEnsembles$reference <- ifelse(custom$createHwDataframe,
+        projectionEnsembles$thresholds <- thresholds
+        projectionEnsembles$reference <- ifelse(custom$createHwDataframe,
                                          reference,
                                          FALSE)
 
-        return(rcpEnsembles)
+        return(projectionEnsembles)
 }
 
 #' Calculate threshold temperatures
@@ -200,7 +200,7 @@ processReference <- function(model, global, custom){
 #'    historical climate projections within the community.
 #' @inheritParams buildStructureModels
 #' @inheritParams processModel
-#' @inheritParams processHistorical
+#' @inheritParams processThresholds
 #'
 #' @return Write every heatwave dataframe to a .csv and return the ensemble
 #'    used as the reference.
@@ -249,8 +249,8 @@ processProjections <- function(ensemble, modelName, ensembleWriter,
 #' @inheritParams processModel
 #' @inheritParams buildStructureExperiments
 #' @inheritParams buildStructureModels
-#' @inheritParams processHistorical
-#' @inheritParams processRCP
+#' @inheritParams processThresholds
+#' @inheritParams processProjections
 #'
 #' @return Returns a list with the following:
 #'    \code{locations}: A numberical vector with the indices of the columns

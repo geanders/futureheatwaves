@@ -3,7 +3,7 @@
 #' @param ensembleSeries A list object giving the projection times series as
 #'    well as a variety of other information for a single ensemble member.
 #'    This is the output of \code{\link{processEnsemble}}.
-#' @inheritParams processRCP
+#' @inheritParams processProjections
 #' @inheritParams processModel
 #'
 #' @return The combined dataframe of identified and characterized heatwaves for

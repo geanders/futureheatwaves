@@ -4,7 +4,7 @@
 \alias{getBounds}
 \title{Acquire boundaries of time series data}
 \usage{
-getBounds(times, experiment, custom)
+getBounds(times, custom, type)
 }
 \arguments{
 \item{times}{A dataframe containing the time data for one of the
@@ -12,9 +12,6 @@ climate model ensemble's projection. Each row in this dataframe
 corresponds to the row with the same row number in the climate
 projection dataframe. Read in by
 \code{\link{processEnsemble}}.}
-
-\item{experiment}{Character string of the experiment of interest.
-Possible variables are "historical" or "rcp85".}
 
 \item{custom}{An object name for the 'custom` data list. This parameter is
 passed through from \code{\link{gen_hw_set}} and includes user specifications
@@ -42,10 +39,5 @@ This function is customizable. If data boundaries are not set
    the default is to pull Jan. 1, 1981, to Dec. 31, 2014 for a
    historical experiment and Jan. 1, 2061 to Dec. 31, 2080 for
    a future projection experiment.
-
-end' index of the historical experiment has to be
-matched from back to front. This is because the
-data does/may not exceed year 2005. We wish to set
-the end bound to the first day of 2004 instead.
 }
 

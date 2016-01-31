@@ -4,7 +4,7 @@
 \alias{checkCustomBounds}
 \title{Check year boundaries for errors}
 \usage{
-checkCustomBounds(boundList, expected_length = 4)
+checkCustomBounds(boundList)
 }
 \arguments{
 \item{boundList}{Either FALSE, if user wishes to use the default
@@ -12,8 +12,6 @@ boundaries, or a set of boundary years in the format
 c(historical period earliest year, historical period latest year,
 future projection period earliest year, future projection period
 latest year).}
-
-\item{expected_length}{The expected length of \code{boundList}.}
 }
 \description{
 This function inputs the boundary lists specified in

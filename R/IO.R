@@ -42,7 +42,7 @@ readTimes <- function(ensemble){
 #'    the function writes out with threshold temperatures for each community
 #'    for the model.
 #' @inheritParams buildStructureModels
-#' @inheritParams processRCP
+#' @inheritParams processProjections
 #' @inheritParams processModel
 writeThresholds <- function(modelName, threshOut, thresholds, global, custom){
 

@@ -6,8 +6,9 @@
 \usage{
 gen_hw_set(out, dataFolder, citycsv, coordinateFilenames, tasFilenames,
   timeFilenames, IDheatwavesReplacement = "IDHeatwavesR",
-  dataBoundaries = FALSE, referenceBoundaries = FALSE,
-  probThreshold = 0.98, printWarning = TRUE)
+  thresholdBoundaries = c(1981, 2004), projectionBoundaries = c(2061, 2080),
+  referenceBoundaries = c(2061, 2080), probThreshold = 0.98,
+  printWarning = TRUE)
 }
 \arguments{
 \item{out}{Character string with pathway to directory to which
@@ -33,17 +34,18 @@ date information corresponding to the rows of the time series data.}
 heatwave definition, or a user-specified custom function to
 use to identify heatwaves.}
 
-\item{dataBoundaries}{Custom time boundaries for extracting data
-from the ensembles. Format: c(historical low bound, historical
-high bound, reference low bound, reference high bound).
-Restrictions: Bounds cannot span multiple experiments}
+\item{thresholdBoundaries}{Custom time boundaries for determining
+threshold temperatures for the heatwave definition.
+Format: c(earliest year, latest year).
+Restrictions: Bounds must be between the years 1980 and 2099 and
+cannot span 2005 (i.e., both must either be before 2005 or after 2005).}
 
-\item{referenceBoundaries}{Custom time boundaries for ... .
-The first two values give the year range of the dataset to use to
-determine the threshold temperatures of the heatwave definition.
-Format: c(historical low bound, historical
-high bound, reference low bound, reference high bound).
-Restrictions: Bounds cannot span multiple experiments}
+\item{referenceBoundaries}{Custom time boundaries to use in calculating
+relative characteristics for heatwaves (i.e., to use when exploring
+the role of adaptation in projections).
+Format: c(earliest year, latest year).
+Restrictions: Bounds must be between the years 1980 and 2099 and
+cannot span 2005 (i.e., both must either be before 2005 or after 2005).}
 
 \item{probThreshold}{Numerical value between 0 and 1 specifying the threshold
 of temperature to use when defining heatwaves. The default value is 0.98
@@ -52,6 +54,11 @@ percentile temperature).}
 
 \item{printWarning}{TRUE / FALSE specifying whether to print out the progress
 of the function as it runs. Default is TRUE.}
+
+\item{thresholdBoundaries}{Custom time boundaries for projections.
+Format: c(earliest year, latest year).
+Restrictions: Bounds must be between the years 1980 and 2099 and
+cannot span 2005 (i.e., both must either be before 2005 or after 2005).}
 }
 \value{
 This function returns a dataframe listing the name of each climate

@@ -9,7 +9,8 @@ IDHeatwavesAlternative(city = stop("Error: unspecified city"),
   datafr = stop("Error: 'datafr' unspecified"))
 }
 \arguments{
-\item{city}{...}
+\item{city}{A numeric vector containing the city's ID, latitude, and
+longitude, in that order.}
 
 \item{threshold}{Numeric string with threshold percentile used in
 heatwave definition.}
@@ -17,8 +18,13 @@ heatwave definition.}
 \item{days}{Numeric string specifying minimum number of days required
 in heatwave definition.}
 
-\item{datafr}{Dataframe with a time series of the daily temperatures in
-the community being analyzed.}
+\item{datafr}{A dataframe with daily temperature projections in the
+the community being processed. This dataframe must have two columns:
+(1) the first column must have the date of each observation, with
+class "Date" and; (2) the second column must have temperatures, in
+Fahrenheit. In the normal running of this package, this dataframe
+will be generate by the closure created by
+\code{\link{createCityProcessor}}.}
 }
 \value{
 Returns the dataframe entered as \code{datafr}, but with new

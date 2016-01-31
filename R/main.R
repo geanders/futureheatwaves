@@ -319,6 +319,42 @@ checkCustomBounds <- function(boundList, expected_length = 4){
   }
 }
 
+#' Check year boundaries for errors
+#'
+#' This function inputs the boundary lists specified in
+#' \code{\link{gen_hw_set}}, \code{dataBoundaries} and
+#' \code{referenceBoundaries}, and checks them for errors in structure of the
+#' input or in the years selected.
+#'
+#' @param boundList Either FALSE, if user wishes to use the default
+#'    boundaries, or a set of boundary years in the format
+#'    c(historical period earliest year, historical period latest year,
+#'    future projection period earliest year, future projection period
+#'    latest year).
+checkCustomBounds2 <- function(boundList){
+
+        if(class(boundList) != "numeric"){
+                stop("All date boundaries must have the class `numeric`.")
+        }
+
+        if(boundList[1] > boundList[2]){
+                stop(paste("In date boundaries, the first value must equal",
+                           "or be lower than the second value."))
+        }
+
+        if(boundList[1] < 1980 | boundList[2] > 2099){
+                stop("Date boundaries must be within the years 1980 and 2099.")
+        }
+
+        if(boundList[1] < 2005){
+                if(boundList[2] >= 2005){
+                        stop(paste("Date boundaries cannot span between",
+                                   "the historical (1980-2004) and future",
+                                   "(2006-2099) periods."))
+                }
+        }
+}
+
 # TODO: It may be possible to make the accumulator system extremely robust.
 # Consider this possibility after all else is finished.
 

@@ -10,9 +10,6 @@ createHwDataframe(city = stop("Unspecified city"),
   custom)
 }
 \arguments{
-\item{city}{A numeric vector containing the city's ID, latitude, and
-longitude, in that order.}
-
 \item{threshold}{Numeric string with threshold percentile used in
 heatwave definition.}
 

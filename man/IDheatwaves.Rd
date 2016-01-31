@@ -4,17 +4,11 @@
 \alias{IDheatwaves}
 \title{Identify all heatwaves within a given city's time series}
 \usage{
-IDheatwaves(city, threshold, days = 2, datafr, global, custom)
+IDheatwaves(threshold, datafr, global, custom)
 }
 \arguments{
-\item{city}{A numeric vector containing the city's ID, latitude, and
-longitude, in that order.}
-
 \item{threshold}{Numeric string with threshold percentile used in
 heatwave definition.}
-
-\item{days}{Numeric string specifying minimum number of days required
-in heatwave definition.}
 
 \item{datafr}{A dataframe with daily temperature projections in the
 the community being processed. This dataframe must have two columns:
@@ -42,6 +36,9 @@ alternative upper and lower year boundaries for the reference period
 to be used when measuring all heatwave characteristics related to
 relative, rather than absolute, temperature, and the percentile
 threshold to use when defining heatwaves.}
+
+\item{days}{Numeric string specifying minimum number of days required
+in heatwave definition.}
 }
 \value{
 Returns the dataframe entered as \code{datafr}, but with new

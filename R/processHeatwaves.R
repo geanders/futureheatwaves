@@ -58,9 +58,7 @@ createCityProcessor <- function(global){
                                      ensembleSeries$series[,i])
 
                 # Identify all heatwaves for the given city
-                heatwaves <- IDheatwaves(city = city,
-                                         threshold = threshold,
-                                         days = 2,
+                heatwaves <- IDheatwaves(threshold = threshold,
                                          datafr = datafr,
                                          global = global,
                                          custom = custom)

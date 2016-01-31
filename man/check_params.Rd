@@ -5,8 +5,7 @@
 \title{Check for input parameter errors}
 \usage{
 check_params(out, dataFolder, citycsv, coordinateFilenames, tasFilenames,
-  timeFilenames, RorCPP, IDheatwavesReplacement, dataBoundaries,
-  referenceBoundaries)
+  timeFilenames, IDheatwavesReplacement, dataBoundaries, referenceBoundaries)
 }
 \arguments{
 \item{out}{Character string with pathway to directory to which
@@ -27,9 +26,6 @@ series data.}
 
 \item{timeFilenames}{Character string with name of the files containing the
 date information corresponding to the rows of the time series data.}
-
-\item{RorCPP}{0 /1 flag that indicates whether to use R (0) or
-C++ (1) function to identify heatwaves in the projections}
 
 \item{IDheatwavesReplacement}{Either FALSE, to use the default
 heatwave definition, or a user-specified custom function to
@@ -78,14 +74,13 @@ citycsv <- "inst/cities.csv"
 coordinateFilenames <- "latitude_longitude_NorthAmerica_12mo.csv"
 tasFilenames <- "tas_NorthAmerica_12mo.csv"
 timeFilenames <- "time_NorthAmerica_12mo.csv"
-RorCPP <- 1
 IDheatwavesReplacement <- FALSE
 dataBoundaries <- FALSE
 referenceBoundaries <- FALSE
 
 check_params(out, dataFolder, citycsv,
    coordinateFilenames, tasFilenames, timeFilenames,
-   RorCPP, IDheatwavesReplacement,
+   IDheatwavesReplacement,
    dataBoundaries, referenceBoundaries)
 }
 

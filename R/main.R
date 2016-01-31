@@ -27,8 +27,6 @@
 #'    series data.
 #' @param timeFilenames Character string with name of the files containing the
 #'    date information corresponding to the rows of the time series data.
-#' @param RorCPP 0 /1 flag that indicates whether to use R (0) or
-#'    C++ (1) function to identify heatwaves in the projections
 #' @param IDheatwavesReplacement Either FALSE, to use the default
 #'    heatwave definition, or a user-specified custom function to
 #'    use to identify heatwaves.
@@ -63,8 +61,7 @@ gen_hw_set <- function(out,
                        coordinateFilenames,
                        tasFilenames,
                        timeFilenames,
-                       RorCPP = 1,
-                       IDheatwavesReplacement = FALSE,
+                       IDheatwavesReplacement = "IDHeatwavesR",
                        dataBoundaries = FALSE,
                        referenceBoundaries = FALSE,
                        probThreshold = 0.98,
@@ -91,7 +88,6 @@ gen_hw_set <- function(out,
                      coordinateFilenames = coordinateFilenames,
                      tasFilenames = tasFilenames,
                      timeFilenames = timeFilenames,
-                     RorCPP = RorCPP,
                      IDheatwavesReplacement = IDheatwavesReplacement,
                      dataBoundaries = dataBoundaries,
                      referenceBoundaries = referenceBoundaries)
@@ -125,8 +121,7 @@ gen_hw_set <- function(out,
                        "cities" = cities,
                        "coordinateFilenames" = coordinateFilenames,
                        "tasFilenames" = tasFilenames,
-                       "timeFilenames" = timeFilenames,
-                       "RorCPP" = RorCPP)
+                       "timeFilenames" = timeFilenames)
 
         # Create the "custom" list object that will hold all of the user's
         # custom settings.
@@ -187,14 +182,13 @@ gen_hw_set <- function(out,
 #' coordinateFilenames <- "latitude_longitude_NorthAmerica_12mo.csv"
 #' tasFilenames <- "tas_NorthAmerica_12mo.csv"
 #' timeFilenames <- "time_NorthAmerica_12mo.csv"
-#' RorCPP <- 1
 #' IDheatwavesReplacement <- FALSE
 #' dataBoundaries <- FALSE
 #' referenceBoundaries <- FALSE
 #'
 #' check_params(out, dataFolder, citycsv,
 #'    coordinateFilenames, tasFilenames, timeFilenames,
-#'    RorCPP, IDheatwavesReplacement,
+#'    IDheatwavesReplacement,
 #'    dataBoundaries, referenceBoundaries)
 check_params <- function(out,
                          dataFolder,
@@ -202,7 +196,6 @@ check_params <- function(out,
                          coordinateFilenames,
                          tasFilenames,
                          timeFilenames,
-                         RorCPP,
                          IDheatwavesReplacement,
                          dataBoundaries,
                          referenceBoundaries){
@@ -227,12 +220,6 @@ check_params <- function(out,
                                    "(`citycsv`). Stopping."))
                 }
         )
-
-        # Check if the user has specified 1 or 0 for the RorCPP flag
-        if( RorCPP != 1 & RorCPP != 0){
-                stop(paste("Invalid RorCPP flag value. Must be 1 or 0.",
-                           "Stopping."))
-        }
 
         # Check 'Filenames' parameters for .csv extension.
         if(!grepl(".csv", coordinateFilenames)){

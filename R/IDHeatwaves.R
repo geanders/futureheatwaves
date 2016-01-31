@@ -21,72 +21,49 @@
 #'    (\code{hw.number}), and whether the day was the first day in a heatwave
 #'    (\code{first.hw.day}, 0 /1).
 #'
-IDheatwaves <- function(city, threshold, days = 2, datafr, global, custom){
-        # Initialize return value
-        hwdata <- c()
-        RorCPP <- global["RorCPP"]
+IDheatwaves <- function(threshold, datafr, global, custom){
 
-        # Check if user has specified their own replacement function for identifying heatwaves
-        if(!is.logical(custom["IDheatwaves"]) &
-           is.function(custom["IDheatwaves"][[1]]) == TRUE){
-                customidhw <- custom["IDheatwaves"][[1]]
-                tryCatch(
-                        hwdata <<- customidhw(city, threshold, days, datafr),
-                        error = function(){
-                                stop("Invalid function for identifying heatwaves specified. Exiting")
-                        },
-                        finally = {}
-                )
-        }
+        hwdata <- do.call(custom["IDheatwaves"][[1]],
+                          list(threshold = threshold,
+                               datafr = datafr))
 
-        # Acquire heatwave dataframe using the R or C++ functions
-        # R
-        else if(RorCPP == 0){
-                hwdata <- IDHeatwavesR(city, threshold, days, datafr)
-
-        # C++
-        } else if (RorCPP == 1){
-                # Add names to the dataframe
-                colnames(datafr) <- c("date", "tmpd")
-
-                # Find temperatures that exceed the threshold. One means the measurement equals or exceeds threshold.
-                tempsExceedingthreshold <- ifelse(datafr[,2] >= threshold, 1, 0)
-
-                # Add zero onto the end of the vector. The CPP routine needs this to work properly.
-                tempsExceedingthreshold <- c(tempsExceedingthreshold, 0)
-
-                # Identify heatwaves using the C++ functions.
-                heatwaves <- IDHeatwavesCPP(days, tempsExceedingthreshold)
-
-                # Attach heatwaves columns onto the data in the datafr variable
-                # Note that the final row, which contains zeroes as placeholders, is excluded.
-                hwdata <- data.frame(datafr, heatwaves[-(dim(heatwaves)[1]),])
-        }
         return(hwdata)
 }
 
 #' Identify heatwaves in a time series
 #'
-#' @param city ...
-#' @param threshold Numeric string with threshold percentile used in
-#'    heatwave definition.
-#' @param days Numeric string specifying minimum number of days required
-#'    in heatwave definition.
-#' @param datafr Dataframe with a time series of the daily temperatures in
-#'    the community being analyzed.
+#' @inheritParams closest_point
+#' @inheritParams IDheatwaves
 #'
 #' @return Returns the dataframe entered as \code{datafr}, but with new
-#'    columns providing heatwave identifiers.
-IDHeatwavesR <- function(city = stop("Error: unspecified city"),
-                         threshold = stop("Error: unspecified threshold"),
+#'    columns providing heatwave identifiers. The returned dataframe will
+#'    have new columns for whether a day was part of a heatwave (\code{hw},
+#'    0 / 1), if it was part of a heatwave, the number of the heatwave
+#'    (\code{hw.number}), and whether the day was the first day in a heatwave
+#'    (\code{first.hw.day}, 0 /1).
+#'
+#' @note There are a few cases near the edges of data frames when this function
+#'    would return that a day was not a heatwave when it was.First, if the first
+#'    day of the dataset is a heatwave because preceeding days exceeded the
+#'    threshold, but the second day in the dataframe is not above the threshold,
+#'    this function would not capture that the first day was a heatwaves.
+#'    Similar caveats apply to the last day in the dataframe. In northern
+#'    hemisphere communities, this should not be a concern when studying
+#'    heatwaves, as it is unlikely that Jan. 1 or Dec. 31 would qualify as
+#'    a heatwave in this part of the world. However, care should be taken
+#'    when using this function either with Southern Hemisphere communities
+#'    or when exploring exposures that, unlike heatwaves, may occur very
+#'    early or late in the calendar year.
+IDHeatwavesR <- function(threshold = stop("Error: unspecified threshold"),
                          days = 2,
                          datafr =  stop("Error: 'datafr' unspecified")){
 
         # Add names to the dataframe
         colnames(datafr) <- c("date", "tmpd")
 
-        # Find temperatures that exceed the threshold. One means the measurement equals or exceeds threshold.
-        tempsExceedingthreshold <- ifelse(datafr[,2] >= threshold, 1, 0)
+        # Find temperatures that exceed the threshold. One means the
+        # measurement equals or exceeds threshold.
+        tempsExceedingthreshold <- as.numeric(datafr[,2] >= threshold)
 
         # Add zero to end of vector so that the match function below
         tempsExceedingthreshold <- c(tempsExceedingthreshold, 0)
@@ -97,37 +74,49 @@ IDHeatwavesR <- function(city = stop("Error: unspecified city"),
         # Counter for heatwave number
         counter <- 1
 
-        # hwBound is used to extract a vector of data from the series to compare against heatwaveForm
+        # hwBound is used to extract a vector of data from the series to
+        # compare against heatwaveForm
         hwBound <- days - 1
 
         # Initialize dataframe containing the columns that will be added to datafr
-        hwInfo <- data.frame(hw = c(9), hw.number = c(9), first.hw.day = c(9))
+        # Initialize dataframe containing the columns that will be added to
+        # datafr
+        hwInfo <- data.frame(hw = c(9),
+                            hw.number = c(9),
+                            first.hw.day = c(9))
 
         # Current Index
         i <- 1
 
         # Identify all heatwaves for the city
-        while (i <= length(datafr[,2])) {
-                if(identical( tempsExceedingthreshold[i: (i + hwBound)], heatwaveForm)){ # Check if there is a heatwave starting at i
-                        size <- match(0, tempsExceedingthreshold[-(1:i)]) # Acquire size of heatwave
+        while (i <= nrow(datafr)) {
+                # Check if there is a heatwave starting at i
+                # If so, acquire size of heatwave
+                if(identical(tempsExceedingthreshold[i: (i + hwBound)],
+                              heatwaveForm)){
+                        size <- match(0, tempsExceedingthreshold[-(1:i)])
 
                         # Store all desired information about this heatwave
                         hwInfo <- data.frame(hw = c(hwInfo[,1], rep(1, size)),
-                                             hw.number = c(hwInfo[,2], rep(counter, size)),
-                                             first.hw.day = c(hwInfo[,3], 1, rep(0, size - 1)))
+                                             hw.number = c(hwInfo[,2],
+                                                           rep(counter, size)),
+                                             first.hw.day = c(hwInfo[,3], 1,
+                                                              rep(0, size - 1)))
 
-                        counter <- counter + 1 # Increment counter for heatwave number
-                        i <- i + size # Advance i to next position after heatwave
+                        # Increment and advance
+                        counter <- counter + 1
+                        i <- i + size
                 } else {
-                        # If no heatwave at i, then add zeros to the end of the dataframe
-                        hwInfo <- data.frame(hw = c(hwInfo[,1], 0),
-                                             hw.number = c(hwInfo[,2], 0),
-                                             first.hw.day = c(hwInfo[,3], 0))
+                        # If no heatwave at i, then add zeros to the end of
+                        # the dataframe
+                        hwInfo <- rbind(hwInfo, c(0, 0, 0))
                         i <- i + 1
                 }
         }
 
-        return(data.frame(datafr, hwInfo[-1,])) # Combine the original dataframe with the heatwave characteristics matrix. Notice the placeholder row is excluded.
+        # Combine the original dataframe with the heatwave characteristics
+        # matrix. Notice the placeholder row is excluded.
+        return(data.frame(datafr, hwInfo[-1,]))
 }
 
 #' Identify heatwaves with alternative definition
@@ -136,16 +125,16 @@ IDHeatwavesR <- function(city = stop("Error: unspecified city"),
 #'
 #' @return Returns the dataframe entered as \code{datafr}, but with new
 #'    columns providing heatwave identifiers.
-IDHeatwavesAlternative <- function(city = stop("Error: unspecified city"),
-                           threshold = stop("Error: unspecified threshold"),
-                           days = 1,
+IDHeatwavesAlternative <- function(threshold = stop("Error: unspecified threshold"),
+                           days = 5,
                            datafr =  stop("Error: 'datafr' unspecified")){
 
         # Add names to the dataframe
         colnames(datafr) <- c("date", "tmpd")
 
-        # Find temperatures that exceed the threshold. One means the measurement equals or exceeds threshold.
-        tempsExceedingthreshold <- ifelse(datafr[,2] >= threshold, 1, 0)
+        # Find temperatures that exceed the threshold. One means the
+        # measurement equals or exceeds threshold.
+        tempsExceedingthreshold <- as.numeric(datafr[,2] >= threshold)
 
         # Add zero to end of vector so that the match function below
         tempsExceedingthreshold <- c(tempsExceedingthreshold, 0)
@@ -156,36 +145,68 @@ IDHeatwavesAlternative <- function(city = stop("Error: unspecified city"),
         # Counter for heatwave number
         counter <- 1
 
-        # hwBound is used to extract a vector of data from the series to compare against heatwaveForm
+        # hwBound is used to extract a vector of data from the series to
+        # compare against heatwaveForm
         hwBound <- days - 1
 
-        # Initialize dataframe containing the columns that will be added to datafr
-        hwInfo <- data.frame(hw = c(9), hw.number = c(9), first.hw.day = c(9))
+        # Initialize dataframe containing the columns that will be added to
+        # datafr
+        hwInfo <- data.frame(hw = c(9),
+                             hw.number = c(9),
+                             first.hw.day = c(9))
 
         # Current Index
         i <- 1
 
         # Identify all heatwaves for the city
         while (i <= length(datafr[,2])) {
-                if(identical( tempsExceedingthreshold[i: (i + hwBound)], heatwaveForm)){ # Check if there is a heatwave starting at i
-                        size <- match(0, tempsExceedingthreshold[-(1:i)]) # Acquire size of heatwave
+                # Check if there is a heatwave starting at i
+                if(identical(tempsExceedingthreshold[i: (i + hwBound)],
+                              heatwaveForm)){
+                        # Acquire size of heatwave
+                        size <- match(0, tempsExceedingthreshold[-(1:i)])
 
                         # Store all desired information about this heatwave
                         hwInfo <- data.frame(hw = c(hwInfo[,1], rep(1, size)),
-                                             hw.number = c(hwInfo[,2], rep(counter, size)),
-                                             first.hw.day = c(hwInfo[,3], 1, rep(0, size - 1)))
+                                             hw.number = c(hwInfo[,2],
+                                                           rep(counter, size)),
+                                             first.hw.day = c(hwInfo[,3], 1,
+                                                              rep(0, size - 1)))
 
-                        counter <- counter + 1 # Increment counter for heatwave number
-                        i <- i + size # Advance i to next position after heatwave
+                        # Increment counter for heatwave number
+                        # Advance i to next position after heatwave
+                        counter <- counter + 1
+                        i <- i + size
                 } else {
-                        # If no heatwave at i, then add zeros to the end of the dataframe
-                        hwInfo <- data.frame(hw = c(hwInfo[,1], 0),
-                                             hw.number = c(hwInfo[,2], 0),
-                                             first.hw.day = c(hwInfo[,3], 0))
+                        # If no heatwave at i, then add zeros to the end of the
+                        # dataframe
+                        hwInfo <- rbind(hwInfo, c(0, 0, 0))
                         i <- i + 1
                 }
         }
 
-        return(data.frame(datafr, hwInfo[-1,])) # Combine the original dataframe with the heatwave characteristics matrix. Notice the placeholder row is excluded.
+        # Combine the original dataframe with the heatwave characteristics
+        # matrix. Notice the placeholder row is excluded.
+        return(data.frame(datafr, hwInfo[-1,]))
 }
 
+IDHeatwavesCPPwrapper <- function(datafr, threshold){
+        colnames(datafr) <- c("date", "tmpd")
+
+        # Find temperatures that exceed the threshold. One means the
+        # measurement equals or exceeds threshold.
+        tempsExceedingthreshold <- as.numeric(datafr[ , 2] >= threshold)
+
+        # Add zero onto the end of the vector. The CPP routine needs
+        # this to work properly.
+        tempsExceedingthreshold <- c(tempsExceedingthreshold, 0)
+
+        # Identify heatwaves using the C++ functions.
+        heatwaves <- IDHeatwavesCPP(days, tempsExceedingthreshold)
+
+        # Attach heatwaves columns onto the data in the datafr
+        # variable. Note that the final row, which contains zeroes as
+        # placeholders, is excluded.
+        hwdata <- data.frame(datafr, heatwaves[-(dim(heatwaves)[1]),])
+        return(hwdata)
+}

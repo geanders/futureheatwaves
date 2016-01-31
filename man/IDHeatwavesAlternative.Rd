@@ -4,14 +4,10 @@
 \alias{IDHeatwavesAlternative}
 \title{Identify heatwaves with alternative definition}
 \usage{
-IDHeatwavesAlternative(city = stop("Error: unspecified city"),
-  threshold = stop("Error: unspecified threshold"), days = 1,
-  datafr = stop("Error: 'datafr' unspecified"))
+IDHeatwavesAlternative(threshold = stop("Error: unspecified threshold"),
+  days = 5, datafr = stop("Error: 'datafr' unspecified"))
 }
 \arguments{
-\item{city}{A numeric vector containing the city's ID, latitude, and
-longitude, in that order.}
-
 \item{threshold}{Numeric string with threshold percentile used in
 heatwave definition.}
 

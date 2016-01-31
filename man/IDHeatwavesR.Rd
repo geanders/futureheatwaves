@@ -4,14 +4,10 @@
 \alias{IDHeatwavesR}
 \title{Identify heatwaves in a time series}
 \usage{
-IDHeatwavesR(city = stop("Error: unspecified city"),
-  threshold = stop("Error: unspecified threshold"), days = 2,
+IDHeatwavesR(threshold = stop("Error: unspecified threshold"), days = 2,
   datafr = stop("Error: 'datafr' unspecified"))
 }
 \arguments{
-\item{city}{A numeric vector containing the city's ID, latitude, and
-longitude, in that order.}
-
 \item{threshold}{Numeric string with threshold percentile used in
 heatwave definition.}
 

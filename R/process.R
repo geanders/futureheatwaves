@@ -53,15 +53,21 @@ processModel <- function(model, global, custom, accumulators){
         histens <- model[[2]]
         rcpens <- model[[3]]
 
-        # Get reference period if one exists
-        reference <- custom["processModel"] # referenceBoundaries argument
-                                            # from `gen_hw_set`
+        # Add entry to the modelInfoAccumulator
+        accumulators(command = "append model information",
+                     newElement = data.frame(modelName,
+                                             length(histens),
+                                             length(rcpens)))
 
         # Acquire vector of threshold temperatures using the historical
         # ensemble for this model which possesses the name r1i1p1
-        ret <- processThresholds(model, global, custom, reference)
-        thresholds <- ret[[1]]
-        reference <- ret[[2]]
+        thresholds <- processThresholds(model, global, custom)
+
+        # If reference period differs from projection period, get data
+        # for reference period
+        if(custom$createHwDataframe){
+                reference <- processReference(model, global, custom)
+        }
 
         # Process the projection data
 
@@ -80,17 +86,15 @@ processModel <- function(model, global, custom, accumulators){
                                ensembleWriter = createEnsembleWriter(modelName,
                                                                      global,
                                                                      custom),
-                               thresholds = thresholds,
                                global = global,
                                custom = custom,
-                               accumulators = accumulators,
-                               reference = reference)
+                               thresholds = thresholds,
+                               accumulators = accumulators)
 
-        # Add entry to the modelInfoAccumulator
-        accumulators(command = "append model information",
-                     newElement = data.frame(modelName,
-                                             length(histens),
-                                             length(rcpens)))
+        rcpEnsembles$thresholds <- thresholds
+        rcpEnsembles$reference <- ifelse(custom$createHwDataframe,
+                                         reference,
+                                         FALSE)
 
         return(rcpEnsembles)
 }
@@ -122,19 +126,12 @@ processModel <- function(model, global, custom, accumulators){
 #'    \code{\link{gen_hw_set}} and otherwise is ... .
 #'    This function also writes threshold temperatures to files within
 #'    the user-specified output directory for future reference.
-processThreshold <- function(model, global, custom, reference = FALSE){
+processThresholds <- function(model, global, custom){
         name <- model[[1]]
-
-        # Determine relevant experiment for thresholds
-        if(custom$getBounds[1] < 2005){
-                experiment <- "historical"
-        } else {
-                experiment <- "rcp"
-        }
 
         # To find the threshold, use the first ensemble member within
         # the relevant directory, historical or rcp
-        if(experiment == "historical"){
+        if(custom$getBounds[1] < 2005){
                 thresholdDirs <- model[[2]][1][[1]]
         } else {
                 thresholdDirs <- model[[3]][1][[1]]
@@ -144,26 +141,45 @@ processThreshold <- function(model, global, custom, reference = FALSE){
 
         # Acquire characteristics of the first historical ensemble
         thresholdEnsemble <- processEnsemble(ensemble = thresholdDirs,
-                                              experiment = experiment,
                                               modelName = name,
                                               global = global,
                                               custom = custom,
-                                              reference = reference)
+                                              type = "threshold")
 
         # Calculate threshold temperatures using the user-specified
         # threshold percentile (default: 0.98)
         thresholds <- apply(thresholdEnsemble$series, 2, quantile,
                             probs = custom$probThreshold)
 
-        # Acquire the reference series. Will be false if reference period
-        # unspecified
-        reference_series <- historicalEnsemble$reference
-
         # Save thresholds to file
         writeThresholds(name, 'thresholds', thresholds, global, custom)
 
-        ret <- list(thresholds, reference_series)
-        return(ret)
+        return(thresholds)
+}
+
+processReference <- function(model, global, custom){
+        name <- model[[1]]
+
+        # To find the threshold, use the first ensemble member within
+        # the relevant directory, historical or rcp
+        if(custom$processModel[1] < 2005){
+                referenceDirs <- model[[2]][1][[1]]
+        } else {
+                referenceDirs <- model[[3]][1][[1]]
+        }
+
+        cat("Processing references for", name, "\n")
+
+        # Acquire characteristics of the first historical ensemble
+        referenceEnsemble <- processEnsemble(ensemble = referenceDirs,
+                                             modelName = name,
+                                             global = global,
+                                             custom = custom,
+                                             type = "reference")
+
+        reference <- referenceEnsemble$series
+
+        return(reference)
 }
 
 #' Create heatwave dataframe for climate projection
@@ -188,24 +204,17 @@ processThreshold <- function(model, global, custom, reference = FALSE){
 #'
 #' @return Write every heatwave dataframe to a .csv and return the ensemble
 #'    used as the reference.
-processProjections <- function(ensemble, modelName, ensembleWriter, thresholds,
-                       global, custom, accumulators, reference = FALSE){
+processProjections <- function(ensemble, modelName, ensembleWriter,
+                               thresholds, global, custom, accumulators,
+                               reference = FALSE){
         cat("Processing projections for ", modelName, "\n")
 
-        # Determine if `experiment` is `historical` or `rcp85`
-        if(custom$getBounds[3] < 2005){
-                experiment <- "historical"
-        } else {
-                experiment <- "rcp"
-        }
-
-        # Acquire desired characteristics of the RCP 8.5 ensembles
+        # Acquire desired characteristics of the projection ensemble
         ensembleSeries <- processEnsemble(ensemble = ensemble,
-                                    experiment = experiment,
                                     modelName = modelName,
                                     global = global,
                                     custom = custom,
-                                    reference = reference)
+                                    type = "projections")
 
         # Append locations vector to the locations vector accumulator
         accumulators("append location list", ensembleSeries$locations)
@@ -221,7 +230,7 @@ processProjections <- function(ensemble, modelName, ensembleWriter, thresholds,
         ensembleWriter(hwFrame)
 
         # Return the ensemble used as the reference
-        return(ensemble)
+        return(ensembleSeries)
 }
 
 #' Extract projections from ensemble member
@@ -265,8 +274,7 @@ processProjections <- function(ensemble, modelName, ensembleWriter, thresholds,
 #'    theorem to calculate the distance between each community given in the
 #'    \code{citycsv} file and the nearest grid point for the climate model
 #'    for the specified ensemble member.
-processEnsemble <- function(ensemble, experiment, modelName, global,
-                            custom, reference){
+processEnsemble <- function(ensemble, modelName, global, custom, type){
 
         # Read the ensemble data
         cat("Reading --->", ensemble[1], "\n")
@@ -282,23 +290,10 @@ processEnsemble <- function(ensemble, experiment, modelName, global,
         # Structure: c(start index, end index, # of elements spanning
         # from start to end)
         bounds <- getBounds(times = times,
-                            experiment = experiment,
-                            custom = custom)
+                            custom = custom,
+                            type = type)
         start <- bounds[1]
         end <- bounds[2]
-
-        #         if(debug){
-        #                 print("Process Ensemble Bounds: ")
-        #                 cat("start: ", start, "\n")
-        #                 cat("end: ", end, "\n")
-        #         }
-
-        subCustom <- list("IDheatwaves" = FALSE,
-                          "getBounds" = reference,
-                          "processModel" = FALSE,
-                          "createHwDataframe" = FALSE)
-        # Get a vector containing the dates of days we are dealing with
-        dates <- formDates(times, bounds)
 
         # Acquire time series for every city
         series <- data.frame(tas[start:end, locations])
@@ -308,25 +303,12 @@ processEnsemble <- function(ensemble, experiment, modelName, global,
                 return((element * 9/5) - 459.67)
         })
 
-        # CUSTOM BLOCK
-        # Extract and store the reference period data
-        if(reference != FALSE && length(reference) != 1){
-                rbounds <- getBounds(times = times,
-                                     experiment = experiment,
-                                     custom = subCustom)
-                reference <- data.frame(tas[rbounds[1]:rbounds[2], locations])
-                reference <- apply(reference, 1:2, function(element){
-                        return((element * 9/5) - 459.67)
-                })
-        }
-
         # Prepare return value
         ret <- list(locations = locations,
                     bounds = bounds,
                     series = series,
                     times = times,
-                    dates = dates,
-                    reference = reference)
+                    dates = dates)
         return(ret)
 }
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/processHeatwaves.R
 \name{formHwFrame}
 \alias{formHwFrame}
-\title{Create heatwave dataframe for the given ensemble}
+\title{Create heatwave dataframe for an ensemble}
 \usage{
 formHwFrame(ensembleSeries, thresholds, global, custom)
 }
@@ -39,8 +39,57 @@ threshold to use when defining heatwaves.}
 \value{
 The combined dataframe of identified and characterized heatwaves for
    selected projection date range for all communities specified by the user.
+   This dataframe includes the following columns: \code{hw.number}: A
+   sequential number identifying each heatwave in each community;
+   \code{mean.temp}: Average of mean daily temperature across all
+   days in the heatwave; \code{max.temp}: Highest value of mean daily
+   temperature across days in the heatwave; \code{min.temp}: Lowest
+   value of mean daily temperature across days in the heatwave;
+   \code{length}: Number of days in the heatwave; \code{start.date}:
+   Date of the first day of the heatwave; \code{end.date}: Date of the
+   last day of the heatwave; \code{start.doy}: Numeric day of the year
+   of the first day of the heatwave (1 = Jan. 1, etc.); \code{start.month}:
+   Numeric value indicating the month in which the heatwave started (1 =
+   January); \code{days.above.80}: Number of days in the heatwave above
+   80 degrees Fahrenheit; \code{days.above.85}: Number of days in the
+   heatwave above 85 degrees Fahrenheit; \code{days.above.90}: Number of
+   days in the heatwave above 90 degrees Fahrenheit; \code{days.above.95}:
+   Number of days in the heatwave above 90 degrees Fahrenheit;
+   \code{days.above.99th}:Number of days in the heatwave above the 99th
+   percentile temperature for the community, using the period specified
+   by the user with the \code{referenceBoundaries} argument in
+   \code{\link{gen_hw_set}} as a reference for determining these percentiles;
+   \code{days.above.99.5th}:Number of days in the heatwave above the 99.5th
+   percentile temperature for the community; \code{first.in.season}:
+   Whether the heatwave was the first to occur in its season (as determined
+   by whether the heatwave was the first in its calendar year);
+   \code{threshold.temp}: The temperature used as the threshold for the
+   heatwave definition in the selected community; \code{mean.temp.quantile}:
+   The percentile of the average daily mean temperature during the heatwave
+   compared to the community's year-round temperature distribution, based on
+   the temperatures for the community during the period specified by the
+   \code{referenceBoundaries} argument in \code{\link{gen_hw_set}};
+   \code{max.temp.quantile}: The percentile of the highest daily mean
+   temperature during the heatwave compared to the community's year-round
+   temperature distribution; \code{min.temp.quantile}: The percentile of
+   the lowest daily mean temperature during the heatwave compared to the
+   community's year-round temperature distribution; \code{mean.temp.1}:
+   The community's average year-round temperature, based on the
+   temperatures for the community during the period specified by the
+   \code{referenceBoundaries} argument in \code{\link{gen_hw_set}};
+   \code{mean.summer.temp}: The community's average May--September
+   temperature, based on the temperatures for the community during the
+   period specified by the \code{referenceBoundaries} argument in
+   \code{\link{gen_hw_set}}; and \code{city}: The identifier for the
+   community, as given in the file specified in the \code{citycsv}
+   argument of \code{\link{gen_hw_set}}.
 }
 \description{
-Create heatwave dataframe for the given ensemble
+This function takes inputs, from \code{\link{processProjections}}, on the
+projection data for an ensemble, the thresholds for communities for the
+ensemble, and \code{global} and \code{custom} objects with user
+specifications. Using these inputs, the function creates a dataframe with
+the heatwaves identified in the selected projections as well as
+characteristics of all the heatwaves.
 }
 

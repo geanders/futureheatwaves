@@ -2,7 +2,7 @@
 % Please edit documentation in R/IO.R
 \name{writeAccumulator}
 \alias{writeAccumulator}
-\title{Write out model information}
+\title{Write model information to file}
 \usage{
 writeAccumulator(modelInfoAccumulator, global)
 }
@@ -18,8 +18,12 @@ format for the filenames of the coordinate, tas, and time files in the
 ensemble-specific subdirectories of the projection directory input by
 the user.}
 }
+\value{
+...
+}
 \description{
-Output the variable that accumulates information on the models and
-ensemble counts
+This function writes out a dataframe that accumulates information on all
+climate models included in the analysis, including the number of
+historical (1980--2004) and future (2006--2099) ensemble members.
 }
 

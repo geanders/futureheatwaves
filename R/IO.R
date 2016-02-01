@@ -143,14 +143,17 @@ createEnsembleWriter <- function(modelName, global, custom){
         }
 }
 
-#' Write out model information
+#' Write model information to file
 #'
-#' Output the variable that accumulates information on the models and
-#' ensemble counts
+#' This function writes out a dataframe that accumulates information on all
+#' climate models included in the analysis, including the number of
+#' historical (1980--2004) and future (2006--2099) ensemble members.
 #'
 #' @param modelInfoAccumulator The dataframe that accumulates the number of
 #'    ensembles for each model.
 #' @inheritParams processModel
+#'
+#' @return ...
 writeAccumulator <- function(modelInfoAccumulator, global){
         colnames(modelInfoAccumulator)[1] <- "Models"
         colnames(modelInfoAccumulator)[2] <- "# of historical ensembles"

@@ -166,8 +166,6 @@ gen_hw_set <- function(out,
         out <- accumulators("return model information")
         writeAccumulator(accumulators("return model information"), global)
 
-        # Make the map
-        # makeMap(accumulators("return locations"), cities)
         cat("All operations completed. Exiting.", "\n\n")
         return(out)
 }
@@ -223,7 +221,6 @@ check_params <- function(out,
                          projectionBoundaries,
                          referenceBoundaries){
 
-        # TODO: ERROR CHECKING!!!!!!!!
         # Check to see if the folder that holds the climate data exists.
         tryCatch(
                 dir.exists(dataFolder),

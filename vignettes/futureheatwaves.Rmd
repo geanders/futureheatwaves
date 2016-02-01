@@ -1,6 +1,6 @@
 ---
 title: "`futureheatwaves` package vignette"
-author: "G. Brooke Anderson and Colin Eason"
+author: "G. Brooke Anderson, Colin Eason, and Elizabeth Barnes"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
@@ -18,6 +18,8 @@ library(futureheatwaves)
 The `futureheatwaves` package can process climate data files that you have stored locally to generate a list of heatwaves in each projection as well as characteristics of each heatwave (e.g., length, intensity, timing in the year). The package generates community-specific dataframes based on an input file listing each community and its latitude and longitude. Files with the heatwaves identified and characterized under each ensemble member of each climate model are output as files in a directory specified by the user.
 
 ## A basic example of using the package
+
+### Required files and directory set-up
 
 For these functions to work correctly, you must have the climate projections saved in a specific structure locally on your computer. An example of a directory with the required set-up is given as the `cmip5` directory in the `inst` directory of this package.
 
@@ -56,6 +58,8 @@ out <- "~/tmp/example_results/"
 ```
 
 These selections will be sufficient to run the main function of this package, `gen_hw_set`, using a basic example with default values for things like the heatwave definition, years for which to generate the heatwave datasets (default is 2061--2080), and years to use as a reference for the relative temperature characteristics measured for the heatwaves (default is ...).
+
+### Running the code to generate heatwave datasets
 
 Once you have specified these values, you can create files with future heatwaves and their characteristics using the following code:
 
@@ -105,6 +109,39 @@ The function provides status reports on its progress in generating the heatwave 
 
 Once the function has completed running, you will have two new subdirectories in the directory you specified with the `out` variable. These will be called `Heatwaves` and `Thresholds`. The `Heatwaves` directory will contain dataframes with all identified heatwaves and their characteristics for each city, while the `Thresholds` folder will contain files with the temperature thresholds used for each city given. The `out` directory specified will also have a file called `hwModelInfo.csv` that contains some basic information about the climate models and the number of ensemble members included for each.
 
+### Applying functions to the heatwave datasets
+
+Once you have created a directory of files with characterized heatwaves for each ensemble member, ...
+
+## Using custom options
+
+### Using a custom heatwave definition
+
+The default is for this package to use the following definition to identify heatwaves: 
+
+> A heatwave is two or more days at or above a community-specific threshold temperature, with the threshold determined as the $98^{th}$ percentile of year-round temperature in the community during some reference period (by default, 1981--2004).
+
+Two components of this definition can be customized directly. 
+
+First, the percentile used to identify a heatwave can be changed using the `probThreshold` option when calling the `gen_hw_set` function. This option can take values between 0 and 1. The default value is 0.98, or a definition with a threshold of the $98^{th}$ percentile of the community's temperature.
+
+Second, it is possible to specify the range of years of data for the community that should be used when determining this threshold. For example, if you wanted to base the threshold for each community on current community climates, you could leave this option as its default, which uses climate projections from the years 1981 to 2004 to determine the thresholds. If you wanted to use a different set of years, you could set the start and end year
+bounds for this reference period within the first two values of the option `dataBoundaries` in the function `gen_hw_set`.
+
+It is also possible to use a completely customized heatwave definition. To do this, you will need to load a function, implementing the definition to identify heatwaves in a time series of temperature data, into your R session. You can then reference the custom function using the `IDheatwavesReplacement` option in `gen_hw_set`.
+
+To work correctly, this custom function for identifying heatwaves must allow specific inputs and generate specific outputs. The function must allow the following inputs (even if it does not use them within the function code):
+
+...
+
+The function most generate the following output: 
+
+...
+
+### Customizing projection dates
+
+By default, the function will generate heatwave projections for the selected communities for the years 2061 to 2080. This projection date range can be changed by specifying alternative starting and ending years as the third and fourth values of the `dataBoundaries` option in the `gen_hw_set` function. The starting year cannot be earlier than 2006 and the ending year cannot be later than 2099.
+
 ## Example data
 
 We used, as an example, data from the Beijing Climate Center, China Meteorological Administration model projections included in CMIP5. See: [this link](http://cmip-pcmdi.llnl.gov/cmip5/availability.html). 
@@ -141,36 +178,6 @@ my_file <- paste0(my_dir, "/",
 tas2 <- read.csv(my_file, header = FALSE)
 head(tas2, 4)
 ```
-
-
-## Using custom options
-
-### Using a custom heatwave definition
-
-The default is for this package to use the following definition to identify heatwaves: 
-
-> A heatwave is two or more days at or above a community-specific threshold temperature, with the threshold determined as the $98^{th}$ percentile of year-round temperature in the community during some reference period (by default, 1981--2004).
-
-Two components of this definition can be customized directly. 
-
-First, the percentile used to identify a heatwave can be changed using the `probThreshold` option when calling the `gen_hw_set` function. This option can take values between 0 and 1. The default value is 0.98, or a definition with a threshold of the $98^{th}$ percentile of the community's temperature.
-
-Second, it is possible to specify the range of years of data for the community that should be used when determining this threshold. For example, if you wanted to base the threshold for each community on current community climates, you could leave this option as its default, which uses climate projections from the years 1981 to 2004 to determine the thresholds. If you wanted to use a different set of years, you could set the start and end year
-bounds for this reference period within the first two values of the option `dataBoundaries` in the function `gen_hw_set`.
-
-It is also possible to use a completely customized heatwave definition. To do this, you will need to load a function, implementing the definition to identify heatwaves in a time series of temperature data, into your R session. You can then reference the custom function using the `IDheatwavesReplacement` option in `gen_hw_set`.
-
-To work correctly, this custom function for identifying heatwaves must allow specific inputs and generate specific outputs. The function must allow the following inputs (even if it does not use them within the function code):
-
-...
-
-The function most generate the following output: 
-
-...
-
-### Customizing projection dates
-
-By default, the function will generate heatwave projections for the selected communities for the years 2061 to 2080. This projection date range can be changed by specifying alternative starting and ending years as the third and fourth values of the `dataBoundaries` option in the `gen_hw_set` function. The starting year cannot be earlier than 2006 and the ending year cannot be later than 2099.
 
 ## How it works
 
@@ -209,4 +216,28 @@ All climate projection data for the grid point closest to each community is pull
 
 These community-specific thresholds are then passed through to later calls in the function, where they are used to identify heatwaves in a time series of climate projection data. 
 
-### Creating ensemble-member specific projections
+### Identifying heatwaves in an ensemble member's projection data
+
+...
+
+### Characterizing heatwaves
+
+...
+
+### Writing out results to the user's local computer
+
+...
+
+### Applying user-specified functions across all heatwave datasets
+
+...
+
+## Caveats
+
+- Heatwaves near the start / end of the dataset
+- Downscaling
+
+## Possible future developments
+
+- Allowing netCDF for input files
+- Allowing to specify exact date for boundaries, not year (would allow easier use for southern hemisphere-- reduce problems with "edge-case" heatwaves)

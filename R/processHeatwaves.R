@@ -109,25 +109,31 @@ consolidate <- function(hwDataframeList){
 #' @return Result is a dataframe where each row represents a heatwave.
 #'
 #' @importFrom dplyr %>%
-createHwDataframe <- function(city = stop("Unspecified city"),
-                              threshold = stop("Unspecified threshold"),
-                              heatwaves = stop("'heatwaves' unspecified"),
+createHwDataframe <- function(city, threshold, heatwaves,
                               ensembleSeries, i, global, custom){
         hold <<- heatwaves
 
         intermediate <- heatwaves
         heatwaves2 <- subset(intermediate, hw == 1)
 
-        if(custom["createHwDataframe"] != FALSE){
-                datafr <- data.frame(ensembleSeries$dates,
-                                     ensembleSeries$reference[,i])
-                heatwaves <- IDheatwaves(city = city,
-                                         threshold = threshold,
-                                         days = 2,
-                                         datafr = datafr,
-                                         global = global,
-                                         custom = custom)
+        if(custom["createHwDataframe"][[1]]){
+                ref_temps <- ensembleSeries$reference[ , i]
+                ref_dates <- ensembleSeries$reference_dates
+        } else {
+                ref_temps <- ensembleSeries$series[ , i]
+                ref_dates <- ensembleSeries$dates
         }
+
+#         if(custom["createHwDataframe"] != FALSE){
+#                 datafr <- data.frame(ensembleSeries$dates,
+#                                      ensembleSeries$reference[,i])
+#                 heatwaves <- IDheatwaves(city = city,
+#                                          threshold = threshold,
+#                                          days = 2,
+#                                          datafr = datafr,
+#                                          global = global,
+#                                          custom = custom)
+#         }
 
         bloodhound <<- heatwaves2
         bark <<- heatwaves
@@ -146,10 +152,10 @@ createHwDataframe <- function(city = stop("Unspecified city"),
                                  days.above.90 = length(date[tmpd > 90]),
                                  days.above.95 = length(date[tmpd > 95]),
                                  days.above.99th = length(date[tmpd >
-                                                quantile(heatwaves$tmpd, .99,
+                                                quantile(ref_temps, .99,
                                                          na.rm = TRUE)]),
                                  days.above.99.5th = length(date[tmpd >
-                                                quantile(heatwaves$tmpd, .995,
+                                                quantile(ref_temps, .995,
                                                          na.rm = TRUE)]))
 
         hw.frame$first.in.season <- c(1, rep(NA, nrow(hw.frame) - 1))
@@ -162,16 +168,17 @@ createHwDataframe <- function(city = stop("Unspecified city"),
                 }
         }
 
-        hw.frame$"98th.temp" <- threshold
+        hw.frame$threshold <- threshold
 
-        dist.tmpd <- ecdf(heatwaves$tmpd)
+        dist.tmpd <- ecdf(ref_temps)
         hw.frame$mean.temp.quantile <- dist.tmpd(hw.frame$mean.temp)
         hw.frame$max.temp.quantile <- dist.tmpd(hw.frame$max.temp)
         hw.frame$min.temp.quantile <- dist.tmpd(hw.frame$min.temp)
 
-        hw.frame$mean.temp.1 <- mean(heatwaves$tmpd)
-        summertime <- as.POSIXlt(heatwaves$date)$mon %in% c(4:8)
-        hw.frame$mean.summer.temp <- mean(heatwaves$tmpd[summertime])
+        hw.frame$mean.temp.1 <- mean(ref_temps)
+        # Summertime is months May through September
+        summertime <- as.POSIXlt(ref_dates)$mon %in% c(4:8)
+        hw.frame$mean.summer.temp <- mean(ref_temps[summertime])
 
         hw.frame$city <- city
 

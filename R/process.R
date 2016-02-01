@@ -65,8 +65,13 @@ processModel <- function(model, global, custom, accumulators){
 
         # If reference period differs from projection period, get data
         # for reference period
-        if(custom$createHwDataframe){
-                reference <- processReference(model, global, custom)
+        if(custom$createHwDataframe[[1]]){
+                referenceEnsemble <- processReference(model, global, custom)
+                reference <- referenceEnsemble$series
+                reference_dates <- referenceEnsemble$dates
+        } else {
+                reference <- FALSE
+                reference_dates <- FALSE
         }
 
         # Process the projection data
@@ -89,12 +94,9 @@ processModel <- function(model, global, custom, accumulators){
                                global = global,
                                custom = custom,
                                thresholds = thresholds,
-                               accumulators = accumulators)
-
-        projectionEnsembles$thresholds <- thresholds
-        projectionEnsembles$reference <- ifelse(custom$createHwDataframe,
-                                         reference,
-                                         FALSE)
+                               accumulators = accumulators,
+                               reference = reference,
+                               reference_dates = reference_dates)
 
         return(projectionEnsembles)
 }
@@ -177,9 +179,7 @@ processReference <- function(model, global, custom){
                                              custom = custom,
                                              type = "reference")
 
-        reference <- referenceEnsemble$series
-
-        return(reference)
+        return(referenceEnsemble)
 }
 
 #' Create heatwave dataframe for climate projection
@@ -206,7 +206,8 @@ processReference <- function(model, global, custom){
 #'    used as the reference.
 processProjections <- function(ensemble, modelName, ensembleWriter,
                                thresholds, global, custom, accumulators,
-                               reference = FALSE){
+                               reference = reference,
+                               reference_dates = reference_dates){
         cat("Processing projections for ", modelName, "\n")
 
         # Acquire desired characteristics of the projection ensemble
@@ -215,6 +216,9 @@ processProjections <- function(ensemble, modelName, ensembleWriter,
                                     global = global,
                                     custom = custom,
                                     type = "projections")
+
+        ensembleSeries$reference <- reference
+        ensembleSeries$reference_dates <- reference_dates
 
         # Append locations vector to the locations vector accumulator
         accumulators("append location list", ensembleSeries$locations)

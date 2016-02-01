@@ -4,10 +4,7 @@
 \alias{createHwDataframe}
 \title{Characterize heatwaves}
 \usage{
-createHwDataframe(city = stop("Unspecified city"),
-  threshold = stop("Unspecified threshold"),
-  heatwaves = stop("'heatwaves' unspecified"), ensembleSeries, i, global,
-  custom)
+createHwDataframe(city, threshold, heatwaves, ensembleSeries, i, global, custom)
 }
 \arguments{
 \item{threshold}{Numeric string with threshold percentile used in

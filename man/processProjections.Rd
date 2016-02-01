@@ -5,7 +5,8 @@
 \title{Create heatwave dataframe for climate projection}
 \usage{
 processProjections(ensemble, modelName, ensembleWriter, thresholds, global,
-  custom, accumulators, reference = FALSE)
+  custom, accumulators, reference = reference,
+  reference_dates = reference_dates)
 }
 \arguments{
 \item{ensemble}{List with parsed information about the directory structure for

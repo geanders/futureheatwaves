@@ -2,7 +2,7 @@
 % Please edit documentation in R/processHeatwaves.R
 \name{consolidate}
 \alias{consolidate}
-\title{Combine all identified heatwave dataframes together into one.}
+\title{Consolidate heatwave dataframes}
 \usage{
 consolidate(hwDataframeList)
 }
@@ -17,6 +17,9 @@ A combined dataframe version of the list that was passed as an
    argument.
 }
 \description{
-Combine all identified heatwave dataframes together into one.
+This function combines all identified heatwave dataframes together into
+a single dataframe. This function is used to create a single dataframe
+with all heatwaves from all specified communities for each ensemble
+member.
 }
 

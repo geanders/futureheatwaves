@@ -1,4 +1,4 @@
-#' Identify all heatwaves in a community time series
+#' Identify all heatwaves in a time series
 #'
 #' This function takes a dataframe with columns for date and projected
 #' temperature and adds columns identifying which days belong to a
@@ -44,6 +44,13 @@ IDheatwaves <- function(threshold, datafr, global, custom){
 }
 
 #' Identify heatwaves in a time series
+#'
+#' This function identifies heatwaves in a time series of temperature
+#' data using a heatwave definition that a heatwave must be two or more
+#' days with temperatures equal to or above some threshold temperature.
+#'
+#' This function is the default function used to identify heatwaves in
+#' \code{\link{gen_hw_set}}.
 #'
 #' @inheritParams closest_point
 #' @inheritParams IDheatwaves
@@ -133,13 +140,34 @@ IDHeatwavesR <- function(threshold = stop("Error: unspecified threshold"),
         return(data.frame(datafr, hwInfo[-1,]))
 }
 
-#' Identify heatwaves with alternative definition
+#' Identify heatwaves in a time series
 #'
-#' @inheritParams IDHeatwavesR
+#' This function identifies heatwaves in a time series of temperature
+#' data using a heatwave definition that a heatwave must be five or more
+#' days with temperatures equal to or above some threshold temperature.
+#'
+#' @inheritParams closest_point
+#' @inheritParams IDheatwaves
 #'
 #' @return Returns the dataframe entered as \code{datafr}, but with new
-#'    columns providing heatwave identifiers.
+#'    columns providing heatwave identifiers. The returned dataframe will
+#'    have new columns for whether a day was part of a heatwave (\code{hw},
+#'    0 / 1), if it was part of a heatwave, the number of the heatwave
+#'    (\code{hw.number}), and whether the day was the first day in a heatwave
+#'    (\code{first.hw.day}, 0 /1).
 #'
+#' @note There are a few cases near the edges of data frames when this function
+#'    would return that a day was not a heatwave when it was.First, if the first
+#'    day of the dataset is a heatwave because preceeding days exceeded the
+#'    threshold, but the second day in the dataframe is not above the threshold,
+#'    this function would not capture that the first day was a heatwaves.
+#'    Similar caveats apply to the last day in the dataframe. In northern
+#'    hemisphere communities, this should not be a concern when studying
+#'    heatwaves, as it is unlikely that Jan. 1 or Dec. 31 would qualify as
+#'    a heatwave in this part of the world. However, care should be taken
+#'    when using this function either with Southern Hemisphere communities
+#'    or when exploring exposures that, unlike heatwaves, may occur very
+#'    early or late in the calendar year.
 #' @export
 IDHeatwavesAlternative <- function(threshold = stop("Error: unspecified threshold"),
                            days = 5,
@@ -206,15 +234,21 @@ IDHeatwavesAlternative <- function(threshold = stop("Error: unspecified threshol
         return(data.frame(datafr, hwInfo[-1,]))
 }
 
-#' Identify heatwaves using a C++ function
+#' Identify heatwaves in a time series
 #'
-#' This function identifies heatwaves as two or more days at or above
-#'    a user-defined threshold.
+#' This function identifies heatwaves in a time series of temperature
+#' data using a heatwave definition that a heatwave must be two or more
+#' days with temperatures equal to or above some threshold temperature.
 #'
-#' @inheritParams IDHeatwavesR
+#' @inheritParams closest_point
+#' @inheritParams IDheatwaves
 #'
 #' @return Returns the dataframe entered as \code{datafr}, but with new
-#'    columns providing heatwave identifiers.
+#'    columns providing heatwave identifiers. The returned dataframe will
+#'    have new columns for whether a day was part of a heatwave (\code{hw},
+#'    0 / 1), if it was part of a heatwave, the number of the heatwave
+#'    (\code{hw.number}), and whether the day was the first day in a heatwave
+#'    (\code{first.hw.day}, 0 /1).
 #'
 #' @note This function gives identical results to the \link{\code{IDHeatwavesR}}
 #'    function, but should take less time to run.

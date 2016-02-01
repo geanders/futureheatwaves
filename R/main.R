@@ -62,11 +62,14 @@
 #'    for this argument.
 #'
 #' @return This function returns a dataframe listing the name of each climate
-#'    model included in the directory of projection files inputted to the
-#'    function as well as the number of historical and future projection
-#'    ensembles included for each model. This output can be used as a check
+#'    model used, as well as the number of historical and future projection
+#'    ensembles for each model. This output can be used as a check
 #'    that the function processed through the directory of input files
 #'    specified using the \code{dataFolder} argument.
+#'
+#' This function also creates, and writes to the user's computer, files with
+#'    the heatwaves and their characteristics for the specified climate
+#'    projections and dates.
 #'
 #' @export
 gen_hw_set <- function(out,

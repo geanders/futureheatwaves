@@ -17,16 +17,16 @@ name is typically generated for use in this function from the subdirectory
 names for the climate model within the directory of projection data
 specified by the user in \code{\link{gen_hw_set}}.}
 
-\item{global}{An object name for the 'global' variable list. This
-parameter is passed through from \code{\link{gen_hw_set}} and includes user
+\item{global}{An object name for the \code{global} object. This
+object is created by \code{\link{gen_hw_set}} and includes user
 specifications for the path to the output directory, the path to the
 input climate projections, the dataframe with community locations, and the
 format for the filenames of the coordinate, tas, and time files in the
 ensemble-specific subdirectories of the projection directory input by
 the user.}
 
-\item{custom}{An object name for the 'custom` data list. This parameter is
-passed through from \code{\link{gen_hw_set}} and includes user specifications
+\item{custom}{An object name for the \code{custom} object. This object is
+created by \code{\link{gen_hw_set}} and includes user specifications
 for, if specified as other than the default, the name of the R function to
 use to identify heatwaves, alternative upper and lower year boundaries
 for the data used to determine threshold temperatures for the heatwave

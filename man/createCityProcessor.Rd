@@ -7,8 +7,8 @@
 createCityProcessor(global)
 }
 \arguments{
-\item{global}{An object name for the 'global' variable list. This
-parameter is passed through from \code{\link{gen_hw_set}} and includes user
+\item{global}{An object name for the \code{global} object. This
+object is created by \code{\link{gen_hw_set}} and includes user
 specifications for the path to the output directory, the path to the
 input climate projections, the dataframe with community locations, and the
 format for the filenames of the coordinate, tas, and time files in the

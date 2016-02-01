@@ -2,7 +2,7 @@
 % Please edit documentation in R/IDHeatwaves.R
 \name{IDHeatwavesCPPwrapper}
 \alias{IDHeatwavesCPPwrapper}
-\title{Identify heatwaves using a C++ function}
+\title{Identify heatwaves in a time series}
 \usage{
 IDHeatwavesCPPwrapper(datafr, threshold)
 }
@@ -22,11 +22,16 @@ series in \code{datafr}.}
 }
 \value{
 Returns the dataframe entered as \code{datafr}, but with new
-   columns providing heatwave identifiers.
+   columns providing heatwave identifiers. The returned dataframe will
+   have new columns for whether a day was part of a heatwave (\code{hw},
+   0 / 1), if it was part of a heatwave, the number of the heatwave
+   (\code{hw.number}), and whether the day was the first day in a heatwave
+   (\code{first.hw.day}, 0 /1).
 }
 \description{
-This function identifies heatwaves as two or more days at or above
-   a user-defined threshold.
+This function identifies heatwaves in a time series of temperature
+data using a heatwave definition that a heatwave must be two or more
+days with temperatures equal to or above some threshold temperature.
 }
 \note{
 This function gives identical results to the \link{\code{IDHeatwavesR}}

@@ -30,7 +30,13 @@ Returns the dataframe entered as \code{datafr}, but with new
    (\code{first.hw.day}, 0 /1).
 }
 \description{
-Identify heatwaves in a time series
+This function identifies heatwaves in a time series of temperature
+data using a heatwave definition that a heatwave must be two or more
+days with temperatures equal to or above some threshold temperature.
+}
+\details{
+This function is the default function used to identify heatwaves in
+\code{\link{gen_hw_set}}.
 }
 \note{
 There are a few cases near the edges of data frames when this function

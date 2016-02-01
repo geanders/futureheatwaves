@@ -10,41 +10,60 @@ check_params(out, dataFolder, citycsv, coordinateFilenames, tasFilenames,
 }
 \arguments{
 \item{out}{Character string with pathway to directory to which
-heatwave files will be written.}
+heatwave files will be written. This should be a pathname to a directory
+on the user's local computer. If the directory already exists, it will
+be overwritten by this function, so the user should either specify a
+pathname for a directory that does not yet exist.}
 
 \item{dataFolder}{Character string with pathway to directory that
 contains climate projection data.}
 
-\item{citycsv}{Character string giving the filepath to a .csv
-file with latitude and longitude values for each city.}
+\item{citycsv}{Character string giving the filepath to a
+comma-separated values (.csv) file with unique identifiers, latitudes, and
+longitudes for each community for which the user wants to generate
+heatwave projections.}
 
-\item{coordinateFilenames}{Character string with name of the files
-containing the latitude and longitude coordinates
-corresponding to the columns of the time series data.}
+\item{coordinateFilenames}{Character string with filename of the file
+containing the latitude and longitude coordinates in the bottom
+directory of each ensemble member subdirectory. (See the package
+vignette for an example of the required structure for this file.)}
 
-\item{tasFilenames}{Character sting with name of files containing the time
-series data.}
+\item{tasFilenames}{Character string with filename of the file
+containing the climate projection data in the bottom
+directory of each ensemble member subdirectory. (See the package
+vignette for an example of the required structure for this file.)}
 
-\item{timeFilenames}{Character string with name of the files containing the
-date information corresponding to the rows of the time series data.}
+\item{timeFilenames}{Character string with filename of the file
+containing the date dataframe in the bottom
+directory of each ensemble member subdirectory. (See the package
+vignette for an example of the required structure for this file.)}
 
 \item{IDheatwavesFunction}{A character string with the name of the R function
 to use to identify heatwaves. This function may be a user-specified custom
 function to, but it must be loaded into the current R session. The
 function name must be put in quotation marks.}
 
-\item{thresholdBoundaries}{Custom time boundaries for determining
-threshold temperatures for the heatwave definition.
-Format: c(earliest year, latest year).
-Restrictions: Bounds must be between the years 1980 and 2099 and
-cannot span 2005 (i.e., both must either be before 2005 or after 2005).}
+\item{thresholdBoundaries}{A numeric vector with the custom time boundaries
+to be used to determine the threshold temperatures for the heatwave
+definition. The required format for this vector is that the first element
+is the lower year bound and the second element is the upper year bound,
+with the restrictions that bounds must be between the years 1980 and 2099
+and cannot span 2005 (i.e., both must either be before 2005 or after 2005).}
 
-\item{referenceBoundaries}{Custom time boundaries to use in calculating
-relative characteristics for heatwaves (i.e., to use when exploring
-the role of adaptation in projections).
-Format: c(earliest year, latest year).
-Restrictions: Bounds must be between the years 1980 and 2099 and
-cannot span 2005 (i.e., both must either be before 2005 or after 2005).}
+\item{projectionBoundaries}{A numeric vector with the custom time boundaries
+for which the user wants to create heatwave projections. The required
+format for this vector is that the first element
+is the lower year bound and the second element is the upper year bound,
+with the restrictions that bounds must be between the years 1980 and 2099
+and cannot span 2005 (i.e., both must either be before 2005 or after 2005).}
+
+\item{referenceBoundaries}{A numeric vector with the custom time boundaries
+to use in calculating relative characteristics for heatwaves (i.e., to use
+when exploring the role of adaptation in projections). The required format
+for this vector is that the first element is the lower year bound and the
+second element is the upper year bound, with the restrictions that bounds
+must be between the years 1980 and 2099 and cannot span 2005 (i.e., both
+must either be before 2005 or after 2005).}
 }
 \value{
 Stops and returns an error if any parameters are incorrect.

@@ -11,15 +11,20 @@ acquireDirectoryStructure(dataFolder, coordinateFilenames, tasFilenames,
 \item{dataFolder}{Character string with pathway to directory that
 contains climate projection data.}
 
-\item{coordinateFilenames}{Character string with name of the files
-containing the latitude and longitude coordinates
-corresponding to the columns of the time series data.}
+\item{coordinateFilenames}{Character string with filename of the file
+containing the latitude and longitude coordinates in the bottom
+directory of each ensemble member subdirectory. (See the package
+vignette for an example of the required structure for this file.)}
 
-\item{tasFilenames}{Character sting with name of files containing the time
-series data.}
+\item{tasFilenames}{Character string with filename of the file
+containing the climate projection data in the bottom
+directory of each ensemble member subdirectory. (See the package
+vignette for an example of the required structure for this file.)}
 
-\item{timeFilenames}{Character string with name of the files containing the
-date information corresponding to the rows of the time series data.}
+\item{timeFilenames}{Character string with filename of the file
+containing the date dataframe in the bottom
+directory of each ensemble member subdirectory. (See the package
+vignette for an example of the required structure for this file.)}
 }
 \value{
 A list object outlining the file structure of the directory

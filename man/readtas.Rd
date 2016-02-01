@@ -2,18 +2,25 @@
 % Please edit documentation in R/IO.R
 \name{readtas}
 \alias{readtas}
-\title{Read the time series data for a given ensemble}
+\title{Read climate projection data}
 \usage{
 readtas(ensemble)
 }
 \arguments{
-\item{ensemble}{Ensemble component of the directory structure that contains the path
-to the time series data to be read}
+\item{ensemble}{Character vector that includes
+the file paths to (1) the latitude and longitude file; (2) the
+climate projection file; and (3) the projection dates file
+for the selected climate model.}
 }
 \value{
-A dataframe of the time series data of the ensemble
+A dataframe of climate projection data where each column
+   corresponds to a climate model grid point and each row corresponds
+   to a date of observation.
 }
 \description{
-Read the time series data for a given ensemble
+This function reads climate projection data for a climate
+model into R from a locally-stored comma-separated file located within
+the directory specified by the \code{dataFolder} argument of
+\code{\link{gen_hw_set}}.
 }
 

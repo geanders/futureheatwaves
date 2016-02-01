@@ -2,18 +2,25 @@
 % Please edit documentation in R/IO.R
 \name{readTimes}
 \alias{readTimes}
-\title{Read the date data for a given ensemble}
+\title{Read projection dates data}
 \usage{
 readTimes(ensemble)
 }
 \arguments{
-\item{ensemble}{Ensemble component of the directory structure that contains the path
-to the date data to be read}
+\item{ensemble}{Character vector that includes
+the file paths to (1) the latitude and longitude file; (2) the
+climate projection file; and (3) the projection dates file
+for the selected climate model.}
 }
 \value{
-A dataframe of the date data of the ensemble
+A dataframe of dates corresponding to climate projection data,
+   where each row gives a date, split into columns of day in the
+   dataframe, four-digit year, numeric month, and numeric day.
 }
 \description{
-Read the date data for a given ensemble
+This function reads the dates corresponding to climate projection data for
+a climate model into R from a locally-stored comma-separated file located
+within the directory specified by the \code{dataFolder} argument of
+\code{\link{gen_hw_set}}.
 }
 

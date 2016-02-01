@@ -2,18 +2,27 @@
 % Please edit documentation in R/IO.R
 \name{readLatLong}
 \alias{readLatLong}
-\title{Read the latitude and longitude data for a given ensemble}
+\title{Read latitude and longitude data}
 \usage{
 readLatLong(ensemble)
 }
 \arguments{
-\item{ensemble}{Ensemble component of the directory structure that contains the path
-to the latitude and longitude data to be read}
+\item{ensemble}{Character vector that includes
+the file paths to (1) the latitude and longitude file; (2) the
+climate projection file; and (3) the projection dates file
+for the selected climate model.}
 }
 \value{
 A dataframe of the latitude and longitude data of the ensemble
+   with columns for the latitude (first column) and longitude (second
+   column) of each grid point in the climate model. This dataframe
+   uses a format where the location of New York City, for example, is
+   (40.7127, 285.9941).
 }
 \description{
-Read the latitude and longitude data for a given ensemble
+This function reads data on the longitudes and latitudes of a climate
+model into R from a locally-stored comma-separated file located within
+the directory specified by the \code{dataFolder} argument of
+\code{\link{gen_hw_set}}.
 }
 

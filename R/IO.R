@@ -1,31 +1,57 @@
-#' Read the latitude and longitude data for a given ensemble
+#' Read latitude and longitude data
 #'
-#' @param ensemble Ensemble component of the directory structure that contains the path
-#' to the latitude and longitude data to be read
+#' This function reads data on the longitudes and latitudes of a climate
+#' model into R from a locally-stored comma-separated file located within
+#' the directory specified by the \code{dataFolder} argument of
+#' \code{\link{gen_hw_set}}.
+#'
+#' @param ensemble Character vector that includes
+#'    the file paths to (1) the latitude and longitude file; (2) the
+#'    climate projection file; and (3) the projection dates file
+#'    for the selected climate model.
 #'
 #' @return A dataframe of the latitude and longitude data of the ensemble
+#'    with columns for the latitude (first column) and longitude (second
+#'    column) of each grid point in the climate model. This dataframe
+#'    uses a format where the location of New York City, for example, is
+#'    (40.7127, 285.9941).
 readLatLong <- function(ensemble){
-        return(read.csv(ensemble[2], header = FALSE))
+        loc_file <- grep(global$coordinateFilenames, ensemble)
+        return(read.csv(ensemble[loc_file], header = FALSE))
 }
 
-#' Read the time series data for a given ensemble
+#' Read climate projection data
 #'
-#' @param ensemble Ensemble component of the directory structure that contains the path
-#' to the time series data to be read
+#' This function reads climate projection data for a climate
+#' model into R from a locally-stored comma-separated file located within
+#' the directory specified by the \code{dataFolder} argument of
+#' \code{\link{gen_hw_set}}.
 #'
-#' @return A dataframe of the time series data of the ensemble
+#' @inheritParams readLatLong
+#'
+#' @return A dataframe of climate projection data where each column
+#'    corresponds to a climate model grid point and each row corresponds
+#'    to a date of observation.
 readtas <- function(ensemble){
-        return(read.csv(ensemble[3], header = FALSE))
+        loc_file <- grep(global$tasFilenames, ensemble)
+        return(read.csv(ensemble[loc_file], header = FALSE))
 }
 
-#' Read the date data for a given ensemble
+#' Read projection dates data
 #'
-#' @param ensemble Ensemble component of the directory structure that contains the path
-#' to the date data to be read
+#' This function reads the dates corresponding to climate projection data for
+#' a climate model into R from a locally-stored comma-separated file located
+#' within the directory specified by the \code{dataFolder} argument of
+#' \code{\link{gen_hw_set}}.
 #'
-#' @return A dataframe of the date data of the ensemble
+#' @inheritParams readLatLong
+#'
+#' @return A dataframe of dates corresponding to climate projection data,
+#'    where each row gives a date, split into columns of day in the
+#'    dataframe, four-digit year, numeric month, and numeric day.
 readTimes <- function(ensemble){
-        return(read.csv(ensemble[4], header = FALSE))
+        loc_file <- grep(global$timeFilenames, ensemble)
+        return(read.csv(ensemble[loc_file], header = FALSE))
 }
 
 #' Write temperature thresholds to file
@@ -62,20 +88,24 @@ writeThresholds <- function(modelName, threshOut, thresholds, global, custom){
 
 #' Ensemble writer factory function
 #'
-#' Produces a function that writes a single heatwave list to a .csv
+#' This function creates a closure that writes a single heatwave list to a
+#' comma-separated file in the directory specified by the user in the
+#' \code{out} argument of \code{\link{gen_hw_set}}.
 #'
-#' Closes over an incrementer variable for ensembles that advances forward
-#' each time the produced function is called.
-#' Output the heatwave data of each model. Produces a closure that must be
+#' The closure created by this function closes over an incrementer variable
+#' for ensembles that advances each time the closure is called.
+#' Output the heatwave data of each model.
+#'
+#' @note The closure produced by this function must be
 #' applied to a list of the heatwave dataframes corresponding to the
 #' ensembles of the model
 #'
 #' @inheritParams buildStructureModels
 #' @inheritParams processModel
 #'
-#' @return A closure that writes heatwave dataframes
-#' Argument 1: A combined heatwave dataframe that contains all heatwave
-#' information for the ensemble being processed.
+#' @return A closure that writes heatwave dataframes. This closure has
+#' the argument \code{hwFrame}: A combined heatwave dataframe that contains
+#' all heatwave information for the ensemble being processed.
 #'
 #' @importFrom dplyr %>%
 createEnsembleWriter <- function(modelName, global, custom){

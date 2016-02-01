@@ -33,17 +33,22 @@ relative, rather than absolute, temperature, and the percentile
 threshold to use when defining heatwaves.}
 }
 \value{
-A closure that writes heatwave dataframes
-Argument 1: A combined heatwave dataframe that contains all heatwave
-information for the ensemble being processed.
+A closure that writes heatwave dataframes. This closure has
+the argument \code{hwFrame}: A combined heatwave dataframe that contains
+all heatwave information for the ensemble being processed.
 }
 \description{
-Produces a function that writes a single heatwave list to a .csv
+This function creates a closure that writes a single heatwave list to a
+comma-separated file in the directory specified by the user in the
+\code{out} argument of \code{\link{gen_hw_set}}.
 }
 \details{
-Closes over an incrementer variable for ensembles that advances forward
-each time the produced function is called.
-Output the heatwave data of each model. Produces a closure that must be
+The closure created by this function closes over an incrementer variable
+for ensembles that advances each time the closure is called.
+Output the heatwave data of each model.
+}
+\note{
+The closure produced by this function must be
 applied to a list of the heatwave dataframes corresponding to the
 ensembles of the model
 }

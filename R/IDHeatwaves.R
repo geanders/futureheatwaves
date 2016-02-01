@@ -1,14 +1,19 @@
-#' Identify all heatwaves within a given city's time series
+#' Identify all heatwaves in a community time series
 #'
-#' @param threshold Numeric string with threshold percentile used in
-#'    heatwave definition.
-#' @param days Numeric string specifying minimum number of days required
-#'    in heatwave definition.
+#' This function takes a dataframe with columns for date and projected
+#' temperature and adds columns identifying which days belong to a
+#' heatwave, giving separate numbers to identify each discrete heatwave,
+#' and identifying which days are the first day in a heatwave.
+#'
+#' @param threshold Numeric string with threshold temperature used in
+#'    the heatwave definition, in the same units as the temperature time
+#'    series in \code{datafr}.
 #' @param datafr A dataframe with daily temperature projections in the
 #'    the community being processed. This dataframe must have two columns:
 #'    (1) the first column must have the date of each observation, with
-#'    class "Date" and; (2) the second column must have temperatures, in
-#'    Fahrenheit. In the normal running of this package, this dataframe
+#'    class "Date" and; (2) the second column must have temperatures
+#'    (in typical runs of this function, this will be in degrees
+#'    Fahrenheit). In the normal running of this package, this dataframe
 #'    will be generate by the closure created by
 #'    \code{\link{createCityProcessor}}.
 #' @inheritParams processModel
@@ -16,11 +21,19 @@
 #'
 #' @return Returns the dataframe entered as \code{datafr}, but with new
 #'    columns providing heatwave identifiers. The returned dataframe will
-#'    have new columns for whether a day was part of a heatwave (\code{hw},
-#'    0 / 1), if it was part of a heatwave, the number of the heatwave
-#'    (\code{hw.number}), and whether the day was the first day in a heatwave
-#'    (\code{first.hw.day}, 0 /1).
+#'    have new columns for: \code{hw}: whether a day was part of a heatwave
+#'    (0 : not part of a heatwave / 1: part of a heatwave); \code{hw.number}:
+#'    if it was part of a heatwave, the number of the heatwave (1, 2, etc.);
+#'    and \code{first.hw.day} whether the day was the first day in a heatwave
+#'    (0: not the first day in a heatwave / 1: first day in a heatwave).
 #'
+#' @note The function actually used to identify heatwaves in the time series
+#'    is specified in the `IDheatwaves` slot of the `custom` object passed
+#'    into this function. The default is the function
+#'    \code{\link{IDHeatwavesR}}. The user can specify a different function
+#'    using the argument `IDheatwavesFunction` in \code{\link{gen_hw_set}}.
+#'
+#' @export
 IDheatwaves <- function(threshold, datafr, global, custom){
 
         hwdata <- do.call(custom["IDheatwaves"][[1]],
@@ -54,6 +67,7 @@ IDheatwaves <- function(threshold, datafr, global, custom){
 #'    when using this function either with Southern Hemisphere communities
 #'    or when exploring exposures that, unlike heatwaves, may occur very
 #'    early or late in the calendar year.
+#' @export
 IDHeatwavesR <- function(threshold = stop("Error: unspecified threshold"),
                          days = 2,
                          datafr =  stop("Error: 'datafr' unspecified")){
@@ -125,6 +139,8 @@ IDHeatwavesR <- function(threshold = stop("Error: unspecified threshold"),
 #'
 #' @return Returns the dataframe entered as \code{datafr}, but with new
 #'    columns providing heatwave identifiers.
+#'
+#' @export
 IDHeatwavesAlternative <- function(threshold = stop("Error: unspecified threshold"),
                            days = 5,
                            datafr =  stop("Error: 'datafr' unspecified")){
@@ -202,6 +218,8 @@ IDHeatwavesAlternative <- function(threshold = stop("Error: unspecified threshol
 #'
 #' @note This function gives identical results to the \link{\code{IDHeatwavesR}}
 #'    function, but should take less time to run.
+#'
+#' @export
 IDHeatwavesCPPwrapper <- function(datafr, threshold){
         colnames(datafr) <- c("date", "tmpd")
 

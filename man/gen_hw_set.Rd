@@ -5,7 +5,7 @@
 \title{Create and write heatwave projections}
 \usage{
 gen_hw_set(out, dataFolder, citycsv, coordinateFilenames, tasFilenames,
-  timeFilenames, IDheatwavesReplacement = "IDHeatwavesR",
+  timeFilenames, IDheatwavesFunction = "IDHeatwavesR",
   thresholdBoundaries = c(1981, 2004), projectionBoundaries = c(2061, 2080),
   referenceBoundaries = c(2061, 2080), probThreshold = 0.98,
   printWarning = TRUE)
@@ -30,9 +30,10 @@ series data.}
 \item{timeFilenames}{Character string with name of the files containing the
 date information corresponding to the rows of the time series data.}
 
-\item{IDheatwavesReplacement}{Either FALSE, to use the default
-heatwave definition, or a user-specified custom function to
-use to identify heatwaves.}
+\item{IDheatwavesFunction}{A character string with the name of the R function
+to use to identify heatwaves. This function may be a user-specified custom
+function to, but it must be loaded into the current R session. The
+function name must be put in quotation marks.}
 
 \item{thresholdBoundaries}{Custom time boundaries for determining
 threshold temperatures for the heatwave definition.

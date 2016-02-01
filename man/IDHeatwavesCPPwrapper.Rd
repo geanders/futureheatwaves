@@ -10,13 +10,15 @@ IDHeatwavesCPPwrapper(datafr, threshold)
 \item{datafr}{A dataframe with daily temperature projections in the
 the community being processed. This dataframe must have two columns:
 (1) the first column must have the date of each observation, with
-class "Date" and; (2) the second column must have temperatures, in
-Fahrenheit. In the normal running of this package, this dataframe
+class "Date" and; (2) the second column must have temperatures
+(in typical runs of this function, this will be in degrees
+Fahrenheit). In the normal running of this package, this dataframe
 will be generate by the closure created by
 \code{\link{createCityProcessor}}.}
 
-\item{threshold}{Numeric string with threshold percentile used in
-heatwave definition.}
+\item{threshold}{Numeric string with threshold temperature used in
+the heatwave definition, in the same units as the temperature time
+series in \code{datafr}.}
 }
 \value{
 Returns the dataframe entered as \code{datafr}, but with new

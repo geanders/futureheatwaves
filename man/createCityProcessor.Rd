@@ -10,11 +10,10 @@ createCityProcessor(global)
 \item{global}{An object name for the 'global' variable list. This
 parameter is passed through from \code{\link{gen_hw_set}} and includes user
 specifications for the path to the output directory, the path to the
-input climate projections, the dataframe with community locations, the
+input climate projections, the dataframe with community locations, and the
 format for the filenames of the coordinate, tas, and time files in the
 ensemble-specific subdirectories of the projection directory input by
-the user, and whether the user prefers to run the function using the R
-or C++ version of the function to identify heatwaves.}
+the user.}
 }
 \value{
 A closure that will find all heatwaves for a given ensemble. Each

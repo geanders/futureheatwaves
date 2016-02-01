@@ -7,8 +7,9 @@
 createHwDataframe(city, threshold, heatwaves, ensembleSeries, i, global, custom)
 }
 \arguments{
-\item{threshold}{Numeric string with threshold percentile used in
-heatwave definition.}
+\item{threshold}{Numeric string with threshold temperature used in
+the heatwave definition, in the same units as the temperature time
+series in \code{datafr}.}
 
 \item{heatwaves}{data.frame(dates, thresholds)}
 
@@ -24,16 +25,17 @@ are given in the \code{citycsv} file specified in
 \item{global}{An object name for the 'global' variable list. This
 parameter is passed through from \code{\link{gen_hw_set}} and includes user
 specifications for the path to the output directory, the path to the
-input climate projections, the dataframe with community locations, the
+input climate projections, the dataframe with community locations, and the
 format for the filenames of the coordinate, tas, and time files in the
 ensemble-specific subdirectories of the projection directory input by
-the user, and whether the user prefers to run the function using the R
-or C++ version of the function to identify heatwaves.}
+the user.}
 
 \item{custom}{An object name for the 'custom` data list. This parameter is
 passed through from \code{\link{gen_hw_set}} and includes user specifications
-for, if specified as other than the default, an alternative function to
+for, if specified as other than the default, the name of the R function to
 use to identify heatwaves, alternative upper and lower year boundaries
+for the data used to determine threshold temperatures for the heatwave
+definition, alternative upper and lower year boundaries
 for the projection period of the heatwave datasets being generated,
 alternative upper and lower year boundaries for the reference period
 to be used when measuring all heatwave characteristics related to

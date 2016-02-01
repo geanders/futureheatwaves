@@ -1,56 +1,65 @@
-#~
-# TODO: Note for later. Will delete
-# "latitude_longitude_NorthAmerica_12mo.csv",  "tas_NorthAmerica_12mo.csv",
-# "time_NorthAmerica_12mo.csv"
-#
-# TODO: Analyze the dataBoundaries and referenceBoundaries variables to make
-# sure they are consistent with program requirements.
-# ~
-
 #' Create and write heatwave projections
 #'
 #' This function creates heatwave projection datasets for all models and
-#' ensemble members in a directory of climate projections for a specified
-#' set of communities.The resulting heatwave projections are written out
-#' to a specified directory on the user's local computer.
+#' ensemble members for a user-specified set of communities.The resulting
+#' heatwave projections are written out to a specified directory on the
+#' user's local computer.
 #'
 #' @param out Character string with pathway to directory to which
-#'    heatwave files will be written.
+#'    heatwave files will be written. This should be a pathname to a directory
+#'    on the user's local computer. If the directory already exists, it will
+#'    be overwritten by this function, so the user should either specify a
+#'    pathname for a directory that does not yet exist.
 #' @param dataFolder Character string with pathway to directory that
 #'    contains climate projection data.
-#' @param citycsv Character string giving the filepath to a .csv
-#'    file with latitude and longitude values for each city.
-#' @param coordinateFilenames Character string with name of the files
-#'    containing the latitude and longitude coordinates
-#'    corresponding to the columns of the time series data.
-#' @param tasFilenames Character sting with name of files containing the time
-#'    series data.
-#' @param timeFilenames Character string with name of the files containing the
-#'    date information corresponding to the rows of the time series data.
-#' @param IDheatwavesReplacement Either FALSE, to use the default
-#'    heatwave definition, or a user-specified custom function to
-#'    use to identify heatwaves.
-#' @param thresholdBoundaries Custom time boundaries for determining
-#'    threshold temperatures for the heatwave definition.
-#'    Format: c(earliest year, latest year).
-#'    Restrictions: Bounds must be between the years 1980 and 2099 and
-#'    cannot span 2005 (i.e., both must either be before 2005 or after 2005).
-#' @param thresholdBoundaries Custom time boundaries for projections.
-#'    Format: c(earliest year, latest year).
-#'    Restrictions: Bounds must be between the years 1980 and 2099 and
-#'    cannot span 2005 (i.e., both must either be before 2005 or after 2005).
-#' @param referenceBoundaries Custom time boundaries to use in calculating
-#'    relative characteristics for heatwaves (i.e., to use when exploring
-#'    the role of adaptation in projections).
-#'    Format: c(earliest year, latest year).
-#'    Restrictions: Bounds must be between the years 1980 and 2099 and
-#'    cannot span 2005 (i.e., both must either be before 2005 or after 2005).
+#' @param citycsv Character string giving the filepath to a
+#'    comma-separated values (.csv) file with unique identifiers, latitudes, and
+#'    longitudes for each community for which the user wants to generate
+#'    heatwave projections.
+#' @param coordinateFilenames Character string with filename of the file
+#'    containing the latitude and longitude coordinates in the bottom
+#'    directory of each ensemble member subdirectory. (See the package
+#'    vignette for an example of the required structure for this file.)
+#' @param tasFilenames Character string with filename of the file
+#'    containing the climate projection data in the bottom
+#'    directory of each ensemble member subdirectory. (See the package
+#'    vignette for an example of the required structure for this file.)
+#' @param timeFilenames Character string with filename of the file
+#'    containing the date dataframe in the bottom
+#'    directory of each ensemble member subdirectory. (See the package
+#'    vignette for an example of the required structure for this file.)
+#' @param IDheatwavesFunction A character string with the name of the R function
+#'    to use to identify heatwaves. This function may be a user-specified custom
+#'    function to, but it must be loaded into the current R session. The
+#'    function name must be put in quotation marks.
+#' @param thresholdBoundaries A numeric vector with the custom time boundaries
+#'    to be used to determine the threshold temperatures for the heatwave
+#'    definition. The required format for this vector is that the first element
+#'    is the lower year bound and the second element is the upper year bound,
+#'    with the restrictions that bounds must be between the years 1980 and 2099
+#'    and cannot span 2005 (i.e., both must either be before 2005 or after 2005).
+#' @param projectionBoundaries A numeric vector with the custom time boundaries
+#'    for which the user wants to create heatwave projections. The required
+#'    format for this vector is that the first element
+#'    is the lower year bound and the second element is the upper year bound,
+#'    with the restrictions that bounds must be between the years 1980 and 2099
+#'    and cannot span 2005 (i.e., both must either be before 2005 or after 2005).
+#' @param referenceBoundaries A numeric vector with the custom time boundaries
+#'    to use in calculating relative characteristics for heatwaves (i.e., to use
+#'    when exploring the role of adaptation in projections). The required format
+#'    for this vector is that the first element is the lower year bound and the
+#'    second element is the upper year bound, with the restrictions that bounds
+#'    must be between the years 1980 and 2099 and cannot span 2005 (i.e., both
+#'    must either be before 2005 or after 2005).
 #' @param probThreshold Numerical value between 0 and 1 specifying the threshold
 #'    of temperature to use when defining heatwaves. The default value is 0.98
 #'    (i.e., a heatwave is two or more days above the community's 98th
 #'    percentile temperature).
-#' @param printWarning TRUE / FALSE specifying whether to print out the progress
-#'    of the function as it runs. Default is TRUE.
+#' @param printWarning TRUE / FALSE, specifies whether to print out a warning
+#'    informing the user that the function will write out results to the local
+#'    directory specified by the user with \code{out}. This warning prints out
+#'    by default; the user must opt-out of this warning by specifying FALSE
+#'    for this argument.
 #'
 #' @return This function returns a dataframe listing the name of each climate
 #'    model included in the directory of projection files inputted to the
@@ -66,7 +75,7 @@ gen_hw_set <- function(out,
                        coordinateFilenames,
                        tasFilenames,
                        timeFilenames,
-                       IDheatwavesReplacement = "IDHeatwavesR",
+                       IDheatwavesFunction = "IDHeatwavesR",
                        thresholdBoundaries = c(1981, 2004),
                        projectionBoundaries = c(2061, 2080),
                        referenceBoundaries = c(2061, 2080),
@@ -94,7 +103,7 @@ gen_hw_set <- function(out,
                      coordinateFilenames = coordinateFilenames,
                      tasFilenames = tasFilenames,
                      timeFilenames = timeFilenames,
-                     IDheatwavesReplacement = IDheatwavesReplacement,
+                     IDheatwavesFunction = IDheatwavesFunction,
                      thresholdBoundaries = thresholdBoundaries,
                      projectionBoundaries = projectionBoundaries,
                      referenceBoundaries = referenceBoundaries)
@@ -103,7 +112,8 @@ gen_hw_set <- function(out,
         if(printWarning){
                 cat("\n", "Warning: This function will write new files",
                     "to your computer in the \n", out,
-                    "directory of your computer.\n",
+                    "directory of your computer. If that directory already",
+                    "exists,\nrunning this function will write over it. \n",
                     "Do you want to continue? (y / n): \n")
                 user_prompt <- scan(n = 1, what = "character")
                 user_prompt <- tolower(user_prompt)
@@ -132,7 +142,7 @@ gen_hw_set <- function(out,
 
         # Create the "custom" list object that will hold all of the user's
         # custom settings.
-        custom <- list("IDheatwaves" = IDheatwavesReplacement,
+        custom <- list("IDheatwaves" = IDheatwavesFunction,
                        "getBounds" = c(thresholdBoundaries,
                                        projectionBoundaries),
                        "processModel" = referenceBoundaries,
@@ -191,13 +201,13 @@ gen_hw_set <- function(out,
 #' coordinateFilenames <- "latitude_longitude_NorthAmerica_12mo.csv"
 #' tasFilenames <- "tas_NorthAmerica_12mo.csv"
 #' timeFilenames <- "time_NorthAmerica_12mo.csv"
-#' IDheatwavesReplacement <- FALSE
+#' IDheatwavesFunction <- FALSE
 #' dataBoundaries <- FALSE
 #' referenceBoundaries <- FALSE
 #'
 #' check_params(out, dataFolder, citycsv,
 #'    coordinateFilenames, tasFilenames, timeFilenames,
-#'    IDheatwavesReplacement,
+#'    IDheatwavesFunction,
 #'    dataBoundaries, referenceBoundaries)
 check_params <- function(out,
                          dataFolder,
@@ -205,7 +215,7 @@ check_params <- function(out,
                          coordinateFilenames,
                          tasFilenames,
                          timeFilenames,
-                         IDheatwavesReplacement,
+                         IDheatwavesFunction,
                          thresholdBoundaries,
                          projectionBoundaries,
                          referenceBoundaries){

@@ -2,53 +2,64 @@
 % Please edit documentation in R/IDHeatwaves.R
 \name{IDheatwaves}
 \alias{IDheatwaves}
-\title{Identify all heatwaves within a given city's time series}
+\title{Identify all heatwaves in a community time series}
 \usage{
 IDheatwaves(threshold, datafr, global, custom)
 }
 \arguments{
-\item{threshold}{Numeric string with threshold percentile used in
-heatwave definition.}
+\item{threshold}{Numeric string with threshold temperature used in
+the heatwave definition, in the same units as the temperature time
+series in \code{datafr}.}
 
 \item{datafr}{A dataframe with daily temperature projections in the
 the community being processed. This dataframe must have two columns:
 (1) the first column must have the date of each observation, with
-class "Date" and; (2) the second column must have temperatures, in
-Fahrenheit. In the normal running of this package, this dataframe
+class "Date" and; (2) the second column must have temperatures
+(in typical runs of this function, this will be in degrees
+Fahrenheit). In the normal running of this package, this dataframe
 will be generate by the closure created by
 \code{\link{createCityProcessor}}.}
 
 \item{global}{An object name for the 'global' variable list. This
 parameter is passed through from \code{\link{gen_hw_set}} and includes user
 specifications for the path to the output directory, the path to the
-input climate projections, the dataframe with community locations, the
+input climate projections, the dataframe with community locations, and the
 format for the filenames of the coordinate, tas, and time files in the
 ensemble-specific subdirectories of the projection directory input by
-the user, and whether the user prefers to run the function using the R
-or C++ version of the function to identify heatwaves.}
+the user.}
 
 \item{custom}{An object name for the 'custom` data list. This parameter is
 passed through from \code{\link{gen_hw_set}} and includes user specifications
-for, if specified as other than the default, an alternative function to
+for, if specified as other than the default, the name of the R function to
 use to identify heatwaves, alternative upper and lower year boundaries
+for the data used to determine threshold temperatures for the heatwave
+definition, alternative upper and lower year boundaries
 for the projection period of the heatwave datasets being generated,
 alternative upper and lower year boundaries for the reference period
 to be used when measuring all heatwave characteristics related to
 relative, rather than absolute, temperature, and the percentile
 threshold to use when defining heatwaves.}
-
-\item{days}{Numeric string specifying minimum number of days required
-in heatwave definition.}
 }
 \value{
 Returns the dataframe entered as \code{datafr}, but with new
    columns providing heatwave identifiers. The returned dataframe will
-   have new columns for whether a day was part of a heatwave (\code{hw},
-   0 / 1), if it was part of a heatwave, the number of the heatwave
-   (\code{hw.number}), and whether the day was the first day in a heatwave
-   (\code{first.hw.day}, 0 /1).
+   have new columns for: \code{hw}: whether a day was part of a heatwave
+   (0 : not part of a heatwave / 1: part of a heatwave); \code{hw.number}:
+   if it was part of a heatwave, the number of the heatwave (1, 2, etc.);
+   and \code{first.hw.day} whether the day was the first day in a heatwave
+   (0: not the first day in a heatwave / 1: first day in a heatwave).
 }
 \description{
-Identify all heatwaves within a given city's time series
+This function takes a dataframe with columns for date and projected
+temperature and adds columns identifying which days belong to a
+heatwave, giving separate numbers to identify each discrete heatwave,
+and identifying which days are the first day in a heatwave.
+}
+\note{
+The function actually used to identify heatwaves in the time series
+   is specified in the `IDheatwaves` slot of the `custom` object passed
+   into this function. The default is the function
+   \code{\link{IDHeatwavesR}}. The user can specify a different function
+   using the argument `IDheatwavesFunction` in \code{\link{gen_hw_set}}.
 }
 

@@ -5,8 +5,8 @@
 \title{Check for input parameter errors}
 \usage{
 check_params(out, dataFolder, citycsv, coordinateFilenames, tasFilenames,
-  timeFilenames, IDheatwavesReplacement, thresholdBoundaries,
-  projectionBoundaries, referenceBoundaries)
+  timeFilenames, IDheatwavesFunction, thresholdBoundaries, projectionBoundaries,
+  referenceBoundaries)
 }
 \arguments{
 \item{out}{Character string with pathway to directory to which
@@ -28,9 +28,10 @@ series data.}
 \item{timeFilenames}{Character string with name of the files containing the
 date information corresponding to the rows of the time series data.}
 
-\item{IDheatwavesReplacement}{Either FALSE, to use the default
-heatwave definition, or a user-specified custom function to
-use to identify heatwaves.}
+\item{IDheatwavesFunction}{A character string with the name of the R function
+to use to identify heatwaves. This function may be a user-specified custom
+function to, but it must be loaded into the current R session. The
+function name must be put in quotation marks.}
 
 \item{thresholdBoundaries}{Custom time boundaries for determining
 threshold temperatures for the heatwave definition.
@@ -76,13 +77,13 @@ citycsv <- "inst/cities.csv"
 coordinateFilenames <- "latitude_longitude_NorthAmerica_12mo.csv"
 tasFilenames <- "tas_NorthAmerica_12mo.csv"
 timeFilenames <- "time_NorthAmerica_12mo.csv"
-IDheatwavesReplacement <- FALSE
+IDheatwavesFunction <- FALSE
 dataBoundaries <- FALSE
 referenceBoundaries <- FALSE
 
 check_params(out, dataFolder, citycsv,
    coordinateFilenames, tasFilenames, timeFilenames,
-   IDheatwavesReplacement,
+   IDheatwavesFunction,
    dataBoundaries, referenceBoundaries)
 }
 

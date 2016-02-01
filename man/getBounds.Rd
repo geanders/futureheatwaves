@@ -15,8 +15,10 @@ projection dataframe. Read in by
 
 \item{custom}{An object name for the 'custom` data list. This parameter is
 passed through from \code{\link{gen_hw_set}} and includes user specifications
-for, if specified as other than the default, an alternative function to
+for, if specified as other than the default, the name of the R function to
 use to identify heatwaves, alternative upper and lower year boundaries
+for the data used to determine threshold temperatures for the heatwave
+definition, alternative upper and lower year boundaries
 for the projection period of the heatwave datasets being generated,
 alternative upper and lower year boundaries for the reference period
 to be used when measuring all heatwave characteristics related to

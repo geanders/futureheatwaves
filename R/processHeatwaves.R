@@ -279,7 +279,7 @@ createHwDataframe <- function(city, threshold, heatwaves,
         hw.frame$mean.temp.1 <- mean(ref_temps)
         # Summertime is months May through September
         summertime <- as.POSIXlt(ref_dates)$mon %in% c(4:8)
-        hw.frame$mean.summer.temp <- mean(ref_temps[summertime])
+        hw.frame$mean.summer.temp <- mean(ref_temps[summertime], na.rm = TRUE)
 
         hw.frame$city <- city
 

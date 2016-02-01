@@ -18,3 +18,18 @@ number_of_heatwaves <- function(hw_datafr){
         out <- nrow(hw_datafr)
         return(out)
 }
+
+heatwave_days <- function(hw_datafr){
+        out <- sum(hw_datafr$length)
+        return(out)
+}
+
+average_length <- function(hw_datafr){
+        out <- mean(hw_datafr$length)
+        return(out)
+}
+
+average_mean_temp <- function(hw_datafr){
+        out <- mean(hw_datafr$mean.temp)
+        return(out)
+}

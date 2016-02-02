@@ -164,31 +164,31 @@ running this function will write over it.
  Do you want to continue? (y / n): 
 ```
 
-This warning reminds you that this function will create subdirectories and write out files to the directory you specified when defining `out`. If you agree that it is okay to write files and subdirectories to this directory, enter "y" at the prompt, and the function will continue running. 
+This warning reminds you that this function will create subdirectories and write out files to the directory you specified when defining `out`. If you agree that it is okay to write files and subdirectories to this directory, enter "y" at the prompt, and the function will continue running. (If you do not get this warning when running the function, choose the option `printWarning = FALSE` when calling `gen_hw_set`.)
 
 If your file structure is set up correctly, you should get output that looks like this:
 
 ```
-Processing historical ensemble for bcc1 
+Processing thresholds for bcc1 
 Reading ---> r1i1p1 
 Read operation complete 
-Processing rcp 8.5 ensemble bcc1 
+Processing references for bcc1 
 Reading ---> r1i1p1 
 Read operation complete 
-Creating heatwave dataframe ~~ City:  balt  ~~ City Number:  1  ~~ Cutoff:  84.632 
-Creating heatwave dataframe ~~ City:  ny  ~~ City Number:  2  ~~ Cutoff:  78.77876 
-Creating heatwave dataframe ~~ City:  nwk  ~~ City Number:  3  ~~ Cutoff:  78.77876 
-Creating heatwave dataframe ~~ City:  phil  ~~ City Number:  4  ~~ Cutoff:  84.632 
-Creating heatwave dataframe ~~ City:  prov  ~~ City Number:  5  ~~ Cutoff:  75.074 
+Processing projections for  bcc1 
+Reading ---> r1i1p1 
+Read operation complete 
+Creating heatwave dataframe ~~ City:  balt  ~~ City Number:  1  ~~ Cutoff:  93.59672 
+Creating heatwave dataframe ~~ City:  ny  ~~ City Number:  2  ~~ Cutoff:  86.07236 
+Creating heatwave dataframe ~~ City:  nwk  ~~ City Number:  3  ~~ Cutoff:  86.07236 
+Creating heatwave dataframe ~~ City:  phil  ~~ City Number:  4  ~~ Cutoff:  93.59672 
+Creating heatwave dataframe ~~ City:  prov  ~~ City Number:  5  ~~ Cutoff:  81.06836 
 Writing bcc1: r1i1p1
 Writing accumulator 
 All operations completed. Exiting. 
-
-  modelName length.histens. length.rcpens.
-1      bcc1               1              1
 ```
 
-The function provides status reports on its progress in generating the heatwave projections, as this process can take a while if you include many cities and / or many climate model projections. If you do not want to generate this output when running the function, choose the option `printWarning = FALSE` when calling `gen_hw_set`.
+The function provides status reports on its progress in generating the heatwave projections, as this process can take a while if you include many cities and / or many climate model projections. 
 
 Once the function has completed running, you will have two new subdirectories in the directory you specified with the `out` variable. These will be called `Heatwaves` and `Thresholds`. The `Heatwaves` directory will contain dataframes with all identified heatwaves and their characteristics for each city, while the `Thresholds` folder will contain files with the temperature thresholds used for each city given. The `out` directory specified will also have a file called `hwModelInfo.csv` that contains some basic information about the climate models and the number of ensemble members included for each.
 

@@ -283,9 +283,9 @@ processEnsemble <- function(ensemble, modelName, global, custom, type){
 
         # Read the ensemble data
         cat("Reading --->", ensemble[1], "\n")
-        latlong <- readLatLong(ensemble)
-        tas <- readtas(ensemble)
-        times <- readTimes(ensemble)
+        latlong <- readLatLong(ensemble = ensemble, global = global)
+        tas <- readtas(ensemble = ensemble, global = global)
+        times <- readTimes(ensemble = ensemble, global = global)
         cat("Read operation complete", "\n")
 
         # Find indices of the closest points of measurement
@@ -299,6 +299,9 @@ processEnsemble <- function(ensemble, modelName, global, custom, type){
                             type = type)
         start <- bounds[1]
         end <- bounds[2]
+
+        # Get a vector containing the dates of days we are dealing with
+        dates <- formDates(times, bounds)
 
         # Acquire time series for every city
         series <- data.frame(tas[start:end, locations])

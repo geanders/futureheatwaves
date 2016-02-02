@@ -15,7 +15,7 @@
 #'    column) of each grid point in the climate model. This dataframe
 #'    uses a format where the location of New York City, for example, is
 #'    (40.7127, 285.9941).
-readLatLong <- function(ensemble){
+readLatLong <- function(ensemble, global){
         loc_file <- grep(global$coordinateFilenames, ensemble)
         return(read.csv(ensemble[loc_file], header = FALSE))
 }
@@ -32,7 +32,7 @@ readLatLong <- function(ensemble){
 #' @return A dataframe of climate projection data where each column
 #'    corresponds to a climate model grid point and each row corresponds
 #'    to a date of observation.
-readtas <- function(ensemble){
+readtas <- function(ensemble, global){
         loc_file <- grep(global$tasFilenames, ensemble)
         return(read.csv(ensemble[loc_file], header = FALSE))
 }
@@ -49,7 +49,7 @@ readtas <- function(ensemble){
 #' @return A dataframe of dates corresponding to climate projection data,
 #'    where each row gives a date, split into columns of day in the
 #'    dataframe, four-digit year, numeric month, and numeric day.
-readTimes <- function(ensemble){
+readTimes <- function(ensemble, global){
         loc_file <- grep(global$timeFilenames, ensemble)
         return(read.csv(ensemble[loc_file], header = FALSE))
 }

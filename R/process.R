@@ -337,7 +337,7 @@ processEnsemble <- function(ensemble, modelName, global, custom, type){
 #'    coordinates.
 closest_point <- function(city, latlong){
         latitude <- as.double(city[2])
-        longitude <- 360 - as.double(city[3])
+        longitude <- as.double(city[3])
         aSQ <- abs(latlong[,1] - latitude) ^ 2
         bSQ <- abs(latlong[,2] - longitude) ^ 2
         cSQ <- aSQ + bSQ

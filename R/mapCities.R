@@ -3,6 +3,10 @@
 #' @param plot_model A character string with the name of the model to plot
 #' @inheritParams gen_hw_set
 #'
+#' @examples
+#' out <- system.file(package = "futureheatwaves")
+#' map_grid(plot_model = "bcc1", out = out)
+#'
 #' @export
 #'
 #' @importFrom dplyr %>%

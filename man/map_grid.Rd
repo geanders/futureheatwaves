@@ -18,4 +18,9 @@ pathname for a directory that does not yet exist.}
 \description{
 Create a map of model grid
 }
+\examples{
+out <- system.file(package = "futureheatwaves")
+map_grid(plot_model = "bcc1", out = out)
+
+}
 

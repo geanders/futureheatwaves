@@ -336,7 +336,7 @@ First, the percentile used to identify a heatwave can be changed using the `prob
 Second, it is possible to specify the range of years of data for the community that should be used when determining this threshold. For example, if you wanted to base the threshold for each community on current community climates, you could leave this option as its default, which uses climate projections from the years 1981 to 2004 to determine the thresholds. If you wanted to use a different set of years, you could set the start and end year
 bounds for this reference period within the first two values of the option `dataBoundaries` in the function `gen_hw_set`.
 
-It is also possible to use a completely customized heatwave definition. To do this, you will need to load a function, implementing the definition to identify heatwaves in a time series of temperature data, into your R session. You can then reference the custom function using the `IDheatwavesReplacement` option in `gen_hw_set`.
+It is also possible to use a completely customized heatwave definition. To do this, you will need to load a function, implementing the definition to identify heatwaves in a time series of temperature data, into your R session. You can then reference the custom function using the `IDheatwavesFunction` option in `gen_hw_set`.
 
 To work correctly, this custom function for identifying heatwaves must allow specific inputs and generate specific outputs. The function must allow the following inputs (even if it does not use them within the function code):
 
@@ -348,7 +348,7 @@ The function must return the input dataframe (`datafr`), with the following colu
 - `hw`: A binary variable indicating whether a day was part of a heatwave (1: day in a heatwave; 0: not in a heatwave) and
 - `hw.number`: A non-negative integer that is 0 for all days that are not in heatwaves and, for days in heatwaves, gives a unique number for each separate heatwave. For example, all days in the second heatwaves in the time series would get the value 2 for this column, while all days in the fifth heatwave would get the value 5, and all days not in heatwaves would get the value 0. 
 
-The custom function can then be referenced using the `IDheatwavesReplacement` option in `gen_hw_set`, and it will be used to identify heatwaves in the dataset. For example, we have included an alternative ID definition function in this package, called `IDHeatwavesAlternative`, which identifies heatwaves as five or more days (compared to two or more days required by the default definition) above a community's $98^{th}$ percentile temperature. To use this as the heatwave definition, you would run:
+The custom function can then be referenced using the `IDheatwavesFunction` option in `gen_hw_set`, and it will be used to identify heatwaves in the dataset. For example, we have included an alternative ID definition function in this package, called `IDHeatwavesAlternative`, which identifies heatwaves as five or more days (compared to two or more days required by the default definition) above a community's $98^{th}$ percentile temperature. To use this as the heatwave definition, you would run:
 
 ```{r, eval = FALSE}
 gen_hw_set(out = "example_results",

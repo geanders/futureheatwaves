@@ -32,6 +32,10 @@ library(futureheatwaves)
 ## ----eval = FALSE--------------------------------------------------------
 #  data(hw_datafr)
 
+## ----fig.width = 5, message = FALSE, warning = FALSE---------------------
+out <- system.file(package = "futureheatwaves")
+map_grid(plot_model = "bcc1", out = out)
+
 ## ---- eval = FALSE-------------------------------------------------------
 #  gen_hw_set(out = "example_results",
 #             dataFolder = "cmip5" ,

@@ -318,7 +318,7 @@ data(hw_datafr)
 
 The package also has a function that allows you to plot the locations of grid points for each climate model that match study communities, as well as show the links between climate grid points and associated communities.
 
-```{r}
+```{r fig.width = 5, message = FALSE, warning = FALSE}
 out <- system.file(package = "futureheatwaves")
 map_grid(plot_model = "bcc1", out = out)
 ```

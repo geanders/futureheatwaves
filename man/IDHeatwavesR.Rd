@@ -4,8 +4,7 @@
 \alias{IDHeatwavesR}
 \title{Identify heatwaves in a time series}
 \usage{
-IDHeatwavesR(threshold = stop("Error: unspecified threshold"), days = 2,
-  datafr = stop("Error: 'datafr' unspecified"))
+IDHeatwavesR(threshold, datafr)
 }
 \arguments{
 \item{threshold}{Numeric string with threshold temperature used in

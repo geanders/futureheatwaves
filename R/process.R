@@ -62,7 +62,9 @@ processModel <- function(model, global, custom, accumulators){
 
         # Acquire vector of threshold temperatures using the historical
         # ensemble for this model which possesses the name r1i1p1
-        thresholds <- processThresholds(model, global, custom)
+        thresholds <- processThresholds(model = model,
+                                        global = global,
+                                        custom = custom)
 
         # If reference period differs from projection period, get data
         # for reference period
@@ -153,9 +155,6 @@ processThresholds <- function(model, global, custom){
         # threshold percentile (default: 0.98)
         thresholds <- apply(thresholdEnsemble$series, 2, quantile,
                             probs = custom$probThreshold)
-
-        # Save thresholds to file
-        writeThresholds(name, 'thresholds', thresholds, global, custom)
 
         return(thresholds)
 }

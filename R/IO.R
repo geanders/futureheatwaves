@@ -54,38 +54,6 @@ readTimes <- function(ensemble, global){
         return(read.csv(ensemble[loc_file], header = FALSE))
 }
 
-#' Write temperature thresholds to file
-#'
-#' This function creates a dataframe with a column with names of each of the
-#' user-specified communities and a column with each community's threshold
-#' temperature, as determine from the climate projections for the reference
-#' period and the user-specified percentile threshold. These files are written
-#' out to a directory called "Thresholds" within the user-specified output
-#' directory (as specified in \code{\link{gen_hw_set}}). Within "Thresholds",
-#' there will be a subdirectory for each of the climate models.
-#'
-#' @param threshOut Character string with the file name to use for the file
-#'    the function writes out with threshold temperatures for each community
-#'    for the model.
-#' @inheritParams buildStructureModels
-#' @inheritParams processProjections
-#' @inheritParams processModel
-writeThresholds <- function(modelName, threshOut, thresholds, global, custom){
-
-        writePath <- paste0(global$output, "Thresholds/")
-
-        # Create datastructure that will be written
-        writeThis <- data.frame(global$cities[,1], thresholds)
-
-        # Create the directory that the file will be written to
-        dir.create(paste(writePath, modelName, sep = ""),
-                   showWarnings = FALSE, recursive = TRUE)
-
-        # Write the file
-        write.csv(writeThis, file = paste(writePath, modelName,
-                                          "/", threshOut, ".csv", sep = ''))
-}
-
 #' Ensemble writer factory function
 #'
 #' This function creates a closure that writes a single heatwave list to a
@@ -118,15 +86,6 @@ createEnsembleWriter <- function(modelName, global, custom){
 
                 cat("Writing ", modelName, ": r", i, "i", i, "p", i,
                     "\n", sep = "")
-
-                # TODO: Contradiction detected. writeThresholds is called each time the closure is called
-                # even though the documentation for writeThresholds states it is only supposed to be called
-                # for the r1i1p1 ensemble. Make adjustments.
-                # Write minimum threshold temperatures of each city to a file
-                thresholds <- dplyr::group_by(hwFrame, city) %>%
-                        dplyr::summarize(min = min(min.temp))
-                writeThresholds(modelName, 'minimums',
-                                thresholds, global, custom)
 
                 # Create the directory that the file will be written to
                 dir.create(paste(writePath, modelName, sep = ""),

@@ -1,34 +1,70 @@
 ## ----echo = FALSE, message = FALSE---------------------------------------
 library(futureheatwaves)
 
-## ------------------------------------------------------------------------
-dataFolder <- "inst/cmip5/" 
-citycsv <- "inst/cities.csv"
+## ----eval = FALSE--------------------------------------------------------
+#  gen_hw_set(out = "example_results",
+#             dataFolder = "cmip5" ,
+#             citycsv = "cities.csv",
+#             coordinateFilenames = "latitude_longitude_NorthAmerica_12mo.csv",
+#             tasFilenames = "tas_NorthAmerica_12mo.csv",
+#             timeFilenames = "time_NorthAmerica_12mo.csv")
 
-## ------------------------------------------------------------------------
-coordinateFilenames <- "latitude_longitude_NorthAmerica_12mo.csv"
-tasFilenames <- "tas_NorthAmerica_12mo.csv"
-timeFilenames <- "time_NorthAmerica_12mo.csv"
+## ---- eval = FALSE-------------------------------------------------------
+#  # Define the function
+#  average_length <- function(hw_datafr){
+#          ave_length <- mean(hw_datafr$length)
+#          return(ave_length)
+#  }
 
-## ------------------------------------------------------------------------
-out <- "~/tmp/example_results/"
+## ---- eval = FALSE-------------------------------------------------------
+#  # Apply across all heatwave dataframes from all ensemble members
+#  apply_all_models(out = "results",
+#                   FUN = average_length)
+
+## ---- eval = FALSE-------------------------------------------------------
+#  apply_all_models(out = "results",
+#                   FUN = average_length,
+#                   city_specific = TRUE)
+
+## ---- eval = FALSE-------------------------------------------------------
+#  average_mean_temp
 
 ## ----eval = FALSE--------------------------------------------------------
-#  gen_hw_set(out = out,
-#             dataFolder = dataFolder,
-#             citycsv = citycsv,
-#             coordinateFilenames = coordinateFilenames,
-#             tasFilenames = tasFilenames,
-#             timeFilenames = timeFilenames,
-#             RorCPP = 0)
+#  data(hw_datafr)
 
-## ------------------------------------------------------------------------
-dataFolder <- system.file("cmip5", package = "futureheatwaves")
-finalList <- acquireDirectoryStructure(dataFolder = dataFolder,
-   coordinateFilenames = coordinateFilenames,
-   tasFilenames = tasFilenames,
-   timeFilenames = timeFilenames)
+## ---- eval = FALSE-------------------------------------------------------
+#  gen_hw_set(out = "example_results",
+#             dataFolder = "cmip5" ,
+#             citycsv = "cities.csv",
+#             coordinateFilenames = "latitude_longitude_NorthAmerica_12mo.csv",
+#             tasFilenames = "tas_NorthAmerica_12mo.csv",
+#             timeFilenames = "time_NorthAmerica_12mo.csv",
+#             IDheatwavesFunction = "IDHeatwavesAlternative")
 
-str(finalList[[1]][[1]])
-str(finalList[[1]][[2]][1])
+## ---- eval = FALSE-------------------------------------------------------
+#  gen_hw_set(out = "example_results",
+#             dataFolder = "cmip5" ,
+#             citycsv = "cities.csv",
+#             coordinateFilenames = "latitude_longitude_NorthAmerica_12mo.csv",
+#             tasFilenames = "tas_NorthAmerica_12mo.csv",
+#             timeFilenames = "time_NorthAmerica_12mo.csv",
+#             projectionBoundaries = c(2071, 2090))
+
+## ---- eval = FALSE-------------------------------------------------------
+#  gen_hw_set(out = "example_results",
+#             dataFolder = "cmip5" ,
+#             citycsv = "cities.csv",
+#             coordinateFilenames = "latitude_longitude_NorthAmerica_12mo.csv",
+#             tasFilenames = "tas_NorthAmerica_12mo.csv",
+#             timeFilenames = "time_NorthAmerica_12mo.csv",
+#             thresholdBoundaries = c(2061, 2080))
+
+## ---- eval = FALSE-------------------------------------------------------
+#  gen_hw_set(out = "example_results",
+#             dataFolder = "cmip5" ,
+#             citycsv = "cities.csv",
+#             coordinateFilenames = "latitude_longitude_NorthAmerica_12mo.csv",
+#             tasFilenames = "tas_NorthAmerica_12mo.csv",
+#             timeFilenames = "time_NorthAmerica_12mo.csv",
+#             referenceBoundaries = c(2031, 2040))
 

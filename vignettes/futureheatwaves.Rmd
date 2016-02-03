@@ -190,7 +190,7 @@ All operations completed. Exiting.
 
 The function provides status reports on its progress in generating the heatwave projections, as this process can take a while if you include many cities and / or many climate model projections. 
 
-Once the function has completed running, you will have two new subdirectories in the directory you specified with the `out` variable. These will be called `Heatwaves` and `Thresholds`. The `Heatwaves` directory will contain dataframes with all identified heatwaves and their characteristics for each community, while the `Thresholds` folder will contain files with the temperature thresholds used for each community. The `out` directory specified will also have a file called `hwModelInfo.csv` that contains some basic information about the climate models and the number of ensemble members included for each.
+Once the function has completed running, you will have one new subdirectory in the directory you specified with the `out` variable called `Heatwaves`. This directory will contain dataframes with all identified heatwaves and their characteristics for each community. The `out` directory specified will also have a file called `hwModelInfo.csv` that contains some basic information about the climate models and the number of ensemble members included for each.
 
 The full output directory structure will look something like this: 
 
@@ -202,13 +202,6 @@ The full output directory structure will look something like this:
             - `bcc1-a`
                 - `1.csv`
                 - `2.csv`
-    - `Thresholds`
-        - `bcc1`
-            - `minimums.csv`
-            - `thresholds.csv`
-        - `bcc1-a`
-            - `minimums.csv`
-            - `thresholds.csv`
     - `hwModelInfo.csv`
     
 Each of the heatwave files will have one heatwave per row, covering all the heatwaves identified for that particular ensemble member. The dataframe has the following columns with characteristics of each heatwave: 

@@ -321,7 +321,6 @@ To help users create their own functions, we have included an example dataframe 
 data(hw_datafr)
 ```
 
-
 ## Using custom options
 
 ### Using a custom heatwave definition
@@ -380,7 +379,31 @@ gen_hw_set(out = "example_results",
 
 ### Customizing dates used to determine thresholds or reference data
 
-...
+Similarly, while the default is to use data from 1981 to 2004 to determine the $98^{th}$ percentile temperature for each community to use in their heatwave definitions, the user can customize which date range to use when pulling the temperature data to use to calculate these thresholds. This option is specified using the `thresholdBoundaries` option in `gen_hw_set`. For example, to use the years 2061 to 2080 to calculate these threshold temperatures, you could run: 
+
+```{r, eval = FALSE}
+gen_hw_set(out = "example_results",
+           dataFolder = "cmip5" ,
+           citycsv = "cities.csv",
+           coordinateFilenames = "latitude_longitude_NorthAmerica_12mo.csv",
+           tasFilenames = "tas_NorthAmerica_12mo.csv",
+           timeFilenames = "time_NorthAmerica_12mo.csv",
+           thresholdBoundaries = c(2061, 2080))
+```
+
+You can customize one other set of time boundaries. The heatwave datasets include several heatwave characteristics that incorporate relative temperature. These take the absolute temperature measures of heatwave and compare them to the community's typical temperature distributions to generate relative measures of the intensity of the heatwave. The default is to use temperatures from a community for the period 2061 to 2080 for these reference temperatures to calculate relative temperatures of each heatwave. However, you can use the `referenceBoundaries` option of `gen_hw_set` to specify which years you would like to use for these reference temperatures. This can be useful in exploring the role of adaptation in future heatwaves. For example, if you wanted to use temperature projections for 2031 to 2040 when calculating relative characteristics of heatwaves, you could run: 
+
+```{r, eval = FALSE}
+gen_hw_set(out = "example_results",
+           dataFolder = "cmip5" ,
+           citycsv = "cities.csv",
+           coordinateFilenames = "latitude_longitude_NorthAmerica_12mo.csv",
+           tasFilenames = "tas_NorthAmerica_12mo.csv",
+           timeFilenames = "time_NorthAmerica_12mo.csv",
+           referenceBoundaries = c(2031, 2040))
+```
+
+As with the `projectionBoundaries` option, there are some restrictions on which year ranges can be selected. The starting year cannot be earlier than 1980 and the ending year cannot be later than 2099. Further, the custom date boundaries cannot span 2005 (i.e., they must end in 2004 or earlier or must start in 2006 or later).
 
 ## Example data
 

@@ -86,18 +86,18 @@ void storeHeatwaveEntry(int index, int hwSize, int hwCounter, std::vector<int>& 
 
         for(int i = 0; i < hwSize; i++){
                 // Push back 1 hwSize number of times onto hw.
-                hw[index] = 1;
+                hw[index + i] = 1;
 
                 // Push back hwCounter value of hwSize number of times onto hwNumber.
-                hwNumber[index] = hwCounter;
+                hwNumber[index + i] = hwCounter;
 
                 if(i == 0){
                         // Put the first heatwave day in place.
-                        firstHwDay[index] = 1;
+                        firstHwDay[index + i] = 1;
                 }
                 else{
                         // Put zeroes after the first heatwave day has been placed.
-                        firstHwDay[index] = 0;
+                        firstHwDay[index + i] = 0;
                 }
         }
 }
@@ -121,8 +121,8 @@ void storeZeroes(int index, int potentialHeatwave, std::vector<int>& hw, std::ve
 
         //Store the zeroes.
         for(int i = 0; i < zercount; i++){
-                hw[index] = 0;
-                hwNumber[index] = 0;
-                firstHwDay[index] = 0;
+                hw[index + i] = 0;
+                hwNumber[index + i] = 0;
+                firstHwDay[index + i] = 0;
         }
 }

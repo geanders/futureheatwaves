@@ -1,5 +1,3 @@
-# TODO: clarify documentation. Do this after testing.
-
 #' Process valid models
 #'
 #' This function takes any models that are valid, identifies and characterizes
@@ -290,6 +288,9 @@ processEnsemble <- function(ensemble, modelName, global, custom, type){
         # Find indices of the closest points of measurement
         locations <- apply(global$cities, 1, closest_point, latlong = latlong)
 
+        out_locations <- cbind(global$cities, latlong[locations, ])
+        colnames(out_locations)[4:5] <- c("lat_grid", "long_grid")
+
         # Acquire the boundaries for the time series
         # Structure: c(start index, end index, # of elements spanning
         # from start to end)
@@ -315,7 +316,8 @@ processEnsemble <- function(ensemble, modelName, global, custom, type){
                     bounds = bounds,
                     series = series,
                     times = times,
-                    dates = dates)
+                    dates = dates,
+                    out_locations = out_locations)
         return(ret)
 }
 

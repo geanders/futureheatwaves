@@ -4,7 +4,7 @@
 \alias{readTimes}
 \title{Read projection dates data}
 \usage{
-readTimes(ensemble)
+readTimes(ensemble, global)
 }
 \arguments{
 \item{ensemble}{Character vector that includes

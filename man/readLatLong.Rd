@@ -4,7 +4,7 @@
 \alias{readLatLong}
 \title{Read latitude and longitude data}
 \usage{
-readLatLong(ensemble)
+readLatLong(ensemble, global)
 }
 \arguments{
 \item{ensemble}{Character vector that includes

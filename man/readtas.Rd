@@ -4,7 +4,7 @@
 \alias{readtas}
 \title{Read climate projection data}
 \usage{
-readtas(ensemble)
+readtas(ensemble, global)
 }
 \arguments{
 \item{ensemble}{Character vector that includes

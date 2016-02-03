@@ -19,16 +19,19 @@ number_of_heatwaves <- function(hw_datafr){
         return(out)
 }
 
+#' @export
 heatwave_days <- function(hw_datafr){
         out <- sum(hw_datafr$length)
         return(out)
 }
 
+#' @export
 average_length <- function(hw_datafr){
         out <- mean(hw_datafr$length)
         return(out)
 }
 
+#' @export
 average_mean_temp <- function(hw_datafr){
         out <- mean(hw_datafr$mean.temp)
         return(out)

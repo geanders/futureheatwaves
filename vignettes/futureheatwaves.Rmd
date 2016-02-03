@@ -25,11 +25,11 @@ This function requires you to have data on community locations and climate proje
 
 #### File with community locations
 
-First, you must have a comma-separated (csv) file the gives unique identifiers for each community for which you wish to make projections, as well as their latitude and longitude. This file should have at least three columns, with the following column names: 
+First, you must have a comma-separated (csv) file the gives unique identifiers for each community for which you wish to make projections, as well as their latitude and longitude. The latitude and longitude should be expressed in the same way that latitude and longitude are expressed in the climate projection files to be processed. The community location file should have three columns, with the following column names: 
 
 - `city`: A unique identifier for each community you will be analyzing.
-- `lat`: The communities latitude, in [units]
-- `long`: The communities longitude, in [units]
+- `lat`: The communities' latitudes
+- `long`: The communities' longitudes
 
 Here is an example of the correct format for a community locations file for five US communities (Baltimore, MD; New York, NY; Newark, NJ; Philadelphia, PA; and Providence RI):
 
@@ -210,10 +210,110 @@ The full output directory structure will look something like this:
             - `minimums.csv`
             - `thresholds.csv`
     - `hwModelInfo.csv`
+    
+Each of the heatwave files will have one heatwave per row, covering all the heatwaves identified for that particular ensemble member. The dataframe has the following columns with characteristics of each heatwave: 
+
+- `hw.number`: A sequential number identifying each heatwave in each community;
+- `mean.temp`: Average of mean daily temperature across all days in the heatwave; 
+- `max.temp`: Highest value of mean daily temperature across days in the heatwave; 
+- `min.temp`: Lowest value of mean daily temperature across days in the heatwave;
+- `length`: Number of days in the heatwave; 
+- `start.date`: Date of the first day of the heatwave; \code{end.date}: Date of the last day of the heatwave; 
+- `start.doy`: Numeric day of the year of the first day of the heatwave (1 = Jan. 1, etc.); 
+- `start.month`: Numeric value indicating the month in which the heatwave started (1 = January); 
+- `days.above.80`: Number of days in the heatwave above 80 degrees Fahrenheit; 
+- `days.above.85`: Number of days in the heatwave above 85 degrees Fahrenheit; 
+- `days.above.90`: Number of days in the heatwave above 90 degrees Fahrenheit;
+- `days.above.95`: Number of days in the heatwave above 90 degrees Fahrenheit;
+- `days.above.99th`:Number of days in the heatwave above the 99th percentile temperature for the community, using the period specified by the user with the `referenceBoundaries` argument in `gen_hw_set` as a reference for determining these percentiles;
+- `days.above.99.5th`:Number of days in the heatwave above the 99.5th percentile temperature for the community; 
+- `first.in.season`: Whether the heatwave was the first to occur in its season (as determined by whether the heatwave was the first in its calendar year); 
+- `threshold.temp`: The temperature used as the threshold for the heatwave definition in the selected community; 
+- `mean.temp.quantile`: The percentile of the average daily mean temperature during the heatwave compared to the community's year-round temperature distribution, based on the temperatures for the community during the period specified by the `referenceBoundaries` argument in `gen_hw_set`;
+- `max.temp.quantile`: The percentile of the highest daily mean temperature during the heatwave compared to the community's year-round temperature distribution; 
+- `min.temp.quantile`: The percentile of the lowest daily mean temperature during the heatwave compared to the community's year-round temperature distribution; 
+- `mean.temp.1`: The community's average year-round temperature, based on the temperatures for the community during the period specified by the `referenceBoundaries` argument in `gen_hw_set`;
+- `mean.summer.temp`: The community's average May--September temperature, based on the temperatures for the community during the period specified by the `referenceBoundaries` argument in `gen_hw_set`; and
+- `city`: The identifier for the community, as given in the file specified in the `citycsv` argument of `gen_hw_set`.
 
 ### Applying functions to the heatwave datasets
 
-Once you have created a directory of files with characterized heatwaves for each ensemble member, ...
+Once you have created a directory of files with characterized heatwaves for each ensemble member, you can explore the results by using the `apply_all_models` function to apply custom R functions across all heatwave dataframes created by the `gen_hw_sets` call. You specify the location of the directory with the heatwave dataframes using the `out` argument when calling `apply_all_models`. Typically, this will be the same value as that for the `out` argument in `gen_hw_set`.
+
+For example, if you wanted to to get the average length of the heatwaves identified within each ensemble member, you could write a simple function to calculate average length and then use `apply_all_models` to apply it across the dataframes for heatwaves for all ensemble members in all climate models: 
+
+```{r, eval = FALSE}
+# Define the function
+average_length <- function(hw_datafr){
+        ave_length <- mean(hw_datafr$length)
+        return(ave_length)
+}
+```
+
+```{r, eval = FALSE}
+# Apply across all heatwave dataframes from all ensemble members
+apply_all_models(out = "results", 
+                 FUN = average_length)
+```
+
+```
+  model ensemble value
+ bcc1-a        1   3.5
+ bcc1-a        2   3.5
+   bcc1        1   3.5
+```
+
+You can also use the `city_specific` argument in `apply_all_models` to apply the function separately by community to all heatwaves within the dataframe of heatwaves for each ensemble member. For example: 
+
+```{r, eval = FALSE}
+apply_all_models(out = "results", 
+                 FUN = average_length,
+                 city_specific = TRUE)
+```
+
+```
+   model ensemble city value
+  bcc1-a        1 balt   3.5
+  bcc1-a        1  nwk   3.5
+  bcc1-a        1   ny   3.5
+  bcc1-a        1 phil   3.5
+  bcc1-a        1 prov   3.5
+  bcc1-a        2 balt   3.5
+  bcc1-a        2  nwk   3.5
+  bcc1-a        2   ny   3.5
+  bcc1-a        2 phil   3.5
+  bcc1-a        2 prov   3.5
+    bcc1        1 balt   3.5
+    bcc1        1  nwk   3.5
+    bcc1        1   ny   3.5
+    bcc1        1 phil   3.5
+    bcc1        1 prov   3.5
+```
+
+To work, the functions you apply using `apply_all_models` must follow a certain structure. They must require only a dataframe of heatwaves, in the format of those output by `gen_hw_set`, as the input, and they must output a single-value vector (i.e., a vector of length one).
+
+We have included several functions as simple examples of the type of functions that can be used with `apply_all_models`: 
+
+- `number_of_heatwaves`: Determines the number of heatwaves ; 
+- `heatwave_days`: Sums up the total number of heatwave days by adding the lengths of all heatwaves; 
+- `average_length`: Calculates the average length of heatwaves; and 
+- `average_mean_temp`: Calculates the average mean temperature across all heatwaves
+
+You can see the code of any of these functions, to use to develop your own, by typing just the function name (with no parentheses) in your R console. 
+
+```{r, eval = FALSE}
+average_mean_temp
+```
+
+```
+function(hw_datafr){
+        out <- mean(hw_datafr$mean.temp)
+        return(out)
+}
+<environment: namespace:futureheatwaves>
+```
+
+You can use this functionality to either explore characteristics of the identified heatwaves or to estimate the health impacts of the identified heatwaves. 
 
 ## Using custom options
 
@@ -223,7 +323,7 @@ The default is for this package to use the following definition to identify heat
 
 > A heatwave is two or more days at or above a community-specific threshold temperature, with the threshold determined as the $98^{th}$ percentile of year-round temperature in the community during some reference period (by default, 1981--2004).
 
-Two components of this definition can be customized directly. 
+Two components of this definition can be easily customized, without creating a new R function to use to identify heatwaves. 
 
 First, the percentile used to identify a heatwave can be changed using the `probThreshold` option when calling the `gen_hw_set` function. This option can take values between 0 and 1. The default value is 0.98, or a definition with a threshold of the $98^{th}$ percentile of the community's temperature.
 
@@ -252,34 +352,6 @@ We used, as an example, data from the Beijing Climate Center, China Meteorologic
 The data for this example of includes climate projections for grid points near several major East Coast cities: New York, NY; Philadelphia, PA; Newark, NJ; Baltimore, MD, Providence, RI. For the example CMIP5 data we used, all of these communities could be linked to three grid points on the climate model.
 
 The historical projections range over the years 1980 to 2005, while the future projections range over the years 2006 to 2099.
-
-Here is an example of the first few lines of a `times` file for historical projection data: 
-
-```{r echo = FALSE}
-my_dir <- system.file("cmip5", package = "futureheatwaves")
-my_file <- paste0(my_dir, "/", 
-                    "historical/bcc1/r1i1p1/time_NorthAmerica_12mo.csv")
-times <- read.csv(my_file, header = FALSE)
-head(times, 4)
-```
-
-Here is an example of the first few lines of a `latlong` file for historical projection data: 
-
-```{r echo = FALSE}
-my_file <- paste0(my_dir, "/", 
-                    "historical/bcc1/r1i1p1/latitude_longitude_NorthAmerica_12mo.csv")
-latlongs <- read.csv(my_file, header = FALSE)
-head(latlongs, 4)
-```
-
-Here is an example of the first few lines of a `tas` file for historical projection data for the three grid points that are included in our examples in the package documentation: 
-
-```{r echo = FALSE}
-my_file <- paste0(my_dir, "/", 
-                    "historical/bcc1/r1i1p1/tas_NorthAmerica_12mo.csv")
-tas2 <- read.csv(my_file, header = FALSE)
-head(tas2, 4)
-```
 
 ## How the package works
 

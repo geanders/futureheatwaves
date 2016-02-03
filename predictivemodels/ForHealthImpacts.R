@@ -29,7 +29,7 @@ proj_pops <- group_by(proj_pops, city) %>%
 out <- "~/tmp/results"  ## Replace with the path to where you have heatwave
                         ## dataframes stored
 
-# Predict frequency of very dangerous heatwaves using the custom tree model
+# Predict frequency of very dangerous heatwaves using the bagging model
 apply_all_models(out = out, FUN = "bag_frequency")
 apply_all_models(out = out, FUN = "bag_frequency",
                  city_specific = TRUE)

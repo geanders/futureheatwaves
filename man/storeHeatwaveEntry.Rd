@@ -5,7 +5,7 @@
 \title{Helper function for IDHeatwavescpp that addes entries to the data structures that track
 heatwave information}
 \usage{
-storeHeatwaveEntry(index, hwSize, hwCounter, hw, hwNumber, firstHwDay)
+storeHeatwaveEntry(index, hwSize, hwCounter, hw, hwNumber)
 }
 \arguments{
 \item{index}{An index into the various}
@@ -17,8 +17,6 @@ storeHeatwaveEntry(index, hwSize, hwCounter, hw, hwNumber, firstHwDay)
 \item{hw}{A reference of the vector that contains the heatwaves}
 
 \item{hwNumber}{A reference of the vector that contains the heatwave numbers.}
-
-\item{firstHwDay}{A reference of the vector that contains the first day the heatwave occurred.}
 }
 \description{
 Helper function for IDHeatwavescpp that addes entries to the data structures that track

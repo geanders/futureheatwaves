@@ -4,7 +4,7 @@
 \alias{storeZeroes}
 \title{Helper function that adds zeroes to the data structures that track heatwave information}
 \usage{
-storeZeroes(index, potentialHeatwave, hw, hwNumber, firstHwDay)
+storeZeroes(index, potentialHeatwave, hw, hwNumber)
 }
 \arguments{
 \item{potentialHeatwave}{Size of the potential heatwave that turned out not to be a heatwave.}
@@ -12,8 +12,6 @@ storeZeroes(index, potentialHeatwave, hw, hwNumber, firstHwDay)
 \item{hw}{A reference of the vector that contains the heatwaves}
 
 \item{hwNumber}{A reference of the vector that contains the heatwave numbers.}
-
-\item{firstHwDay}{A reference of the vector that contains the first day the heatwave occurred.}
 }
 \description{
 Helper function that adds zeroes to the data structures that track heatwave information

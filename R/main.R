@@ -164,7 +164,9 @@ gen_hw_set <- function(out,
 
         # Write the model information from the model information accumulator
         out <- accumulators("return model information")
-        writeAccumulator(accumulators("return model information"), global)
+        writeAccumulators(modelInfoAccumulator = accumulators("return model information"),
+                          locationList = accumulators("return locations"),
+                          global = global)
 
         cat("All operations completed. Exiting.", "\n\n")
         return(out)
@@ -293,9 +295,6 @@ checkCustomBounds <- function(boundList){
         }
 }
 
-# TODO: It may be possible to make the accumulator system extremely robust.
-# Consider this possibility after all else is finished.
-
 #' Create accumulator closure
 #'
 #' This closure holds, adds to, and returns data structures that the user
@@ -332,7 +331,7 @@ checkCustomBounds <- function(boundList){
 #'    input into the data structures it contains.
 createAccumulators <- function(){
         modelInfoAccumulator <- data.frame(c(), c(), c())
-        locationList <- list()
+        locationList <- data.frame(c(), c(), c(), c(), c(), c())
 
         function(command, newElement = FALSE){
 
@@ -349,7 +348,7 @@ createAccumulators <- function(){
                         return(locationList)
 
                 } else if(command == "append location list"){
-                        locationList <<- list(locationList, newElement)
+                        locationList <<- rbind(locationList, newElement)
                 }
 
                 # If user passes an invalid command, halt the program.

@@ -60,9 +60,16 @@ processModel <- function(model, global, custom, accumulators){
 
         # Acquire vector of threshold temperatures using the historical
         # ensemble for this model which possesses the name r1i1p1
-        thresholds <- processThresholds(model = model,
+        thresholdList <- processThresholds(model = model,
                                         global = global,
                                         custom = custom)
+        thresholds <- thresholdList$thresholds
+        out_locations <- thresholdList$out_locations
+        out_locations$model <- modelName
+
+        # Add locations to the locationList accumulator
+        accumulators(command = "append location list",
+                     newElement = out_locations)
 
         # If reference period differs from projection period, get data
         # for reference period
@@ -154,7 +161,10 @@ processThresholds <- function(model, global, custom){
         thresholds <- apply(thresholdEnsemble$series, 2, quantile,
                             probs = custom$probThreshold)
 
-        return(thresholds)
+        out_locations <- thresholdEnsemble$out_locations
+
+        return(list(thresholds = thresholds,
+                    out_locations = out_locations))
 }
 
 processReference <- function(model, global, custom){
@@ -218,8 +228,8 @@ processProjections <- function(ensemble, modelName, ensembleWriter,
         ensembleSeries$reference <- reference
         ensembleSeries$reference_dates <- reference_dates
 
-        # Append locations vector to the locations vector accumulator
-        accumulators("append location list", ensembleSeries$locations)
+#         # Append locations vector to the locations vector accumulator
+#         accumulators("append location list", ensembleSeries$locations)
 
         # Acquire the heatwave dataframes for every ensemble in the
         # model

@@ -112,13 +112,19 @@ createEnsembleWriter <- function(modelName, global, custom){
 #' @inheritParams processModel
 #'
 #' @return ...
-writeAccumulator <- function(modelInfoAccumulator, global){
+writeAccumulators <- function(modelInfoAccumulator,
+                             locationList,
+                             global){
         colnames(modelInfoAccumulator)[1] <- "Models"
         colnames(modelInfoAccumulator)[2] <- "# of historical ensembles"
         colnames(modelInfoAccumulator)[3] <- "# of future projection ensembles"
-        cat("Writing accumulator", "\n")
+
+        cat("Writing accumulators", "\n")
         writePath <- global$output
         write.csv(modelInfoAccumulator,
                   file = paste0(writePath, "hwModelInfo", ".csv"),
+                  row.names = FALSE)
+        write.csv(locationList,
+                  file = paste0(writePath, "locationList", ".csv"),
                   row.names = FALSE)
 }

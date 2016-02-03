@@ -1,62 +1,32 @@
-#' Map cities of interest
+#' Create a map of model grid
 #'
-#' @param locationsList
-#' @param cities
-#' @param sampleEnsemble
+#' @param plot_model A character string with the name of the model to plot
+#' @inheritParams gen_hw_set
 #'
-#' @return Checks locations in locationList for ... and, if ...,
-#'    plots a map of ... .
-makeMap <- function(locationsList, cities, sampleEnsemble){
-        identical <- checkLocations(locationsList)
-        if(identical){
-                mapCities(locationsList[1], cities, sampleEnsemble)
-        }
-}
+#' @export
+#'
+#' @importFrom dplyr %>%
+map_grid <- function(plot_model, out){
+        cities <- read.csv(paste(out, "locationList.csv", sep = "/")) %>%
+                mutate(long = long - 360,
+                       long_grid = long_grid - 360) %>%
+                filter(model == plot_model)
 
-#' [Short title for function]
-#'
-#' @param locationList [Whis is this?]
-#'
-#' @return [What does this return?]
-checkLocations <- function(locationsList){
-        identical <- sapply(locationsList, function(locations, locationsList){
-                identical2 <- sapply(locationsList, function(locations2, locations){
-                        if(identical(locations, locations2)){
-                                return(TRUE)
-                        }
-                },
-                locations)
-                return(all(identical2))
-        },
-        locationsList)
-        return(all(identical))
-}
-
-#' Map locations and cities
-#'
-#' @param locations [What is this?]
-#' @param cities Dataframe with a row for every city and columns for
-#'    city ID, latitude, and longitude.
-#' @param sampleEnsemble [What is this?]
-#'
-#' @return Plots  a map of all cities in the \code{cities} dataframe,
-#'     as well as ...
-#TODO: SWAP LONGITUDE AND LATITUDE
-mapCities <- function(locations, cities, sampleEnsemble){
-        latlong <- readLatLong(sampleEnsemble)
-        dataCoordinates <- latlong[locations]
-        cities <- cities[ , 1:3]
-        cities <- -cities$long
+        latlong <- unique(cities[ , c("long_grid", "lat_grid")])
         states <- map_data("state")
+
         map <- ggplot()
         map <- map + geom_polygon(data = states,
                                   aes(x = long, y = lat, group = group),
-                                  colour = "white", fill = "grey10")
-        map <- map + geom_text(data = cities, hjust = .5, vjust = -.5,
-                               aes( x = long, y = lat, label = cities$city),
-                               colour = "gold2", size = 4)
-        map("state")
-        intermediate <- gcIntermediate(cities[ , 2:3], locations)
-        lines(intermediate, col = 'red')
-        text(cities[ , 2], cities[ , 3], cities[ , 1], pos = 1)
+                                  colour = "lightgray", fill = "white")
+        map <- map + geom_point(data = latlong,
+                                aes(x = long_grid, y = lat_grid),
+                                color = 132, alpha = 0.6)
+        map <- map + geom_segment(data = cities, aes(x = long, y = lat,
+                                                     xend = long_grid,
+                                                     yend = lat_grid),
+                                  size = 0.9, alpha = 0.6, color = 132)
+        map <- map + coord_map("albers", lat0=30, lat1=40) + theme_map()
+        map <- map + ggtitle(plot_model)
+        return(map)
 }

@@ -75,9 +75,9 @@ IDheatwaves <- function(threshold, datafr, global, custom){
 #'    or when exploring exposures that, unlike heatwaves, may occur very
 #'    early or late in the calendar year.
 #' @export
-IDHeatwavesR <- function(threshold = stop("Error: unspecified threshold"),
-                         days = 2,
-                         datafr =  stop("Error: 'datafr' unspecified")){
+IDHeatwavesR <- function(threshold, datafr){
+
+        days <- 2
 
         # Add names to the dataframe
         colnames(datafr) <- c("date", "tmpd")
@@ -103,8 +103,7 @@ IDHeatwavesR <- function(threshold = stop("Error: unspecified threshold"),
         # Initialize dataframe containing the columns that will be added to
         # datafr
         hwInfo <- data.frame(hw = c(9),
-                            hw.number = c(9),
-                            first.hw.day = c(9))
+                            hw.number = c(9))
 
         # Current Index
         i <- 1
@@ -120,9 +119,7 @@ IDHeatwavesR <- function(threshold = stop("Error: unspecified threshold"),
                         # Store all desired information about this heatwave
                         hwInfo <- data.frame(hw = c(hwInfo[,1], rep(1, size)),
                                              hw.number = c(hwInfo[,2],
-                                                           rep(counter, size)),
-                                             first.hw.day = c(hwInfo[,3], 1,
-                                                              rep(0, size - 1)))
+                                                           rep(counter, size)))
 
                         # Increment and advance
                         counter <- counter + 1
@@ -130,7 +127,7 @@ IDHeatwavesR <- function(threshold = stop("Error: unspecified threshold"),
                 } else {
                         # If no heatwave at i, then add zeros to the end of
                         # the dataframe
-                        hwInfo <- rbind(hwInfo, c(0, 0, 0))
+                        hwInfo <- rbind(hwInfo, c(0, 0))
                         i <- i + 1
                 }
         }
@@ -169,9 +166,9 @@ IDHeatwavesR <- function(threshold = stop("Error: unspecified threshold"),
 #'    or when exploring exposures that, unlike heatwaves, may occur very
 #'    early or late in the calendar year.
 #' @export
-IDHeatwavesAlternative <- function(threshold = stop("Error: unspecified threshold"),
-                           days = 5,
-                           datafr =  stop("Error: 'datafr' unspecified")){
+IDHeatwavesAlternative <- function(threshold, datafr){
+
+        days <- 5
 
         # Add names to the dataframe
         colnames(datafr) <- c("date", "tmpd")
@@ -196,8 +193,7 @@ IDHeatwavesAlternative <- function(threshold = stop("Error: unspecified threshol
         # Initialize dataframe containing the columns that will be added to
         # datafr
         hwInfo <- data.frame(hw = c(9),
-                             hw.number = c(9),
-                             first.hw.day = c(9))
+                             hw.number = c(9))
 
         # Current Index
         i <- 1
@@ -213,9 +209,7 @@ IDHeatwavesAlternative <- function(threshold = stop("Error: unspecified threshol
                         # Store all desired information about this heatwave
                         hwInfo <- data.frame(hw = c(hwInfo[,1], rep(1, size)),
                                              hw.number = c(hwInfo[,2],
-                                                           rep(counter, size)),
-                                             first.hw.day = c(hwInfo[,3], 1,
-                                                              rep(0, size - 1)))
+                                                           rep(counter, size)))
 
                         # Increment counter for heatwave number
                         # Advance i to next position after heatwave
@@ -224,7 +218,7 @@ IDHeatwavesAlternative <- function(threshold = stop("Error: unspecified threshol
                 } else {
                         # If no heatwave at i, then add zeros to the end of the
                         # dataframe
-                        hwInfo <- rbind(hwInfo, c(0, 0, 0))
+                        hwInfo <- rbind(hwInfo, c(0, 0))
                         i <- i + 1
                 }
         }

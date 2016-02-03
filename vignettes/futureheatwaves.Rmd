@@ -315,6 +315,13 @@ function(hw_datafr){
 
 You can use this functionality to either explore characteristics of the identified heatwaves or to estimate the health impacts of the identified heatwaves. 
 
+To help users create their own functions, we have included an example dataframe representative of the heatwave dataframes that `gen_hw_set` outputs. This data can be loaded using the call: 
+
+```{r eval = FALSE}
+data(hw_datafr)
+```
+
+
 ## Using custom options
 
 ### Using a custom heatwave definition
@@ -342,7 +349,7 @@ The function must return the input dataframe (`datafr`), with the following colu
 - `hw`: A binary variable indicating whether a day was part of a heatwave (1: day in a heatwave; 0: not in a heatwave) and
 - `hw.number`: A non-negative integer that is 0 for all days that are not in heatwaves and, for days in heatwaves, gives a unique number for each separate heatwave. For example, all days in the second heatwaves in the time series would get the value 2 for this column, while all days in the fifth heatwave would get the value 5, and all days not in heatwaves would get the value 0. 
 
-The custom function can then be referenced using the `IDheatwavesReplacement` option in `gen_hw_set`, and it will be used to identify heatwaves in the dataset. For example, we have included an alternative ID definition function in this package, called `IDHeatwavesAlternative`, which identifies heatwaves as five or more days above a community's $98^{th}$ percentile temperature. To use this as the heatwave definition, you would run:
+The custom function can then be referenced using the `IDheatwavesReplacement` option in `gen_hw_set`, and it will be used to identify heatwaves in the dataset. For example, we have included an alternative ID definition function in this package, called `IDHeatwavesAlternative`, which identifies heatwaves as five or more days (compared to two or more days required by the default definition) above a community's $98^{th}$ percentile temperature. To use this as the heatwave definition, you would run:
 
 ```{r, eval = FALSE}
 gen_hw_set(out = "example_results",

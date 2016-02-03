@@ -79,7 +79,7 @@ writeThresholds <- function(modelName, threshOut, thresholds, global, custom){
 
         # Create the directory that the file will be written to
         dir.create(paste(writePath, modelName, sep = ""),
-                   showWarnings = FALSE, recursive = TRUE, mode = "0777")
+                   showWarnings = FALSE, recursive = TRUE)
 
         # Write the file
         write.csv(writeThis, file = paste(writePath, modelName,
@@ -130,8 +130,7 @@ createEnsembleWriter <- function(modelName, global, custom){
 
                 # Create the directory that the file will be written to
                 dir.create(paste(writePath, modelName, sep = ""),
-                           showWarnings = FALSE, recursive = TRUE,
-                           mode = "0777")
+                           showWarnings = FALSE, recursive = TRUE)
 
                 # Write the file
                 write.csv(hwFrame,

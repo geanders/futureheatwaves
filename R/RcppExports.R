@@ -25,11 +25,10 @@ IDHeatwavesCPP <- function(heatwaveLength, tempsExceedingCutoff) {
 #' @param hwCounter Current number of heatwaves.
 #' @param hw A reference of the vector that contains the heatwaves
 #' @param hwNumber A reference of the vector that contains the heatwave numbers.
-#' @param firstHwDay A reference of the vector that contains the first day the heatwave occurred.
 #'
 #' @export
-storeHeatwaveEntry <- function(index, hwSize, hwCounter, hw, hwNumber, firstHwDay) {
-    invisible(.Call('futureheatwaves_storeHeatwaveEntry', PACKAGE = 'futureheatwaves', index, hwSize, hwCounter, hw, hwNumber, firstHwDay))
+storeHeatwaveEntry <- function(index, hwSize, hwCounter, hw, hwNumber) {
+    invisible(.Call('futureheatwaves_storeHeatwaveEntry', PACKAGE = 'futureheatwaves', index, hwSize, hwCounter, hw, hwNumber))
 }
 
 #' Helper function that adds zeroes to the data structures that track heatwave information
@@ -37,11 +36,10 @@ storeHeatwaveEntry <- function(index, hwSize, hwCounter, hw, hwNumber, firstHwDa
 #' @param potentialHeatwave Size of the potential heatwave that turned out not to be a heatwave.
 #' @param hw A reference of the vector that contains the heatwaves
 #' @param hwNumber A reference of the vector that contains the heatwave numbers.
-#' @param firstHwDay A reference of the vector that contains the first day the heatwave occurred.
 #'
 #' @export
-storeZeroes <- function(index, potentialHeatwave, hw, hwNumber, firstHwDay) {
-    invisible(.Call('futureheatwaves_storeZeroes', PACKAGE = 'futureheatwaves', index, potentialHeatwave, hw, hwNumber, firstHwDay))
+storeZeroes <- function(index, potentialHeatwave, hw, hwNumber) {
+    invisible(.Call('futureheatwaves_storeZeroes', PACKAGE = 'futureheatwaves', index, potentialHeatwave, hw, hwNumber))
 }
 
 # Register entry points for exported C++ functions

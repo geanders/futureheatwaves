@@ -43,17 +43,17 @@ namespace futureheatwaves {
         return Rcpp::as<DataFrame >(__result);
     }
 
-    inline void storeHeatwaveEntry(int index, int hwSize, int hwCounter, std::vector<int>& hw, std::vector<int>& hwNumber, std::vector<int>& firstHwDay) {
-        typedef SEXP(*Ptr_storeHeatwaveEntry)(SEXP,SEXP,SEXP,SEXP,SEXP,SEXP);
+    inline void storeHeatwaveEntry(int index, int hwSize, int hwCounter, std::vector<int>& hw, std::vector<int>& hwNumber) {
+        typedef SEXP(*Ptr_storeHeatwaveEntry)(SEXP,SEXP,SEXP,SEXP,SEXP);
         static Ptr_storeHeatwaveEntry p_storeHeatwaveEntry = NULL;
         if (p_storeHeatwaveEntry == NULL) {
-            validateSignature("void(*storeHeatwaveEntry)(int,int,int,std::vector<int>&,std::vector<int>&,std::vector<int>&)");
+            validateSignature("void(*storeHeatwaveEntry)(int,int,int,std::vector<int>&,std::vector<int>&)");
             p_storeHeatwaveEntry = (Ptr_storeHeatwaveEntry)R_GetCCallable("futureheatwaves", "futureheatwaves_storeHeatwaveEntry");
         }
         RObject __result;
         {
             RNGScope __rngScope;
-            __result = p_storeHeatwaveEntry(Rcpp::wrap(index), Rcpp::wrap(hwSize), Rcpp::wrap(hwCounter), Rcpp::wrap(hw), Rcpp::wrap(hwNumber), Rcpp::wrap(firstHwDay));
+            __result = p_storeHeatwaveEntry(Rcpp::wrap(index), Rcpp::wrap(hwSize), Rcpp::wrap(hwCounter), Rcpp::wrap(hw), Rcpp::wrap(hwNumber));
         }
         if (__result.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -61,17 +61,17 @@ namespace futureheatwaves {
             throw Rcpp::exception(as<std::string>(__result).c_str());
     }
 
-    inline void storeZeroes(int index, int potentialHeatwave, std::vector<int>& hw, std::vector<int>& hwNumber, std::vector<int>& firstHwDay) {
-        typedef SEXP(*Ptr_storeZeroes)(SEXP,SEXP,SEXP,SEXP,SEXP);
+    inline void storeZeroes(int index, int potentialHeatwave, std::vector<int>& hw, std::vector<int>& hwNumber) {
+        typedef SEXP(*Ptr_storeZeroes)(SEXP,SEXP,SEXP,SEXP);
         static Ptr_storeZeroes p_storeZeroes = NULL;
         if (p_storeZeroes == NULL) {
-            validateSignature("void(*storeZeroes)(int,int,std::vector<int>&,std::vector<int>&,std::vector<int>&)");
+            validateSignature("void(*storeZeroes)(int,int,std::vector<int>&,std::vector<int>&)");
             p_storeZeroes = (Ptr_storeZeroes)R_GetCCallable("futureheatwaves", "futureheatwaves_storeZeroes");
         }
         RObject __result;
         {
             RNGScope __rngScope;
-            __result = p_storeZeroes(Rcpp::wrap(index), Rcpp::wrap(potentialHeatwave), Rcpp::wrap(hw), Rcpp::wrap(hwNumber), Rcpp::wrap(firstHwDay));
+            __result = p_storeZeroes(Rcpp::wrap(index), Rcpp::wrap(potentialHeatwave), Rcpp::wrap(hw), Rcpp::wrap(hwNumber));
         }
         if (__result.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();

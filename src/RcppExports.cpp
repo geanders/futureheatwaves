@@ -40,24 +40,23 @@ RcppExport SEXP futureheatwaves_IDHeatwavesCPP(SEXP heatwaveLengthSEXP, SEXP tem
     return __result;
 }
 // storeHeatwaveEntry
-void storeHeatwaveEntry(int index, int hwSize, int hwCounter, std::vector<int>& hw, std::vector<int>& hwNumber, std::vector<int>& firstHwDay);
-static SEXP futureheatwaves_storeHeatwaveEntry_try(SEXP indexSEXP, SEXP hwSizeSEXP, SEXP hwCounterSEXP, SEXP hwSEXP, SEXP hwNumberSEXP, SEXP firstHwDaySEXP) {
+void storeHeatwaveEntry(int index, int hwSize, int hwCounter, std::vector<int>& hw, std::vector<int>& hwNumber);
+static SEXP futureheatwaves_storeHeatwaveEntry_try(SEXP indexSEXP, SEXP hwSizeSEXP, SEXP hwCounterSEXP, SEXP hwSEXP, SEXP hwNumberSEXP) {
 BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type index(indexSEXP);
     Rcpp::traits::input_parameter< int >::type hwSize(hwSizeSEXP);
     Rcpp::traits::input_parameter< int >::type hwCounter(hwCounterSEXP);
     Rcpp::traits::input_parameter< std::vector<int>& >::type hw(hwSEXP);
     Rcpp::traits::input_parameter< std::vector<int>& >::type hwNumber(hwNumberSEXP);
-    Rcpp::traits::input_parameter< std::vector<int>& >::type firstHwDay(firstHwDaySEXP);
-    storeHeatwaveEntry(index, hwSize, hwCounter, hw, hwNumber, firstHwDay);
+    storeHeatwaveEntry(index, hwSize, hwCounter, hw, hwNumber);
     return R_NilValue;
 END_RCPP_RETURN_ERROR
 }
-RcppExport SEXP futureheatwaves_storeHeatwaveEntry(SEXP indexSEXP, SEXP hwSizeSEXP, SEXP hwCounterSEXP, SEXP hwSEXP, SEXP hwNumberSEXP, SEXP firstHwDaySEXP) {
+RcppExport SEXP futureheatwaves_storeHeatwaveEntry(SEXP indexSEXP, SEXP hwSizeSEXP, SEXP hwCounterSEXP, SEXP hwSEXP, SEXP hwNumberSEXP) {
     SEXP __result;
     {
         Rcpp::RNGScope __rngScope;
-        __result = PROTECT(futureheatwaves_storeHeatwaveEntry_try(indexSEXP, hwSizeSEXP, hwCounterSEXP, hwSEXP, hwNumberSEXP, firstHwDaySEXP));
+        __result = PROTECT(futureheatwaves_storeHeatwaveEntry_try(indexSEXP, hwSizeSEXP, hwCounterSEXP, hwSEXP, hwNumberSEXP));
     }
     Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
     if (__isInterrupt) {
@@ -74,23 +73,22 @@ RcppExport SEXP futureheatwaves_storeHeatwaveEntry(SEXP indexSEXP, SEXP hwSizeSE
     return __result;
 }
 // storeZeroes
-void storeZeroes(int index, int potentialHeatwave, std::vector<int>& hw, std::vector<int>& hwNumber, std::vector<int>& firstHwDay);
-static SEXP futureheatwaves_storeZeroes_try(SEXP indexSEXP, SEXP potentialHeatwaveSEXP, SEXP hwSEXP, SEXP hwNumberSEXP, SEXP firstHwDaySEXP) {
+void storeZeroes(int index, int potentialHeatwave, std::vector<int>& hw, std::vector<int>& hwNumber);
+static SEXP futureheatwaves_storeZeroes_try(SEXP indexSEXP, SEXP potentialHeatwaveSEXP, SEXP hwSEXP, SEXP hwNumberSEXP) {
 BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type index(indexSEXP);
     Rcpp::traits::input_parameter< int >::type potentialHeatwave(potentialHeatwaveSEXP);
     Rcpp::traits::input_parameter< std::vector<int>& >::type hw(hwSEXP);
     Rcpp::traits::input_parameter< std::vector<int>& >::type hwNumber(hwNumberSEXP);
-    Rcpp::traits::input_parameter< std::vector<int>& >::type firstHwDay(firstHwDaySEXP);
-    storeZeroes(index, potentialHeatwave, hw, hwNumber, firstHwDay);
+    storeZeroes(index, potentialHeatwave, hw, hwNumber);
     return R_NilValue;
 END_RCPP_RETURN_ERROR
 }
-RcppExport SEXP futureheatwaves_storeZeroes(SEXP indexSEXP, SEXP potentialHeatwaveSEXP, SEXP hwSEXP, SEXP hwNumberSEXP, SEXP firstHwDaySEXP) {
+RcppExport SEXP futureheatwaves_storeZeroes(SEXP indexSEXP, SEXP potentialHeatwaveSEXP, SEXP hwSEXP, SEXP hwNumberSEXP) {
     SEXP __result;
     {
         Rcpp::RNGScope __rngScope;
-        __result = PROTECT(futureheatwaves_storeZeroes_try(indexSEXP, potentialHeatwaveSEXP, hwSEXP, hwNumberSEXP, firstHwDaySEXP));
+        __result = PROTECT(futureheatwaves_storeZeroes_try(indexSEXP, potentialHeatwaveSEXP, hwSEXP, hwNumberSEXP));
     }
     Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
     if (__isInterrupt) {
@@ -112,8 +110,8 @@ static int futureheatwaves_RcppExport_validate(const char* sig) {
     static std::set<std::string> signatures;
     if (signatures.empty()) {
         signatures.insert("DataFrame(*IDHeatwavesCPP)(int,NumericVector)");
-        signatures.insert("void(*storeHeatwaveEntry)(int,int,int,std::vector<int>&,std::vector<int>&,std::vector<int>&)");
-        signatures.insert("void(*storeZeroes)(int,int,std::vector<int>&,std::vector<int>&,std::vector<int>&)");
+        signatures.insert("void(*storeHeatwaveEntry)(int,int,int,std::vector<int>&,std::vector<int>&)");
+        signatures.insert("void(*storeZeroes)(int,int,std::vector<int>&,std::vector<int>&)");
     }
     return signatures.find(sig) != signatures.end();
 }

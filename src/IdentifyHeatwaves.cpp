@@ -1,5 +1,5 @@
 #include <Rcpp.h>
-#include <vector.h>
+#include <vector>
 using namespace Rcpp;
 
 //TODO: TEST

@@ -54,6 +54,7 @@ acquireDirectoryStructure <- function(dataFolder, coordinateFilenames,
 
         # Convert list to a dataframe
         split_all <- strsplit(all, "/")
+        split_all <- split_all[sapply(split_all, length) == 4]
         df_all <- as.data.frame(matrix(unlist(split_all),
                                         ncol = 4, byrow = TRUE))
         colnames(df_all) <- c("exp", "model", "ens", "type")

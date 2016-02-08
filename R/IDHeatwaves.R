@@ -199,7 +199,7 @@ IDHeatwavesAlternative <- function(threshold, datafr){
         i <- 1
 
         # Identify all heatwaves for the city
-        while (i <= length(datafr[,2])) {
+        while (i <= length(datafr[ , 2])) {
                 # Check if there is a heatwave starting at i
                 if(identical(tempsExceedingthreshold[i: (i + hwBound)],
                               heatwaveForm)){
@@ -225,7 +225,7 @@ IDHeatwavesAlternative <- function(threshold, datafr){
 
         # Combine the original dataframe with the heatwave characteristics
         # matrix. Notice the placeholder row is excluded.
-        return(data.frame(datafr, hwInfo[-1,]))
+        return(data.frame(datafr, hwInfo[-1, ]))
 }
 
 #' Identify heatwaves in a time series
@@ -263,9 +263,13 @@ IDHeatwavesCPPwrapper <- function(datafr, threshold){
         heatwaves <- IDHeatwavesCPP(heatwaveLength = 2,
                                     tempsExceedingCutoff = tempsExceedingthreshold)
 
+
         # Attach heatwaves columns onto the data in the datafr
         # variable. Note that the final row, which contains zeroes as
         # placeholders, is excluded.
-        hwdata <- data.frame(datafr, heatwaves[-(dim(heatwaves)[1]),])
-        return(hwdata)
+        heatwaves <- heatwaves[-nrow(heatwaves), ]
+        heatwaves <- cbind(datafr, heatwaves)
+        colnames(heatwaves) <- c("date", "tmpd", "hw", "hw.number")
+
+        return(heatwaves)
 }

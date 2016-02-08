@@ -30,18 +30,16 @@ DataFrame IDHeatwavesCPP(int heatwaveLength, NumericVector tempsExceedingCutoff)
 
         // Declare vectors that will form columns of the dataframe; Allocate memory.
         int dataLength = tempsExceedingCutoff.size();
-        std::vector<int> hw(dataLength); std::vector<int> hwNumber(dataLength);
+        std::vector<int> hw(dataLength);
+        std::vector<int> hwNumber(dataLength);
 
         // Holder variable for examining individual instances of cases that could be heatwaves
         int potentialHeatwave = 0;
 
-        // Counter of # of heatwaves. Initialize to 1 for first heatwave.
+        // Counter of # of heatwaves. Initialize to 0 for first heatwave.
         int hwCounter = 0;
 
-        // Size of the time series we're dealing with
-        int size = tempsExceedingCutoff.size();
-
-        for(int i = 0; i < size; i++){
+        for(int i = 0; i < dataLength; i++){
 
                 // If a 1 is encountered, increment the potentialHeatwave counter
                 if(tempsExceedingCutoff[i] == 1){
@@ -85,7 +83,7 @@ DataFrame IDHeatwavesCPP(int heatwaveLength, NumericVector tempsExceedingCutoff)
 //' @export
 // [[Rcpp::export]]
 void storeHeatwaveEntry(int index, int hwSize, int hwCounter, std::vector<int>& hw, std::vector<int>& hwNumber){
-
+        index--;
         for(int i = 0; i < hwSize; i++){
                 // Push back 1 hwSize number of times onto hw.
                 hw[index + i] = 1;
@@ -104,7 +102,7 @@ void storeHeatwaveEntry(int index, int hwSize, int hwCounter, std::vector<int>& 
 //' @export
 // [[Rcpp::export]]
 void storeZeroes(int index, int potentialHeatwave, std::vector<int>& hw, std::vector<int>& hwNumber){
-
+        index--;
         //Increment potentialHeatwave by 1, since we want to add potentialHeatwave + 1 number of zeroes to the column variables
         //This is because the potentialHeatwave variable counts only the rows that were a part of the potential
         //heatwave, but excludes the row that was skipped over in the outer if/else if clause of the IDHeatwavesCPP

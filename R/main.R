@@ -82,6 +82,7 @@ gen_hw_set <- function(out,
                        thresholdBoundaries = c(1981, 2004),
                        projectionBoundaries = c(2061, 2080),
                        referenceBoundaries = c(2061, 2080),
+                       models_to_run = "all",
                        probThreshold = 0.98,
                        printWarning = TRUE){
 
@@ -130,6 +131,11 @@ gen_hw_set <- function(out,
                                             coordinateFilenames = coordinateFilenames,
                                             tasFilenames = tasFilenames,
                                             timeFilenames = timeFilenames)
+
+        if(models_to_run[1] != "all"){
+                names(models) <- sapply(models, function(x) x[[1]])
+                models <- models[models_to_run]
+        }
 
         # Read the cities data file
         cities <- read.csv(citycsv)

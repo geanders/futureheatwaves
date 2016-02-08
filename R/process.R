@@ -387,17 +387,17 @@ getBounds <- function(times, custom, type){
 
         if(type == "threshold"){
                 start_time <- custom$getBounds[1]
-                end_time <- custom$getBounds[2] + 1
+                end_time <- custom$getBounds[2]
         } else if (type == "projections") {
                 start_time <- custom$getBounds[3]
-                end_time <- custom$getBounds[4] + 1
+                end_time <- custom$getBounds[4]
         } else if (type == "reference"){
                 start_time <- custom$processModel[1]
-                end_time <- custom$processModel[2] + 1
+                end_time <- custom$processModel[2]
         }
 
-        start <- match(start_time, times[,2])
-        end <- match(end_time, times[,2]) - 1
+        start <- min(which(start_time == times[ , 2]))
+        end <- max(which(end_time == times[ , 2]))
         size <- end - (start - 1)
 
         return(c(start, end, size))

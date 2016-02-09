@@ -38,7 +38,8 @@
 #'
 #' @importFrom dplyr %>%
 acquireDirectoryStructure <- function(dataFolder, coordinateFilenames,
-                                      tasFilenames, timeFilenames){
+                                      tasFilenames, timeFilenames,
+                                      models_to_run){
 
         # If `dataFolder` does not end in "/", add it.
         # (Only need to repeat here to use with in-package examples)
@@ -81,6 +82,13 @@ acquireDirectoryStructure <- function(dataFolder, coordinateFilenames,
         finalList <- lapply(models, buildStructureModels, experiments,
                             dataFolder, coordinateFilenames, tasFilenames,
                             timeFilenames)
+
+        # Limit to only the models the user wants to run (if specified)
+        if(models_to_run[1] != "all"){
+                names(finalList) <- sapply(finalList, function(x) x[[1]])
+                finalList <- finalList[models_to_run]
+        }
+
         return(finalList)
 }
 

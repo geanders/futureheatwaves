@@ -130,12 +130,8 @@ gen_hw_set <- function(out,
         models <- acquireDirectoryStructure(dataFolder = dataFolder,
                                             coordinateFilenames = coordinateFilenames,
                                             tasFilenames = tasFilenames,
-                                            timeFilenames = timeFilenames)
-
-        if(models_to_run[1] != "all"){
-                names(models) <- sapply(models, function(x) x[[1]])
-                models <- models[models_to_run]
-        }
+                                            timeFilenames = timeFilenames,
+                                            models_to_run = models_to_run)
 
         # Read the cities data file
         cities <- read.csv(citycsv)

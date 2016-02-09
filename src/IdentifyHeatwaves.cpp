@@ -83,7 +83,7 @@ DataFrame IDHeatwavesCPP(int heatwaveLength, NumericVector tempsExceedingCutoff)
 //' @export
 // [[Rcpp::export]]
 void storeHeatwaveEntry(int index, int hwSize, int hwCounter, std::vector<int>& hw, std::vector<int>& hwNumber){
-        index--;
+        index = index - hwSize;
         for(int i = 0; i < hwSize; i++){
                 // Push back 1 hwSize number of times onto hw.
                 hw[index + i] = 1;
@@ -102,7 +102,7 @@ void storeHeatwaveEntry(int index, int hwSize, int hwCounter, std::vector<int>& 
 //' @export
 // [[Rcpp::export]]
 void storeZeroes(int index, int potentialHeatwave, std::vector<int>& hw, std::vector<int>& hwNumber){
-        index--;
+        index = index - potentialHeatwave;
         //Increment potentialHeatwave by 1, since we want to add potentialHeatwave + 1 number of zeroes to the column variables
         //This is because the potentialHeatwave variable counts only the rows that were a part of the potential
         //heatwave, but excludes the row that was skipped over in the outer if/else if clause of the IDHeatwavesCPP
@@ -115,3 +115,15 @@ void storeZeroes(int index, int potentialHeatwave, std::vector<int>& hw, std::ve
                 hwNumber[index + i] = 0;
         }
 }
+
+/*** R
+data(datafr, package = "futureheatwaves")
+threshold <- 84.632
+tempsExceedingthreshold <- as.numeric(datafr[ , 2] >= threshold)
+tempsExceedingthreshold <- c(tempsExceedingthreshold, 0)
+heatwaves <- IDHeatwavesCPP(heatwaveLength = 2,
+                            tempsExceedingCutoff = tempsExceedingthreshold)
+heatwaves <- heatwaves[-nrow(heatwaves), ]
+heatwaves <- cbind(datafr, heatwaves)
+colnames(heatwaves) <- c("date", "tmpd", "hw", "hw.number")
+*/

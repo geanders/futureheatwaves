@@ -142,9 +142,9 @@ processThresholds <- function(model, global, custom){
         # To find the threshold, use the first ensemble member within
         # the relevant directory, historical or rcp
         if(custom$getBounds[1] < 2005){
-                thresholdDirs_model <- model[[2]][1]
+                thresholdDirs_model <- model[[2]]
         } else {
-                thresholdDirs_model <- model[[3]][1]
+                thresholdDirs_model <- model[[3]]
         }
         r1i1p1_i <- sapply(thresholdDirs_model, function(x) x[1]) ==
                 global$threshold_ensemble

@@ -84,7 +84,8 @@ gen_hw_set <- function(out,
                        referenceBoundaries = c(2061, 2080),
                        models_to_run = "all",
                        probThreshold = 0.98,
-                       printWarning = TRUE){
+                       printWarning = TRUE,
+                       threshold_ensemble = "r1i1p1"){
 
         # If `dataFolder` does not end in "/", add it.
         split_dataFolder <- unlist(strsplit(dataFolder, split = ""))
@@ -143,7 +144,8 @@ gen_hw_set <- function(out,
                        "cities" = cities,
                        "coordinateFilenames" = coordinateFilenames,
                        "tasFilenames" = tasFilenames,
-                       "timeFilenames" = timeFilenames)
+                       "timeFilenames" = timeFilenames,
+                       "threshold_ensemble" = threshold_ensemble)
 
         # Create the "custom" list object that will hold all of the user's
         # custom settings.

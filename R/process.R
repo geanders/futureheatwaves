@@ -141,7 +141,7 @@ processThresholds <- function(model, global, custom){
 
         # To find the threshold, use the first ensemble member within
         # the relevant directory, historical or rcp
-        if(custom$getBounds[1] < 2005){
+        if(custom$getBounds[1] <= global$dataDirectories[[1]][2]){
                 thresholdDirs_model <- model[[2]]
         } else {
                 thresholdDirs_model <- model[[3]]
@@ -175,11 +175,14 @@ processReference <- function(model, global, custom){
 
         # To find the threshold, use the first ensemble member within
         # the relevant directory, historical or rcp
-        if(custom$processModel[1] < 2005){
-                referenceDirs <- model[[2]][1][[1]]
+        if(custom$processModel[1] <= global$dataDirectories[[1]][2]){
+                referenceDirs_model <- model[[2]]
         } else {
-                referenceDirs <- model[[3]][1][[1]]
+                referenceDirs_model <- model[[3]]
         }
+        r1i1p1_i <- sapply(referenceDirs_model, function(x) x[1]) ==
+                global$threshold_ensemble
+        referenceDirs <- referenceDirs_model[r1i1p1_i][[1]]
 
         cat("Processing references for", name, "\n")
 

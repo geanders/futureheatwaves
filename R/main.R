@@ -79,6 +79,8 @@
 #' @importFrom dplyr %>%
 gen_hw_set <- function(out,
                        dataFolder,
+                       dataDirectories = list("historical" = c(1980, 2004),
+                                              "rcp85" = c(2006, 2099)),
                        citycsv,
                        coordinateFilenames,
                        tasFilenames,
@@ -110,6 +112,7 @@ gen_hw_set <- function(out,
         # Check the parameters for errors
         check_params(out = out,
                      dataFolder = dataFolder,
+                     dataDirectories = dataDirectories,
                      citycsv = citycsv,
                      coordinateFilenames = coordinateFilenames,
                      tasFilenames = tasFilenames,
@@ -138,7 +141,9 @@ gen_hw_set <- function(out,
                                             coordinateFilenames = coordinateFilenames,
                                             tasFilenames = tasFilenames,
                                             timeFilenames = timeFilenames,
-                                            models_to_run = models_to_run)
+                                            models_to_run = models_to_run,
+                                            dataDirectories = dataDirectories,
+                                            threshold_ensemble = threshold_ensemble)
 
         # Read the cities data file
         cities <- read.csv(citycsv) %>%
@@ -148,6 +153,7 @@ gen_hw_set <- function(out,
         # functions that need then will have access to
         global <- list("output" = out,
                        "data" = dataFolder,
+                       "dataDirectories" = dataDirectories,
                        "cities" = cities,
                        "coordinateFilenames" = coordinateFilenames,
                        "tasFilenames" = tasFilenames,
@@ -225,6 +231,7 @@ gen_hw_set <- function(out,
 #'    dataBoundaries, referenceBoundaries)
 check_params <- function(out,
                          dataFolder,
+                         dataDirectories,
                          citycsv,
                          coordinateFilenames,
                          tasFilenames,
@@ -265,9 +272,12 @@ check_params <- function(out,
                 stop("Invalid format: timeFilenames. Stopping.")
         }
 
-        checkCustomBounds(thresholdBoundaries)
-        checkCustomBounds(projectionBoundaries)
-        checkCustomBounds(referenceBoundaries)
+        checkCustomBounds(boundList = thresholdBoundaries,
+                          dataDirectories = dataDirectories)
+        checkCustomBounds(boundList = projectionBoundaries,
+                          dataDirectories = dataDirectories)
+        checkCustomBounds(boundList = referenceBoundaries,
+                          dataDirectories = dataDirectories)
 }
 
 #' Check year boundaries for errors
@@ -282,7 +292,7 @@ check_params <- function(out,
 #'    c(historical period earliest year, historical period latest year,
 #'    future projection period earliest year, future projection period
 #'    latest year).
-checkCustomBounds <- function(boundList){
+checkCustomBounds <- function(boundList, dataDirectories){
 
         if(class(boundList) != "numeric"){
                 stop("All date boundaries must have the class `numeric`.")
@@ -293,15 +303,26 @@ checkCustomBounds <- function(boundList){
                            "or be lower than the second value."))
         }
 
-        if(boundList[1] < 1980 | boundList[2] > 2099){
-                stop("Date boundaries must be within the years 1980 and 2099.")
+        if(boundList[1] < dataDirectories[[1]][1] |
+           boundList[2] > dataDirectories[[2]][2]){
+                stop(paste0("Date boundaries must be within the years ",
+                           dataDirectories[[1]][1],
+                           " and ",
+                           dataDirectories[[2]][2], "."))
         }
 
-        if(boundList[1] < 2005){
-                if(boundList[2] >= 2005){
-                        stop(paste("Date boundaries cannot span between",
-                                   "the historical (1980-2004) and future",
-                                   "(2006-2099) periods."))
+        if(boundList[1] <= dataDirectories[[1]][2]){
+                if(boundList[2] > dataDirectories[[1]][2]){
+                        stop(paste0("Date boundaries cannot span between ",
+                                   "the first (",
+                                   dataDirectories[[1]][1],
+                                   "-",
+                                   dataDirectories[[1]][2],
+                                   ") and second (",
+                                   dataDirectories[[2]][1],
+                                   "-",
+                                   dataDirectories[[2]][2],
+                                   ") directory time spans."))
                 }
         }
 }

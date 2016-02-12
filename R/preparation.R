@@ -39,7 +39,8 @@
 #' @importFrom dplyr %>%
 acquireDirectoryStructure <- function(dataFolder, coordinateFilenames,
                                       tasFilenames, timeFilenames,
-                                      models_to_run){
+                                      models_to_run, dataDirectories,
+                                      threshold_ensemble){
 
         # If `dataFolder` does not end in "/", add it.
         # (Only need to repeat here to use with in-package examples)
@@ -63,9 +64,10 @@ acquireDirectoryStructure <- function(dataFolder, coordinateFilenames,
         # Only get climate models with (a) both historical and
         # rcp85 results and (b) r1i1p1 ensemble historical results
         df_all <- dplyr::group_by(df_all, model) %>%
-                dplyr::summarize(check_1 = "historical" %in% exp,
-                          check_2 = "rcp85" %in% exp,
-                          check_3 = "historical r1i1p1" %in%
+                dplyr::summarize(check_1 = names(dataDirectories)[1] %in% exp,
+                          check_2 = names(dataDirectories)[2] %in% exp,
+                          check_3 = paste(names(dataDirectories)[1],
+                                          threshold_ensemble) %in%
                                   paste(exp, ens)) %>%
                 dplyr::left_join(df_all, by = "model") %>%
                 dplyr::filter(check_1 & check_2 & check_3 &
@@ -79,9 +81,13 @@ acquireDirectoryStructure <- function(dataFolder, coordinateFilenames,
 
         # Generate the nested lists that will be used for the processing step
         # Structure: model -> experiment -> ensemble
-        finalList <- lapply(models, buildStructureModels, experiments,
-                            dataFolder, coordinateFilenames, tasFilenames,
-                            timeFilenames)
+        finalList <- lapply(models, buildStructureModels,
+                            experiments = experiments,
+                            dataFolder = dataFolder,
+                            coordinateFilenames = coordinateFilenames,
+                            tasFilenames = tasFilenames,
+                            timeFilenames = timeFilenames,
+                            dataDirectories = dataDirectories)
 
         # Limit to only the models the user wants to run (if specified)
         if(models_to_run[1] != "all"){
@@ -136,16 +142,18 @@ acquireDirectoryStructure <- function(dataFolder, coordinateFilenames,
 buildStructureModels <- function(modelName, experiments,
                                  dataFolder,
                                  coordinateFilenames, tasFilenames,
-                                 timeFilenames){
+                                 timeFilenames, dataDirectories){
         return(list(modelName,
                     buildStructureExperiments(modelName, experiments[1],
                                               dataFolder,
                                               coordinateFilenames,
-                                              tasFilenames, timeFilenames),
+                                              tasFilenames, timeFilenames,
+                                              dataDirectories),
                     buildStructureExperiments(modelName, experiments[2],
                                               dataFolder,
                                               coordinateFilenames,
-                                              tasFilenames, timeFilenames)))
+                                              tasFilenames, timeFilenames,
+                                              dataDirectories)))
 }
 
 #' Generate file structure for an experiment
@@ -185,7 +193,8 @@ buildStructureModels <- function(modelName, experiments,
 buildStructureExperiments <- function(modelName, experiment,
                                       dataPath,
                                       coordinateFilenames, tasFilenames,
-                                      timeFilenames){
+                                      timeFilenames,
+                                      dataDirectories){
 
         # List all ensembles in the given experiment
         ensembles <- list.dirs(paste0(dataPath, experiment, "/", modelName))
@@ -195,8 +204,11 @@ buildStructureExperiments <- function(modelName, experiment,
         ensembles <- ensembles[-1]
 
         # Build the directory structure of each ensemble
-        ret <- lapply(ensembles, buildStructureEnsembles, coordinateFilenames,
-                      tasFilenames, timeFilenames)
+        ret <- lapply(ensembles, buildStructureEnsembles,
+                      coordinateFilenames = coordinateFilenames,
+                      tasFilenames = tasFilenames,
+                      timeFilenames = timeFilenames,
+                      dataDirectories = dataDirectories)
         return(ret)
 }
 
@@ -236,14 +248,15 @@ buildStructureExperiments <- function(modelName, experiment,
 #'                         tasFilenames = tasFilenames,
 #'                         timeFilenames = timeFilenames)
 buildStructureEnsembles <- function(ensemblePath, coordinateFilenames,
-                                    tasFilenames, timeFilenames){
+                                    tasFilenames, timeFilenames,
+                                    dataDirectories){
 
         # Extract name of the ensemble (two directories below the
         # one named for the experiment, "historical" or "rcp85").
         splist = strsplit(ensemblePath, "/")
         ensemble_name_index <- which(sapply(splist,
                                          function(x) x %in%
-                                                 c("historical", "rcp85")))
+                                                 names(dataDirectories)))
         ensemble_name_index <- ensemble_name_index + 2
         ensembleName <- splist[[1]][ensemble_name_index]
 

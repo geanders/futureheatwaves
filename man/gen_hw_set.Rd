@@ -5,10 +5,11 @@
 \title{Create and write heatwave projections}
 \usage{
 gen_hw_set(out, dataFolder, citycsv, coordinateFilenames, tasFilenames,
-  timeFilenames, IDheatwavesFunction = "IDHeatwavesR",
+  timeFilenames, IDheatwavesFunction = "IDHeatwavesCPPwrapper",
   thresholdBoundaries = c(1981, 2004), projectionBoundaries = c(2061, 2080),
-  referenceBoundaries = c(2061, 2080), probThreshold = 0.98,
-  printWarning = TRUE)
+  referenceBoundaries = c(2061, 2080), models_to_run = "all",
+  probThreshold = 0.98, printWarning = TRUE,
+  threshold_ensemble = "r1i1p1", lat_lon_colnames = c("lat", "lon"))
 }
 \arguments{
 \item{out}{Character string with pathway to directory to which
@@ -77,6 +78,10 @@ informing the user that the function will write out results to the local
 directory specified by the user with \code{out}. This warning prints out
 by default; the user must opt-out of this warning by specifying FALSE
 for this argument.}
+
+\item{lat_lon_colnames}{A character vector of length two with the column names
+in the \code{cities} dataframe for latitude (first vector element) and
+longitude (second vector element)}
 }
 \value{
 This function returns a dataframe listing the name of each climate

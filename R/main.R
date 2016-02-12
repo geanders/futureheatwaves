@@ -60,6 +60,9 @@
 #'    directory specified by the user with \code{out}. This warning prints out
 #'    by default; the user must opt-out of this warning by specifying FALSE
 #'    for this argument.
+#' @param lat_lon_colnames A character vector of length two with the column names
+#'    in the \code{cities} dataframe for latitude (first vector element) and
+#'    longitude (second vector element)
 #'
 #' @return This function returns a dataframe listing the name of each climate
 #'    model used, as well as the number of historical and future projection
@@ -72,6 +75,8 @@
 #'    projections and dates.
 #'
 #' @export
+#'
+#' @importFrom dplyr %>%
 gen_hw_set <- function(out,
                        dataFolder,
                        citycsv,
@@ -85,7 +90,8 @@ gen_hw_set <- function(out,
                        models_to_run = "all",
                        probThreshold = 0.98,
                        printWarning = TRUE,
-                       threshold_ensemble = "r1i1p1"){
+                       threshold_ensemble = "r1i1p1",
+                       lat_lon_colnames = c("lat", "lon")){
 
         # If `dataFolder` does not end in "/", add it.
         split_dataFolder <- unlist(strsplit(dataFolder, split = ""))
@@ -135,7 +141,8 @@ gen_hw_set <- function(out,
                                             models_to_run = models_to_run)
 
         # Read the cities data file
-        cities <- read.csv(citycsv)
+        cities <- read.csv(citycsv) %>%
+                process_cities_file(lat_lon_colnames = lat_lon_colnames)
 
         # Create "global" list object that will hold variables that all
         # functions that need then will have access to

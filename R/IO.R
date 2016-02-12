@@ -1,3 +1,34 @@
+#' Process city file once it's read
+#'
+#' This function takes the dataframe read in fram the user-specified file. It then
+#' renames the columns for latitude and longitude \code{lat} and \code{lon} based on
+#' the user's selections in the "lat_lon_colnames" option for \code{gen_hw_set}. If
+#' there are extra columns besides those and the \code{city} column, this function
+#' removes them.
+#'
+#' @param cities Dataframe with communities you want to analyze and their latitudes
+#'    and longitudes.The dataframe must have a column named \code{city} with a unique
+#'    identifier for each community in the study, as well as columns for latitude and
+#'    longitude.Other columns may be included in the dataset, but will not be run
+#'    within this code.
+#' @inheritParams gen_hw_set
+#'
+#' @importFrom dplyr %>%
+process_cities_file <- function(cities, lat_lon_colnames){
+
+        if(!all(lat_lon_colnames %in% colnames(cities))) {
+                stop(paste("The `lat_lon_colnames` that you specified are not",
+                           "column names in the `cities` dataframe."))
+        }
+
+        cities <- cities %>%
+                dplyr::select(city,
+                              lat = matches(lat_lon_colnames[1]),
+                              lon = matches(lat_lon_colnames[2]))
+
+        return(cities)
+}
+
 #' Read latitude and longitude data
 #'
 #' This function reads data on the longitudes and latitudes of a climate
@@ -17,7 +48,8 @@
 #'    (40.7127, 285.9941).
 readLatLong <- function(ensemble, global){
         loc_file <- grep(global$coordinateFilenames, ensemble)
-        return(read.csv(ensemble[loc_file], header = FALSE))
+        locations <- read.csv(ensemble[loc_file], header = FALSE)
+        return(locations)
 }
 
 #' Read climate projection data

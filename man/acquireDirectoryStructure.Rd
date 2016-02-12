@@ -5,7 +5,7 @@
 \title{Acquire structure of input directory}
 \usage{
 acquireDirectoryStructure(dataFolder, coordinateFilenames, tasFilenames,
-  timeFilenames)
+  timeFilenames, models_to_run)
 }
 \arguments{
 \item{dataFolder}{Character string with pathway to directory that

@@ -5,7 +5,7 @@
 \title{List files for a single ensemble member}
 \usage{
 buildStructureEnsembles(ensemblePath, coordinateFilenames, tasFilenames,
-  timeFilenames)
+  timeFilenames, dataDirectories)
 }
 \arguments{
 \item{ensemblePath}{A character string that gives the absolute file path

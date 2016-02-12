@@ -21,6 +21,8 @@
 #' @return A dataframe with the value output by the user-specified
 #'    function, as applied to every dataframe of heatwaves and characteristics
 #'    for every ensemble member of every climate model.
+#'
+#' @export
 apply_all_models <- function(out, FUN, city_specific = FALSE){
 
         proj_files <- list.files(paste(out, "Heatwaves", sep = "/"),

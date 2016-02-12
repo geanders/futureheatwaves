@@ -4,7 +4,7 @@
 \alias{checkCustomBounds}
 \title{Check year boundaries for errors}
 \usage{
-checkCustomBounds(boundList)
+checkCustomBounds(boundList, dataDirectories)
 }
 \arguments{
 \item{boundList}{Either FALSE, if user wishes to use the default

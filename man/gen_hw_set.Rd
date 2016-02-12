@@ -4,7 +4,8 @@
 \alias{gen_hw_set}
 \title{Create and write heatwave projections}
 \usage{
-gen_hw_set(out, dataFolder, citycsv, coordinateFilenames, tasFilenames,
+gen_hw_set(out, dataFolder, dataDirectories = list(historical = c(1980, 2004),
+  rcp85 = c(2006, 2099)), citycsv, coordinateFilenames, tasFilenames,
   timeFilenames, IDheatwavesFunction = "IDHeatwavesCPPwrapper",
   thresholdBoundaries = c(1981, 2004), projectionBoundaries = c(2061, 2080),
   referenceBoundaries = c(2061, 2080), models_to_run = "all",

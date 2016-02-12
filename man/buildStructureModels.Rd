@@ -5,7 +5,7 @@
 \title{Generate list of file structure}
 \usage{
 buildStructureModels(modelName, experiments, dataFolder, coordinateFilenames,
-  tasFilenames, timeFilenames)
+  tasFilenames, timeFilenames, dataDirectories)
 }
 \arguments{
 \item{modelName}{Character string of climate model name (e.g., "bcc1"). This

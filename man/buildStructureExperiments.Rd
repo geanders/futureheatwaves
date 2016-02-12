@@ -5,7 +5,7 @@
 \title{Generate file structure for an experiment}
 \usage{
 buildStructureExperiments(modelName, experiment, dataPath, coordinateFilenames,
-  tasFilenames, timeFilenames)
+  tasFilenames, timeFilenames, dataDirectories)
 }
 \arguments{
 \item{modelName}{Character string of climate model name (e.g., "bcc1"). This

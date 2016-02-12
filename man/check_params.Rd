@@ -4,9 +4,9 @@
 \alias{check_params}
 \title{Check for input parameter errors}
 \usage{
-check_params(out, dataFolder, citycsv, coordinateFilenames, tasFilenames,
-  timeFilenames, IDheatwavesFunction, thresholdBoundaries, projectionBoundaries,
-  referenceBoundaries)
+check_params(out, dataFolder, dataDirectories, citycsv, coordinateFilenames,
+  tasFilenames, timeFilenames, IDheatwavesFunction, thresholdBoundaries,
+  projectionBoundaries, referenceBoundaries)
 }
 \arguments{
 \item{out}{Character string with pathway to directory to which

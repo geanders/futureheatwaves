@@ -17,13 +17,12 @@ Description: Takes locally saved climate projections and identifies and
     intensity, and timing in the summer.
 License: MIT + file LICENSE
 LazyData: TRUE
-Imports: 
+Imports:
     dplyr (>= 0.4.3),
     ggplot2 (>= 2.0.0),
-    ggmap (>= 2.5.2),
-    maps (>= 3.0.2),
+    ggthemes (>= 3.0.0),
     Rcpp (>= 0.12.3)
-Suggests: 
+Suggests:
     knitr (>= 1.10.5),
     rmarkdown (>= 0.7),
     testthat

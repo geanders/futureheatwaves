@@ -15,26 +15,53 @@ library(futureheatwaves)
 
 ## What the package does
 
-The `futureheatwaves` package can process climate data files that you have stored locally to generate a list of heatwaves in each projection as well as characteristics of each heatwave (e.g., length, intensity, timing in the year). The package generates community-specific dataframes based on an input file listing each community and its latitude and longitude. Files with the heatwaves identified and characterized under each ensemble member of each climate model are output as files in a directory specified by the user.
+Often, it is of interest in climate impact research to explore impact estimates for climate projections from many different climate models, some of which have multiple ensemble members. The scope of this data means that researchers often must spend a lot of time writing code scripts to process the data from different climate models or ensemble members. This is the case, for example, in studying the climate impacts of heatwaves, since multi-day heatwave events must be indentified and characterized for each cliamte model and ensemble member before impacts can be estimated. We have created this package to automate this process in a way that still allows extensive customization by the user in choices like how to define a heatwave. 
 
-This function requires you to have data on community locations and climate projection data set up in a specific way on your local computer. You then use arguments in the main package function, `gen_hw_set`, to direct the function to these files so it can process them and output heatwave projections. The final projection files will be written out to your local computer, in a directory that you select and specify through `gen_hw_set`. You can then apply user-created R functions to all heatwaves in the output using the `apply_all_models` function.
+The `futureheatwaves` package can process climate files, which are stored locally on your computer, to generate a list of the heatwaves in each projection as well as characteristics of each heatwave (e.g., length, intensity, timing in the year). You can identify heatwaves based either on a default definition (two or more days with temperatures at or above the community's $98^{th}$ percentile of year-round temperature), or you can write your own R function to use any heatwave definition of your choice, or to explore several heatwave definitions. The package identifies community-specific heatwaves, based on an input file listing each community and its latitude and longitude. of each climate model are output as files in a directory specified by the user.
+
+Once you create these dataframes of community-specific heatwaves, another function in the package allows you to apply custom functions across all the heatwave dataframes that were generated. This functionality can be used to generate summary statistics (e.g., determine average heatwave length or total heatwave days), or can be used to apply more complex functions (e.g., apply epidemiologic effect estimates across the heatwaves to generate health impact estimates).
+
+This package does require some pre-processing, in terms of getting climate projection data into a specific format and storing files in a specific directory structure. However, once the user has completed this pre-processing and directory set-up, the package allows the user to quickly process through data from many projections, generate heatwave datasets for each, and apply custom functions across each heatwave definition.
+
+This package requires you to have data on community locations and climate projection data set up in a specific way on your local computer. You then use arguments in the main package function, `gen_hw_set`, to direct the function to these files so it can process them and output heatwave projections. The final projection files will be written out to your local computer, in a directory that you select and specify through `gen_hw_set`. You can then apply user-created R functions to all heatwaves in the output using the `apply_all_models` function.
 
 ## A basic example of using the package
+
+### Example data
+
+We have included data files in the package to serve as example files so users can try out this package before applying it to their own directories. The files are all included as comma-separated files, rather than as saved R objects, to allow users to see how to create the appropriate directory set-up for this package. 
+
+We used, as an example, data from two climate models, the Beijing Climate Center (BCC) and the National Center for Atmospheric Research's (NCAR's) Community Climate System Model (CCSM). We include one ensemble member from BCC (r1i1p1) and two from CCSM (r1i1p1 and r2i1p1).
+
+... the Beijing Climate Center, China Meteorological Administration model projections included in CMIP5. See: [this link](http://cmip-pcmdi.llnl.gov/cmip5/availability.html). 
+)
+
+[More on NCAR model]
+
+To ensure that the size of this example data is reasonably small, we have only included projection data for model grid points near several major East Coast cities: New York, NY; Philadelphia, PA; Newark, NJ; Baltimore, MD, Providence, RI. Further, to keep the file sizes reasonably small, the historical projections range over the years ... to ..., while the future projections range over the years ... to ... .
+
+These location of these files within the downloaded package be determined using  `system.file`: 
+
+```{r}
+system.file("cities.csv", package = "futureheatwaves")
+```
+
+In the later sections of this vignette, we show how to use the package functions with these example files as inputs. 
 
 ### Required files and directory set-up
 
 #### File with community locations
 
-First, you must have a comma-separated (csv) file the gives unique identifiers for each community for which you wish to make projections, as well as their latitude and longitude. The latitude and longitude should be expressed in the same way that latitude and longitude are expressed in the climate projection files to be processed. The community location file should have three columns, with the following column names: 
+First, you must have a comma-separated (csv) file the gives unique identifiers for each community for which you wish to make projections, as well as their latitude and longitude. The latitude and longitude should be expressed in the same way that latitude and longitude are expressed in the climate projection files to be processed (e.g., if latitude for New York City is expressed as 286 in the climate projection files, it cannot be expressed as -74 or 74 W in the community file). The community location file should have three columns, with the following column names: 
 
 - `city`: A unique identifier for each community you will be analyzing.
 - `lat`: The communities' latitudes
-- `long`: The communities' longitudes
+- `lon`: The communities' longitudes
 
 Here is an example of the correct format for a community locations file for five US communities (Baltimore, MD; New York, NY; Newark, NJ; Philadelphia, PA; and Providence RI):
 
 ```
-"city","lat","long"
+"city","lat","lon"
 "balt",39.3008,283.3894
 "ny",40.6698,286.0562
 "nwk",40.7241,285.8268
@@ -42,7 +69,56 @@ Here is an example of the correct format for a community locations file for five
 "prov",41.82195,288.5803
 ```
 
-The location of this community locations file will be specified to the main function, `gen_hw_set`, using the argument `citycsv`. For example, if I had this file saved as "my_cities.csv" in my working directory, I would specify `citycsv = "my_cities.csv"` in the `gen_hw_set` function call.
+You will specify the location of this community locations file within your computer file directory when running the main function (`gen_hw_set`) by using the argument `citycsv`. For example, if I had this file saved as "my_cities.csv" in my working directory, I would specify `citycsv = "my_cities.csv"` in the `gen_hw_set` function call. You can use either absolute or relative filepaths in this argument. 
+
+If your community locations file has different column names for the latitude and longitude columns, you can specify this using the `lat_lon_colnames` argument in `gen_hw_set`. For example, if these columns were named "latitude" and "longitude", you could specify `lat_lon_colnames = c("latitude", "longitude")` when calling `gen_hw_set`.
+
+
+#### Directory structure for climate projection files
+
+For these functions to work correctly, you must have climate projection files saved in a specific structure locally on your computer. An example of a directory with the required set-up is given as the `cmip5` directory that comes installed with this package. To identify the location on your own computer of this directory, you can run:
+
+```{r}
+system.file("cmip5", package = "futureheatwaves")
+```
+
+You must have a directory that has within it separately subdirectories names "rcp85" and "historical" that contain, respectively, all files drawn from projections for future dates ("rcp85") and all for dates up to 2005 ("historical"). Within each of these subdirectories, you need a subdirectory for each climate model. Within each climate model directory, you need subdirectories for each ensemble member of the model (even if the model only has one ensemble member). Within each ensemble-member directory, you will need three comma-separated files: one file with the climate model output, with columns corresponding to climate grid point and rows corresponding to time, one file that gives the time values corresponding to each row in the climate model output file, and one file giving the latitude and longitude corresponding to the grid locations used in the columns of the climate model output file. 
+
+For example, the following shows the file structure for the files in the example data included with the package. This example directory includes separate historical (with years 1980--2004) and RCP8.5 (with years 2006--2099) directories, each of which has the required climate projection, grid point locations, and projection time files for two separate models (`bcc1` and `ccsm`) with one and two separate ensemble members, respectively(`r1i1p1` for `bcc1`; `r1i1p1` and `r2i1p1` for `ccsm`). The user specifies that name and location of the directory (through the `dataFolder` option in `gen_hw_set`) as well as the names and year ranges of the two subdirectories (through the `dataDirectories` option in `gen_hw_set`; e.g., `dataDirectories = list("historical" = c(1980, 2004), "rcp85" = c(2006, 2099))` if the two subdirectories have the names "historical" and "rcp85").
+
+- `cmip5`
+    - `historical`
+        - `bcc1`
+            - `r1i1p1`
+                - `tas_NorthAmerica_12mo.csv`
+                - `latitude_longitude_NorthAmerica_12mo.csv`
+                - `time_NorthAmerica_12mo.csv`
+        - `ccsm`
+            - `r1i1p1`
+                - `tas_NorthAmerica_12mo.csv`
+                - `latitude_longitude_NorthAmerica_12mo.csv`
+                - `time_NorthAmerica_12mo.csv`
+    - `rcp85`
+        - `bcc1`
+            - `r1i1p1`
+                - `tas_NorthAmerica_12mo.csv`
+                - `latitude_longitude_NorthAmerica_12mo.csv`
+                - `time_NorthAmerica_12mo.csv`
+        - `ccsm`
+            - `r1i1p1`
+                - `tas_NorthAmerica_12mo.csv`
+                - `latitude_longitude_NorthAmerica_12mo.csv`
+                - `time_NorthAmerica_12mo.csv`
+            - `r2i1p1`
+                - `tas_NorthAmerica_12mo.csv`
+                - `latitude_longitude_NorthAmerica_12mo.csv`
+                - `time_NorthAmerica_12mo.csv`
+
+Notice that each subdirectory has all required levels-- for example, even though the `bcc1` model only has one ensemble member (in this example), we've still included a directory level for ensembles in the directory structure. Also notice that the final subdirectory always includes three files (with climate projections, grid point locations, and times; these files are explained in the next section), even if multiple ensemble members of the same climate model share the same grid point locations or times. 
+
+Throughout the directory, subdirectories should be named using names reflecting the climate model they contain. The output files will be written using the same type of directory structure and the same names, so this output will be easier to interpret and use if the directory uses meaningful names for subdirectories. 
+
+Once you have your files set up in this structure, you will specify the location of the start of the directory using the `dataFolder` argument in the `gen_hw_set` function. In the example directory structure above, if the `cmip5` directory was in your current working directory, you would specify `dataFolder = "cmip5"` when calling `gen_hw_set`. 
 
 #### Files with climate projections
 
@@ -91,50 +167,6 @@ Each climate model ensemble member will need to have a grid-point location file 
 This file gives a date that corresponds to each row of the climate projection file. The file should have four columns: one with row numbers, and then one each with year, month, and day. Year should be given with four digits. The file should not have a header row. 
 
 Each climate model ensemble member will need to have a separate projection times data file like this one. They will all be saved in separate, ensemble-specific directories and should all be given the same file name. In our example data, these grid-point location files are always saved with the filename "time_NorthAmerica_12mo.csv". You will need to specify this filename in the `timeFilenames` argument when running `gen_hw_set`.
-
-#### Directory structure for climate projection files
-
-For these functions to work correctly, you must have the climate projections saved in a specific structure locally on your computer. An example of a directory with the required set-up is given as the `cmip5` directory in the `inst` directory of this package.
-
-You must have a directory that has within it separately subdirectories names "rcp85" and "historical" that contain, respectively, all files drawn from projections for future dates ("rcp85") and all for dates up to 2005 ("historical"). Within each of these subdirectories, you need a subdirectory for each climate model. Within each climate model directory, you need subdirectories for each ensemble member of the model (even if the model only has one ensemble member). Within each ensemble-member directory, you will need three comma-separated files: one file with the climate model output, with columns corresponding to climate grid point and rows corresponding to time, one file that gives the time values corresponding to each row in the climate model output file, and one file giving the latitude and longitude corresponding to the grid locations used in the columns of the climate model output file. 
-
-For example, the following shows the file structure for the files in the example data included with the package. This example directory includes separate historical (with years 1980--2004) and RCP8.5 (with years 2006--2099) directories, each of which has the required climate projection, grid point locations, and projection time files for two separate models (`bcc1` and `bcc1-a`) with one and two separate ensemble members, respectively(`r1i1p1` for `bcc1`; `r1i1p1` and `r1i1p1-a` for `bcc1-a`). Notice that each subdirectory has all required levels-- for example, even though the `bcc1` model only has one ensemble member (in this example), we've still included a directory level for ensembles in the directory structure.  
-
-- `cmip5`
-    - `historical`
-        - `bcc1`
-            - `r1i1p1`
-                - `tas_NorthAmerica_12mo.csv`
-                - `latitude_longitude_NorthAmerica_12mo.csv`
-                - `time_NorthAmerica_12mo.csv`
-        - `bcc1-a`
-            - `r1i1p1`
-                - `tas_NorthAmerica_12mo.csv`
-                - `latitude_longitude_NorthAmerica_12mo.csv`
-                - `time_NorthAmerica_12mo.csv`
-            - `r1i1p1-a`
-                - `tas_NorthAmerica_12mo.csv`
-                - `latitude_longitude_NorthAmerica_12mo.csv`
-                - `time_NorthAmerica_12mo.csv`
-    - `rcp85`
-        - `bcc1`
-            - `r1i1p1`
-                - `tas_NorthAmerica_12mo.csv`
-                - `latitude_longitude_NorthAmerica_12mo.csv`
-                - `time_NorthAmerica_12mo.csv`
-        - `bcc1-a`
-            - `r1i1p1`
-                - `tas_NorthAmerica_12mo.csv`
-                - `latitude_longitude_NorthAmerica_12mo.csv`
-                - `time_NorthAmerica_12mo.csv`
-            - `r1i1p1-a`
-                - `tas_NorthAmerica_12mo.csv`
-                - `latitude_longitude_NorthAmerica_12mo.csv`
-                - `time_NorthAmerica_12mo.csv`
-
-Throughout the directory, subdirectories should be named using names reflecting the climate model or ensemble members they contain. The output files will be written using the same type of directory structure and the same names, so this output will be easier to interpret and use if the directory uses meaningful names for subdirectories. 
-
-Once you have your files set up in this structure, define the following variables, you will specify the location of the start of the directory using the `dataFolder` argument in the `gen_hw_set` function. In the example directory structure above, if the `cmip5` directory was in your current working directory, you would specify `dataFolder = "cmip5"` when calling `gen_hw_set`. 
 
 #### Specifying where to output results
 
@@ -407,15 +439,6 @@ gen_hw_set(out = "example_results",
 ```
 
 As with the `projectionBoundaries` option, there are some restrictions on which year ranges can be selected. The starting year cannot be earlier than 1980 and the ending year cannot be later than 2099. Further, the custom date boundaries cannot span 2005 (i.e., they must end in 2004 or earlier or must start in 2006 or later).
-
-## Example data
-
-We used, as an example, data from the Beijing Climate Center, China Meteorological Administration model projections included in CMIP5. See: [this link](http://cmip-pcmdi.llnl.gov/cmip5/availability.html). 
-)
-
-The data for this example of includes climate projections for grid points near several major East Coast cities: New York, NY; Philadelphia, PA; Newark, NJ; Baltimore, MD, Providence, RI. For the example CMIP5 data we used, all of these communities could be linked to three grid points on the climate model.
-
-The historical projections range over the years 1980 to 2005, while the future projections range over the years 2006 to 2099.
 
 ## How the package works
 

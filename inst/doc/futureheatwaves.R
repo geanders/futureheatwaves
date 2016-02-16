@@ -1,6 +1,12 @@
 ## ----echo = FALSE, message = FALSE---------------------------------------
 library(futureheatwaves)
 
+## ------------------------------------------------------------------------
+system.file("cities.csv", package = "futureheatwaves")
+
+## ------------------------------------------------------------------------
+system.file("cmip5", package = "futureheatwaves")
+
 ## ----eval = FALSE--------------------------------------------------------
 #  gen_hw_set(out = "example_results",
 #             dataFolder = "cmip5" ,

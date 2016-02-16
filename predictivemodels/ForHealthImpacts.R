@@ -34,7 +34,18 @@ apply_all_models(out = out, FUN = "bag_frequency")
 apply_all_models(out = out, FUN = "bag_frequency",
                  city_specific = TRUE)
 
-# Example of saving model results to file
+# Predict exposure (person-days) to very dangerous heatwaves using the bagging
+# model
+apply_all_models(out = out, FUN = "bag_exposure")
+apply_all_models(out = out, FUN = "bag_exposure",
+                 city_specific = TRUE)
+
+# Predict exposure (days) to very dangerous heatwaves using the bagging model
+apply_all_models(out = out, FUN = "bag_days")
+apply_all_models(out = out, FUN = "bag_days",
+                 city_specific = TRUE)
+
+n# Example of saving model results to file
 to_save <- apply_all_models(out = out, FUN = "bag_frequency",
                             city_specific = TRUE)
 write.csv(to_save, file = "~/tmp/To_Save.csv", ## Replace with filename you want
@@ -53,6 +64,32 @@ custom_tree_frequency <- function(hw_datafr){
         return(adj_very)
 }
 
+custom_tree_exposure <- function(hw_datafr){
+        hw_datafr <- add_pop_area(hw_datafr)
+
+        predictions <- ifelse(hw_datafr$max.temp.quantile >= 0.9989,
+                              "very", "less" )
+
+        adj_exp <- process_exposure(hw_datafr = hw_datafr,
+                                    prediction = predictions,
+                                    precision = 0.012,
+                                    false_omission = 0.0)
+        return(adj_exp)
+}
+
+custom_tree_days <- function(hw_datafr){
+        hw_datafr <- add_pop_area(hw_datafr)
+
+        predictions <- ifelse(hw_datafr$max.temp.quantile >= 0.9989,
+                              "very", "less" )
+
+        adj_days <- process_days(hw_datafr = hw_datafr,
+                                 prediction = predictions,
+                                 precision = 0.012,
+                                 false_omission = 0.0)
+        return(adj_days)
+}
+
 tree_frequency <- function(hw_datafr){
         hw_datafr <- add_pop_area(hw_datafr)
 
@@ -66,6 +103,34 @@ tree_frequency <- function(hw_datafr){
         return(adj_very)
 }
 
+tree_exposure <- function(hw_datafr){
+        hw_datafr <- add_pop_area(hw_datafr)
+
+        predictions <- predict(unpr.tree.rose,
+                               newdata = hw_datafr,
+                               type = "class")
+
+        adj_exp <- process_exposure(hw_datafr = hw_datafr,
+                                    prediction = predictions,
+                                    precision = 0.026,
+                                    false_omission = 0.0)
+        return(adj_exp)
+}
+
+tree_days <- function(hw_datafr){
+        hw_datafr <- add_pop_area(hw_datafr)
+
+        predictions <- predict(unpr.tree.rose,
+                               newdata = hw_datafr,
+                               type = "class")
+
+        adj_days <- process_days(hw_datafr = hw_datafr,
+                                 prediction = predictions,
+                                 precision = 0.026,
+                                 false_omission = 0.0)
+        return(adj_days)
+}
+
 bag_frequency <- function(hw_datafr){
         hw_datafr <- add_pop_area(hw_datafr)
 
@@ -76,6 +141,32 @@ bag_frequency <- function(hw_datafr){
                                      precision = 0.026,
                                      false_omission = 0.0)
         return(adj_very)
+}
+
+bag_exposure <- function(hw_datafr){
+        hw_datafr <- add_pop_area(hw_datafr)
+
+        predictions <- predict(bag.tree.rose,
+                               newdata = hw_datafr)
+
+        adj_exp <- process_exposure(hw_datafr = hw_datafr,
+                                    prediction = predictions,
+                                    precision = 0.026,
+                                    false_omission = 0.0)
+        return(adj_exp)
+}
+
+bag_days <- function(hw_datafr){
+        hw_datafr <- add_pop_area(hw_datafr)
+
+        predictions <- predict(bag.tree.rose,
+                               newdata = hw_datafr)
+
+        adj_days <- process_days(hw_datafr = hw_datafr,
+                                 prediction = predictions,
+                                 precision = 0.026,
+                                 false_omission = 0.0)
+        return(adj_days)
 }
 
 boost_frequency <- function(hw_datafr){
@@ -92,8 +183,82 @@ boost_frequency <- function(hw_datafr){
         return(adj_very)
 }
 
+boost_exposure <- function(hw_datafr){
+        hw_datafr <- add_pop_area(hw_datafr)
+
+        predictions <- predict(boost.tree.rose,
+                               newdata = hw_datafr,
+                               n.trees = 500)
+        predictions <- ifelse(predictions > 0, "very", "other")
+
+        adj_exp <- process_exposure(hw_datafr = hw_datafr,
+                                    prediction = predictions,
+                                    precision = 0.023,
+                                    false_omission = 0.0)
+        return(adj_exp)
+}
+
+boost_days <- function(hw_datafr){
+        hw_datafr <- add_pop_area(hw_datafr)
+
+        predictions <- predict(boost.tree.rose,
+                               newdata = hw_datafr,
+                               n.trees = 500)
+        predictions <- ifelse(predictions > 0, "very", "other")
+
+        adj_days <- process_days(hw_datafr = hw_datafr,
+                                 prediction = predictions,
+                                 precision = 0.023,
+                                 false_omission = 0.0)
+        return(adj_days)
+}
+
 # Helper functions for those functions (don't use directory in
 # `apply_all_models`)
+process_exposure <- function(hw_datafr, predictions, precision, false_omission){
+
+        exp_projs <- data.frame(predictions = predictions,
+                                length = hw_datafr$length,
+                                pop = hw_datafr$pop100) %>%
+                mutate(exposure = length * pop) %>%
+                group_by(predictions) %>%
+                summarise(exposure = sum(exposure))
+
+        # Add "very" with no exposure if necessary
+        if(!("very" %in% exp_projs$predictions)){
+                exp_projs <- rbind(exp_projs,
+                                   data.frame(predictions = "very",
+                                              exposure = 0))
+        }
+
+        adj_exp <- exp_projs$exposure[exp_projs$predictions == "other"] *
+                               false_omission +
+                exp_projs$exposure[exp_projs$predictions == "very"] * precision
+
+        return(adj_exp)
+}
+
+process_days <- function(hw_datafr, predictions, precision, false_omission){
+
+        exp_projs <- data.frame(predictions = predictions,
+                                length = hw_datafr$length) %>%
+                rename(exposure = length) %>%
+                group_by(predictions) %>%
+                summarise(exposure = sum(exposure))
+
+        # Add "very" with no exposure if necessary
+        if(!("very" %in% exp_projs$predictions)){
+                exp_projs <- rbind(exp_projs,
+                                   data.frame(predictions = "very",
+                                              exposure = 0))
+        }
+
+        adj_exp <- exp_projs$exposure[exp_projs$predictions == "other"] *
+                false_omission +
+                exp_projs$exposure[exp_projs$predictions == "very"] * precision
+
+        return(adj_exp)
+}
 
 adj_for_precision <- function(predictions, precision, false_omission){
         tot_very <- sum(predictions == "very")

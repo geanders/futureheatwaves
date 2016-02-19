@@ -65,9 +65,9 @@ apply_hw_projections <- function(hwPath, FUN, city_specific = FALSE){
         ensembleName <- sub(".csv", "", hwPathSplit[length(hwPathSplit)])
 
         hw_datafr <- read.csv(hwPath, as.is = TRUE) %>%
-                mutate(city = factor(city),
-                       start.date = as.Date(start.date),
-                       end.date = as.Date(end.date))
+                dplyr::mutate_(city = ~ factor(city),
+                       start.date = ~ as.Date(start.date),
+                       end.date = ~ as.Date(end.date))
 
         if(!city_specific){
                 hw_fun_out <- do.call(FUN, list(hw_datafr = hw_datafr))
@@ -81,7 +81,8 @@ apply_hw_projections <- function(hwPath, FUN, city_specific = FALSE){
                                          city = cities,
                                          value = NA)
                 for(i in 1:length(cities)){
-                        hw_datafr_city <- subset(hw_datafr, city == cities[i])
+                        hw_datafr_city <- dplyr::filter_(hw_datafr,
+                                                        ~ city == cities[i])
                         hw_fun_out$value[i] <- do.call(FUN,
                                                 list(hw_datafr = hw_datafr_city))
                 }

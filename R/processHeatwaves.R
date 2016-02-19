@@ -225,10 +225,8 @@ consolidate <- function(hwDataframeList){
 #' @importFrom dplyr %>%
 createHwDataframe <- function(city, threshold, heatwaves,
                               ensembleSeries, i, global, custom){
-        hold <<- heatwaves
 
-        intermediate <- heatwaves
-        heatwaves2 <- subset(intermediate, hw == 1)
+        heatwaves2 <- dplyr::filter_(heatwaves, ~ hw == 1)
 
         if(custom["createHwDataframe"][[1]]){
                 ref_temps <- ensembleSeries$reference[ , i]
@@ -238,26 +236,23 @@ createHwDataframe <- function(city, threshold, heatwaves,
                 ref_dates <- ensembleSeries$dates
         }
 
-        bloodhound <<- heatwaves2
-        bark <<- heatwaves
-
-        hw.frame <- dplyr::group_by(heatwaves2, hw.number) %>%
-                dplyr::summarize(mean.temp = mean(tmpd),
-                                 max.temp = max(tmpd),
-                                 min.temp = min(tmpd),
-                                 length = length(unique(date)),
-                                 start.date = date[1],
-                                 end.date = date[length(date)],
-                                 start.doy = as.POSIXlt(date[1])$yday,
-                                 start.month = as.POSIXlt(date[1])$mon + 1,
-                                 days.above.80 = length(date[tmpd > 80]),
-                                 days.above.85 = length(date[tmpd > 85]),
-                                 days.above.90 = length(date[tmpd > 90]),
-                                 days.above.95 = length(date[tmpd > 95]),
-                                 days.above.99th = length(date[tmpd >
+        hw.frame <- dplyr::group_by_(heatwaves2, ~ hw.number) %>%
+                dplyr::summarize_(mean.temp = ~ mean(tmpd),
+                                 max.temp = ~ max(tmpd),
+                                 min.temp = ~ min(tmpd),
+                                 length = ~ length(unique(date)),
+                                 start.date = ~ date[1],
+                                 end.date = ~ date[length(date)],
+                                 start.doy = ~ as.POSIXlt(date[1])$yday,
+                                 start.month = ~ as.POSIXlt(date[1])$mon + 1,
+                                 days.above.80 = ~ length(date[tmpd > 80]),
+                                 days.above.85 = ~ length(date[tmpd > 85]),
+                                 days.above.90 = ~ length(date[tmpd > 90]),
+                                 days.above.95 = ~ length(date[tmpd > 95]),
+                                 days.above.99th = ~ length(date[tmpd >
                                                 quantile(ref_temps, .99,
                                                          na.rm = TRUE)]),
-                                 days.above.99.5th = length(date[tmpd >
+                                 days.above.99.5th = ~ length(date[tmpd >
                                                 quantile(ref_temps, .995,
                                                          na.rm = TRUE)]))
 

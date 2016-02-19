@@ -30,7 +30,7 @@ out <- "~/tmp/results"  ## Replace with the path to where you have heatwave
                         ## dataframes stored
 
 # Predict frequency of very dangerous heatwaves using the bagging model
-apply_all_models(out = out, FUN = "custom_tree_frequency")
+apply_all_models(out = out, FUN = "tree_frequency")
 apply_all_models(out = out, FUN = "tree_frequency",
                  city_specific = TRUE)
 

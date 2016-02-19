@@ -81,7 +81,7 @@ custom_tree_days <- function(hw_datafr){
         hw_datafr <- add_pop_area(hw_datafr)
 
         predictions <- ifelse(hw_datafr$max.temp.quantile >= 0.9989,
-                              "very", "less" )
+                              "very", "other" )
 
         adj_days <- process_days(hw_datafr = hw_datafr,
                                  prediction = predictions,

@@ -30,13 +30,13 @@ out <- "~/tmp/results"  ## Replace with the path to where you have heatwave
                         ## dataframes stored
 
 # Predict frequency of very dangerous heatwaves using the bagging model
-apply_all_models(out = out, FUN = "bag_frequency")
+apply_all_models(out = out, FUN = "custom_tree_frequency")
 apply_all_models(out = out, FUN = "bag_frequency",
                  city_specific = TRUE)
 
 # Predict exposure (person-days) to very dangerous heatwaves using the bagging
 # model
-apply_all_models(out = out, FUN = "bag_exposure")
+apply_all_models(out = out, FUN = "tree_exposure")
 apply_all_models(out = out, FUN = "bag_exposure",
                  city_specific = TRUE)
 
@@ -45,7 +45,7 @@ apply_all_models(out = out, FUN = "bag_days")
 apply_all_models(out = out, FUN = "bag_days",
                  city_specific = TRUE)
 
-n# Example of saving model results to file
+# Example of saving model results to file
 to_save <- apply_all_models(out = out, FUN = "bag_frequency",
                             city_specific = TRUE)
 write.csv(to_save, file = "~/tmp/To_Save.csv", ## Replace with filename you want
@@ -68,7 +68,7 @@ custom_tree_exposure <- function(hw_datafr){
         hw_datafr <- add_pop_area(hw_datafr)
 
         predictions <- ifelse(hw_datafr$max.temp.quantile >= 0.9989,
-                              "very", "less" )
+                              "very", "other" )
 
         adj_exp <- process_exposure(hw_datafr = hw_datafr,
                                     prediction = predictions,

@@ -244,7 +244,7 @@ IDHeatwavesAlternative <- function(threshold, datafr){
 #'    (\code{hw.number}), and whether the day was the first day in a heatwave
 #'    (\code{first.hw.day}, 0 /1).
 #'
-#' @note This function gives identical results to the \link{\code{IDHeatwavesR}}
+#' @note This function gives identical results to the \code{\link{IDHeatwavesR}}
 #'    function, but should take less time to run.
 #'
 #' @export

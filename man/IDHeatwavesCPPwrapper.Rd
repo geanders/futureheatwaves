@@ -34,7 +34,7 @@ data using a heatwave definition that a heatwave must be two or more
 days with temperatures equal to or above some threshold temperature.
 }
 \note{
-This function gives identical results to the \link{\code{IDHeatwavesR}}
+This function gives identical results to the \code{\link{IDHeatwavesR}}
    function, but should take less time to run.
 }
 

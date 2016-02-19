@@ -8,10 +8,10 @@ number_of_heatwaves(hw_datafr)
 }
 \arguments{
 \item{hw_datafr}{A dataframe of heatwaves and their characteristics, as
-created by \code{\link{gen_hw_set}}.}
+created by \code{\link{gen_hw_set}}}
 }
 \value{
-A numeric value giving the number of heatwaves in the dataframe.
+A numeric value giving the number of heatwaves in the dataframe
 }
 \description{
 This function takes a dataframe of heatwaves, as created by

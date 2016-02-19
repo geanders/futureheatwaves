@@ -25,6 +25,7 @@ Imports:
     ggthemes (>= 3.0.0),
     Rcpp (>= 0.12.3)
 Suggests:
+    gridExtra (>= 2.0.0),
     knitr (>= 1.10.5),
     rmarkdown (>= 0.7),
     testthat

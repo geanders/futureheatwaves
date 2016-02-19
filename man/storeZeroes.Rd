@@ -7,6 +7,8 @@
 storeZeroes(index, potentialHeatwave, hw, hwNumber)
 }
 \arguments{
+\item{index}{An index into the various}
+
 \item{potentialHeatwave}{Size of the potential heatwave that turned out not to be a heatwave.}
 
 \item{hw}{A reference of the vector that contains the heatwaves}

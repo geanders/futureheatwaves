@@ -22,6 +22,14 @@ pathname for a directory that does not yet exist.}
 \item{dataFolder}{Character string with pathway to directory that
 contains climate projection data.}
 
+\item{dataDirectories}{A list object, with two elements for each of the
+two subdirectories included in the main directory. Typically, these will
+be a historical directory and a climate projection directory. Each element
+of the list should be named with the names of the subdirectories and
+should provide a numeric vector with the starting year and ending year of
+the data within each of the two subdirectories (e.g.,
+\code{list("historical" = c(1980, 2004), "rcp85" = c(2006, 2099))})}
+
 \item{citycsv}{Character string giving the filepath to a
 comma-separated values (.csv) file with unique identifiers, latitudes, and
 longitudes for each community for which the user wants to generate
@@ -69,6 +77,12 @@ second element is the upper year bound, with the restrictions that bounds
 must be between the years 1980 and 2099 and cannot span 2005 (i.e., both
 must either be before 2005 or after 2005).}
 
+\item{models_to_run}{A character vector with either "all" (the default),
+in which case the function runs through all models in the specified data
+directory, or the names of the models to run, using the names of each
+model's subdirectory within the data directory (e.g.,
+\code{c("bcc1", "ccsm")})}
+
 \item{probThreshold}{Numerical value between 0 and 1 specifying the threshold
 of temperature to use when defining heatwaves. The default value is 0.98
 (i.e., a heatwave is two or more days above the community's 98th
@@ -79,6 +93,11 @@ informing the user that the function will write out results to the local
 directory specified by the user with \code{out}. This warning prints out
 by default; the user must opt-out of this warning by specifying FALSE
 for this argument.}
+
+\item{threshold_ensemble}{A character vector giving the name of the ensemble
+member that should be used when determining the threshold temperature for
+the heatwave definition for each community for each climate model (e.g.,
+\code{"r1i1p1"})}
 
 \item{lat_lon_colnames}{A character vector of length two with the column names
 in the \code{cities} dataframe for latitude (first vector element) and

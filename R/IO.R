@@ -40,6 +40,7 @@ process_cities_file <- function(cities, lat_lon_colnames){
 #'    the file paths to (1) the latitude and longitude file; (2) the
 #'    climate projection file; and (3) the projection dates file
 #'    for the selected climate model.
+#' @inheritParams processModel
 #'
 #' @return A dataframe of the latitude and longitude data of the ensemble
 #'    with columns for the latitude (first column) and longitude (second
@@ -60,6 +61,7 @@ readLatLong <- function(ensemble, global){
 #' \code{\link{gen_hw_set}}.
 #'
 #' @inheritParams readLatLong
+#' @inheritParams processModel
 #'
 #' @return A dataframe of climate projection data where each column
 #'    corresponds to a climate model grid point and each row corresponds
@@ -77,6 +79,7 @@ readtas <- function(ensemble, global){
 #' \code{\link{gen_hw_set}}.
 #'
 #' @inheritParams readLatLong
+#' @inheritParams processModel
 #'
 #' @return A dataframe of dates corresponding to climate projection data,
 #'    where each row gives a date, split into columns of day in the
@@ -139,8 +142,10 @@ createEnsembleWriter <- function(modelName, global, custom){
 #' climate models included in the analysis, including the number of
 #' historical (1980--2004) and future (2006--2099) ensemble members.
 #'
-#' @param modelInfoAccumulator The dataframe that accumulates the number of
-#'    ensembles for each model.
+#' @param modelInfoAccumulator A dataframe with information about the number of
+#'    ensembles for each climate model.
+#' @param locationList A dataframe with information about community locations
+#'    and the closest grid point from each climate model to each community.
 #' @inheritParams processModel
 #'
 #' @return ...

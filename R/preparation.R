@@ -96,8 +96,6 @@ acquireDirectoryStructure <- function(dataFolder, coordinateFilenames,
 #'    specified by the user in \code{\link{gen_hw_set}}.
 #' @param experiments Character vector of the experiment(s) of interest.
 #'    Possible variables are "historical", "rcp85", or both.
-#' @param dataPath Character string of the file path to the directory
-#'    containing the climate projections. Must include the final `/`.
 #' @inheritParams gen_hw_set
 #'
 #' @return A list of length 3. The first element is the name of the model
@@ -130,6 +128,8 @@ buildStructureModels <- function(modelName, experiments,
 #'
 #' @param experiment Character string of the experiment of interest.
 #'    Possible variables are "historical" or "rcp85".
+#' @param dataPath Character string of the file path to the directory
+#'    containing the climate projections. Must include the final `/`.
 #' @inheritParams buildStructureModels
 #' @inheritParams gen_hw_set
 #'

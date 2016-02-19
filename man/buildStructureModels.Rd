@@ -34,8 +34,13 @@ containing the date dataframe in the bottom
 directory of each ensemble member subdirectory. (See the package
 vignette for an example of the required structure for this file.)}
 
-\item{dataPath}{Character string of the file path to the directory
-containing the climate projections. Must include the final `/`.}
+\item{dataDirectories}{A list object, with two elements for each of the
+two subdirectories included in the main directory. Typically, these will
+be a historical directory and a climate projection directory. Each element
+of the list should be named with the names of the subdirectories and
+should provide a numeric vector with the starting year and ending year of
+the data within each of the two subdirectories (e.g.,
+\code{list("historical" = c(1980, 2004), "rcp85" = c(2006, 2099))})}
 }
 \value{
 A list of length 3. The first element is the name of the model

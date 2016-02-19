@@ -31,14 +31,6 @@ alternative upper and lower year boundaries for the reference period
 to be used when measuring all heatwave characteristics related to
 relative, rather than absolute, temperature, and the percentile
 threshold to use when defining heatwaves.}
-
-\item{reference}{FALSE, if the user has not specified custom reference
-boundaries through the \code{referenceBoundaries} argument in
-\code{\link{gen_hw_set}}, otherwise a vector with four elements
-(earliest historical year, latest historical year,
-earliest future projection year, latest future projection year)
-giving the user-specified custom date boundaries for the
-heatwave projections.}
 }
 \value{
 A list with two elements: (1) a vector with one element for

@@ -58,6 +58,11 @@ boundaries through the \code{referenceBoundaries} argument in
 earliest future projection year, latest future projection year)
 giving the user-specified custom date boundaries for the
 heatwave projections.}
+
+\item{reference_dates}{Either FALSE, if the same dates are being used for the
+projection period and for the period to use as a reference for
+relative heatwave characteristics, or a numeric vector with the start and
+end years to use for the reference period}
 }
 \value{
 Write every heatwave dataframe to a .csv and return the ensemble

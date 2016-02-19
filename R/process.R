@@ -117,13 +117,6 @@ processModel <- function(model, global, custom, accumulators){
 #' functions to identify heatwaves in the projections and are also saved
 #' to file through this function to have for future reference.
 #'
-#' @param reference FALSE, if the user has not specified custom reference
-#'    boundaries through the \code{referenceBoundaries} argument in
-#'    \code{\link{gen_hw_set}}, otherwise a vector with four elements
-#'    (earliest historical year, latest historical year,
-#'    earliest future projection year, latest future projection year)
-#'    giving the user-specified custom date boundaries for the
-#'    heatwave projections.
 #' @inheritParams processModel
 #'
 #' @return A list with two elements: (1) a vector with one element for
@@ -212,6 +205,17 @@ processReference <- function(model, global, custom){
 #'    in that community's heatwave definition.These are typically automatically
 #'    determine during the run of the \code{gen_hw_set} function based on
 #'    historical climate projections within the community.
+#' @param reference FALSE, if the user has not specified custom reference
+#'    boundaries through the \code{referenceBoundaries} argument in
+#'    \code{\link{gen_hw_set}}, otherwise a vector with four elements
+#'    (earliest historical year, latest historical year,
+#'    earliest future projection year, latest future projection year)
+#'    giving the user-specified custom date boundaries for the
+#'    heatwave projections.
+#' @param reference_dates Either FALSE, if the same dates are being used for the
+#'    projection period and for the period to use as a reference for
+#'    relative heatwave characteristics, or a numeric vector with the start and
+#'    end years to use for the reference period
 #' @inheritParams buildStructureModels
 #' @inheritParams processModel
 #' @inheritParams processThresholds
@@ -269,6 +273,7 @@ processProjections <- function(ensemble, modelName, ensembleWriter,
 #' @inheritParams buildStructureModels
 #' @inheritParams processThresholds
 #' @inheritParams processProjections
+#' @inheritParams getBounds
 #'
 #' @return Returns a list with the following:
 #'    \code{locations}: A numberical vector with the indices of the columns
@@ -371,6 +376,8 @@ closest_point <- function(city, latlong){
 #'    corresponds to the row with the same row number in the climate
 #'    projection dataframe. Read in by
 #'    \code{\link{processEnsemble}}.
+#' @param type A character vector giving the type of boundaries that are being
+#'   checked. Possible values are "threshold", "projections", and "reference".
 #' @inheritParams buildStructureExperiments
 #' @inheritParams processModel
 #'
@@ -385,9 +392,6 @@ closest_point <- function(city, latlong){
 #'    the default is to pull Jan. 1, 1981, to Dec. 31, 2014 for a
 #'    historical experiment and Jan. 1, 2061 to Dec. 31, 2080 for
 #'    a future projection experiment.
-#'
-# TODO: See if it is possible to simplify this function by using data from
-# the global carrier instead of custom
 getBounds <- function(times, custom, type){
         # Set boundaries
 

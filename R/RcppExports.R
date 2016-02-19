@@ -36,6 +36,7 @@ storeHeatwaveEntry <- function(index, hwSize, hwCounter, hw, hwNumber) {
 #' @param potentialHeatwave Size of the potential heatwave that turned out not to be a heatwave.
 #' @param hw A reference of the vector that contains the heatwaves
 #' @param hwNumber A reference of the vector that contains the heatwave numbers.
+#' @inheritParams storeHeatwaveEntry
 #'
 #' @export
 storeZeroes <- function(index, potentialHeatwave, hw, hwNumber) {

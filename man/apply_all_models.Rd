@@ -7,6 +7,12 @@
 apply_all_models(out, FUN, city_specific = FALSE)
 }
 \arguments{
+\item{out}{Character string with pathway to directory to which
+heatwave files will be written. This should be a pathname to a directory
+on the user's local computer. If the directory already exists, it will
+be overwritten by this function, so the user should either specify a
+pathname for a directory that does not yet exist.}
+
 \item{FUN}{A character string giving the name of a function to apply to
 the heatwave dataframe located in the file specified by \code{hwPath}.
 This function must only take one argument, \code{hw_datafr}, which

@@ -17,6 +17,7 @@
 #'    applied to the full dataframe.
 #' @param city_specific TRUE / FALSE: Should the function be calculated
 #'    separately for each community within the dataframe?
+#' @inheritParams gen_hw_set
 #'
 #' @return A dataframe with the value output by the user-specified
 #'    function, as applied to every dataframe of heatwaves and characteristics

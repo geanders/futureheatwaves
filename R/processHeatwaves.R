@@ -150,7 +150,9 @@ consolidate <- function(hwDataframeList){
 #' This function takes a dataframe with identified heatwaves and returns
 #' a dataframe that lists and characterizes all of the heatwaves.
 #'
-#' @param A dataframe with the following columns: (1) \code{date}: Date
+#' @param city A character vector with the identification of the community
+#'    being processed
+#' @param heatwaves A dataframe with the following columns: (1) \code{date}: Date
 #'    of each observation, in class "Date"; (2) \code{tmpd}: Temperature
 #'    (in typical runs of this function, this will be in degrees Fahrenheit);
 #'    (3) \code{hw}: A binary variable designating whether a day is in a

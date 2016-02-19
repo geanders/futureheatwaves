@@ -63,6 +63,22 @@
 #' @param lat_lon_colnames A character vector of length two with the column names
 #'    in the \code{cities} dataframe for latitude (first vector element) and
 #'    longitude (second vector element)
+#' @param models_to_run A character vector with either "all" (the default),
+#'    in which case the function runs through all models in the specified data
+#'    directory, or the names of the models to run, using the names of each
+#'    model's subdirectory within the data directory (e.g.,
+#'    \code{c("bcc1", "ccsm")})
+#' @param dataDirectories A list object, with two elements for each of the
+#'    two subdirectories included in the main directory. Typically, these will
+#'    be a historical directory and a climate projection directory. Each element
+#'    of the list should be named with the names of the subdirectories and
+#'    should provide a numeric vector with the starting year and ending year of
+#'    the data within each of the two subdirectories (e.g.,
+#'    \code{list("historical" = c(1980, 2004), "rcp85" = c(2006, 2099))})
+#' @param threshold_ensemble A character vector giving the name of the ensemble
+#'    member that should be used when determining the threshold temperature for
+#'    the heatwave definition for each community for each climate model (e.g.,
+#'    \code{"r1i1p1"})
 #'
 #' @return This function returns a dataframe listing the name of each climate
 #'    model used, as well as the number of historical and future projection
@@ -276,6 +292,7 @@ check_params <- function(out,
 #'    c(historical period earliest year, historical period latest year,
 #'    future projection period earliest year, future projection period
 #'    latest year).
+#' @inheritParams gen_hw_set
 checkCustomBounds <- function(boundList, dataDirectories){
 
         if(class(boundList) != "numeric"){

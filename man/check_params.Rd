@@ -18,6 +18,14 @@ pathname for a directory that does not yet exist.}
 \item{dataFolder}{Character string with pathway to directory that
 contains climate projection data.}
 
+\item{dataDirectories}{A list object, with two elements for each of the
+two subdirectories included in the main directory. Typically, these will
+be a historical directory and a climate projection directory. Each element
+of the list should be named with the names of the subdirectories and
+should provide a numeric vector with the starting year and ending year of
+the data within each of the two subdirectories (e.g.,
+\code{list("historical" = c(1980, 2004), "rcp85" = c(2006, 2099))})}
+
 \item{citycsv}{Character string giving the filepath to a
 comma-separated values (.csv) file with unique identifiers, latitudes, and
 longitudes for each community for which the user wants to generate

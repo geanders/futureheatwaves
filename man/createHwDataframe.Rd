@@ -7,9 +7,22 @@
 createHwDataframe(city, threshold, heatwaves, ensembleSeries, i, global, custom)
 }
 \arguments{
+\item{city}{A character vector with the identification of the community
+being processed}
+
 \item{threshold}{Numeric string with threshold temperature used in
 the heatwave definition, in the same units as the temperature time
 series in \code{datafr}.}
+
+\item{heatwaves}{A dataframe with the following columns: (1) \code{date}: Date
+of each observation, in class "Date"; (2) \code{tmpd}: Temperature
+(in typical runs of this function, this will be in degrees Fahrenheit);
+(3) \code{hw}: A binary variable designating whether a day is in a
+heatwave (0: not in a heatwave; 1: in a heatwave); (4) \code{hw.number}:
+A numeric value, 0 if the day was not part of a heatwave, otherwise the
+number of the heatwave to which the day belonged; and (5)
+\code{first.hw.day}: binary variable designating whether a day was
+the first day of a heatwave (1) or not (0).}
 
 \item{ensembleSeries}{A list object giving the projection times series as
 well as a variety of other information for a single ensemble member.
@@ -39,16 +52,6 @@ alternative upper and lower year boundaries for the reference period
 to be used when measuring all heatwave characteristics related to
 relative, rather than absolute, temperature, and the percentile
 threshold to use when defining heatwaves.}
-
-\item{A}{dataframe with the following columns: (1) \code{date}: Date
-of each observation, in class "Date"; (2) \code{tmpd}: Temperature
-(in typical runs of this function, this will be in degrees Fahrenheit);
-(3) \code{hw}: A binary variable designating whether a day is in a
-heatwave (0: not in a heatwave; 1: in a heatwave); (4) \code{hw.number}:
-A numeric value, 0 if the day was not part of a heatwave, otherwise the
-number of the heatwave to which the day belonged; and (5)
-\code{first.hw.day}: binary variable designating whether a day was
-the first day of a heatwave (1) or not (0).}
 }
 \value{
 A dataframe where each row represents a heatwave, with the following

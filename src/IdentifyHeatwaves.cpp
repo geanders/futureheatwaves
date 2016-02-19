@@ -98,6 +98,7 @@ void storeHeatwaveEntry(int index, int hwSize, int hwCounter, std::vector<int>& 
 //' @param potentialHeatwave Size of the potential heatwave that turned out not to be a heatwave.
 //' @param hw A reference of the vector that contains the heatwaves
 //' @param hwNumber A reference of the vector that contains the heatwave numbers.
+//' @inheritParams storeHeatwaveEntry
 //'
 //' @export
 // [[Rcpp::export]]

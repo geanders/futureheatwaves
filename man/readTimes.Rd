@@ -11,6 +11,14 @@ readTimes(ensemble, global)
 the file paths to (1) the latitude and longitude file; (2) the
 climate projection file; and (3) the projection dates file
 for the selected climate model.}
+
+\item{global}{An object name for the \code{global} object. This
+object is created by \code{\link{gen_hw_set}} and includes user
+specifications for the path to the output directory, the path to the
+input climate projections, the dataframe with community locations, and the
+format for the filenames of the coordinate, tas, and time files in the
+ensemble-specific subdirectories of the projection directory input by
+the user.}
 }
 \value{
 A dataframe of dates corresponding to climate projection data,

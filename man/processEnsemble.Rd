@@ -36,6 +36,9 @@ alternative upper and lower year boundaries for the reference period
 to be used when measuring all heatwave characteristics related to
 relative, rather than absolute, temperature, and the percentile
 threshold to use when defining heatwaves.}
+
+\item{type}{A character vector giving the type of boundaries that are being
+checked. Possible values are "threshold", "projections", and "reference".}
 }
 \value{
 Returns a list with the following:

@@ -25,6 +25,22 @@ references:
   type: article-journal
   issued: 
     year: 2011
+- id: smith2013
+  title: "Heat waves in the United States: definitions, patterns and trends"
+  author: 
+  - family: Smith
+    given: Tiffany T 
+  - family: Zaitchik
+    given: Benjamin F
+  - family: Gohlke
+    given: Julia M
+  container-title: Climatic Change
+  volume: 118
+  DOI: 10.1007/s10584-012-0659-2
+  page: 811-825
+  type: article-journal
+  issued: 
+    year: 2013
 - id: taylor2012
   title: An Overview of CMIP5 and the Experiment Design
   author: 
@@ -460,6 +476,8 @@ grid.arrange(a, b, ncol = 1)
 A strength of this package is that it allows extensive customization by the user. This section describes which features can be customized and how. 
 
 ### Using a custom heatwave definition
+
+A variety of different heatwave definitions have been used to identify heatwaves in a time series of temperature data [@smith2013]. Researchers might want to use a specific definition, for example, because it matches the definition used by local health officials to declare heat wave warnings or, in the case of health impact assessments, to match with a definition used in an epidemiologic study. 
 
 The default is for this package to use the following definition to identify heatwaves: 
 

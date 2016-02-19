@@ -7,8 +7,11 @@
 writeAccumulators(modelInfoAccumulator, locationList, global)
 }
 \arguments{
-\item{modelInfoAccumulator}{The dataframe that accumulates the number of
-ensembles for each model.}
+\item{modelInfoAccumulator}{A dataframe with information about the number of
+ensembles for each climate model.}
+
+\item{locationList}{A dataframe with information about community locations
+and the closest grid point from each climate model to each community.}
 
 \item{global}{An object name for the \code{global} object. This
 object is created by \code{\link{gen_hw_set}} and includes user

@@ -31,7 +31,7 @@ out <- "~/tmp/results"  ## Replace with the path to where you have heatwave
 
 # Predict frequency of very dangerous heatwaves using the bagging model
 apply_all_models(out = out, FUN = "custom_tree_frequency")
-apply_all_models(out = out, FUN = "bag_frequency",
+apply_all_models(out = out, FUN = "tree_frequency",
                  city_specific = TRUE)
 
 # Predict exposure (person-days) to very dangerous heatwaves using the bagging
@@ -57,7 +57,7 @@ write.csv(to_save, file = "~/tmp/To_Save.csv", ## Replace with filename you want
 
 custom_tree_frequency <- function(hw_datafr){
         predictions <- ifelse(hw_datafr$max.temp.quantile >= 0.9989,
-                              "very", "less" )
+                              "very", "other" )
         adj_very <-adj_for_precision(predictions = predictions,
                                      precision = 0.012,
                                      false_omission = 0.0)

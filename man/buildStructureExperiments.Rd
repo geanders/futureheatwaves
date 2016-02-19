@@ -45,23 +45,4 @@ This function generates a list object with the file structure of files
 within the user-specified projection directory for a single experiment
 (i.e., "historical" or "rcp85").
 }
-\examples{
-modelName <- "bcc1"
-experiment <- "rcp85"
-
-dataPath <- system.file("cmip5", package = "futureheatwaves")
-dataPath <- paste0(dataFolder, "/")
-
-coordinateFilenames <- "latitude_longitude_NorthAmerica_12mo.csv"
-tasFilenames <- "tas_NorthAmerica_12mo.csv"
-timeFilenames <- "time_NorthAmerica_12mo.csv"
-
-buildStructureExperiments(modelName = modelName,
-                          experiment = experiment,
-                          dataPath = dataPath,
-                          coordinateFilenames = coordinateFilenames,
-                          tasFilenames = tasFilenames,
-                          timeFilenames = timeFilenames)
-
-}
 

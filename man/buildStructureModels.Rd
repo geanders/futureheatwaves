@@ -51,22 +51,4 @@ file structure. This parsed file structure is later used to lead other
 code through all climate models and ensemble members in the input
 projection directory.
 }
-\examples{
-modelName <- "bcc1"
-experiments <- c("historical", "rcp85")
-
-dataFolder <- system.file("cmip5", package = "futureheatwaves")
-dataFolder <- paste0(dataFolder, "/")
-
-coordinateFilenames <- "latitude_longitude_NorthAmerica_12mo.csv"
-tasFilenames <- "tas_NorthAmerica_12mo.csv"
-timeFilenames <- "time_NorthAmerica_12mo.csv"
-
-buildStructureModels(model = modelName,
-                     experiments = experiments,
-                     dataFolder,
-                     coordinateFilenames = coordinateFilenames,
-                     tasFilenames = tasFilenames,
-                     timeFilenames = timeFilenames)
-}
 

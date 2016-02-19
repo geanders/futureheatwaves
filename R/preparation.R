@@ -20,22 +20,6 @@
 #'    of this function. All other files will be removed when creating the
 #'    directory structure.
 #'
-#' @examples
-#' dataFolder <- system.file("cmip5", package = "futureheatwaves")
-#' coordinateFilenames <- "latitude_longitude_NorthAmerica_12mo.csv"
-#' tasFilenames <- "tas_NorthAmerica_12mo.csv"
-#' timeFilenames <- "time_NorthAmerica_12mo.csv"
-#'
-#' finalList <- acquireDirectoryStructure(dataFolder = dataFolder,
-#'    coordinateFilenames = coordinateFilenames,
-#'    tasFilenames = tasFilenames,
-#'    timeFilenames = timeFilenames)
-#'
-#' finalList[[1]][[1]]
-#' finalList[[1]][[2]][1]
-#'
-#' @export
-#'
 #' @importFrom dplyr %>%
 acquireDirectoryStructure <- function(dataFolder, coordinateFilenames,
                                       tasFilenames, timeFilenames,
@@ -121,24 +105,6 @@ acquireDirectoryStructure <- function(dataFolder, coordinateFilenames,
 #'    experiment hierarchy. The third element is the hierarchy of the future
 #'    projection directory for the model. The second and third elements are
 #'    return values of \code{\link{buildStructureExperiments}}.
-#'
-#' @examples
-#' modelName <- "bcc1"
-#' experiments <- c("historical", "rcp85")
-#'
-#' dataFolder <- system.file("cmip5", package = "futureheatwaves")
-#' dataFolder <- paste0(dataFolder, "/")
-#'
-#' coordinateFilenames <- "latitude_longitude_NorthAmerica_12mo.csv"
-#' tasFilenames <- "tas_NorthAmerica_12mo.csv"
-#' timeFilenames <- "time_NorthAmerica_12mo.csv"
-#'
-#' buildStructureModels(model = modelName,
-#'                      experiments = experiments,
-#'                      dataFolder,
-#'                      coordinateFilenames = coordinateFilenames,
-#'                      tasFilenames = tasFilenames,
-#'                      timeFilenames = timeFilenames)
 buildStructureModels <- function(modelName, experiments,
                                  dataFolder,
                                  coordinateFilenames, tasFilenames,
@@ -171,25 +137,6 @@ buildStructureModels <- function(modelName, experiments,
 #'    is a return value of the \code{\link{buildStructureEnsembles}} function for
 #'    one of the ensemble members in that experiment of that climate model
 #'    within the user-specified projections directory.
-#'
-#' @examples
-#' modelName <- "bcc1"
-#' experiment <- "rcp85"
-#'
-#' dataPath <- system.file("cmip5", package = "futureheatwaves")
-#' dataPath <- paste0(dataFolder, "/")
-#'
-#' coordinateFilenames <- "latitude_longitude_NorthAmerica_12mo.csv"
-#' tasFilenames <- "tas_NorthAmerica_12mo.csv"
-#' timeFilenames <- "time_NorthAmerica_12mo.csv"
-#'
-#' buildStructureExperiments(modelName = modelName,
-#'                           experiment = experiment,
-#'                           dataPath = dataPath,
-#'                           coordinateFilenames = coordinateFilenames,
-#'                           tasFilenames = tasFilenames,
-#'                           timeFilenames = timeFilenames)
-#'
 buildStructureExperiments <- function(modelName, experiment,
                                       dataPath,
                                       coordinateFilenames, tasFilenames,
@@ -228,25 +175,6 @@ buildStructureExperiments <- function(modelName, experiment,
 #' that was processed. The second element is a list containing the coordinate
 #' comma-separated file, the projection data comma-separated file,
 #' and the time data comma-separated file, respectively.
-#'
-#' @examples
-#'
-#' experiment <- "rcp85"
-#' modelName <- "bcc1"
-#' ensembleName <- "r1i1p1"
-#' dataFolder <- system.file("cmip5", package = "futureheatwaves")
-#'
-#' ensemblePath <- paste(dataFolder, experiment,
-#'                       modelName, ensembleName, sep = "/")
-#'
-#' coordinateFilenames <- "latitude_longitude_NorthAmerica_12mo.csv"
-#' tasFilenames <- "tas_NorthAmerica_12mo.csv"
-#' timeFilenames <- "time_NorthAmerica_12mo.csv"
-#'
-#' buildStructureEnsembles(ensembleName = ensembleName,
-#'                         coordinateFilenames = coordinateFilenames,
-#'                         tasFilenames = tasFilenames,
-#'                         timeFilenames = timeFilenames)
 buildStructureEnsembles <- function(ensemblePath, coordinateFilenames,
                                     tasFilenames, timeFilenames,
                                     dataDirectories){

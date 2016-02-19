@@ -47,19 +47,4 @@ The files in the bottom directory must all have a .csv extension
    of this function. All other files will be removed when creating the
    directory structure.
 }
-\examples{
-dataFolder <- system.file("cmip5", package = "futureheatwaves")
-coordinateFilenames <- "latitude_longitude_NorthAmerica_12mo.csv"
-tasFilenames <- "tas_NorthAmerica_12mo.csv"
-timeFilenames <- "time_NorthAmerica_12mo.csv"
-
-finalList <- acquireDirectoryStructure(dataFolder = dataFolder,
-   coordinateFilenames = coordinateFilenames,
-   tasFilenames = tasFilenames,
-   timeFilenames = timeFilenames)
-
-finalList[[1]][[1]]
-finalList[[1]][[2]][1]
-
-}
 

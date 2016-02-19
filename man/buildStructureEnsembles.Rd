@@ -39,23 +39,4 @@ creates a list with all files in the subdirectory of a single
 ensemble member subdirectory within a specific climate model
 subdirectory.
 }
-\examples{
-
-experiment <- "rcp85"
-modelName <- "bcc1"
-ensembleName <- "r1i1p1"
-dataFolder <- system.file("cmip5", package = "futureheatwaves")
-
-ensemblePath <- paste(dataFolder, experiment,
-                      modelName, ensembleName, sep = "/")
-
-coordinateFilenames <- "latitude_longitude_NorthAmerica_12mo.csv"
-tasFilenames <- "tas_NorthAmerica_12mo.csv"
-timeFilenames <- "time_NorthAmerica_12mo.csv"
-
-buildStructureEnsembles(ensembleName = ensembleName,
-                        coordinateFilenames = coordinateFilenames,
-                        tasFilenames = tasFilenames,
-                        timeFilenames = timeFilenames)
-}
 

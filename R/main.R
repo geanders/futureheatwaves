@@ -213,22 +213,6 @@ gen_hw_set <- function(out,
 #'    column and times by row; 2. A file with the longitude and latitude
 #'    of each grid point in the projection file and; 3. A file with the
 #'    date of each of the rows in the projection file.)
-#'
-#' @examples
-#' out <- "~/tmp/results"
-#' dataFolder <- "inst/cmip5/"
-#' citycsv <- "inst/cities.csv"
-#' coordinateFilenames <- "latitude_longitude_NorthAmerica_12mo.csv"
-#' tasFilenames <- "tas_NorthAmerica_12mo.csv"
-#' timeFilenames <- "time_NorthAmerica_12mo.csv"
-#' IDheatwavesFunction <- FALSE
-#' dataBoundaries <- FALSE
-#' referenceBoundaries <- FALSE
-#'
-#' check_params(out, dataFolder, citycsv,
-#'    coordinateFilenames, tasFilenames, timeFilenames,
-#'    IDheatwavesFunction,
-#'    dataBoundaries, referenceBoundaries)
 check_params <- function(out,
                          dataFolder,
                          dataDirectories,

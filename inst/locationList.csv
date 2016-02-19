@@ -1,4 +1,4 @@
-"city","lat","lon","lat_grid","long_grid","model"
+"city","lat","long","lat_grid","long_grid","model"
 "balt",39.3008,283.3894,40.464,284.06,"bcc1"
 "ny",40.6698,286.0562,40.464,286.88,"bcc1"
 "nwk",40.7241,285.8268,40.464,286.88,"bcc1"

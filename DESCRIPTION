@@ -6,14 +6,16 @@ Date: 2016-01-31
 Authors@R: c(
     person("Colin", "Eason", , "aimesce@gmail.com", c("aut")),
     person("Elizabeth", "Barnes", , "eabarnes@atmos.colostate.edu", c("aut")),
-    person("Brooke", "Anderson", , "brooke.anderson@colostate.edu", c("aut", "cre"))
+    person("Brooke", "Anderson", , "brooke.anderson@colostate.edu",
+    c("aut", "cre"))
     )
 Description: Takes locally saved climate projections and identifies and
     characterizes heatwaves in those projections. Heatwaves are defined
     based on a definition frequently used in climate epidemiology.
     Characterizations include several metrics of heatwave length,
     intensity, and timing in the summer. This work was supported in part by
-    grants from the National Institute of Environmental Health Sciences and the
+    grants from the National Institute of Environmental Health Sciences
+    (R00ES022631), the National Science Foundation (1331399), and the
     Colorado State University Vice President for Research.
 License: MIT + file LICENSE
 LazyData: TRUE

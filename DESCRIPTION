@@ -29,8 +29,10 @@ Imports:
 Suggests:
     gridExtra (>= 2.0.0),
     knitr (>= 1.10.5),
-    rmarkdown (>= 0.7),
-    testthat
+    mapproj (>= 1.2.4),
+    maps (>= 3.0.2),
+    rmarkdown (>= 0.7.0),
+    testthat (>= 0.11.0)
 VignetteBuilder: knitr
 RoxygenNote: 5.0.1
 LinkingTo: Rcpp

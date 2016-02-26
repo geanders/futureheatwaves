@@ -191,11 +191,11 @@ These files must be in a certain structure to run correctly through the `gen_hw_
 **Climate projection file**: The climate projection file should be a comma-separated file of temperatures (in Kelvin) that looks something like this:
 
 ```
-"275.74","282.32","285.03"
-"275.94","283.14","285.47"
-"272.9","280.26","284.6"
-"273.61","280.82","284.67"
-"273.97","281.18","284.83"
+267.6,281.17,285.69
+269.33,280.48,285.28
+269.29,280.12,285.05
+271.35,280.19,284.97
+272.97,281.57,285.22
 ```
 
 This is a projection file covering three grid points of a climate model, giving projections for five dates. Each column corresponds to one grid point in the climate model. Each row corresponds to one date. The file does not have a header row; rather, the observations begin immediately on the first row of the file. Similarly, the file does not have a column of row numbers. Most projection files will include many more columns and rows than this small example, since they will usually cover all the grid points in a climate model and a long time series of observations.
@@ -205,9 +205,9 @@ In the current version of this package, these projection files must not have gap
 **Grid point location file**: The grid point location file should be a comma-separated file that looks something like this:
 
 ```
-"40.464","284.06"
-"40.464","286.88"
-"40.464","289.69"
+40.464,284.06
+40.464,286.88
+40.464,289.69
 ```
 
 For this file, each row gives the location for the grid point for the corresponding column in the climate projection files. For example, the first row gives the latitude (first column) and longitude (second column) for the projections given in the first column of the climate projection file, the second row of this file gives the latitude and longitude for the projection given in the second column of the climate projection file, and so on. 
@@ -219,11 +219,11 @@ Each climate model ensemble member will need to have a grid-point location file 
 **Projection times data file**: The projection times data file should be a comma-separated file that looks something like this:
 
 ```
-"0","2006","1","1"
-"1","2006","1","2"
-"2","2006","1","3"
-"3","2006","1","4"
-"4","2006","1","5"
+51100,1990,1,1
+51101,1990,1,2
+51102,1990,1,3
+51103,1990,1,4
+51104,1990,1,5
 ```
 
 This file gives a date that corresponds to each row of the climate projection file. The file should have four columns: one with row numbers, and then one each with year, month, and day. Year should be given with four digits. The file should not have a header row. 
@@ -246,16 +246,18 @@ city_file_location <- system.file("cities.csv", package = "futureheatwaves")
 
 gen_hw_set(out = "example_results",
            dataFolder = projection_dir_location ,
-           dataDirectories = list("historical" = c(1980, 2004),
-                                        "rcp85" = c(2006, 2099)),
+           dataDirectories = list("historical" = c(1990, 1999),
+                                       "rcp85" = c(2060, 2079)),
            citycsv = city_file_location,
            coordinateFilenames = "latitude_longitude_NorthAmerica_12mo.csv",
            tasFilenames = "tas_NorthAmerica_12mo.csv",
            timeFilenames = "time_NorthAmerica_12mo.csv",
-           lat_lon_colnames = c("lat", "long"))
+           thresholdBoundaries = c(1990, 1999),
+           projectionBoundaries = c(2070, 2079),
+           referenceBoundaries = c(2070, 2079))
 ```
 
-Notice that, in this call, you must specify the directory where you would like results written (`out`), the location of the directory of climate projections (`dataFolder`), the names of the two main subdirectories of that climate projection directory, as well as their year boundaries (`dataDirectories`), the file name of the community location file (`citycsv`), and the names used for the final grid coordinate, climate projection, and projection date files (`coordinateFilenames`, `tasFilenames`, and `timeFilenames`). In this example, the `lat_lon_colnames` is also required, because the community locations file uses the column name "long", rather than the default "lon", to specify the longitude column.
+Notice that, in this call, you must specify the directory where you would like results written (`out`), the location of the directory of climate projections (`dataFolder`), the names of the two main subdirectories of that climate projection directory, as well as their year boundaries (`dataDirectories`), the file name of the community location file (`citycsv`), and the names used for the final grid coordinate, climate projection, and projection date files (`coordinateFilenames`, `tasFilenames`, and `timeFilenames`).
 
 When you run this call, you will first be advised that the function will write files to your computer, and you will need to confirm that you want to proceed: 
 
@@ -277,11 +279,11 @@ Read operation complete
 Processing projections for  bcc1 
 Reading ---> r1i1p1 
 Read operation complete 
-Creating heatwave dataframe ~~ City:  balt  ~~ City Number:  1  ~~ Cutoff:  84.632 
-Creating heatwave dataframe ~~ City:  ny  ~~ City Number:  2  ~~ Cutoff:  78.77876 
-Creating heatwave dataframe ~~ City:  nwk  ~~ City Number:  3  ~~ Cutoff:  78.77876 
-Creating heatwave dataframe ~~ City:  phil  ~~ City Number:  4  ~~ Cutoff:  84.632 
-Creating heatwave dataframe ~~ City:  prov  ~~ City Number:  5  ~~ Cutoff:  75.074 
+Creating heatwave dataframe ~~ City:  balt  ~~ City Number:  1  ~~ Cutoff:  84.25436 
+Creating heatwave dataframe ~~ City:  ny  ~~ City Number:  2  ~~ Cutoff:  78.11672 
+Creating heatwave dataframe ~~ City:  nwk  ~~ City Number:  3  ~~ Cutoff:  78.11672 
+Creating heatwave dataframe ~~ City:  phil  ~~ City Number:  4  ~~ Cutoff:  84.25436 
+Creating heatwave dataframe ~~ City:  prov  ~~ City Number:  5  ~~ Cutoff:  74.498 
 Writing bcc1: r1i1p1
 Processing thresholds for ccsm 
 Reading ---> r1i1p1 
@@ -289,23 +291,23 @@ Read operation complete
 Processing projections for  ccsm 
 Reading ---> r1i1p1 
 Read operation complete 
-Creating heatwave dataframe ~~ City:  balt  ~~ City Number:  1  ~~ Cutoff:  82.36076 
-Creating heatwave dataframe ~~ City:  ny  ~~ City Number:  2  ~~ Cutoff:  79.55276 
-Creating heatwave dataframe ~~ City:  nwk  ~~ City Number:  3  ~~ Cutoff:  79.55276 
-Creating heatwave dataframe ~~ City:  phil  ~~ City Number:  4  ~~ Cutoff:  80.474 
-Creating heatwave dataframe ~~ City:  prov  ~~ City Number:  5  ~~ Cutoff:  79.34 
+Creating heatwave dataframe ~~ City:  balt  ~~ City Number:  1  ~~ Cutoff:  82.92344 
+Creating heatwave dataframe ~~ City:  ny  ~~ City Number:  2  ~~ Cutoff:  81.212 
+Creating heatwave dataframe ~~ City:  nwk  ~~ City Number:  3  ~~ Cutoff:  81.212 
+Creating heatwave dataframe ~~ City:  phil  ~~ City Number:  4  ~~ Cutoff:  81.44672 
+Creating heatwave dataframe ~~ City:  prov  ~~ City Number:  5  ~~ Cutoff:  80.88872 
 Writing ccsm: r1i1p1
 Processing projections for  ccsm 
 Reading ---> r2i1p1 
 Read operation complete 
-Creating heatwave dataframe ~~ City:  balt  ~~ City Number:  1  ~~ Cutoff:  82.36076 
-Creating heatwave dataframe ~~ City:  ny  ~~ City Number:  2  ~~ Cutoff:  79.55276 
-Creating heatwave dataframe ~~ City:  nwk  ~~ City Number:  3  ~~ Cutoff:  79.55276 
-Creating heatwave dataframe ~~ City:  phil  ~~ City Number:  4  ~~ Cutoff:  80.474 
-Creating heatwave dataframe ~~ City:  prov  ~~ City Number:  5  ~~ Cutoff:  79.34 
+Creating heatwave dataframe ~~ City:  balt  ~~ City Number:  1  ~~ Cutoff:  82.92344 
+Creating heatwave dataframe ~~ City:  ny  ~~ City Number:  2  ~~ Cutoff:  81.212 
+Creating heatwave dataframe ~~ City:  nwk  ~~ City Number:  3  ~~ Cutoff:  81.212 
+Creating heatwave dataframe ~~ City:  phil  ~~ City Number:  4  ~~ Cutoff:  81.44672 
+Creating heatwave dataframe ~~ City:  prov  ~~ City Number:  5  ~~ Cutoff:  80.88872 
 Writing ccsm: r2i2p2
 Writing accumulators 
-All operations completed. Exiting.
+All operations completed. Exiting. 
 ```
 
 The function provides status reports on its progress in generating the heatwave projections. This helps you see that the function call is progressing, as this process can take a while if you include many cities and / or many climate model projections. 
@@ -389,10 +391,10 @@ apply_all_models(out = "results",
 ```
 
 ```
-  model ensemble    value
-1  bcc1        1 9.830108
-2  ccsm        1 9.673943
-3  ccsm        2 8.795396
+  model ensemble     value
+1  bcc1        1 10.763566
+2  ccsm        1  7.914729
+3  ccsm        2  6.993088
 ```
 
 You can also use the `city_specific` argument in `apply_all_models` to apply the function separately by community. For example: 
@@ -405,21 +407,21 @@ apply_all_models(out = "results",
 
 ```
    model ensemble city     value
-1   bcc1        1 balt  5.196078
-2   bcc1        1  nwk  9.287037
-3   bcc1        1   ny  9.287037
-4   bcc1        1 phil  5.196078
-5   bcc1        1 prov 33.444444
-6   ccsm        1 balt  8.192308
-7   ccsm        1  nwk 10.060811
-8   ccsm        1   ny 10.060811
-9   ccsm        1 phil  9.739437
-10  ccsm        1 prov 10.446043
-11  ccsm        2 balt  7.083333
-12  ccsm        2  nwk  9.455128
-13  ccsm        2   ny  9.455128
-14  ccsm        2 phil  8.128049
-15  ccsm        2 prov 10.181159
+1   bcc1        1 balt  5.457627
+2   bcc1        1  nwk 10.683333
+3   bcc1        1   ny 10.683333
+4   bcc1        1 phil  5.457627
+5   bcc1        1 prov 42.550000
+6   ccsm        1 balt  7.358025
+7   ccsm        1  nwk  8.240000
+8   ccsm        1   ny  8.240000
+9   ccsm        1 phil  7.554217
+10  ccsm        1 prov  8.273973
+11  ccsm        2 balt  6.732558
+12  ccsm        2  nwk  7.232558
+13  ccsm        2   ny  7.232558
+14  ccsm        2 phil  6.886364
+15  ccsm        2 prov  6.886364
 ```
 
 To work, the functions you apply using `apply_all_models` must follow a certain structure. They must require only a dataframe of heatwaves, in the format of those output by `gen_hw_set`, as the input, and they must output a single-value vector (i.e., a vector of length one).
@@ -525,13 +527,15 @@ city_file_location <- system.file("cities.csv", package = "futureheatwaves")
 
 gen_hw_set(out = "example_results",
            dataFolder = projection_dir_location ,
-           dataDirectories = list("historical" = c(1980, 2004),
-                                        "rcp85" = c(2006, 2099)),
+           dataDirectories = list("historical" = c(1990, 1999),
+                                       "rcp85" = c(2060, 2079)),
            citycsv = city_file_location,
            coordinateFilenames = "latitude_longitude_NorthAmerica_12mo.csv",
            tasFilenames = "tas_NorthAmerica_12mo.csv",
            timeFilenames = "time_NorthAmerica_12mo.csv",
-           lat_lon_colnames = c("lat", "long"),
+           thresholdBoundaries <- c(1990, 1999),
+           projectionBoundaries <- c(2070, 2079),
+           referenceBoundaries <- c(2070, 2079),
            IDheatwavesFunction = "IDHeatwavesAlternative")
 ```
 
@@ -544,49 +548,49 @@ For example, to create projections for 2071 to 2090, you could call:
 ```{r, eval = FALSE}
 gen_hw_set(out = "example_results",
            dataFolder = projection_dir_location ,
-           dataDirectories = list("historical" = c(1980, 2004),
-                                        "rcp85" = c(2006, 2099)),
+           dataDirectories = list("historical" = c(1990, 1999),
+                                  "rcp85" = c(2060, 2079)),
            citycsv = city_file_location,
            coordinateFilenames = "latitude_longitude_NorthAmerica_12mo.csv",
            tasFilenames = "tas_NorthAmerica_12mo.csv",
            timeFilenames = "time_NorthAmerica_12mo.csv",
-           lat_lon_colnames = c("lat", "long"),
-           IDheatwavesFunction = "IDHeatwavesAlternative",
-           projectionBoundaries = c(2071, 2090))
+           thresholdBoundaries = c(1990, 1999),
+           projectionBoundaries = c(2060, 2069),
+           referenceBoundaries = c(2060, 2069))
 ```
 
 ### Customizing dates used to determine thresholds or reference data
 
-Similarly, while the default is to use data from 1981 to 2004 to determine the threshold temperature for each community's heatwave definition, the user can customize which date range to use when pulling the temperature data to use to calculate these thresholds. This option is specified using the `thresholdBoundaries` option in `gen_hw_set`. For example, to use the years 2061 to 2080 to calculate these threshold temperatures, you could run: 
+Similarly, while the default is to use data from 1981 to 2004 to determine the threshold temperature for each community's heatwave definition, the user can customize which date range to use when pulling the temperature data to use to calculate these thresholds. This option is specified using the `thresholdBoundaries` option in `gen_hw_set`. For example, to use the years 2070 to 2079 to calculate these threshold temperatures, you could run: 
 
 ```{r, eval = FALSE}
 gen_hw_set(out = "example_results",
            dataFolder = projection_dir_location ,
-           dataDirectories = list("historical" = c(1980, 2004),
-                                        "rcp85" = c(2006, 2099)),
+           dataDirectories = list("historical" = c(1990, 1999),
+                                       "rcp85" = c(2060, 2079)),
            citycsv = city_file_location,
            coordinateFilenames = "latitude_longitude_NorthAmerica_12mo.csv",
            tasFilenames = "tas_NorthAmerica_12mo.csv",
            timeFilenames = "time_NorthAmerica_12mo.csv",
-           lat_lon_colnames = c("lat", "long"),
-           IDheatwavesFunction = "IDHeatwavesAlternative",
-           thresholdBoundaries = c(2061, 2080))
+           thresholdBoundaries = c(2070, 2079),
+           projectionBoundaries = c(2070, 2079),
+           referenceBoundaries = c(2070, 2079))
 ```
 
-You can customize one other set of time boundaries. The heatwave datasets include several heatwave characteristics that incorporate relative temperature. These take the absolute temperature measures of heatwave and compare them to the community's typical temperature distributions to generate relative measures of the intensity of the heatwave. The default is to use temperatures from a community for the period 2061 to 2080 for these reference temperatures to calculate relative temperatures of each heatwave. However, you can use the `referenceBoundaries` option of `gen_hw_set` to specify which years you would like to use for these reference temperatures. This can be useful in exploring the role of adaptation in future heatwaves. For example, if you wanted to use temperature projections for 2031 to 2040 when calculating relative characteristics of heatwaves, you could run: 
+You can customize one other set of time boundaries. The heatwave datasets include several heatwave characteristics that incorporate relative temperature. These take the absolute temperature measures of heatwave and compare them to the community's typical temperature distributions to generate relative measures of the intensity of the heatwave. The default is to use temperatures from a community for the period 2061 to 2080 for these reference temperatures to calculate relative temperatures of each heatwave. However, you can use the `referenceBoundaries` option of `gen_hw_set` to specify which years you would like to use for these reference temperatures. This can be useful in exploring the role of adaptation in future heatwaves. For example, if you wanted to use temperature projections for 1990 to 1999 when calculating relative characteristics of heatwaves, you could run: 
 
 ```{r, eval = FALSE}
 gen_hw_set(out = "example_results",
            dataFolder = projection_dir_location ,
-           dataDirectories = list("historical" = c(1980, 2004),
-                                        "rcp85" = c(2006, 2099)),
+           dataDirectories = list("historical" = c(1990, 1999),
+                                       "rcp85" = c(2060, 2079)),
            citycsv = city_file_location,
            coordinateFilenames = "latitude_longitude_NorthAmerica_12mo.csv",
            tasFilenames = "tas_NorthAmerica_12mo.csv",
            timeFilenames = "time_NorthAmerica_12mo.csv",
-           lat_lon_colnames = c("lat", "long"),
-           IDheatwavesFunction = "IDHeatwavesAlternative",
-           referencdeBoundaries = c(2031, 2040))
+           thresholdBoundaries = c(1990, 1999),
+           projectionBoundaries = c(2070, 2079),
+           referenceBoundaries = c(1990, 1999))
 ```
 
 As with the `projectionBoundaries` option, there are some restrictions on which year ranges can be selected. The starting year cannot be earlier than the first year in the first subdirectory and the ending year cannot be later than the last year of the second subdirectory. Further, the custom date boundaries cannot span the two directories.

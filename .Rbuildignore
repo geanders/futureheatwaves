@@ -5,3 +5,4 @@
 ^paper_drafts/$
 ^paper_drafts$
 ^\.travis\.yml$
+^..pdf$

@@ -11,7 +11,7 @@
 #'
 #' @importFrom dplyr %>%
 map_grid <- function(plot_model, out){
-        cities <- read.csv(paste(out, "locationList.csv", sep = "/"),
+        cities <- utils::read.csv(paste(out, "locationList.csv", sep = "/"),
                            col.names = c("city","lat", "lon",
                                          "lat_grid", "lon_grid", "model")) %>%
                 dplyr::mutate_(lon = ~ lon - 360,

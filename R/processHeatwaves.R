@@ -250,10 +250,10 @@ createHwDataframe <- function(city, threshold, heatwaves,
                                  days.above.90 = ~ length(date[tmpd > 90]),
                                  days.above.95 = ~ length(date[tmpd > 95]),
                                  days.above.99th = ~ length(date[tmpd >
-                                                quantile(ref_temps, .99,
+                                                stats::quantile(ref_temps, .99,
                                                          na.rm = TRUE)]),
                                  days.above.99.5th = ~ length(date[tmpd >
-                                                quantile(ref_temps, .995,
+                                                stats::quantile(ref_temps, .995,
                                                          na.rm = TRUE)]))
 
         hw.frame$first.in.season <- c(1, rep(NA, nrow(hw.frame) - 1))
@@ -268,7 +268,7 @@ createHwDataframe <- function(city, threshold, heatwaves,
 
         hw.frame$threshold <- threshold
 
-        dist.tmpd <- ecdf(ref_temps)
+        dist.tmpd <- stats::ecdf(ref_temps)
         hw.frame$mean.temp.quantile <- dist.tmpd(hw.frame$mean.temp)
         hw.frame$max.temp.quantile <- dist.tmpd(hw.frame$max.temp)
         hw.frame$min.temp.quantile <- dist.tmpd(hw.frame$min.temp)

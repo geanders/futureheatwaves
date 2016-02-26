@@ -162,7 +162,7 @@ gen_hw_set <- function(out,
                                             threshold_ensemble = threshold_ensemble)
 
         # Read the cities data file
-        cities <- read.csv(citycsv) %>%
+        cities <- utils::read.csv(citycsv) %>%
                 process_cities_file(lat_lon_colnames = lat_lon_colnames)
 
         # Create "global" list object that will hold variables that all
@@ -254,7 +254,7 @@ check_params <- function(out,
         # Check if the city information .csv can be opened.
         # Note: Does not check if the city information is valid.
         tryCatch(
-                read.csv(citycsv, header = TRUE),
+                utils::read.csv(citycsv, header = TRUE),
                 error = function(x){
                         stop(paste("Cannot read city information .csv",
                                    "(`citycsv`). Stopping."))

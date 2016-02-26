@@ -154,7 +154,7 @@ processThresholds <- function(model, global, custom){
 
         # Calculate threshold temperatures using the user-specified
         # threshold percentile (default: 0.98)
-        thresholds <- apply(thresholdEnsemble$series, 2, quantile,
+        thresholds <- apply(thresholdEnsemble$series, 2, stats::quantile,
                             probs = custom$probThreshold)
 
         out_locations <- thresholdEnsemble$out_locations

@@ -64,7 +64,7 @@ apply_hw_projections <- function(hwPath, FUN, city_specific = FALSE){
         modelName <- hwPathSplit[(length(hwPathSplit) - 1)]
         ensembleName <- sub(".csv", "", hwPathSplit[length(hwPathSplit)])
 
-        hw_datafr <- read.csv(hwPath, as.is = TRUE) %>%
+        hw_datafr <- utils::read.csv(hwPath, as.is = TRUE) %>%
                 dplyr::mutate_(city = ~ factor(city),
                        start.date = ~ as.Date(start.date),
                        end.date = ~ as.Date(end.date))

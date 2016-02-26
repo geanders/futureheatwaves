@@ -49,7 +49,7 @@ process_cities_file <- function(cities, lat_lon_colnames){
 #'    (40.7127, 285.9941).
 readLatLong <- function(ensemble, global){
         loc_file <- grep(global$coordinateFilenames, ensemble)
-        locations <- read.csv(ensemble[loc_file], header = FALSE)
+        locations <- utils::read.csv(ensemble[loc_file], header = FALSE)
         return(locations)
 }
 
@@ -68,7 +68,7 @@ readLatLong <- function(ensemble, global){
 #'    to a date of observation.
 readtas <- function(ensemble, global){
         loc_file <- grep(global$tasFilenames, ensemble)
-        return(read.csv(ensemble[loc_file], header = FALSE))
+        return(utils::read.csv(ensemble[loc_file], header = FALSE))
 }
 
 #' Read projection dates data
@@ -86,7 +86,7 @@ readtas <- function(ensemble, global){
 #'    dataframe, four-digit year, numeric month, and numeric day.
 readTimes <- function(ensemble, global){
         loc_file <- grep(global$timeFilenames, ensemble)
-        return(read.csv(ensemble[loc_file], header = FALSE))
+        return(utils::read.csv(ensemble[loc_file], header = FALSE))
 }
 
 #' Ensemble writer factory function
@@ -127,7 +127,7 @@ createEnsembleWriter <- function(modelName, global, custom){
                            showWarnings = FALSE, recursive = TRUE)
 
                 # Write the file
-                write.csv(hwFrame,
+                utils::write.csv(hwFrame,
                           file = paste0(writePath, modelName, "/", i, ".csv"),
                           row.names = FALSE)
 
@@ -158,10 +158,10 @@ writeAccumulators <- function(modelInfoAccumulator,
 
         cat("Writing accumulators", "\n")
         writePath <- global$output
-        write.csv(modelInfoAccumulator,
+        utils::write.csv(modelInfoAccumulator,
                   file = paste0(writePath, "hwModelInfo", ".csv"),
                   row.names = FALSE)
-        write.csv(locationList,
+        utils::write.csv(locationList,
                   file = paste0(writePath, "locationList", ".csv"),
                   row.names = FALSE)
 }

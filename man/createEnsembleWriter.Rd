@@ -13,24 +13,24 @@ name is generated from the subdirectory name for the climate model within
 
 \item{global}{An list object created by \code{\link{gen_hw_set}} that
 includes user specifications (e.g., the path to the output directory, the
-path to the input climate projections, the dataframe with community
+path to the input climate projections, the dataframe withcity
 locations).}
 
 \item{custom}{An list object created by \code{\link{gen_hw_set}} that
 includes user specifications (e.g., the name of the R function to
-use to identify heatwaves, alternative upper and lower year boundaries
-for the data used to determine threshold temperatures for the heatwave
+use to identify heat waves, alternative upper and lower year boundaries
+for the data used to determine threshold temperatures for the heat wave
 definition, alternative upper and lower year boundaries
-for the projection period of the heatwave datasets being generated).}
+for the projection period of the heat wave datasets being generated).}
 }
 \value{
-A closure that inputs \code{hwFrame}, a combined heatwave dataframe
-with all heatwave information for all cities for the ensemble
-and writes out a heatwave dataframe to the output directory specified by
+A closure that inputs \code{hwFrame}, a combined heat wave dataframe
+with all heat wave information for all cities for the ensemble
+and writes out a heat wave dataframe to the output directory specified by
 the \code{out} argument in \code{\link{gen_hw_set}}.
 }
 \description{
-This function creates a closure that writes a single heatwave list to a
+This function creates a closure that writes a single heat wave list to a
 comma-separated file in the directory specified by the user in the
 \code{out} argument of \code{\link{gen_hw_set}}.
 }

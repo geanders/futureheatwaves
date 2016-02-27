@@ -98,7 +98,7 @@ model's subdirectory within the data directory (e.g.,
 
 \item{probThreshold}{Numerical value between 0 and 1 specifying the threshold
 of temperature to use when defining heat waves. The default value is 0.98
-(i.e., a heat wave is two or more days above the community's 98th
+(i.e., a heat wave is two or more days above the city's 98th
 percentile temperature).}
 
 \item{printWarning}{TRUE / FALSE, specifies whether to print out a warning

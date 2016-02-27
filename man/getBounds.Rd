@@ -13,10 +13,10 @@ same row number in the climate projection dataframe.}
 
 \item{custom}{An list object created by \code{\link{gen_hw_set}} that
 includes user specifications (e.g., the name of the R function to
-use to identify heatwaves, alternative upper and lower year boundaries
-for the data used to determine threshold temperatures for the heatwave
+use to identify heat waves, alternative upper and lower year boundaries
+for the data used to determine threshold temperatures for the heat wave
 definition, alternative upper and lower year boundaries
-for the projection period of the heatwave datasets being generated).}
+for the projection period of the heat wave datasets being generated).}
 
 \item{type}{A character vector giving the type of boundaries that are being
 checked. Possible values are "threshold", "projections", and "reference".}

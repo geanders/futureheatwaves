@@ -63,7 +63,7 @@
 #'    \code{\link{gen_hw_set}}. The default value is 2070 to 2079.
 #' @param probThreshold Numerical value between 0 and 1 specifying the threshold
 #'    of temperature to use when defining heat waves. The default value is 0.98
-#'    (i.e., a heat wave is two or more days above the community's 98th
+#'    (i.e., a heat wave is two or more days above the city's 98th
 #'    percentile temperature).
 #' @param printWarning TRUE / FALSE, specifies whether to print out a warning
 #'    informing the user that the function will write out results to the local

@@ -9,12 +9,13 @@
 #'
 #' @param cities Dataframe with study cities and their latitudes
 #'    and longitudes.The dataframe must have a column named \code{city} with a
-#'    unique identifier for each community in the study, as well as columns for
+#'    unique identifier for each city in the study, as well as columns for
 #'    latitude and longitude. Other columns may be included in the dataset, but
 #'    will not be passed through to later code.
 #' @inheritParams gen_hw_set
 #'
-#' @value A processed version of the latitude and longitude dataframe.
+#' @return A processed version of the latitude and longitude dataframe.
+#'
 #' @importFrom dplyr %>%
 process_cities_file <- function(cities, lat_lon_colnames){
 
@@ -91,7 +92,7 @@ readTimes <- function(ensemble, global){
 
 #' Ensemble writer factory function
 #'
-#' This function creates a closure that writes a single heatwave list to a
+#' This function creates a closure that writes a single heat wave list to a
 #' comma-separated file in the directory specified by the user in the
 #' \code{out} argument of \code{\link{gen_hw_set}}.
 #'
@@ -101,9 +102,9 @@ readTimes <- function(ensemble, global){
 #' @inheritParams buildStructureModels
 #' @inheritParams processModel
 #'
-#' @return A closure that inputs \code{hwFrame}, a combined heatwave dataframe
-#' with all heatwave information for all cities for the ensemble
-#' and writes out a heatwave dataframe to the output directory specified by
+#' @return A closure that inputs \code{hwFrame}, a combined heat wave dataframe
+#' with all heat wave information for all cities for the ensemble
+#' and writes out a heat wave dataframe to the output directory specified by
 #' the \code{out} argument in \code{\link{gen_hw_set}}.
 #'
 #' @importFrom dplyr %>%

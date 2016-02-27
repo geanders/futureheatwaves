@@ -2,13 +2,13 @@
 % Please edit documentation in R/processHeatwaves.R
 \name{consolidate}
 \alias{consolidate}
-\title{Consolidate heatwave dataframes}
+\title{Consolidate heat wave dataframes}
 \usage{
 consolidate(hwDataframeList)
 }
 \arguments{
 \item{hwDataframeList}{A list object where each element is the dataframe
-of heatwaves, created by the closure created by
+of heat waves, created by the closure created by
 \code{\link{createCityProcessor}}, for a single city.}
 }
 \value{
@@ -16,9 +16,9 @@ A combined dataframe version of the list object that was passed as an
    argument.
 }
 \description{
-This function combines all identified city-specific heatwave dataframes
+This function combines all identified city-specific heat wave dataframes
 together into a single dataframe. This function is used to create a single
-dataframe with all heatwaves from all study cities for an ensemble
+dataframe with all heat waves from all study cities for an ensemble
 member.
 }
 

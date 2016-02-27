@@ -10,8 +10,8 @@ writeAccumulators(modelInfoAccumulator, locationList, global)
 \item{modelInfoAccumulator}{A dataframe with information about the number of
 ensembles for each climate model.}
 
-\item{locationList}{A dataframe with information about community locations
-and the closest grid point from each climate model to each community.}
+\item{locationList}{A dataframe with information about city locations
+and the closest grid point from each climate model to each city.}
 
 \item{global}{An list object created by \code{\link{gen_hw_set}} that
 includes user specifications (e.g., the path to the output directory, the
@@ -19,11 +19,13 @@ path to the input climate projections, the dataframe with community
 locations).}
 }
 \value{
-...
+This function writes out a dataframe with information on all
+climate models included in the analysis, including the number of
+ensemble members in each of the two experiments.
 }
 \description{
 This function writes out a dataframe that accumulates information on all
 climate models included in the analysis, including the number of
-historical (1980--2004) and future (2006--2099) ensemble members.
+ensemble members in each of the two experiments.
 }
 

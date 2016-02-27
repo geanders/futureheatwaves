@@ -38,9 +38,8 @@ A list with two elements: (1) a vector with one element for
 }
 \description{
 This function calculates the threshold temperatures required to identify
-heatwaves in the climate projection data using each climate model's
-first listed historical ensemble. These values are both used in later
-functions to identify heatwaves in the projections and are also saved
-to file through this function to have for future reference.
+heatwaves in the climate projection data using the ensemble member specified
+by \code{threshold_ensemble} in \code{\link{gen_hw_set}}. This threshold is
+used in later functions to identify heatwaves.
 }
 

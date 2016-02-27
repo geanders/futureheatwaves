@@ -20,13 +20,11 @@ locations).}
 \value{
 A dataframe of the latitude and longitude data of the ensemble
    with columns for the latitude (first column) and longitude (second
-   column) of each grid point in the climate model. This dataframe
-   uses a format where the location of New York City, for example, is
-   (40.7127, 285.9941).
+   column) of each grid point in the climate model.
 }
 \description{
-This function reads data on the longitudes and latitudes of a climate
-model into R from a locally-stored comma-separated file located within
+This function reads in data on the longitudes and latitudes of a climate
+model's grid pooints from a locally-stored comma-separated file located within
 the directory specified by the \code{dataFolder} argument of
 \code{\link{gen_hw_set}}.
 }

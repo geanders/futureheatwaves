@@ -7,7 +7,7 @@
 storeZeroes(index, potentialHeatwave, hw, hwNumber)
 }
 \arguments{
-\item{index}{An index into the various}
+\item{index}{A running index.}
 
 \item{potentialHeatwave}{Size of the potential heat wave that turned out
 not to be a heat wave.}

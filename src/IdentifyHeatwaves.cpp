@@ -76,10 +76,12 @@ DataFrame IDHeatwavesCPP(int heatwaveLength, NumericVector tempsExceedingCutoff)
         return DataFrame::create(_["hw"] = heat, _["hw.number"] = hwNum);
 }
 
-//' Helper function for IDHeatwavescpp that addes entries to the data structures
-//' that track heatwave information
+//' Helper function that adds entries
 //'
-//' @param index An index into the various
+//' This is a helper function for \code{\link{IDHeatwavescpp}} that adds entries
+//' to the data structures that track heatwave information
+//'
+//' @param index A running index.
 //' @param hwSize Size of the heat wave to be added.
 //' @param hwCounter Current number of heat waves.
 //' @param hw A reference of the vector that contains the heat waves

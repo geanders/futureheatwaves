@@ -2,13 +2,12 @@
 % Please edit documentation in R/RcppExports.R
 \name{storeHeatwaveEntry}
 \alias{storeHeatwaveEntry}
-\title{Helper function for IDHeatwavescpp that addes entries to the data structures
-that track heatwave information}
+\title{Helper function that adds entries}
 \usage{
 storeHeatwaveEntry(index, hwSize, hwCounter, hw, hwNumber)
 }
 \arguments{
-\item{index}{An index into the various}
+\item{index}{A running index.}
 
 \item{hwSize}{Size of the heat wave to be added.}
 
@@ -20,7 +19,7 @@ storeHeatwaveEntry(index, hwSize, hwCounter, hw, hwNumber)
 numbers.}
 }
 \description{
-Helper function for IDHeatwavescpp that addes entries to the data structures
-that track heatwave information
+This is a helper function for \code{\link{IDHeatwavescpp}} that adds entries
+to the data structures that track heatwave information
 }
 

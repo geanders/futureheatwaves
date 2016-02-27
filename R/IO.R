@@ -1,18 +1,20 @@
-#' Process city file once it's read
+#' Process city file
 #'
-#' This function takes the dataframe read in fram the user-specified file. It then
-#' renames the columns for latitude and longitude \code{lat} and \code{lon} based on
-#' the user's selections in the "lat_lon_colnames" option for \code{gen_hw_set}. If
-#' there are extra columns besides those and the \code{city} column, this function
-#' removes them.
+#' This function takes the dataframe read in from the file specified with
+#' \code{citycsv} in \code{\link{gen_hw_set}} and renames the columns for
+#' latitude and longitude \code{lat} and \code{lon}, based on
+#' the user's selections in \code{lat_lon_colnames} for
+#' \code{\link{gen_hw_set}}. If there are extra columns besides those and the
+#' \code{city} column, this function removes them.
 #'
-#' @param cities Dataframe with communities you want to analyze and their latitudes
-#'    and longitudes.The dataframe must have a column named \code{city} with a unique
-#'    identifier for each community in the study, as well as columns for latitude and
-#'    longitude.Other columns may be included in the dataset, but will not be run
-#'    within this code.
+#' @param cities Dataframe with study cities and their latitudes
+#'    and longitudes.The dataframe must have a column named \code{city} with a
+#'    unique identifier for each community in the study, as well as columns for
+#'    latitude and longitude. Other columns may be included in the dataset, but
+#'    will not be passed through to later code.
 #' @inheritParams gen_hw_set
 #'
+#' @value A processed version of the latitude and longitude dataframe.
 #' @importFrom dplyr %>%
 process_cities_file <- function(cities, lat_lon_colnames){
 
@@ -31,8 +33,8 @@ process_cities_file <- function(cities, lat_lon_colnames){
 
 #' Read latitude and longitude data
 #'
-#' This function reads data on the longitudes and latitudes of a climate
-#' model into R from a locally-stored comma-separated file located within
+#' This function reads in data on the longitudes and latitudes of a climate
+#' model's grid pooints from a locally-stored comma-separated file located within
 #' the directory specified by the \code{dataFolder} argument of
 #' \code{\link{gen_hw_set}}.
 #'
@@ -44,9 +46,7 @@ process_cities_file <- function(cities, lat_lon_colnames){
 #'
 #' @return A dataframe of the latitude and longitude data of the ensemble
 #'    with columns for the latitude (first column) and longitude (second
-#'    column) of each grid point in the climate model. This dataframe
-#'    uses a format where the location of New York City, for example, is
-#'    (40.7127, 285.9941).
+#'    column) of each grid point in the climate model.
 readLatLong <- function(ensemble, global){
         loc_file <- grep(global$coordinateFilenames, ensemble)
         locations <- utils::read.csv(ensemble[loc_file], header = FALSE)
@@ -136,15 +136,17 @@ createEnsembleWriter <- function(modelName, global, custom){
 #'
 #' This function writes out a dataframe that accumulates information on all
 #' climate models included in the analysis, including the number of
-#' historical (1980--2004) and future (2006--2099) ensemble members.
+#' ensemble members in each of the two experiments.
 #'
 #' @param modelInfoAccumulator A dataframe with information about the number of
 #'    ensembles for each climate model.
-#' @param locationList A dataframe with information about community locations
-#'    and the closest grid point from each climate model to each community.
+#' @param locationList A dataframe with information about city locations
+#'    and the closest grid point from each climate model to each city.
 #' @inheritParams processModel
 #'
-#' @return ...
+#' @return This function writes out a dataframe with information on all
+#' climate models included in the analysis, including the number of
+#' ensemble members in each of the two experiments.
 writeAccumulators <- function(modelInfoAccumulator,
                              locationList,
                              global){

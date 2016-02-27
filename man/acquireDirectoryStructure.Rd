@@ -8,62 +8,64 @@ acquireDirectoryStructure(dataFolder, coordinateFilenames, tasFilenames,
   timeFilenames, models_to_run, dataDirectories, threshold_ensemble)
 }
 \arguments{
-\item{dataFolder}{Character string with pathway to directory that
-contains climate projection data.}
+\item{dataFolder}{Character string with pathway to a directory with
+climate projection data. This directory must have a specific structure--
+see the \code{futureheatwaves} vignette for guidance on setting up this
+directory.}
 
-\item{coordinateFilenames}{Character string with filename of the file
-containing the latitude and longitude coordinates in the bottom
-directory of each ensemble member subdirectory. (See the package
-vignette for an example of the required structure for this file.)}
+\item{coordinateFilenames}{Character string the with filename of each
+grid point location file. This filename should be identical for all ensemble
+members included in the \code{dataFolder} directory. See the package
+vignette for an example of the required structure for this file.}
 
-\item{tasFilenames}{Character string with filename of the file
-containing the climate projection data in the bottom
-directory of each ensemble member subdirectory. (See the package
-vignette for an example of the required structure for this file.)}
+\item{tasFilenames}{Character string the with filename of each climate
+projection file. This filename should be identical for all ensemble
+members included in the \code{dataFolder} directory. See the package
+vignette for an example of the required structure for this file.}
 
-\item{timeFilenames}{Character string with filename of the file
-containing the date dataframe in the bottom
-directory of each ensemble member subdirectory. (See the package
-vignette for an example of the required structure for this file.)}
+\item{timeFilenames}{Character string the with filename of each projection
+dates file. This filename should be identical for all ensemble
+members included in the \code{dataFolder} directory. See the package
+vignette for an example of the required structure for this file.}
 
 \item{models_to_run}{A character vector with either "all" (the default),
-in which case the function runs through all models in the specified data
+in which case the function runs through all models in the \code{dataFolder}
 directory, or the names of the models to run, using the names of each
 model's subdirectory within the data directory (e.g.,
-\code{c("bcc1", "ccsm")})}
+\code{c("bcc1", "ccsm")}).}
 
-\item{dataDirectories}{A list object, with two elements for each of the
+\item{dataDirectories}{A list object, with two elements, one for each of the
 two subdirectories included in the main directory. Typically, these will
-be a historical directory and a climate projection directory. Each element
-of the list should be named with the names of the subdirectories and
-should provide a numeric vector with the starting year and ending year of
+be separate directories of historical and projection experiments from
+climate models. Each element
+of the list should be named with the name of the subdirectory and
+should provide a numeric vector with the starting and ending years of
 the data within each of the two subdirectories (e.g.,
-\code{list("historical" = c(1980, 2004), "rcp85" = c(2006, 2099))})}
+\code{list("historical" = c(1990, 1999), "rcp85" = c(2060, 2079))}
+for a \code{dataFolder} with historical experiment data for 1990 to 1999
+and RCP8.5 projections for 2060 to 2079).}
 
 \item{threshold_ensemble}{A character vector giving the name of the ensemble
-member that should be used when determining the threshold temperature for
-the heatwave definition for each community for each climate model (e.g.,
-\code{"r1i1p1"})}
+member that should be used when determining the city-specific threshold
+temperatures  for each climate model (e.g., \code{"r1i1p1"}). This
+threshold is used for relative heat wave definitions. See the
+\code{futureheatwaves} vignette for more on heat wave definitions.}
 }
 \value{
-A list object outlining the file structure of the directory
-   containing the climate projections.This list has an element
-   for each climate model (e.g.,"bcc1"). The first element within each
-   of these elements is the name of the model. The second element within
-   the first-level element gives the file paths for location grids,
-   climate projections, and projection times for each ensemble run of the
-   model.
+The function returns a list object outlining the file structure of
+   the \code{dataFolder} directory.
 }
 \description{
-This function walks through the directory structure of the user-provided
-directory of climate projection files and parses out a list of the
-climate models and ensemble members included in that directory based
-on subdirectory names.
+This function parses the structure of the user-provided
+directory of climate projection files to create a list of the
+climate models and ensemble members included.
 }
 \note{
-The files in the bottom directory must all have a .csv extension
-   and must have names corresponding to the relevant "*Filenames" parameter
-   of this function. All other files will be removed when creating the
-   directory structure.
+Projection, grid locations, and projection time files within the
+   \code{dataFolder} directory must be comma-separated (.csv) files and
+   must be named using the names specified by the arguments
+   \code{coordinateFilenames}, \code{tasFilenames}, and \code{timeFilenames}.
+   See the \code{futureheatwaves} vignette for more information about
+   setting up the \code{dataFolder} directory.
 }
 

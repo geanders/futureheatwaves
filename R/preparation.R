@@ -1,24 +1,20 @@
 #' Acquire structure of input directory
 #'
-#' This function walks through the directory structure of the user-provided
-#' directory of climate projection files and parses out a list of the
-#' climate models and ensemble members included in that directory based
-#' on subdirectory names.
+#' This function parses the structure of the user-provided
+#' directory of climate projection files to create a list of the
+#' climate models and ensemble members included.
 #'
 #' @inheritParams gen_hw_set
 #'
-#' @return A list object outlining the file structure of the directory
-#'    containing the climate projections.This list has an element
-#'    for each climate model (e.g.,"bcc1"). The first element within each
-#'    of these elements is the name of the model. The second element within
-#'    the first-level element gives the file paths for location grids,
-#'    climate projections, and projection times for each ensemble run of the
-#'    model.
+#' @return The function returns a list object outlining the file structure of
+#'    the \code{dataFolder} directory.
 #'
-#' @note The files in the bottom directory must all have a .csv extension
-#'    and must have names corresponding to the relevant "*Filenames" parameter
-#'    of this function. All other files will be removed when creating the
-#'    directory structure.
+#' @note Projection, grid locations, and projection time files within the
+#'    \code{dataFolder} directory must be comma-separated (.csv) files and
+#'    must be named using the names specified by the arguments
+#'    \code{coordinateFilenames}, \code{tasFilenames}, and \code{timeFilenames}.
+#'    See the \code{futureheatwaves} vignette for more information about
+#'    setting up the \code{dataFolder} directory.
 #'
 #' @importFrom dplyr %>%
 acquireDirectoryStructure <- function(dataFolder, coordinateFilenames,
@@ -91,18 +87,19 @@ acquireDirectoryStructure <- function(dataFolder, coordinateFilenames,
 #' projection directory.
 #'
 #' @param modelName Character string of climate model name (e.g., "bcc1"). This
-#'    name is typically generated for use in this function from the subdirectory
-#'    names for the climate model within the directory of projection data
-#'    specified by the user in \code{\link{gen_hw_set}}.
-#' @param experiments Character vector of the experiment(s) of interest.
-#'    Possible variables are "historical", "rcp85", or both.
+#'    name is generated from the subdirectory name for the climate model within
+#'    \code{dataFolder}.
+#' @param experiments Character string of the experiment(s). Possible variables
+#'    are the names of elements in the list object specified by the
+#'    \code{dataDirectories} argument in \code{\link{gen_hw_set}}.
 #' @inheritParams gen_hw_set
 #'
 #' @return A list of length 3. The first element is the name of the model
-#'    whose structure was being built. The second element is the historical
-#'    experiment hierarchy. The third element is the hierarchy of the future
-#'    projection directory for the model. The second and third elements are
-#'    return values of \code{\link{buildStructureExperiments}}.
+#'    whose structure was being built. The second element is, for this climate
+#'    model, the hierarchy of the first subdirectory specified by
+#'    \code{dataDirectories}. The third element is the hierarchy of the second
+#'    subdirectory specified by \code{dataDirectories}. The second and third
+#'    elements are return values of \code{\link{buildStructureExperiments}}.
 buildStructureModels <- function(modelName, experiments,
                                  dataFolder,
                                  coordinateFilenames, tasFilenames,
@@ -123,20 +120,20 @@ buildStructureModels <- function(modelName, experiments,
 #' Generate file structure for an experiment
 #'
 #' This function generates a list object with the file structure of files
-#' within the user-specified projection directory for a single experiment
-#' (i.e., "historical" or "rcp85").
+#' in the \code{dataFolder} directory for a single experiment
+#' (e.g., "historical" or "rcp85").
 #'
-#' @param experiment Character string of the experiment of interest.
-#'    Possible variables are "historical" or "rcp85".
-#' @param dataPath Character string of the file path to the directory
-#'    containing the climate projections. Must include the final `/`.
+#' @param experiment Character string of the experiment. Possible variables are
+#'    the names of elements in the list object specified by the
+#'    \code{dataDirectories} argument in \code{\link{gen_hw_set}}.
+#' @param dataPath Character string of the file path to \code{dataFolder}.
+#'    Must include the final `/`.
 #' @inheritParams buildStructureModels
 #' @inheritParams gen_hw_set
 #'
-#' @return A list that is the length of the number of ensembles. Each element
+#' @return A list with one element for each ensemble member. Each element
 #'    is a return value of the \code{\link{buildStructureEnsembles}} function for
-#'    one of the ensemble members in that experiment of that climate model
-#'    within the user-specified projections directory.
+#'    one ensemble member in the experiment and climate model.
 buildStructureExperiments <- function(modelName, experiment,
                                       dataPath,
                                       coordinateFilenames, tasFilenames,
@@ -161,20 +158,18 @@ buildStructureExperiments <- function(modelName, experiment,
 
 #' List files for a single ensemble member
 #'
-#' This function reads through the user-specified projections directory and
-#' creates a list with all files in the subdirectory of a single
-#' ensemble member subdirectory within a specific climate model
-#' subdirectory.
+#' This function reads through the user-specified \code{dataFolder} directory
+#' and creates a list with pathnames to all three files (projection times, grid
+#' points, and projections) for a single ensemble member.
 #'
 #' @param ensemblePath A character string that gives the absolute file path
-#'    for the subdirectory for a particular ensemble member of a climate
-#'    model within the user-specified projection directory.
+#'    for files for an ensemble member within the user-specified projection
+#'    directory (\code{dataFolder}).
 #' @inheritParams gen_hw_set
 #'
 #' @return A list of length 2. The first element is the name of the ensemble
-#' that was processed. The second element is a list containing the coordinate
-#' comma-separated file, the projection data comma-separated file,
-#' and the time data comma-separated file, respectively.
+#' that was processed. The second element is a vector with the filepaths of
+#' the three files.
 buildStructureEnsembles <- function(ensemblePath, coordinateFilenames,
                                     tasFilenames, timeFilenames,
                                     dataDirectories){

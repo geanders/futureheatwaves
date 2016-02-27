@@ -10,7 +10,7 @@ map_grid(plot_model, out)
 \item{plot_model}{A character string with the name of the model to plot}
 
 \item{out}{Character string with pathway to directory to which
-heatwave files will be written. This should be a pathname to a directory
+heat wave files will be written. This should be a pathname to a directory
 on the user's local computer. If the directory already exists, it will
 be overwritten by this function, so the user should either specify a
 pathname for a directory that does not yet exist.}

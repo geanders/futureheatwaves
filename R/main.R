@@ -1,59 +1,61 @@
-#' Create and write heatwave projections
+#' Create and write heat wave projections
 #'
-#' This function creates heatwave projection datasets for all models and
+#' This function creates heat wave projection datasets for all models and
 #' ensemble members for a user-specified set of communities.The resulting
-#' heatwave projections are written out to a specified directory on the
+#' heat wave projections are written out to a specified directory on the
 #' user's local computer.
 #'
 #' @param out Character string with pathway to directory to which
-#'    heatwave files will be written. This should be a pathname to a directory
+#'    heat wave files will be written. This should be a pathname to a directory
 #'    on the user's local computer. If the directory already exists, it will
 #'    be overwritten by this function, so the user should either specify a
 #'    pathname for a directory that does not yet exist.
-#' @param dataFolder Character string with pathway to directory that
-#'    contains climate projection data.
+#' @param dataFolder Character string with pathway to a directory with
+#'    climate projection data. This directory must have a specific structure--
+#'    see the \code{futureheatwaves} vignette for guidance on setting up this
+#'    directory.
 #' @param citycsv Character string giving the filepath to a
 #'    comma-separated values (.csv) file with unique identifiers, latitudes, and
 #'    longitudes for each community for which the user wants to generate
-#'    heatwave projections.
-#' @param coordinateFilenames Character string with filename of the file
-#'    containing the latitude and longitude coordinates in the bottom
-#'    directory of each ensemble member subdirectory. (See the package
-#'    vignette for an example of the required structure for this file.)
-#' @param tasFilenames Character string with filename of the file
-#'    containing the climate projection data in the bottom
-#'    directory of each ensemble member subdirectory. (See the package
-#'    vignette for an example of the required structure for this file.)
-#' @param timeFilenames Character string with filename of the file
-#'    containing the date dataframe in the bottom
-#'    directory of each ensemble member subdirectory. (See the package
-#'    vignette for an example of the required structure for this file.)
+#'    heat wave projections.
+#' @param coordinateFilenames Character string the with filename of each
+#'    grid point location file. This filename should be identical for all ensemble
+#'    members included in the \code{dataFolder} directory. See the package
+#'    vignette for an example of the required structure for this file.
+#' @param tasFilenames Character string the with filename of each climate
+#'    projection file. This filename should be identical for all ensemble
+#'    members included in the \code{dataFolder} directory. See the package
+#'    vignette for an example of the required structure for this file.
+#' @param timeFilenames Character string the with filename of each projection
+#'    dates file. This filename should be identical for all ensemble
+#'    members included in the \code{dataFolder} directory. See the package
+#'    vignette for an example of the required structure for this file.
 #' @param IDheatwavesFunction A character string with the name of the R function
-#'    to use to identify heatwaves. This function may be a user-specified custom
+#'    to use to identify heat waves. This function may be a user-specified custom
 #'    function to, but it must be loaded into the current R session. The
 #'    function name must be put in quotation marks.
 #' @param thresholdBoundaries A numeric vector with the custom time boundaries
-#'    to be used to determine the threshold temperatures for the heatwave
+#'    to be used to determine the threshold temperatures for the heat wave
 #'    definition. The required format for this vector is that the first element
 #'    is the lower year bound and the second element is the upper year bound,
 #'    with the restrictions that bounds must be between the years 1980 and 2099
 #'    and cannot span 2005 (i.e., both must either be before 2005 or after 2005).
 #' @param projectionBoundaries A numeric vector with the custom time boundaries
-#'    for which the user wants to create heatwave projections. The required
+#'    for which the user wants to create heat wave projections. The required
 #'    format for this vector is that the first element
 #'    is the lower year bound and the second element is the upper year bound,
 #'    with the restrictions that bounds must be between the years 1980 and 2099
 #'    and cannot span 2005 (i.e., both must either be before 2005 or after 2005).
 #' @param referenceBoundaries A numeric vector with the custom time boundaries
-#'    to use in calculating relative characteristics for heatwaves (i.e., to use
+#'    to use in calculating relative characteristics for heat waves (i.e., to use
 #'    when exploring the role of adaptation in projections). The required format
 #'    for this vector is that the first element is the lower year bound and the
 #'    second element is the upper year bound, with the restrictions that bounds
 #'    must be between the years 1980 and 2099 and cannot span 2005 (i.e., both
 #'    must either be before 2005 or after 2005).
 #' @param probThreshold Numerical value between 0 and 1 specifying the threshold
-#'    of temperature to use when defining heatwaves. The default value is 0.98
-#'    (i.e., a heatwave is two or more days above the community's 98th
+#'    of temperature to use when defining heat waves. The default value is 0.98
+#'    (i.e., a heat wave is two or more days above the community's 98th
 #'    percentile temperature).
 #' @param printWarning TRUE / FALSE, specifies whether to print out a warning
 #'    informing the user that the function will write out results to the local
@@ -64,21 +66,25 @@
 #'    in the \code{cities} dataframe for latitude (first vector element) and
 #'    longitude (second vector element)
 #' @param models_to_run A character vector with either "all" (the default),
-#'    in which case the function runs through all models in the specified data
+#'    in which case the function runs through all models in the \code{dataFolder}
 #'    directory, or the names of the models to run, using the names of each
 #'    model's subdirectory within the data directory (e.g.,
-#'    \code{c("bcc1", "ccsm")})
-#' @param dataDirectories A list object, with two elements for each of the
+#'    \code{c("bcc1", "ccsm")}).
+#' @param dataDirectories A list object, with two elements, one for each of the
 #'    two subdirectories included in the main directory. Typically, these will
-#'    be a historical directory and a climate projection directory. Each element
-#'    of the list should be named with the names of the subdirectories and
-#'    should provide a numeric vector with the starting year and ending year of
+#'    be separate directories of historical and projection experiments from
+#'    climate models. Each element
+#'    of the list should be named with the name of the subdirectory and
+#'    should provide a numeric vector with the starting and ending years of
 #'    the data within each of the two subdirectories (e.g.,
-#'    \code{list("historical" = c(1980, 2004), "rcp85" = c(2006, 2099))})
+#'    \code{list("historical" = c(1990, 1999), "rcp85" = c(2060, 2079))}
+#'    for a \code{dataFolder} with historical experiment data for 1990 to 1999
+#'    and RCP8.5 projections for 2060 to 2079).
 #' @param threshold_ensemble A character vector giving the name of the ensemble
-#'    member that should be used when determining the threshold temperature for
-#'    the heatwave definition for each community for each climate model (e.g.,
-#'    \code{"r1i1p1"})
+#'    member that should be used when determining the city-specific threshold
+#'    temperatures  for each climate model (e.g., \code{"r1i1p1"}). This
+#'    threshold is used for relative heat wave definitions. See the
+#'    \code{futureheatwaves} vignette for more on heat wave definitions.
 #'
 #' @return This function returns a dataframe listing the name of each climate
 #'    model used, as well as the number of historical and future projection
@@ -87,7 +93,7 @@
 #'    specified using the \code{dataFolder} argument.
 #'
 #' This function also creates, and writes to the user's computer, files with
-#'    the heatwaves and their characteristics for the specified climate
+#'    the heat waves and their characteristics for the specified climate
 #'    projections and dates.
 #'
 #' @export
@@ -338,7 +344,7 @@ checkCustomBounds <- function(boundList, dataDirectories){
 #' information on the communities and closest grid point locations based
 #' on the climate model it has just completed analyzing to a growing
 #' dataframe with this information for all climate models. After the function
-#' run to generate the heatwave projections is completed, this closure can
+#' run to generate the heat wave projections is completed, this closure can
 #' be used with the command "return locations" to output the completed
 #' dataframe of this location information.The closure can be used in a
 #' similar manner to aggregate and then return meta-data on the models

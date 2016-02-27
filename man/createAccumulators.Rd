@@ -27,7 +27,7 @@ closure is used with the command "append location list", it will add
 information on the communities and closest grid point locations based
 on the climate model it has just completed analyzing to a growing
 dataframe with this information for all climate models. After the function
-run to generate the heatwave projections is completed, this closure can
+run to generate the heat wave projections is completed, this closure can
 be used with the command "return locations" to output the completed
 dataframe of this location information.The closure can be used in a
 similar manner to aggregate and then return meta-data on the models

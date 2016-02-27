@@ -16,31 +16,36 @@ specified by the user in \code{\link{gen_hw_set}}.}
 \item{experiments}{Character vector of the experiment(s) of interest.
 Possible variables are "historical", "rcp85", or both.}
 
-\item{dataFolder}{Character string with pathway to directory that
-contains climate projection data.}
+\item{dataFolder}{Character string with pathway to a directory with
+climate projection data. This directory must have a specific structure--
+see the \code{futureheatwaves} vignette for guidance on setting up this
+directory.}
 
-\item{coordinateFilenames}{Character string with filename of the file
-containing the latitude and longitude coordinates in the bottom
-directory of each ensemble member subdirectory. (See the package
-vignette for an example of the required structure for this file.)}
+\item{coordinateFilenames}{Character string the with filename of each
+grid point location file. This filename should be identical for all ensemble
+members included in the \code{dataFolder} directory. See the package
+vignette for an example of the required structure for this file.}
 
-\item{tasFilenames}{Character string with filename of the file
-containing the climate projection data in the bottom
-directory of each ensemble member subdirectory. (See the package
-vignette for an example of the required structure for this file.)}
+\item{tasFilenames}{Character string the with filename of each climate
+projection file. This filename should be identical for all ensemble
+members included in the \code{dataFolder} directory. See the package
+vignette for an example of the required structure for this file.}
 
-\item{timeFilenames}{Character string with filename of the file
-containing the date dataframe in the bottom
-directory of each ensemble member subdirectory. (See the package
-vignette for an example of the required structure for this file.)}
+\item{timeFilenames}{Character string the with filename of each projection
+dates file. This filename should be identical for all ensemble
+members included in the \code{dataFolder} directory. See the package
+vignette for an example of the required structure for this file.}
 
-\item{dataDirectories}{A list object, with two elements for each of the
+\item{dataDirectories}{A list object, with two elements, one for each of the
 two subdirectories included in the main directory. Typically, these will
-be a historical directory and a climate projection directory. Each element
-of the list should be named with the names of the subdirectories and
-should provide a numeric vector with the starting year and ending year of
+be separate directories of historical and projection experiments from
+climate models. Each element
+of the list should be named with the name of the subdirectory and
+should provide a numeric vector with the starting and ending years of
 the data within each of the two subdirectories (e.g.,
-\code{list("historical" = c(1980, 2004), "rcp85" = c(2006, 2099))})}
+\code{list("historical" = c(1990, 1999), "rcp85" = c(2060, 2079))}
+for a \code{dataFolder} with historical experiment data for 1990 to 1999
+and RCP8.5 projections for 2060 to 2079).}
 }
 \value{
 A list of length 3. The first element is the name of the model

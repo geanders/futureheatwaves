@@ -21,7 +21,7 @@ IDHeatwavesCPP <- function(heatwaveLength, tempsExceedingCutoff) {
 
 #' Helper function that adds entries
 #'
-#' This is a helper function for \code{\link{IDHeatwavescpp}} that adds entries
+#' This is a helper function for \code{\link{IDHeatwavesCPP}} that adds entries
 #' to the data structures that track heatwave information
 #'
 #' @param index A running index.

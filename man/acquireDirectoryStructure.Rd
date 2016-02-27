@@ -49,7 +49,10 @@ and RCP8.5 projections for 2060 to 2079).}
 member that should be used when determining the city-specific threshold
 temperatures  for each climate model (e.g., \code{"r1i1p1"}). This
 threshold is used for relative heat wave definitions. See the
-\code{futureheatwaves} vignette for more on heat wave definitions.}
+\code{futureheatwaves} vignette for more on heat wave definitions.
+If any climate model lacks that ensemble member for the specified
+dates for calculating the threshold, it will be excluded from the
+processing.}
 }
 \value{
 The function returns a list object outlining the file structure of

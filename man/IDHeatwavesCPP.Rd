@@ -2,24 +2,24 @@
 % Please edit documentation in R/RcppExports.R
 \name{IDHeatwavesCPP}
 \alias{IDHeatwavesCPP}
-\title{Identify heatwaves that are a certain number of days long}
+\title{Identify heat waves that are a certain number of days long}
 \usage{
 IDHeatwavesCPP(heatwaveLength, tempsExceedingCutoff)
 }
 \arguments{
-\item{heatwaveLength}{Number of days that a heatwave lasts under the
+\item{heatwaveLength}{Number of days that a heat wave lasts under the
 user's definition}
 
-\item{tempsExceedingCutoff}{A vector of 1s and 0s that is the size of the
+\item{tempsExceedingCutoff}{A vector of 1s and 0s the length of the
 number of days in the time series. 1 means the temperature for that
-day exceeds the calculated threshold. 0 means it does not exceed the
+day exceeds the calculated threshold; 0 means it does not exceed the
 threshold.}
 }
 \value{
-A dataframe containing information about the heatwaves for this series. It contains three columns with
-   names "hw", "hw.number", and "first.hw.day" respectively.
+A dataframe containing information about the heat waves for this
+   series. It contains two columns: \code{hw} and \code{hw.number}.
 }
 \description{
-Identify heatwaves that are a certain number of days long
+This function identifies heat waves that are a certain number of days long.
 }
 

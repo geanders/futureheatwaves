@@ -7,17 +7,14 @@
 createCityProcessor(global)
 }
 \arguments{
-\item{global}{An object name for the \code{global} object. This
-object is created by \code{\link{gen_hw_set}} and includes user
-specifications for the path to the output directory, the path to the
-input climate projections, the dataframe with community locations, and the
-format for the filenames of the coordinate, tas, and time files in the
-ensemble-specific subdirectories of the projection directory input by
-the user.}
+\item{global}{An list object created by \code{\link{gen_hw_set}} that
+includes user specifications (e.g., the path to the output directory, the
+path to the input climate projections, the dataframe with community
+locations).}
 }
 \value{
 This function creates a closure that takes inputs of \code{threshold},
-   \code{ensembleSeries}, and \code{custom} and returns a closure that will
+   \code{ensembleSeries}, and \code{custom} and will
    find and characterize all heatwaves in all communities for a given
    ensemble. See the help file for \code{\link{formHwFrame}} for more
    information on the format of the dataframe created by this closure.

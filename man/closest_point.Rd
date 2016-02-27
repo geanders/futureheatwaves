@@ -10,18 +10,20 @@ closest_point(city, latlong)
 \item{city}{A numeric vector containing the city's ID, latitude, and
 longitude, in that order.}
 
-\item{latlong}{A dataframe of latitude and longitude pairings for each
-climate grid cell location, with latitudes in the first column and
-longitudes in the second column.}
+\item{latlong}{A dataframe of latitude and longitude of each
+climate grid cell, with latitudes in the first column and
+longitudes in the second column. The \code{\link{readLatLong}} function
+re-orders the columns of longitude and latitude to comply with this
+format if necessary.}
 }
 \value{
 An index corresponding to the column in the climate projections
-   dataframe for that climate model that is closest to the city
+   dataframe for that climate model that is closest to the city's
    coordinates.
 }
 \description{
 This function identifies the closest grid points in a climate model to a
 community based on the community's latitude and longitude using the
-Pythagorean theorem.
+Euclidean distance.
 }
 

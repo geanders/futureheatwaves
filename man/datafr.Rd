@@ -14,9 +14,9 @@
 datafr
 }
 \description{
-This dataset provides an example of the structure of the dataframe that
-any heatwave identification function must be able to input. This data
-can be used to test a custom heatwave function before using the function
+This dataset provides an example of the dataframe to be input into a
+custom heatwave identification function. This dataset can be used to test a
+custom heatwave identification function before using the function
 in \code{\link{gen_hw_set}}.
 }
 \keyword{datasets}

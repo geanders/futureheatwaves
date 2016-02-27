@@ -8,18 +8,17 @@ consolidate(hwDataframeList)
 }
 \arguments{
 \item{hwDataframeList}{A list object where each element is the dataframe
-of identified and characterized heatwaves, created by
-the closure created by \code{\link{createCityProcessor}},
-for a single community .}
+of heatwaves, created by the closure created by
+\code{\link{createCityProcessor}}, for a single city.}
 }
 \value{
-A combined dataframe version of the list that was passed as an
+A combined dataframe version of the list object that was passed as an
    argument.
 }
 \description{
-This function combines all identified heatwave dataframes together into
-a single dataframe. This function is used to create a single dataframe
-with all heatwaves from all specified communities for each ensemble
+This function combines all identified city-specific heatwave dataframes
+together into a single dataframe. This function is used to create a single
+dataframe with all heatwaves from all study cities for an ensemble
 member.
 }
 

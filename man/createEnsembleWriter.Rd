@@ -8,34 +8,26 @@ createEnsembleWriter(modelName, global, custom)
 }
 \arguments{
 \item{modelName}{Character string of climate model name (e.g., "bcc1"). This
-name is typically generated for use in this function from the subdirectory
-names for the climate model within the directory of projection data
-specified by the user in \code{\link{gen_hw_set}}.}
+name is generated from the subdirectory name for the climate model within
+\code{dataFolder}.}
 
-\item{global}{An object name for the \code{global} object. This
-object is created by \code{\link{gen_hw_set}} and includes user
-specifications for the path to the output directory, the path to the
-input climate projections, the dataframe with community locations, and the
-format for the filenames of the coordinate, tas, and time files in the
-ensemble-specific subdirectories of the projection directory input by
-the user.}
+\item{global}{An list object created by \code{\link{gen_hw_set}} that
+includes user specifications (e.g., the path to the output directory, the
+path to the input climate projections, the dataframe with community
+locations).}
 
-\item{custom}{An object name for the \code{custom} object. This object is
-created by \code{\link{gen_hw_set}} and includes user specifications
-for, if specified as other than the default, the name of the R function to
+\item{custom}{An list object created by \code{\link{gen_hw_set}} that
+includes user specifications (e.g., the name of the R function to
 use to identify heatwaves, alternative upper and lower year boundaries
 for the data used to determine threshold temperatures for the heatwave
 definition, alternative upper and lower year boundaries
-for the projection period of the heatwave datasets being generated,
-alternative upper and lower year boundaries for the reference period
-to be used when measuring all heatwave characteristics related to
-relative, rather than absolute, temperature, and the percentile
-threshold to use when defining heatwaves.}
+for the projection period of the heatwave datasets being generated).}
 }
 \value{
-A closure that writes heatwave dataframes. This closure has
-the argument \code{hwFrame}: A combined heatwave dataframe that contains
-all heatwave information for the ensemble being processed.
+A closure that inputs \code{hwFrame}, a combined heatwave dataframe
+with all heatwave information for all cities for the ensemble
+and writes out a heatwave dataframe to the output directory specified by
+the \code{out} argument in \code{\link{gen_hw_set}}.
 }
 \description{
 This function creates a closure that writes a single heatwave list to a
@@ -45,11 +37,5 @@ comma-separated file in the directory specified by the user in the
 \details{
 The closure created by this function closes over an incrementer variable
 for ensembles that advances each time the closure is called.
-Output the heatwave data of each model.
-}
-\note{
-The closure produced by this function must be
-applied to a list of the heatwave dataframes corresponding to the
-ensembles of the model
 }
 

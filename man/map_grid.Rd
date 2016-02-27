@@ -13,10 +13,18 @@ map_grid(plot_model, out)
 heat wave files will be written. This should be a pathname to a directory
 on the user's local computer. If the directory already exists, it will
 be overwritten by this function, so the user should either specify a
-pathname for a directory that does not yet exist.}
+pathname for a directory that does not yet exist or be willing to
+overwrite the existing directory. The parent directory of the specified
+directory must exist.}
 }
 \description{
-Create a map of model grid
+This function creates a map of the grid points of a climate model used for
+the study cities and draws lines connecting each study city to its climate
+model grid point.
+}
+\note{
+This function creates a \code{ggplot2} object, so the output can be
+   edited using \code{ggplot2} functions.
 }
 \examples{
 out <- system.file(package = "futureheatwaves")

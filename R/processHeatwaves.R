@@ -1,13 +1,12 @@
 #' Create heatwave dataframe for an ensemble
 #'
 #' This function takes inputs, from \code{\link{processProjections}}, on the
-#' projection data for an ensemble, the thresholds for communities for the
-#' ensemble, and \code{global} and \code{custom} objects with user
+#' projection data for an ensemble member, the thresholds for communities for
+#' the ensemble, and \code{global} and \code{custom} objects with user
 #' specifications. Using these inputs, the function creates a dataframe with
-#' the heatwaves identified in the selected projections as well as
-#' characteristics of all the heatwaves.
+#' heatwaves identified and characterized for the ensemble member.
 #'
-#' @param ensembleSeries A list object giving the projection times series as
+#' @param ensembleSeries A list object giving the projection time series as
 #'    well as a variety of other information for a single ensemble member.
 #'    This is the output of \code{\link{processEnsemble}}.
 #' @inheritParams processProjections
@@ -15,50 +14,71 @@
 #'
 #' @return The combined dataframe of identified and characterized heatwaves for
 #'    selected projection date range for all communities specified by the user.
-#'    This dataframe includes the following columns: \code{hw.number}: A
-#'    sequential number identifying each heatwave in each community;
-#'    \code{mean.temp}: Average of mean daily temperature across all
-#'    days in the heatwave; \code{max.temp}: Highest value of mean daily
-#'    temperature across days in the heatwave; \code{min.temp}: Lowest
-#'    value of mean daily temperature across days in the heatwave;
-#'    \code{length}: Number of days in the heatwave; \code{start.date}:
-#'    Date of the first day of the heatwave; \code{end.date}: Date of the
-#'    last day of the heatwave; \code{start.doy}: Numeric day of the year
-#'    of the first day of the heatwave (1 = Jan. 1, etc.); \code{start.month}:
-#'    Numeric value indicating the month in which the heatwave started (1 =
-#'    January); \code{days.above.80}: Number of days in the heatwave above
-#'    80 degrees Fahrenheit; \code{days.above.85}: Number of days in the
-#'    heatwave above 85 degrees Fahrenheit; \code{days.above.90}: Number of
-#'    days in the heatwave above 90 degrees Fahrenheit; \code{days.above.95}:
-#'    Number of days in the heatwave above 90 degrees Fahrenheit;
-#'    \code{days.above.99th}:Number of days in the heatwave above the 99th
-#'    percentile temperature for the community, using the period specified
-#'    by the user with the \code{referenceBoundaries} argument in
-#'    \code{\link{gen_hw_set}} as a reference for determining these percentiles;
-#'    \code{days.above.99.5th}:Number of days in the heatwave above the 99.5th
-#'    percentile temperature for the community; \code{first.in.season}:
-#'    Whether the heatwave was the first to occur in its season (as determined
-#'    by whether the heatwave was the first in its calendar year);
-#'    \code{threshold.temp}: The temperature used as the threshold for the
-#'    heatwave definition in the selected community; \code{mean.temp.quantile}:
-#'    The percentile of the average daily mean temperature during the heatwave
-#'    compared to the community's year-round temperature distribution, based on
-#'    the temperatures for the community during the period specified by the
-#'    \code{referenceBoundaries} argument in \code{\link{gen_hw_set}};
-#'    \code{max.temp.quantile}: The percentile of the highest daily mean
-#'    temperature during the heatwave compared to the community's year-round
-#'    temperature distribution; \code{min.temp.quantile}: The percentile of
-#'    the lowest daily mean temperature during the heatwave compared to the
-#'    community's year-round temperature distribution; \code{mean.temp.1}:
-#'    The community's average year-round temperature, based on the
-#'    temperatures for the community during the period specified by the
-#'    \code{referenceBoundaries} argument in \code{\link{gen_hw_set}};
-#'    \code{mean.summer.temp}: The community's average May--September
-#'    temperature, based on the temperatures for the community during the
-#'    period specified by the \code{referenceBoundaries} argument in
-#'    \code{\link{gen_hw_set}}; and \code{city}: The identifier for the
-#'    community, as given in the file specified in the \code{citycsv}
-#'    argument of \code{\link{gen_hw_set}}.
+#'    This dataframe includes the following columns:
+#' \itemize{
+#'    \item hw.number: A sequential number identifying each heatwave in a city;
+#'    \item mean.temp: Average daily temperature across all days in the
+#'       heatwave, in degrees Fahrenheit;
+#'    \item max.temp: Highest daily temperature across days in the
+#'       heatwave, in degrees Fahrenheit;
+#'    \item min.temp: Lowest daily temperature across days in the
+#'       heatwave, in degrees Fahrenheit
+#'    \item length: Number of days in the heatwave;
+#'    \item start.date: Date of the first day of the heatwave;
+#'    \item end.date: Date of the last day of the heatwave;
+#'    \item start.doy: Day of the year of the first day of the heatwave
+#'       (1 = Jan. 1, etc.);
+#'    \item start.month: Month in which the heatwave started (1 = January,
+#'       etc.);
+#'    \item days.above.80: Number of days in the heatwave above 80 degrees
+#'        Fahrenheit;
+#'    \item days.above.85: Number of days in the heatwave above 85 degrees
+#'        Fahrenheit;
+#'    \item days.above.90: Number of days in the heatwave above 90 degrees
+#'        Fahrenheit;
+#'    \item days.above.95: Number of days in the heatwave above 90 degrees
+#'        Fahrenheit;
+#'    \item days.above.99th: Number of days in the heatwave above the 99th
+#'        percentile temperature for the city, using the period specified
+#'        by the user with the \code{referenceBoundaries} argument in
+#'        \code{\link{gen_hw_set}} as a reference for determining these
+#'        percentiles;
+#'    \item days.above.99.5th: Number of days in the heatwave above the 99.5th
+#'        percentile temperature for the city, using the period specified
+#'        by the user with the \code{referenceBoundaries} argument in
+#'        \code{\link{gen_hw_set}} as a reference for determining these
+#'        percentiles;
+#'    \item first.in.season: Whether the heatwave was the first to occur in its
+#'        calendar year (Note: this characteristic is likely not useful in
+#'        southern hemisphere studies.);
+#'    \item threshold.temp: The temperature used as the threshold for the
+#'        heatwave definition in the city;
+#'    \item mean.temp.quantile: The percentile of the average daily mean
+#'        temperature during the heatwave compared to the city's year-round
+#'        temperature distribution, based on the temperatures for the city
+#'        during the period specified by the \code{referenceBoundaries}
+#'        argument in \code{\link{gen_hw_set}};
+#'    \item max.temp.quantile: The percentile of the highest daily mean
+#'        temperature during the heatwave compared to the city's year-round
+#'        temperature distribution;
+#'    \item min.temp.quantile: The percentile of the lowest daily mean
+#'        temperature during the heatwave compared to the city's year-round
+#'        temperature distribution;
+#'    \item mean.temp.1: The city's average year-round temperature, based
+#'        on the temperatures for the city during the period specified by
+#'        the \code{referenceBoundaries} argument in
+#'        \code{\link{gen_hw_set}};
+#'    \item mean.summer.temp: The city's average May--September
+#'        temperature, based on the temperatures for the community during the
+#'        period specified by the \code{referenceBoundaries} argument
+#'        in \code{\link{gen_hw_set}}; and
+#'    \item city: The identifier for the community, as given in the file
+#'        specified in the \code{citycsv} argument of
+#'        \code{\link{gen_hw_set}}.
+#' }
+#' An example of the output of this function is available as the
+#' \code{\link{hw_datafr}} dataset and can be accessed using
+#' \code{data(hw_datafr)}.
 formHwFrame <- function(ensembleSeries, thresholds, global, custom){
         # Acquire list of heatwave dataframes for each city
         hwDataframeList <- apply(data.frame(thresholds), 1,
@@ -83,7 +103,7 @@ formHwFrame <- function(ensembleSeries, thresholds, global, custom){
 #' @inheritParams processModel
 #'
 #' @return This function creates a closure that takes inputs of \code{threshold},
-#'    \code{ensembleSeries}, and \code{custom} and returns a closure that will
+#'    \code{ensembleSeries}, and \code{custom} and will
 #'    find and characterize all heatwaves in all communities for a given
 #'    ensemble. See the help file for \code{\link{formHwFrame}} for more
 #'    information on the format of the dataframe created by this closure.
@@ -125,17 +145,16 @@ createCityProcessor <- function(global){
 
 #' Consolidate heatwave dataframes
 #'
-#' This function combines all identified heatwave dataframes together into
-#' a single dataframe. This function is used to create a single dataframe
-#' with all heatwaves from all specified communities for each ensemble
+#' This function combines all identified city-specific heatwave dataframes
+#' together into a single dataframe. This function is used to create a single
+#' dataframe with all heatwaves from all study cities for an ensemble
 #' member.
 #'
 #' @param hwDataframeList A list object where each element is the dataframe
-#'    of identified and characterized heatwaves, created by
-#'    the closure created by \code{\link{createCityProcessor}},
-#'    for a single community .
+#'    of heatwaves, created by the closure created by
+#'    \code{\link{createCityProcessor}}, for a single city.
 #'
-#' @return A combined dataframe version of the list that was passed as an
+#' @return A combined dataframe version of the list object that was passed as an
 #'    argument.
 consolidate <- function(hwDataframeList){
         all <- hwDataframeList[[1]]
@@ -150,77 +169,96 @@ consolidate <- function(hwDataframeList){
 #' This function takes a dataframe with identified heatwaves and returns
 #' a dataframe that lists and characterizes all of the heatwaves.
 #'
-#' @param city A character vector with the identification of the community
-#'    being processed
-#' @param heatwaves A dataframe with the following columns: (1) \code{date}: Date
-#'    of each observation, in class "Date"; (2) \code{tmpd}: Temperature
-#'    (in typical runs of this function, this will be in degrees Fahrenheit);
-#'    (3) \code{hw}: A binary variable designating whether a day is in a
-#'    heatwave (0: not in a heatwave; 1: in a heatwave); (4) \code{hw.number}:
-#'    A numeric value, 0 if the day was not part of a heatwave, otherwise the
-#'    number of the heatwave to which the day belonged; and (5)
-#'    \code{first.hw.day}: binary variable designating whether a day was
-#'    the first day of a heatwave (1) or not (0).
-#' @param i An index specifying with community of the specified communities
-#'    is being processed. This corresponds to the order that the communities
-#'    are given in the \code{citycsv} file specified in
+#' @param city A character vector with the identification of the city
+#'    being processed.
+#' @param heatwaves A dataframe with the following columns:
+#'    \itemize{
+#'    \item \code{date}: Date of each observation, in class "Date";
+#'    \item \code{tmpd}: Temperature in degrees Fahrenheit;
+#'    \item \code{hw}: A binary variable designating whether a day is in a
+#'    heatwave (0: not in a heatwave; 1: in a heatwave); and
+#'    \item \code{hw.number}: A numeric value, 0 if the day was not part of a
+#'    heatwave, otherwise the number of the heatwave to which the day belonged.
+#'    }
+#'    This is the format of the output of \code{\link{IDheatwaves}}.
+#' @param i An index specifying which city is being processed. This corresponds
+#'    to the order of the cities in the \code{citycsv} file specified in
 #'    \code{\link{gen_hw_set}}.
 #' @inheritParams processModel
 #' @inheritParams formHwFrame
 #' @inheritParams IDheatwaves
 #'
-#' @return A dataframe where each row represents a heatwave, with the following
-#'    columns: \code{hw.number}: A
-#'    sequential number identifying each heatwave in each community;
-#'    \code{mean.temp}: Average of mean daily temperature across all
-#'    days in the heatwave; \code{max.temp}: Highest value of mean daily
-#'    temperature across days in the heatwave; \code{min.temp}: Lowest
-#'    value of mean daily temperature across days in the heatwave;
-#'    \code{length}: Number of days in the heatwave; \code{start.date}:
-#'    Date of the first day of the heatwave; \code{end.date}: Date of the
-#'    last day of the heatwave; \code{start.doy}: Numeric day of the year
-#'    of the first day of the heatwave (1 = Jan. 1, etc.); \code{start.month}:
-#'    Numeric value indicating the month in which the heatwave started (1 =
-#'    January); \code{days.above.80}: Number of days in the heatwave above
-#'    80 degrees Fahrenheit; \code{days.above.85}: Number of days in the
-#'    heatwave above 85 degrees Fahrenheit; \code{days.above.90}: Number of
-#'    days in the heatwave above 90 degrees Fahrenheit; \code{days.above.95}:
-#'    Number of days in the heatwave above 90 degrees Fahrenheit;
-#'    \code{days.above.99th}:Number of days in the heatwave above the 99th
-#'    percentile temperature for the community, using the period specified
-#'    by the user with the \code{referenceBoundaries} argument in
-#'    \code{\link{gen_hw_set}} as a reference for determining these percentiles;
-#'    \code{days.above.99.5th}:Number of days in the heatwave above the 99.5th
-#'    percentile temperature for the community; \code{first.in.season}:
-#'    Whether the heatwave was the first to occur in its season (as determined
-#'    by whether the heatwave was the first in its calendar year);
-#'    \code{threshold.temp}: The temperature used as the threshold for the
-#'    heatwave definition in the selected community; \code{mean.temp.quantile}:
-#'    The percentile of the average daily mean temperature during the heatwave
-#'    compared to the community's year-round temperature distribution, based on
-#'    the temperatures for the community during the period specified by the
-#'    \code{referenceBoundaries} argument in \code{\link{gen_hw_set}};
-#'    \code{max.temp.quantile}: The percentile of the highest daily mean
-#'    temperature during the heatwave compared to the community's year-round
-#'    temperature distribution; \code{min.temp.quantile}: The percentile of
-#'    the lowest daily mean temperature during the heatwave compared to the
-#'    community's year-round temperature distribution; \code{mean.temp.1}:
-#'    The community's average year-round temperature, based on the
-#'    temperatures for the community during the period specified by the
-#'    \code{referenceBoundaries} argument in \code{\link{gen_hw_set}};
-#'    \code{mean.summer.temp}: The community's average May--September
-#'    temperature, based on the temperatures for the community during the
-#'    period specified by the \code{referenceBoundaries} argument in
-#'    \code{\link{gen_hw_set}}; and \code{city}: The identifier for the
-#'    community, as given in the file specified in the \code{citycsv}
-#'    argument of \code{\link{gen_hw_set}}.
+#' @return A dataframe of identified and characterized heat waves for a single
+#'    city and single ensemble member. Each row of this dataframe represents a
+#'    heatwave, with the following columns:
+#' \itemize{
+#'    \item hw.number: A sequential number identifying each heatwave in a city;
+#'    \item mean.temp: Average daily temperature across all days in the
+#'       heatwave, in degrees Fahrenheit;
+#'    \item max.temp: Highest daily temperature across days in the
+#'       heatwave, in degrees Fahrenheit;
+#'    \item min.temp: Lowest daily temperature across days in the
+#'       heatwave, in degrees Fahrenheit
+#'    \item length: Number of days in the heatwave;
+#'    \item start.date: Date of the first day of the heatwave;
+#'    \item end.date: Date of the last day of the heatwave;
+#'    \item start.doy: Day of the year of the first day of the heatwave
+#'       (1 = Jan. 1, etc.);
+#'    \item start.month: Month in which the heatwave started (1 = January,
+#'       etc.);
+#'    \item days.above.80: Number of days in the heatwave above 80 degrees
+#'        Fahrenheit;
+#'    \item days.above.85: Number of days in the heatwave above 85 degrees
+#'        Fahrenheit;
+#'    \item days.above.90: Number of days in the heatwave above 90 degrees
+#'        Fahrenheit;
+#'    \item days.above.95: Number of days in the heatwave above 90 degrees
+#'        Fahrenheit;
+#'    \item days.above.99th: Number of days in the heatwave above the 99th
+#'        percentile temperature for the city, using the period specified
+#'        by the user with the \code{referenceBoundaries} argument in
+#'        \code{\link{gen_hw_set}} as a reference for determining these
+#'        percentiles;
+#'    \item days.above.99.5th: Number of days in the heatwave above the 99.5th
+#'        percentile temperature for the city, using the period specified
+#'        by the user with the \code{referenceBoundaries} argument in
+#'        \code{\link{gen_hw_set}} as a reference for determining these
+#'        percentiles;
+#'    \item first.in.season: Whether the heatwave was the first to occur in its
+#'        calendar year (Note: this characteristic is likely not useful in
+#'        southern hemisphere studies.);
+#'    \item threshold.temp: The temperature used as the threshold for the
+#'        heatwave definition in the city;
+#'    \item mean.temp.quantile: The percentile of the average daily mean
+#'        temperature during the heatwave compared to the city's year-round
+#'        temperature distribution, based on the temperatures for the city
+#'        during the period specified by the \code{referenceBoundaries}
+#'        argument in \code{\link{gen_hw_set}};
+#'    \item max.temp.quantile: The percentile of the highest daily mean
+#'        temperature during the heatwave compared to the city's year-round
+#'        temperature distribution;
+#'    \item min.temp.quantile: The percentile of the lowest daily mean
+#'        temperature during the heatwave compared to the city's year-round
+#'        temperature distribution;
+#'    \item mean.temp.1: The city's average year-round temperature, based
+#'        on the temperatures for the city during the period specified by
+#'        the \code{referenceBoundaries} argument in
+#'        \code{\link{gen_hw_set}};
+#'    \item mean.summer.temp: The city's average May--September
+#'        temperature, based on the temperatures for the community during the
+#'        period specified by the \code{referenceBoundaries} argument
+#'        in \code{\link{gen_hw_set}}; and
+#'    \item city: The identifier for the community, as given in the file
+#'        specified in the \code{citycsv} argument of
+#'        \code{\link{gen_hw_set}}.
+#' }
 #'
 #' @note When calculating relative characteristics of heatwaves, like the
 #' relative value of the heatwave's mean temperature, this function uses a
 #' time series from the date ranges specified by the user using the
 #' \code{referenceBoundaries} option in \code{\link{gen_hw_set}}. By
-#' default, these references are based on projection data from 2061 to
-#' 2080.
+#' default, these references are based on projection data from 2070 to
+#' 2079.
 #'
 #' @importFrom dplyr %>%
 createHwDataframe <- function(city, threshold, heatwaves,

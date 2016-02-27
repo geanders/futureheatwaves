@@ -7,8 +7,8 @@
 gen_hw_set(out, dataFolder, dataDirectories = list(historical = c(1980, 2004),
   rcp85 = c(2006, 2099)), citycsv, coordinateFilenames, tasFilenames,
   timeFilenames, IDheatwavesFunction = "IDHeatwavesCPPwrapper",
-  thresholdBoundaries = c(1981, 2004), projectionBoundaries = c(2061, 2080),
-  referenceBoundaries = c(2061, 2080), models_to_run = "all",
+  thresholdBoundaries = c(1990, 1999), projectionBoundaries = c(2070, 2079),
+  referenceBoundaries = c(2070, 2079), models_to_run = "all",
   probThreshold = 0.98, printWarning = TRUE,
   threshold_ensemble = "r1i1p1", lat_lon_colnames = c("lat", "lon"))
 }
@@ -17,7 +17,9 @@ gen_hw_set(out, dataFolder, dataDirectories = list(historical = c(1980, 2004),
 heat wave files will be written. This should be a pathname to a directory
 on the user's local computer. If the directory already exists, it will
 be overwritten by this function, so the user should either specify a
-pathname for a directory that does not yet exist.}
+pathname for a directory that does not yet exist or be willing to
+overwrite the existing directory. The parent directory of the specified
+directory must exist.}
 
 \item{dataFolder}{Character string with pathway to a directory with
 climate projection data. This directory must have a specific structure--
@@ -36,9 +38,9 @@ for a \code{dataFolder} with historical experiment data for 1990 to 1999
 and RCP8.5 projections for 2060 to 2079).}
 
 \item{citycsv}{Character string giving the filepath to a
-comma-separated values (.csv) file with unique identifiers, latitudes, and
-longitudes for each community for which the user wants to generate
-heat wave projections.}
+comma-separated (.csv) file with, for each study city, a unique city
+identifier, latitude, and longitude. These values must be specified with
+the column names \code{city}, \code{lat}, and \code{lon}.}
 
 \item{coordinateFilenames}{Character string the with filename of each
 grid point location file. This filename should be identical for all ensemble
@@ -58,29 +60,35 @@ vignette for an example of the required structure for this file.}
 \item{IDheatwavesFunction}{A character string with the name of the R function
 to use to identify heat waves. This function may be a user-specified custom
 function to, but it must be loaded into the current R session. The
-function name must be put in quotation marks.}
+function name must be put in quotation marks. For more guidance on how to
+write and use a custom function to identify heat waves, see the package
+vignette for \code{futureheatwaves}.}
 
 \item{thresholdBoundaries}{A numeric vector with the custom time boundaries
 to be used to determine the threshold temperatures for the heat wave
-definition. The required format for this vector is that the first element
-is the lower year bound and the second element is the upper year bound,
-with the restrictions that bounds must be between the years 1980 and 2099
-and cannot span 2005 (i.e., both must either be before 2005 or after 2005).}
+definition. The required format for this vector is c(start year, end
+year), with the restrictions that bounds must be contained within the
+time boundaries of one of the two experiment subdirectories specified
+by the \code{dataDirectories} argument in \code{\link{gen_hw_set}}.
+The default value is 1990 to 1999.}
 
 \item{projectionBoundaries}{A numeric vector with the custom time boundaries
 for which the user wants to create heat wave projections. The required
-format for this vector is that the first element
-is the lower year bound and the second element is the upper year bound,
-with the restrictions that bounds must be between the years 1980 and 2099
-and cannot span 2005 (i.e., both must either be before 2005 or after 2005).}
+format for this vector is c(start year, end
+year), with the restrictions that bounds must be contained within the
+time boundaries of one of the two experiment subdirectories specified
+by the \code{dataDirectories} argument in \code{\link{gen_hw_set}}.
+The default value is 2070 to 2079.}
 
 \item{referenceBoundaries}{A numeric vector with the custom time boundaries
 to use in calculating relative characteristics for heat waves (i.e., to use
-when exploring the role of adaptation in projections). The required format
-for this vector is that the first element is the lower year bound and the
-second element is the upper year bound, with the restrictions that bounds
-must be between the years 1980 and 2099 and cannot span 2005 (i.e., both
-must either be before 2005 or after 2005).}
+when exploring the role of adaptation in projections). For more
+information on how reference temperatures are used, see the package
+vignette for \code{futureheatwaves}. The required format for this vector
+is c(start year, end year), with the restrictions that bounds must be
+contained within the time boundaries of one of the two experiment
+subdirectories specified by the \code{dataDirectories} argument in
+\code{\link{gen_hw_set}}. The default value is 2070 to 2079.}
 
 \item{models_to_run}{A character vector with either "all" (the default),
 in which case the function runs through all models in the \code{dataFolder}
@@ -103,7 +111,10 @@ for this argument.}
 member that should be used when determining the city-specific threshold
 temperatures  for each climate model (e.g., \code{"r1i1p1"}). This
 threshold is used for relative heat wave definitions. See the
-\code{futureheatwaves} vignette for more on heat wave definitions.}
+\code{futureheatwaves} vignette for more on heat wave definitions.
+If any climate model lacks that ensemble member for the specified
+dates for calculating the threshold, it will be excluded from the
+processing.}
 
 \item{lat_lon_colnames}{A character vector of length two with the column names
 in the \code{cities} dataframe for latitude (first vector element) and
@@ -118,12 +129,13 @@ This function returns a dataframe listing the name of each climate
 
 This function also creates, and writes to the user's computer, files with
    the heat waves and their characteristics for the specified climate
-   projections and dates.
+   projections and dates. For more information on customizing this function,
+   see the \code{futureheatwaves} vignette.
 }
 \description{
-This function creates heat wave projection datasets for all models and
-ensemble members for a user-specified set of communities.The resulting
-heat wave projections are written out to a specified directory on the
-user's local computer.
+This function creates datasets of identified and characterized heat waves
+for all ensemble members in a directory of climate projections for a
+user-specified set of cities.The resulting heat wave projections are written
+out to a specified directory on the user's local computer.
 }
 

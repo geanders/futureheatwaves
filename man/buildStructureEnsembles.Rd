@@ -9,8 +9,8 @@ buildStructureEnsembles(ensemblePath, coordinateFilenames, tasFilenames,
 }
 \arguments{
 \item{ensemblePath}{A character string that gives the absolute file path
-for the subdirectory for a particular ensemble member of a climate
-model within the user-specified projection directory.}
+for files for an ensemble member within the user-specified projection
+directory (\code{dataFolder}).}
 
 \item{coordinateFilenames}{Character string the with filename of each
 grid point location file. This filename should be identical for all ensemble
@@ -40,14 +40,12 @@ and RCP8.5 projections for 2060 to 2079).}
 }
 \value{
 A list of length 2. The first element is the name of the ensemble
-that was processed. The second element is a list containing the coordinate
-comma-separated file, the projection data comma-separated file,
-and the time data comma-separated file, respectively.
+that was processed. The second element is a vector with the filepaths of
+the three files.
 }
 \description{
-This function reads through the user-specified projections directory and
-creates a list with all files in the subdirectory of a single
-ensemble member subdirectory within a specific climate model
-subdirectory.
+This function reads through the user-specified \code{dataFolder} directory
+and creates a list with pathnames to all three files (projection times, grid
+points, and projections) for a single ensemble member.
 }
 

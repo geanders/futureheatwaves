@@ -13,7 +13,9 @@ check_params(out, dataFolder, dataDirectories, citycsv, coordinateFilenames,
 heat wave files will be written. This should be a pathname to a directory
 on the user's local computer. If the directory already exists, it will
 be overwritten by this function, so the user should either specify a
-pathname for a directory that does not yet exist.}
+pathname for a directory that does not yet exist or be willing to
+overwrite the existing directory. The parent directory of the specified
+directory must exist.}
 
 \item{dataFolder}{Character string with pathway to a directory with
 climate projection data. This directory must have a specific structure--
@@ -32,9 +34,9 @@ for a \code{dataFolder} with historical experiment data for 1990 to 1999
 and RCP8.5 projections for 2060 to 2079).}
 
 \item{citycsv}{Character string giving the filepath to a
-comma-separated values (.csv) file with unique identifiers, latitudes, and
-longitudes for each community for which the user wants to generate
-heat wave projections.}
+comma-separated (.csv) file with, for each study city, a unique city
+identifier, latitude, and longitude. These values must be specified with
+the column names \code{city}, \code{lat}, and \code{lon}.}
 
 \item{coordinateFilenames}{Character string the with filename of each
 grid point location file. This filename should be identical for all ensemble
@@ -54,37 +56,42 @@ vignette for an example of the required structure for this file.}
 \item{IDheatwavesFunction}{A character string with the name of the R function
 to use to identify heat waves. This function may be a user-specified custom
 function to, but it must be loaded into the current R session. The
-function name must be put in quotation marks.}
+function name must be put in quotation marks. For more guidance on how to
+write and use a custom function to identify heat waves, see the package
+vignette for \code{futureheatwaves}.}
 
 \item{thresholdBoundaries}{A numeric vector with the custom time boundaries
 to be used to determine the threshold temperatures for the heat wave
-definition. The required format for this vector is that the first element
-is the lower year bound and the second element is the upper year bound,
-with the restrictions that bounds must be between the years 1980 and 2099
-and cannot span 2005 (i.e., both must either be before 2005 or after 2005).}
+definition. The required format for this vector is c(start year, end
+year), with the restrictions that bounds must be contained within the
+time boundaries of one of the two experiment subdirectories specified
+by the \code{dataDirectories} argument in \code{\link{gen_hw_set}}.
+The default value is 1990 to 1999.}
 
 \item{projectionBoundaries}{A numeric vector with the custom time boundaries
 for which the user wants to create heat wave projections. The required
-format for this vector is that the first element
-is the lower year bound and the second element is the upper year bound,
-with the restrictions that bounds must be between the years 1980 and 2099
-and cannot span 2005 (i.e., both must either be before 2005 or after 2005).}
+format for this vector is c(start year, end
+year), with the restrictions that bounds must be contained within the
+time boundaries of one of the two experiment subdirectories specified
+by the \code{dataDirectories} argument in \code{\link{gen_hw_set}}.
+The default value is 2070 to 2079.}
 
 \item{referenceBoundaries}{A numeric vector with the custom time boundaries
 to use in calculating relative characteristics for heat waves (i.e., to use
-when exploring the role of adaptation in projections). The required format
-for this vector is that the first element is the lower year bound and the
-second element is the upper year bound, with the restrictions that bounds
-must be between the years 1980 and 2099 and cannot span 2005 (i.e., both
-must either be before 2005 or after 2005).}
+when exploring the role of adaptation in projections). For more
+information on how reference temperatures are used, see the package
+vignette for \code{futureheatwaves}. The required format for this vector
+is c(start year, end year), with the restrictions that bounds must be
+contained within the time boundaries of one of the two experiment
+subdirectories specified by the \code{dataDirectories} argument in
+\code{\link{gen_hw_set}}. The default value is 2070 to 2079.}
 }
 \value{
-Stops and returns an error if any parameters are incorrect.
+Only stops and returns an error if any parameters are incorrect.
 }
 \description{
-This function goes through all parameter inputs for the main
-functions, \code{\link{gen_hw_set}}, and makes sure all parameter
-entries are in the appropriate format for following functions.
+This function goes through all parameter inputs for \code{\link{gen_hw_set}}
+and makes sure all parameter entries are in the appropriate format.
 If any parameters are in an incorrect format, the function stops
 and returns an error describing the problem.
 }
@@ -92,14 +99,8 @@ and returns an error describing the problem.
 This function does not check if the data is organized in the proper
    structure or if any data exists within the directory at all, so a
    call to \code{\link{gen_hw_set}} could still pass through this check and
-   make it further through the function code with those mistakes.
-
- Does not check if the three ensemble final .csv data files exist,
-   only if they have the .csv extension if they do exist. (Reminder:
-   the final subdirectory should have the following three csv files:
-   1. A file with the climate model projections, with grid points by
-   column and times by row; 2. A file with the longitude and latitude
-   of each grid point in the projection file and; 3. A file with the
-   date of each of the rows in the projection file.)
+   make it further through the function code with those mistakes.This
+   function also does not check if the three ensemble final .csv data
+   files exist, only if they have the .csv extension if they do exist.
 }
 

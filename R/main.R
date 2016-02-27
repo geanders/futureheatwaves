@@ -1,23 +1,25 @@
 #' Create and write heat wave projections
 #'
-#' This function creates heat wave projection datasets for all models and
-#' ensemble members for a user-specified set of communities.The resulting
-#' heat wave projections are written out to a specified directory on the
-#' user's local computer.
+#' This function creates datasets of identified and characterized heat waves
+#' for all ensemble members in a directory of climate projections for a
+#' user-specified set of cities.The resulting heat wave projections are written
+#' out to a specified directory on the user's local computer.
 #'
 #' @param out Character string with pathway to directory to which
 #'    heat wave files will be written. This should be a pathname to a directory
 #'    on the user's local computer. If the directory already exists, it will
 #'    be overwritten by this function, so the user should either specify a
-#'    pathname for a directory that does not yet exist.
+#'    pathname for a directory that does not yet exist or be willing to
+#'    overwrite the existing directory. The parent directory of the specified
+#'    directory must exist.
 #' @param dataFolder Character string with pathway to a directory with
 #'    climate projection data. This directory must have a specific structure--
 #'    see the \code{futureheatwaves} vignette for guidance on setting up this
 #'    directory.
 #' @param citycsv Character string giving the filepath to a
-#'    comma-separated values (.csv) file with unique identifiers, latitudes, and
-#'    longitudes for each community for which the user wants to generate
-#'    heat wave projections.
+#'    comma-separated (.csv) file with, for each study city, a unique city
+#'    identifier, latitude, and longitude. These values must be specified with
+#'    the column names \code{city}, \code{lat}, and \code{lon}.
 #' @param coordinateFilenames Character string the with filename of each
 #'    grid point location file. This filename should be identical for all ensemble
 #'    members included in the \code{dataFolder} directory. See the package
@@ -33,26 +35,32 @@
 #' @param IDheatwavesFunction A character string with the name of the R function
 #'    to use to identify heat waves. This function may be a user-specified custom
 #'    function to, but it must be loaded into the current R session. The
-#'    function name must be put in quotation marks.
+#'    function name must be put in quotation marks. For more guidance on how to
+#'    write and use a custom function to identify heat waves, see the package
+#'    vignette for \code{futureheatwaves}.
 #' @param thresholdBoundaries A numeric vector with the custom time boundaries
 #'    to be used to determine the threshold temperatures for the heat wave
-#'    definition. The required format for this vector is that the first element
-#'    is the lower year bound and the second element is the upper year bound,
-#'    with the restrictions that bounds must be between the years 1980 and 2099
-#'    and cannot span 2005 (i.e., both must either be before 2005 or after 2005).
+#'    definition. The required format for this vector is c(start year, end
+#'    year), with the restrictions that bounds must be contained within the
+#'    time boundaries of one of the two experiment subdirectories specified
+#'    by the \code{dataDirectories} argument in \code{\link{gen_hw_set}}.
+#'    The default value is 1990 to 1999.
 #' @param projectionBoundaries A numeric vector with the custom time boundaries
 #'    for which the user wants to create heat wave projections. The required
-#'    format for this vector is that the first element
-#'    is the lower year bound and the second element is the upper year bound,
-#'    with the restrictions that bounds must be between the years 1980 and 2099
-#'    and cannot span 2005 (i.e., both must either be before 2005 or after 2005).
+#'    format for this vector is c(start year, end
+#'    year), with the restrictions that bounds must be contained within the
+#'    time boundaries of one of the two experiment subdirectories specified
+#'    by the \code{dataDirectories} argument in \code{\link{gen_hw_set}}.
+#'    The default value is 2070 to 2079.
 #' @param referenceBoundaries A numeric vector with the custom time boundaries
 #'    to use in calculating relative characteristics for heat waves (i.e., to use
-#'    when exploring the role of adaptation in projections). The required format
-#'    for this vector is that the first element is the lower year bound and the
-#'    second element is the upper year bound, with the restrictions that bounds
-#'    must be between the years 1980 and 2099 and cannot span 2005 (i.e., both
-#'    must either be before 2005 or after 2005).
+#'    when exploring the role of adaptation in projections). For more
+#'    information on how reference temperatures are used, see the package
+#'    vignette for \code{futureheatwaves}. The required format for this vector
+#'    is c(start year, end year), with the restrictions that bounds must be
+#'    contained within the time boundaries of one of the two experiment
+#'    subdirectories specified by the \code{dataDirectories} argument in
+#'    \code{\link{gen_hw_set}}. The default value is 2070 to 2079.
 #' @param probThreshold Numerical value between 0 and 1 specifying the threshold
 #'    of temperature to use when defining heat waves. The default value is 0.98
 #'    (i.e., a heat wave is two or more days above the community's 98th
@@ -85,6 +93,9 @@
 #'    temperatures  for each climate model (e.g., \code{"r1i1p1"}). This
 #'    threshold is used for relative heat wave definitions. See the
 #'    \code{futureheatwaves} vignette for more on heat wave definitions.
+#'    If any climate model lacks that ensemble member for the specified
+#'    dates for calculating the threshold, it will be excluded from the
+#'    processing.
 #'
 #' @return This function returns a dataframe listing the name of each climate
 #'    model used, as well as the number of historical and future projection
@@ -94,7 +105,8 @@
 #'
 #' This function also creates, and writes to the user's computer, files with
 #'    the heat waves and their characteristics for the specified climate
-#'    projections and dates.
+#'    projections and dates. For more information on customizing this function,
+#'    see the \code{futureheatwaves} vignette.
 #'
 #' @export
 #'
@@ -108,9 +120,9 @@ gen_hw_set <- function(out,
                        tasFilenames,
                        timeFilenames,
                        IDheatwavesFunction = "IDHeatwavesCPPwrapper",
-                       thresholdBoundaries = c(1981, 2004),
-                       projectionBoundaries = c(2061, 2080),
-                       referenceBoundaries = c(2061, 2080),
+                       thresholdBoundaries = c(1990, 1999),
+                       projectionBoundaries = c(2070, 2079),
+                       referenceBoundaries = c(2070, 2079),
                        models_to_run = "all",
                        probThreshold = 0.98,
                        printWarning = TRUE,
@@ -213,28 +225,21 @@ gen_hw_set <- function(out,
 
 #' Check for input parameter errors
 #'
-#' This function goes through all parameter inputs for the main
-#' functions, \code{\link{gen_hw_set}}, and makes sure all parameter
-#' entries are in the appropriate format for following functions.
+#' This function goes through all parameter inputs for \code{\link{gen_hw_set}}
+#' and makes sure all parameter entries are in the appropriate format.
 #' If any parameters are in an incorrect format, the function stops
 #' and returns an error describing the problem.
 #'
 #' @inheritParams gen_hw_set
 #'
-#' @return Stops and returns an error if any parameters are incorrect.
+#' @return Only stops and returns an error if any parameters are incorrect.
 #'
 #' @note This function does not check if the data is organized in the proper
 #'    structure or if any data exists within the directory at all, so a
 #'    call to \code{\link{gen_hw_set}} could still pass through this check and
-#'    make it further through the function code with those mistakes.
-#'
-#'  Does not check if the three ensemble final .csv data files exist,
-#'    only if they have the .csv extension if they do exist. (Reminder:
-#'    the final subdirectory should have the following three csv files:
-#'    1. A file with the climate model projections, with grid points by
-#'    column and times by row; 2. A file with the longitude and latitude
-#'    of each grid point in the projection file and; 3. A file with the
-#'    date of each of the rows in the projection file.)
+#'    make it further through the function code with those mistakes.This
+#'    function also does not check if the three ensemble final .csv data
+#'    files exist, only if they have the .csv extension if they do exist.
 check_params <- function(out,
                          dataFolder,
                          dataDirectories,
@@ -289,15 +294,13 @@ check_params <- function(out,
 #' Check year boundaries for errors
 #'
 #' This function inputs the boundary lists specified in
-#' \code{\link{gen_hw_set}}, \code{dataBoundaries} and
+#' \code{\link{gen_hw_set}}, \code{thresholdBoundaries},
+#' \code{projectionBoundaries}, and
 #' \code{referenceBoundaries}, and checks them for errors in structure of the
 #' input or in the years selected.
 #'
-#' @param boundList Either FALSE, if user wishes to use the default
-#'    boundaries, or a set of boundary years in the format
-#'    c(historical period earliest year, historical period latest year,
-#'    future projection period earliest year, future projection period
-#'    latest year).
+#' @param boundList A set of boundary years in the format
+#'    c(start year, end year).
 #' @inheritParams gen_hw_set
 checkCustomBounds <- function(boundList, dataDirectories){
 
@@ -336,12 +339,13 @@ checkCustomBounds <- function(boundList, dataDirectories){
 
 #' Create accumulator closure
 #'
-#' This closure holds, adds to, and returns data structures that the user
-#' wishes to grow at various points in the execution of the package.
+#' This function creates a closure that holds, adds to, and returns data
+#' structures that the user wishes to grow at various points in the execution of
+#' the package (e.g., location and model information dataframes).
 #'
 #' As an example, when the generated
 #' closure is used with the command "append location list", it will add
-#' information on the communities and closest grid point locations based
+#' information on the cities and closest grid point locations based
 #' on the climate model it has just completed analyzing to a growing
 #' dataframe with this information for all climate models. After the function
 #' run to generate the heat wave projections is completed, this closure can
@@ -351,23 +355,16 @@ checkCustomBounds <- function(boundList, dataDirectories){
 #' analyzed based on their inclusion in the user-specified projections
 #' directory.
 #'
-#' This function exists to couple these structures together in order to lower
-#' the number of parameters of this nature the user would have to pass down
-#' the the program otherwise. It is a closure instead of a list as a
-#' pre-emptive measure.
-#'
 #' @return A closure that accepts commands to access and append new data onto
 #'    data structures as the program executes. The closure created by this
 #'    function accepts two arguments: (1) the command and (2) an element to
 #'    be appended to the end of the data structure of the command. These two
 #'    arguments must be entered in this exact order. The first argument (the
-#'    command) can be one of the following options: "return model information",
-#'    "append model information", "return locations", and "append location
-#'    list". The second argument for the created closure should only be used
+#'    command) can be one of the following options:
+#'    \code{return model information}, \code{append model information},
+#'    \code{return locations}, and \code{append location list}. The second
+#'    argument for the created closure should only be used
 #'    in conjunction with the two "append" commands for the closure.
-#'
-#' @note This function contains no error checking for the types of elements
-#'    input into the data structures it contains.
 createAccumulators <- function(){
         modelInfoAccumulator <- data.frame(c(), c(), c())
         locationList <- data.frame(c(), c(), c(), c(), c(), c())

@@ -12,19 +12,21 @@ A closure that accepts commands to access and append new data onto
    function accepts two arguments: (1) the command and (2) an element to
    be appended to the end of the data structure of the command. These two
    arguments must be entered in this exact order. The first argument (the
-   command) can be one of the following options: "return model information",
-   "append model information", "return locations", and "append location
-   list". The second argument for the created closure should only be used
+   command) can be one of the following options:
+   \code{return model information}, \code{append model information},
+   \code{return locations}, and \code{append location list}. The second
+   argument for the created closure should only be used
    in conjunction with the two "append" commands for the closure.
 }
 \description{
-This closure holds, adds to, and returns data structures that the user
-wishes to grow at various points in the execution of the package.
+This function creates a closure that holds, adds to, and returns data
+structures that the user wishes to grow at various points in the execution of
+the package (e.g., location and model information dataframes).
 }
 \details{
 As an example, when the generated
 closure is used with the command "append location list", it will add
-information on the communities and closest grid point locations based
+information on the cities and closest grid point locations based
 on the climate model it has just completed analyzing to a growing
 dataframe with this information for all climate models. After the function
 run to generate the heat wave projections is completed, this closure can
@@ -33,14 +35,5 @@ dataframe of this location information.The closure can be used in a
 similar manner to aggregate and then return meta-data on the models
 analyzed based on their inclusion in the user-specified projections
 directory.
-
-This function exists to couple these structures together in order to lower
-the number of parameters of this nature the user would have to pass down
-the the program otherwise. It is a closure instead of a list as a
-pre-emptive measure.
-}
-\note{
-This function contains no error checking for the types of elements
-   input into the data structures it contains.
 }
 

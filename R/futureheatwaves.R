@@ -1,10 +1,14 @@
-#' futureheatwaves: Identify and Characterize Heatwaves in Climate Projections
+#' Find, Characterize, and Explore Heat Waves in Climate Projections
 #'
-#' futureheatwaves Takes locally saved climate projections and identifies and
-#' characterizes heatwaves in those projections. Heatwaves are defined
-#' based on a definition frequently used in climate epidemiology.
-#' Characterizations include several metrics of heatwave length,
-#' intensity, and timing in the summer.
+#' \code{futureheatwaves} takes a directory of climate projection files and,
+#' for each, identifies and characterizes all heat waves. The definition used to
+#' identify heat waves can be customized. Characterizations include several
+#' metrics of heat wave length, intensity, and timing in the year. Heat waves
+#' can be explored by applying custom functions across all generated heat wave
+#' files. This work was supported in part by grants from the National Institute
+#' of Environmental Health Sciences (R00ES022631), the National Science
+#' Foundation (1331399), and the Colorado State University Vice President for
+#' Research.
 #'
 #' @docType package
 #' @name futureheatwaves

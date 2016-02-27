@@ -97,18 +97,14 @@ readTimes <- function(ensemble, global){
 #'
 #' The closure created by this function closes over an incrementer variable
 #' for ensembles that advances each time the closure is called.
-#' Output the heatwave data of each model.
-#'
-#' @note The closure produced by this function must be
-#' applied to a list of the heatwave dataframes corresponding to the
-#' ensembles of the model
 #'
 #' @inheritParams buildStructureModels
 #' @inheritParams processModel
 #'
-#' @return A closure that writes heatwave dataframes. This closure has
-#' the argument \code{hwFrame}: A combined heatwave dataframe that contains
-#' all heatwave information for the ensemble being processed.
+#' @return A closure that inputs \code{hwFrame}, a combined heatwave dataframe
+#' with all heatwave information for all cities for the ensemble
+#' and writes out a heatwave dataframe to the output directory specified by
+#' the \code{out} argument in \code{\link{gen_hw_set}}.
 #'
 #' @importFrom dplyr %>%
 createEnsembleWriter <- function(modelName, global, custom){

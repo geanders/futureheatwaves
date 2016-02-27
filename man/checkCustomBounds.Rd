@@ -7,11 +7,8 @@
 checkCustomBounds(boundList, dataDirectories)
 }
 \arguments{
-\item{boundList}{Either FALSE, if user wishes to use the default
-boundaries, or a set of boundary years in the format
-c(historical period earliest year, historical period latest year,
-future projection period earliest year, future projection period
-latest year).}
+\item{boundList}{A set of boundary years in the format
+c(start year, end year).}
 
 \item{dataDirectories}{A list object, with two elements, one for each of the
 two subdirectories included in the main directory. Typically, these will
@@ -26,7 +23,8 @@ and RCP8.5 projections for 2060 to 2079).}
 }
 \description{
 This function inputs the boundary lists specified in
-\code{\link{gen_hw_set}}, \code{dataBoundaries} and
+\code{\link{gen_hw_set}}, \code{thresholdBoundaries},
+\code{projectionBoundaries}, and
 \code{referenceBoundaries}, and checks them for errors in structure of the
 input or in the years selected.
 }

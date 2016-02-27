@@ -2,20 +2,23 @@
 % Please edit documentation in R/RcppExports.R
 \name{storeZeroes}
 \alias{storeZeroes}
-\title{Helper function that adds zeroes to the data structures that track heatwave information}
+\title{Helper function that adds zeroes}
 \usage{
 storeZeroes(index, potentialHeatwave, hw, hwNumber)
 }
 \arguments{
 \item{index}{An index into the various}
 
-\item{potentialHeatwave}{Size of the potential heatwave that turned out not to be a heatwave.}
+\item{potentialHeatwave}{Size of the potential heat wave that turned out
+not to be a heat wave.}
 
-\item{hw}{A reference of the vector that contains the heatwaves}
+\item{hw}{A reference of the vector that contains the heat waves}
 
-\item{hwNumber}{A reference of the vector that contains the heatwave numbers.}
+\item{hwNumber}{A reference of the vector that contains the heat wave
+numbers.}
 }
 \description{
-Helper function that adds zeroes to the data structures that track heatwave information
+This function is a helper function that adds zeros to the data structures
+that track heat wave information
 }
 

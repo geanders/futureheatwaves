@@ -9,15 +9,15 @@ buildStructureExperiments(modelName, experiment, dataPath, coordinateFilenames,
 }
 \arguments{
 \item{modelName}{Character string of climate model name (e.g., "bcc1"). This
-name is typically generated for use in this function from the subdirectory
-names for the climate model within the directory of projection data
-specified by the user in \code{\link{gen_hw_set}}.}
+name is generated from the subdirectory name for the climate model within
+\code{dataFolder}.}
 
-\item{experiment}{Character string of the experiment of interest.
-Possible variables are "historical" or "rcp85".}
+\item{experiment}{Character string of the experiment. Possible variables are
+the names of elements in the list object specified by the
+\code{dataDirectories} argument in \code{\link{gen_hw_set}}.}
 
-\item{dataPath}{Character string of the file path to the directory
-containing the climate projections. Must include the final `/`.}
+\item{dataPath}{Character string of the file path to \code{dataFolder}.
+Must include the final `/`.}
 
 \item{coordinateFilenames}{Character string the with filename of each
 grid point location file. This filename should be identical for all ensemble
@@ -46,14 +46,13 @@ for a \code{dataFolder} with historical experiment data for 1990 to 1999
 and RCP8.5 projections for 2060 to 2079).}
 }
 \value{
-A list that is the length of the number of ensembles. Each element
+A list with one element for each ensemble member. Each element
    is a return value of the \code{\link{buildStructureEnsembles}} function for
-   one of the ensemble members in that experiment of that climate model
-   within the user-specified projections directory.
+   one ensemble member in the experiment and climate model.
 }
 \description{
 This function generates a list object with the file structure of files
-within the user-specified projection directory for a single experiment
-(i.e., "historical" or "rcp85").
+in the \code{dataFolder} directory for a single experiment
+(e.g., "historical" or "rcp85").
 }
 

@@ -7,23 +7,16 @@
 getBounds(times, custom, type)
 }
 \arguments{
-\item{times}{A dataframe containing the time data for one of the
-climate model ensemble's projection. Each row in this dataframe
-corresponds to the row with the same row number in the climate
-projection dataframe. Read in by
-\code{\link{processEnsemble}}.}
+\item{times}{A dataframe containing the time data for one ensemble member's
+projections. Each row in this dataframe corresponds to the row with the
+same row number in the climate projection dataframe.}
 
-\item{custom}{An object name for the \code{custom} object. This object is
-created by \code{\link{gen_hw_set}} and includes user specifications
-for, if specified as other than the default, the name of the R function to
+\item{custom}{An list object created by \code{\link{gen_hw_set}} that
+includes user specifications (e.g., the name of the R function to
 use to identify heatwaves, alternative upper and lower year boundaries
 for the data used to determine threshold temperatures for the heatwave
 definition, alternative upper and lower year boundaries
-for the projection period of the heatwave datasets being generated,
-alternative upper and lower year boundaries for the reference period
-to be used when measuring all heatwave characteristics related to
-relative, rather than absolute, temperature, and the percentile
-threshold to use when defining heatwaves.}
+for the projection period of the heatwave datasets being generated).}
 
 \item{type}{A character vector giving the type of boundaries that are being
 checked. Possible values are "threshold", "projections", and "reference".}
@@ -36,13 +29,6 @@ A numeric vector containing the number of days spanned by the
    specifying the relevant row of the climate projection data.
 }
 \description{
-Acquire boundaries of time series data
-}
-\note{
-This function is customizable. If data boundaries are not set
-   using \code{dataBoundaries} in the \code{\link{gen_hw_set}} function call,
-   the default is to pull Jan. 1, 1981, to Dec. 31, 2014 for a
-   historical experiment and Jan. 1, 2061 to Dec. 31, 2080 for
-   a future projection experiment.
+This function acquires the boundaries of time series data.
 }
 

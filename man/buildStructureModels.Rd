@@ -9,12 +9,12 @@ buildStructureModels(modelName, experiments, dataFolder, coordinateFilenames,
 }
 \arguments{
 \item{modelName}{Character string of climate model name (e.g., "bcc1"). This
-name is typically generated for use in this function from the subdirectory
-names for the climate model within the directory of projection data
-specified by the user in \code{\link{gen_hw_set}}.}
+name is generated from the subdirectory name for the climate model within
+\code{dataFolder}.}
 
-\item{experiments}{Character vector of the experiment(s) of interest.
-Possible variables are "historical", "rcp85", or both.}
+\item{experiments}{Character string of the experiment(s). Possible variables
+are the names of elements in the list object specified by the
+\code{dataDirectories} argument in \code{\link{gen_hw_set}}.}
 
 \item{dataFolder}{Character string with pathway to a directory with
 climate projection data. This directory must have a specific structure--
@@ -49,10 +49,11 @@ and RCP8.5 projections for 2060 to 2079).}
 }
 \value{
 A list of length 3. The first element is the name of the model
-   whose structure was being built. The second element is the historical
-   experiment hierarchy. The third element is the hierarchy of the future
-   projection directory for the model. The second and third elements are
-   return values of \code{\link{buildStructureExperiments}}.
+   whose structure was being built. The second element is, for this climate
+   model, the hierarchy of the first subdirectory specified by
+   \code{dataDirectories}. The third element is the hierarchy of the second
+   subdirectory specified by \code{dataDirectories}. The second and third
+   elements are return values of \code{\link{buildStructureExperiments}}.
 }
 \description{
 This function takes input from \code{\link{acquireDirectoryStructure}} and

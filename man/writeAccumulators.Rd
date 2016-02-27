@@ -13,13 +13,10 @@ ensembles for each climate model.}
 \item{locationList}{A dataframe with information about community locations
 and the closest grid point from each climate model to each community.}
 
-\item{global}{An object name for the \code{global} object. This
-object is created by \code{\link{gen_hw_set}} and includes user
-specifications for the path to the output directory, the path to the
-input climate projections, the dataframe with community locations, and the
-format for the filenames of the coordinate, tas, and time files in the
-ensemble-specific subdirectories of the projection directory input by
-the user.}
+\item{global}{An list object created by \code{\link{gen_hw_set}} that
+includes user specifications (e.g., the path to the output directory, the
+path to the input climate projections, the dataframe with community
+locations).}
 }
 \value{
 ...

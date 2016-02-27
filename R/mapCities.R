@@ -1,7 +1,14 @@
 #' Create a map of model grid
 #'
+#' This function creates a map of the grid points of a climate model used for
+#' the study cities and draws lines connecting each study city to its climate
+#' model grid point.
+#'
 #' @param plot_model A character string with the name of the model to plot
 #' @inheritParams gen_hw_set
+#'
+#' @note This function creates a \code{ggplot2} object, so the output can be
+#'    edited using \code{ggplot2} functions.
 #'
 #' @examples
 #' out <- system.file(package = "futureheatwaves")

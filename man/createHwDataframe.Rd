@@ -13,6 +13,17 @@ being processed.}
 \item{threshold}{Numeric string with threshold temperature used in
 the heat wave definition, in degrees Fahrenheit.}
 
+\item{heatwaves}{A dataframe with the following columns:
+\itemize{
+\item \code{date}: Date of each observation, in class "Date";
+\item \code{tmpd}: Temperature in degrees Fahrenheit;
+\item \code{hw}: A binary variable designating whether a day is in a
+heat wave (0: not in a heat wave; 1: in a heat wave); and
+\item \code{hw.number}: A numeric value, 0 if the day was not part of a
+heat wave, otherwise the number of the heat wave to which the day belonged.
+}
+This is the format of the output of \code{\link{IDheatwaves}}.}
+
 \item{ensembleSeries}{A list object giving the projection time series as
 well as a variety of other information for a single ensemble member.
 This is the output of \code{\link{processEnsemble}}.}
@@ -32,17 +43,6 @@ use to identify heat waves, alternative upper and lower year boundaries
 for the data used to determine threshold temperatures for the heat wave
 definition, alternative upper and lower year boundaries
 for the projection period of the heat wave datasets being generated).}
-
-\item{heat}{waves A dataframe with the following columns:
-\itemize{
-\item \code{date}: Date of each observation, in class "Date";
-\item \code{tmpd}: Temperature in degrees Fahrenheit;
-\item \code{hw}: A binary variable designating whether a day is in a
-heat wave (0: not in a heat wave; 1: in a heat wave); and
-\item \code{hw.number}: A numeric value, 0 if the day was not part of a
-heat wave, otherwise the number of the heat wave to which the day belonged.
-}
-This is the format of the output of \code{\link{IDheatwaves}}.}
 }
 \value{
 A dataframe of identified and characterized heat waves for a single

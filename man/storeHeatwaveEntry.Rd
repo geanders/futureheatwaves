@@ -19,7 +19,7 @@ storeHeatwaveEntry(index, hwSize, hwCounter, hw, hwNumber)
 numbers.}
 }
 \description{
-This is a helper function for \code{\link{IDHeatwavescpp}} that adds entries
+This is a helper function for \code{\link{IDHeatwavesCPP}} that adds entries
 to the data structures that track heatwave information
 }
 

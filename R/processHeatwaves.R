@@ -171,7 +171,7 @@ consolidate <- function(hwDataframeList){
 #'
 #' @param city A character vector with the identification of the city
 #'    being processed.
-#' @param heat waves A dataframe with the following columns:
+#' @param heatwaves A dataframe with the following columns:
 #'    \itemize{
 #'    \item \code{date}: Date of each observation, in class "Date";
 #'    \item \code{tmpd}: Temperature in degrees Fahrenheit;

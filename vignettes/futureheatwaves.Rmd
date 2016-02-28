@@ -498,6 +498,7 @@ The function must allow the following inputs (even if it does not use them withi
 
 - `datafr`: A dataframe with columns for date and temperature for a community. The first column should be the date of each observation, in the Date class. The second column should be the temperature. At this point in the normal processing of the `gen_hw_set` function, temperatures have been converted from Kelvin (the expected units for the climate projection files) to Fahrenheit. Therefore, if you are writing a custom function that uses an absolute temperature threshold, it should be included in the function in Fahrenheit units.
 - `threshold`: A single-value numerical vector; in the default definition, this is the threshold temperature for each community, as determined earlier in the function call, calculated as a percentile of the community's year-round temperature.
+- `numDays`: The number of days above the threshold required for a heat wave. 
 
 The function must return only the input dataframe (`datafr`), with the following columns added: 
 
@@ -514,7 +515,7 @@ If your heatwave function is properly set up to use in this package, it can take
 
 ```{r}
 head(datafr, 3)
-id_of_hws <- IDHeatwavesR(datafr = datafr, threshold = 95)
+id_of_hws <- IDHeatwavesR(datafr = datafr, threshold = 95, numDays = 2)
 head(id_of_hws, 3)
 ```
 

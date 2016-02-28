@@ -20,6 +20,7 @@
 #'    value when applied to the full dataframe.
 #' @param city_specific TRUE / FALSE: Should the function be applied
 #'    separately for each city?
+#' @param ... Optional arguments to FUN
 #'
 #' @return A dataframe with the value output by the function specified by the
 #'    user with \code{FUN}, as applied to every dataframe of heat waves and
@@ -34,7 +35,7 @@
 #'    characterized by \code{\link{gen_hw_set}}.
 #'
 #' @export
-apply_all_models <- function(out, FUN, city_specific = FALSE){
+apply_all_models <- function(out, FUN, city_specific = FALSE, ...){
 
         proj_files <- list.files(paste(out, "Heatwaves", sep = "/"),
                                  recursive = TRUE, full.names = TRUE)
@@ -42,7 +43,8 @@ apply_all_models <- function(out, FUN, city_specific = FALSE){
         result_list <- lapply(proj_files,
                               apply_hw_projections,
                               FUN,
-                              city_specific)
+                              city_specific,
+                              ...)
         result_df <- do.call(rbind.data.frame, result_list)
 
         return(result_df)
@@ -78,7 +80,9 @@ apply_all_models <- function(out, FUN, city_specific = FALSE){
 #'    characterized by \code{\link{gen_hw_set}}.
 #'
 #' @importFrom dplyr %>%
-apply_hw_projections <- function(hwPath, FUN, city_specific = FALSE){
+apply_hw_projections <- function(hwPath, FUN, city_specific = FALSE, ...){
+
+        arguments <- list(...)
 
         hwPathSplit <- unlist(strsplit(hwPath, split = "/"))
         modelName <- hwPathSplit[(length(hwPathSplit) - 1)]
@@ -90,7 +94,8 @@ apply_hw_projections <- function(hwPath, FUN, city_specific = FALSE){
                        end.date = ~ as.Date(end.date))
 
         if(!city_specific){
-                hw_fun_out <- do.call(FUN, list(hw_datafr = hw_datafr))
+                arguments$hw_datafr <- hw_datafr
+                hw_fun_out <- do.call(FUN, arguments)
                 hw_fun_out <- data.frame(model = modelName,
                                          ensemble = ensembleName,
                                          value = hw_fun_out)
@@ -103,8 +108,8 @@ apply_hw_projections <- function(hwPath, FUN, city_specific = FALSE){
                 for(i in 1:length(cities)){
                         hw_datafr_city <- dplyr::filter_(hw_datafr,
                                                         ~ city == cities[i])
-                        hw_fun_out$value[i] <- do.call(FUN,
-                                                list(hw_datafr = hw_datafr_city))
+                        arguments$hw_datafr <- hw_datafr_city
+                        hw_fun_out$value[i] <- do.call(FUN, arguments)
                 }
         }
         return(hw_fun_out)

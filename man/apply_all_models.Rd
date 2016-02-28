@@ -4,7 +4,7 @@
 \alias{apply_all_models}
 \title{Apply a function across heat waves from all projections}
 \usage{
-apply_all_models(out, FUN, city_specific = FALSE)
+apply_all_models(out, FUN, city_specific = FALSE, ...)
 }
 \arguments{
 \item{out}{Character string with pathname to which heat wave files were
@@ -22,6 +22,8 @@ value when applied to the full dataframe.}
 
 \item{city_specific}{TRUE / FALSE: Should the function be applied
 separately for each city?}
+
+\item{...}{Optional arguments to FUN}
 }
 \value{
 A dataframe with the value output by the function specified by the

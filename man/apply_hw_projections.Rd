@@ -4,7 +4,7 @@
 \alias{apply_hw_projections}
 \title{Apply a function to projected heat waves}
 \usage{
-apply_hw_projections(hwPath, FUN, city_specific = FALSE)
+apply_hw_projections(hwPath, FUN, city_specific = FALSE, ...)
 }
 \arguments{
 \item{hwPath}{A filepath to a comma-separated (.csv) file with a dataset
@@ -22,6 +22,8 @@ when applied to the full dataframe.}
 
 \item{city_specific}{TRUE / FALSE: Should the function be applied
 separately for each city?}
+
+\item{...}{Optional arguments to FUN}
 }
 \description{
 This function takes a user-specified function and applies is to a

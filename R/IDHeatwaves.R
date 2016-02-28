@@ -35,7 +35,8 @@ IDheatwaves <- function(threshold, datafr, global, custom){
 
         hwdata <- do.call(custom["IDheatwaves"][[1]],
                           list(threshold = threshold,
-                               datafr = datafr))
+                               datafr = datafr,
+                               numDays = custom["numDays"][[1]]))
 
         return(hwdata)
 }
@@ -71,9 +72,9 @@ IDheatwaves <- function(threshold, datafr, global, custom){
 #'    or when exploring exposures that, unlike heat waves, may occur very
 #'    early or late in the calendar year.
 #' @export
-IDHeatwavesR <- function(threshold, datafr){
+IDHeatwavesR <- function(threshold, datafr, numDays){
 
-        days <- 2
+        days <- numDays
 
         # Add names to the dataframe
         colnames(datafr) <- c("date", "tmpd")
@@ -161,9 +162,9 @@ IDHeatwavesR <- function(threshold, datafr){
 #'    or when exploring exposures that, unlike heat waves, may occur very
 #'    early or late in the calendar year.
 #' @export
-IDHeatwavesAlternative <- function(threshold, datafr){
+IDHeatwavesAlternative <- function(threshold, datafr, numDays){
 
-        days <- 5
+        days <- numDays
 
         # Add names to the dataframe
         colnames(datafr) <- c("date", "tmpd")
@@ -255,7 +256,7 @@ IDHeatwavesAlternative <- function(threshold, datafr){
 #'    early or late in the calendar year.
 #'
 #' @export
-IDHeatwavesCPPwrapper <- function(datafr, threshold){
+IDHeatwavesCPPwrapper <- function(datafr, threshold, numDays){
         colnames(datafr) <- c("date", "tmpd")
 
         # Find temperatures that exceed the threshold. One means the
@@ -267,7 +268,7 @@ IDHeatwavesCPPwrapper <- function(datafr, threshold){
         tempsExceedingthreshold <- c(tempsExceedingthreshold, 0)
 
         # Identify heat waves using the C++ functions.
-        heatwaves <- IDHeatwavesCPP(heatwaveLength = 2,
+        heatwaves <- IDHeatwavesCPP(heatwaveLength = as.integer(numDays),
                                     tempsExceedingCutoff = tempsExceedingthreshold)
 
 

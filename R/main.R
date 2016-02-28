@@ -65,6 +65,9 @@
 #'    of temperature to use when defining heat waves. The default value is 0.98
 #'    (i.e., a heat wave is two or more days above the city's 98th
 #'    percentile temperature).
+#' @param numDays Numerical value greater than 0 giving the number of days to
+#'    use in the heat wave definition (e.g., `numDays = 2` would define a
+#'    heat wave as two or more days above the threshold temperature).
 #' @param printWarning TRUE / FALSE, specifies whether to print out a warning
 #'    informing the user that the function will write out results to the local
 #'    directory specified by the user with \code{out}. This warning prints out
@@ -128,6 +131,7 @@ gen_hw_set <- function(out,
                        referenceBoundaries = c(2070, 2079),
                        models_to_run = "all",
                        probThreshold = 0.98,
+                       numDays = 2,
                        printWarning = TRUE,
                        threshold_ensemble = "r1i1p1",
                        lat_lon_colnames = c("lat", "lon"),
@@ -159,7 +163,8 @@ gen_hw_set <- function(out,
                      thresholdBoundaries = thresholdBoundaries,
                      projectionBoundaries = projectionBoundaries,
                      referenceBoundaries = referenceBoundaries,
-                     input_metric = input_metric)
+                     input_metric = input_metric,
+                     numDays = numDays)
 
   # Add warning for user that this will write new files
         if(printWarning){
@@ -208,7 +213,8 @@ gen_hw_set <- function(out,
                        "processModel" = referenceBoundaries,
                        "createHwDataframe" = !identical(projectionBoundaries,
                                                        referenceBoundaries),
-                       "probThreshold" = probThreshold)
+                       "probThreshold" = probThreshold,
+                       "numDays" = as.integer(floor(numDays)))
 
         # Create accumulator closure
         accumulators <- createAccumulators()
@@ -257,7 +263,8 @@ check_params <- function(out,
                          thresholdBoundaries,
                          projectionBoundaries,
                          referenceBoundaries,
-                         input_metric){
+                         input_metric,
+                         numDays){
 
         # Check to see if the folder that holds the climate data exists.
         tryCatch(
@@ -291,7 +298,13 @@ check_params <- function(out,
         }
 
         if(!(input_metric %in% c("kelvin", "fahrenheit", "celsius"))){
-                stop("`input_metric` must be `kelvin`, `fahrenheit`, or `celsius`")
+                stop("`input_metric` must be `kelvin`, `fahrenheit`, or `celsius`.")
+        }
+
+        if(numDays <= 0){
+                stop("`numDays` must be 1 or larger.")
+        } else if(!is.numeric(numDays)){
+                stop("`numDays` must be a numeric value.")
         }
 
         checkCustomBounds(boundList = thresholdBoundaries,

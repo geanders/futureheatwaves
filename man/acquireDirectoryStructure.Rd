@@ -5,7 +5,8 @@
 \title{Acquire structure of input directory}
 \usage{
 acquireDirectoryStructure(dataFolder, coordinateFilenames, tasFilenames,
-  timeFilenames, models_to_run, dataDirectories, threshold_ensemble)
+  timeFilenames, models_to_run, dataDirectories, threshold_ensemble,
+  thresholdBoundaries)
 }
 \arguments{
 \item{dataFolder}{Character string with pathway to a directory with
@@ -53,6 +54,14 @@ threshold is used for relative heat wave definitions. See the
 If any climate model lacks that ensemble member for the specified
 dates for calculating the threshold, it will be excluded from the
 processing.}
+
+\item{thresholdBoundaries}{A numeric vector with the custom time boundaries
+to be used to determine the threshold temperatures for the heat wave
+definition. The required format for this vector is c(start year, end
+year), with the restrictions that bounds must be contained within the
+time boundaries of one of the two experiment subdirectories specified
+by the \code{dataDirectories} argument in \code{\link{gen_hw_set}}.
+The default value is 1990 to 1999.}
 }
 \value{
 The function returns a list object outlining the file structure of

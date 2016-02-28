@@ -6,7 +6,7 @@
 \usage{
 check_params(out, dataFolder, dataDirectories, citycsv, coordinateFilenames,
   tasFilenames, timeFilenames, IDheatwavesFunction, thresholdBoundaries,
-  projectionBoundaries, referenceBoundaries)
+  projectionBoundaries, referenceBoundaries, input_metric)
 }
 \arguments{
 \item{out}{Character string with pathway to directory to which
@@ -85,6 +85,10 @@ is c(start year, end year), with the restrictions that bounds must be
 contained within the time boundaries of one of the two experiment
 subdirectories specified by the \code{dataDirectories} argument in
 \code{\link{gen_hw_set}}. The default value is 2070 to 2079.}
+
+\item{input_metric}{A character string indicating the temperature metric
+of the climate projection data being processed. Choices are "kelvin",
+"fahrenheit", and "celsius".}
 }
 \value{
 Only stops and returns an error if any parameters are incorrect.

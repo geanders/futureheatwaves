@@ -10,7 +10,8 @@ gen_hw_set(out, dataFolder, dataDirectories = list(historical = c(1980, 2004),
   thresholdBoundaries = c(1990, 1999), projectionBoundaries = c(2070, 2079),
   referenceBoundaries = c(2070, 2079), models_to_run = "all",
   probThreshold = 0.98, printWarning = TRUE,
-  threshold_ensemble = "r1i1p1", lat_lon_colnames = c("lat", "lon"))
+  threshold_ensemble = "r1i1p1", lat_lon_colnames = c("lat", "lon"),
+  input_metric = "kelvin")
 }
 \arguments{
 \item{out}{Character string with pathway to directory to which
@@ -119,6 +120,10 @@ processing.}
 \item{lat_lon_colnames}{A character vector of length two with the column names
 in the \code{cities} dataframe for latitude (first vector element) and
 longitude (second vector element)}
+
+\item{input_metric}{A character string indicating the temperature metric
+of the climate projection data being processed. Choices are "kelvin",
+"fahrenheit", and "celsius".}
 }
 \value{
 This function returns a dataframe listing the name of each climate

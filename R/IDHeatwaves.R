@@ -165,6 +165,9 @@ IDHeatwavesR <- function(threshold, datafr, numDays){
 IDHeatwavesAlternative <- function(threshold, datafr, numDays){
 
         days <- numDays
+        if(threshold <= 80){
+                threshold <- 80
+        }
 
         # Add names to the dataframe
         colnames(datafr) <- c("date", "tmpd")

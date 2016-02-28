@@ -96,6 +96,9 @@
 #'    If any climate model lacks that ensemble member for the specified
 #'    dates for calculating the threshold, it will be excluded from the
 #'    processing.
+#' @param input_metric A character string indicating the temperature metric
+#'    of the climate projection data being processed. Choices are "kelvin",
+#'    "fahrenheit", and "celsius".
 #'
 #' @return This function returns a dataframe listing the name of each climate
 #'    model used, as well as the number of historical and future projection
@@ -127,7 +130,8 @@ gen_hw_set <- function(out,
                        probThreshold = 0.98,
                        printWarning = TRUE,
                        threshold_ensemble = "r1i1p1",
-                       lat_lon_colnames = c("lat", "lon")){
+                       lat_lon_colnames = c("lat", "lon"),
+                       input_metric = "kelvin"){
 
         # If `dataFolder` does not end in "/", add it.
         split_dataFolder <- unlist(strsplit(dataFolder, split = ""))
@@ -154,7 +158,8 @@ gen_hw_set <- function(out,
                      IDheatwavesFunction = IDheatwavesFunction,
                      thresholdBoundaries = thresholdBoundaries,
                      projectionBoundaries = projectionBoundaries,
-                     referenceBoundaries = referenceBoundaries)
+                     referenceBoundaries = referenceBoundaries,
+                     input_metric = input_metric)
 
   # Add warning for user that this will write new files
         if(printWarning){
@@ -192,7 +197,8 @@ gen_hw_set <- function(out,
                        "coordinateFilenames" = coordinateFilenames,
                        "tasFilenames" = tasFilenames,
                        "timeFilenames" = timeFilenames,
-                       "threshold_ensemble" = threshold_ensemble)
+                       "threshold_ensemble" = threshold_ensemble,
+                       "input_metric" = tolower(input_metric))
 
         # Create the "custom" list object that will hold all of the user's
         # custom settings.
@@ -250,7 +256,8 @@ check_params <- function(out,
                          IDheatwavesFunction,
                          thresholdBoundaries,
                          projectionBoundaries,
-                         referenceBoundaries){
+                         referenceBoundaries,
+                         input_metric){
 
         # Check to see if the folder that holds the climate data exists.
         tryCatch(
@@ -281,6 +288,10 @@ check_params <- function(out,
         }
         if(!grepl(".csv", timeFilenames)){
                 stop("Invalid format: timeFilenames. Stopping.")
+        }
+
+        if(!(input_metric %in% c("kelvin", "fahrenheit", "celsius"))){
+                stop("`input_metric` must be `kelvin`, `fahrenheit`, or `celsius`")
         }
 
         checkCustomBounds(boundList = thresholdBoundaries,

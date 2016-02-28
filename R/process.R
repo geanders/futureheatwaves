@@ -281,9 +281,16 @@ processEnsemble <- function(ensemble, modelName, global, custom, type){
         series <- data.frame(tas[start:end, locations])
 
         # Convert the time series data to Fahrenheit
-        series <- apply(series, 1:2, function(element) {
-                return((element * 9/5) - 459.67)
-        })
+        if(global$input_metric == "kelvin"){
+                series <- apply(series, 1:2, function(element) {
+                        return((element * 9/5) - 459.67)
+                })
+        } else if(global$input_metric == "celsius"){
+                series <- apply(series, 1:2, function(element) {
+                        return((element * 9/5) + 32)
+                })
+        }
+
 
         # Prepare return value
         ret <- list(locations = locations,

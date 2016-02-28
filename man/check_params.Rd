@@ -6,7 +6,7 @@
 \usage{
 check_params(out, dataFolder, dataDirectories, citycsv, coordinateFilenames,
   tasFilenames, timeFilenames, IDheatwavesFunction, thresholdBoundaries,
-  projectionBoundaries, referenceBoundaries, input_metric)
+  projectionBoundaries, referenceBoundaries, input_metric, numDays)
 }
 \arguments{
 \item{out}{Character string with pathway to directory to which
@@ -89,6 +89,10 @@ subdirectories specified by the \code{dataDirectories} argument in
 \item{input_metric}{A character string indicating the temperature metric
 of the climate projection data being processed. Choices are "kelvin",
 "fahrenheit", and "celsius".}
+
+\item{numDays}{Numerical value greater than 0 giving the number of days to
+use in the heat wave definition (e.g., `numDays = 2` would define a
+heat wave as two or more days above the threshold temperature).}
 }
 \value{
 Only stops and returns an error if any parameters are incorrect.

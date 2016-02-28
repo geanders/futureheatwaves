@@ -9,7 +9,7 @@ gen_hw_set(out, dataFolder, dataDirectories = list(historical = c(1980, 2004),
   timeFilenames, IDheatwavesFunction = "IDHeatwavesCPPwrapper",
   thresholdBoundaries = c(1990, 1999), projectionBoundaries = c(2070, 2079),
   referenceBoundaries = c(2070, 2079), models_to_run = "all",
-  probThreshold = 0.98, printWarning = TRUE,
+  probThreshold = 0.98, numDays = 2, printWarning = TRUE,
   threshold_ensemble = "r1i1p1", lat_lon_colnames = c("lat", "lon"),
   input_metric = "kelvin")
 }
@@ -101,6 +101,10 @@ model's subdirectory within the data directory (e.g.,
 of temperature to use when defining heat waves. The default value is 0.98
 (i.e., a heat wave is two or more days above the city's 98th
 percentile temperature).}
+
+\item{numDays}{Numerical value greater than 0 giving the number of days to
+use in the heat wave definition (e.g., `numDays = 2` would define a
+heat wave as two or more days above the threshold temperature).}
 
 \item{printWarning}{TRUE / FALSE, specifies whether to print out a warning
 informing the user that the function will write out results to the local

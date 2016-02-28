@@ -52,6 +52,7 @@ IDheatwaves <- function(threshold, datafr, global, custom){
 #'
 #' @inheritParams closest_point
 #' @inheritParams IDheatwaves
+#' @inheritParams gen_hw_set
 #'
 #' @return Returns the dataframe entered as \code{datafr}, but with new
 #'    columns providing heat wave identifiers. The returned dataframe will
@@ -142,6 +143,7 @@ IDHeatwavesR <- function(threshold, datafr, numDays){
 #'
 #' @inheritParams closest_point
 #' @inheritParams IDheatwaves
+#' @inheritParams gen_hw_set
 #'
 #' @return Returns the dataframe entered as \code{datafr}, but with new
 #'    columns providing heat wave identifiers. The returned dataframe will
@@ -238,6 +240,7 @@ IDHeatwavesAlternative <- function(threshold, datafr, numDays){
 #'
 #' @inheritParams closest_point
 #' @inheritParams IDheatwaves
+#' @inheritParams gen_hw_set
 #'
 #' @return Returns the dataframe entered as \code{datafr}, but with new
 #'    columns providing heat wave identifiers. The returned dataframe will

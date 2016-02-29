@@ -327,31 +327,29 @@ The full output directory structure will look something like this:
     
 Each of the heatwave files will have one heatwave per row, covering all the heatwaves identified for that particular ensemble member. The dataframe has the following columns with characteristics of each heatwave: 
 
-Column name | Description
------------ | --------------
-`hw.number` | A sequential number identifying each heatwave in each community
-`mean.temp` | Average of mean daily temperature across all days in the heatwave
-`max.temp` | Highest value of mean daily temperature across days in the heatwave
-`min.temp` | Lowest value of mean daily temperature across days in the heatwave
-`length` | Number of days in the heatwave
-`start.date` | Date of the first day of the heatwave 
-`end.date` | Date of the last day of the heatwave 
-`start.doy` | Numeric day of the year of the first day of the heatwave (1 = Jan. 1, etc.)
-`start.month` | Numeric value indicating the month in which the heatwave started (1 = January) 
-`days.above.80` | Number of days in the heatwave above 80 degrees Fahrenheit 
-`days.above.85` | Number of days in the heatwave above 85 degrees Fahrenheit 
-`days.above.90` | Number of days in the heatwave above 90 degrees Fahrenheit
-`days.above.95` | Number of days in the heatwave above 90 degrees Fahrenheit
-`days.above.99th` | Number of days in the heatwave above the 99th percentile temperature for the community, using the period specified by the user with the `referenceBoundaries` argument in `gen_hw_set` as a reference for determining these percentiles
-`days.above.99.5th` | Number of days in the heatwave above the 99.5th percentile temperature for the community
-`first.in.season` | Whether the heatwave was the first to occur in its season (as determined by whether the heatwave was the first in its calendar year)
-`threshold.temp` | The temperature used as the threshold for the heatwave definition in the selected community
-`mean.temp.quantile` | The percentile of the average daily mean temperature during the heatwave compared to the community's year-round temperature distribution, based on the temperatures for the community during the period specified by the `referenceBoundaries` argument in `gen_hw_set`
-`max.temp.quantile` | The percentile of the highest daily mean temperature during the heatwave compared to the community's year-round temperature distribution 
-`min.temp.quantile` | The percentile of the lowest daily mean temperature during the heatwave compared to the community's year-round temperature distribution 
-`mean.temp.1` | The community's average year-round temperature, based on the temperatures for the community during the period specified by the `referenceBoundaries` argument in `gen_hw_set`
-`mean.summer.temp` | The community's average May--September temperature, based on the temperatures for the community during the period specified by the `referenceBoundaries` argument in `gen_hw_set` 
-`city` | The identifier for the community, as given in the file specified in the `citycsv` argument of `gen_hw_set`.
+- `hw.number`: A sequential number identifying each heat wave in a city;
+- `mean.temp`: Average daily temperature across all days in the heat wave, in degrees Fahrenheit;
+- `max.temp`: Highest daily temperature across days in the heat wave, in degrees Fahrenheit;
+- `min.temp`: Lowest daily temperature across days in the heat wave, in degrees Fahrenheit
+- `length`: Number of days in the heat wave;
+- `start.date`: Date of the first day of the heat wave;
+- `end.date`: Date of the last day of the heat wave;
+- `start.doy`: Day of the year of the first day of the heat wave (1 = Jan. 1, etc.);
+- `start.month`: Month in which the heat wave started (1 = January, etc.);
+- `days.above.80`: Number of days in the heat wave above 80 degrees Fahrenheit;
+- `days.above.85`: Number of days in the heat wave above 85 degrees Fahrenheit;
+- `days.above.90`: Number of days in the heat wave above 90 degrees Fahrenheit;
+- `days.above.95`: Number of days in the heat wave above 90 degrees Fahrenheit;
+- `days.above.99th`: Number of days in the heat wave above the 99th percentile temperature for the city, using the period specified by the user with the `referenceBoundaries` argument in `gen_hw_set` as a reference for determining these percentiles;
+- `days.above.99.5th`: Number of days in the heat wave above the 99.5th percentile temperature for the city, using the period specified by the user with the `referenceBoundaries` argument in `gen_hw_set` as a reference for determining these percentiles;
+- `first.in.season`: Whether the heat wave was the first to occur in its calendar year (Note: this characteristic is likely not useful in southern hemisphere studies.);
+- `threshold.temp`: The temperature used as the threshold for the heat wave definition in the city;
+- `mean.temp.quantile`: The percentile of the average daily mean temperature during the heat wave compared to the city's year-round temperature distribution, based on the temperatures for the city during the period specified by the `referenceBoundaries` argument in `gen_hw_set`;
+- `max.temp.quantile`: The percentile of the highest daily mean temperature during the heat wave compared to the city's year-round temperature distribution;
+- `min.temp.quantile`: The percentile of the lowest daily mean temperature during the heat wave compared to the city's year-round temperature distribution;
+- `mean.temp.1`: The city's average year-round temperature, based on the temperatures for the city during the period specified by the `referenceBoundaries` argument in `gen_hw_set`;
+- `mean.summer.temp`: The city's average May--September temperature, based on the temperatures for the city during the period specified by the `referenceBoundaries` argument in `gen_hw_set`; and
+- `city`: The identifier for the city, as given in the file specified in the `citycsv` argument of `gen_hw_set`.
 
 An example of one of these dataframes is given in the `hw_datafr` dataset included with the package. This gives heatwaves projected using the r1i1p1 ensemble of NCAR's CCSM for 2061-2080, using thresholds for the heatwave definition based on present temperature distributions (1981-2004) and the temperature distributions from 2061-2080 as reference values for relative heatwave characteristics. 
 
@@ -392,7 +390,7 @@ You can also use the `city_specific` argument in `apply_all_models` to apply the
 
 ```{r}
 apply_all_models(out = out, 
-                 FUN = average_length,
+                 FUN = average_mean_temp,
                  city_specific = TRUE)
 ```
 

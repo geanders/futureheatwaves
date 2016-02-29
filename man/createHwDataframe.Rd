@@ -34,7 +34,7 @@ to the order of the cities in the \code{citycsv} file specified in
 
 \item{global}{An list object created by \code{\link{gen_hw_set}} that
 includes user specifications (e.g., the path to the output directory, the
-path to the input climate projections, the dataframe withcity
+path to the input climate projections, the dataframe with city
 locations).}
 
 \item{custom}{An list object created by \code{\link{gen_hw_set}} that

@@ -14,7 +14,7 @@ for the selected climate model.}
 
 \item{global}{An list object created by \code{\link{gen_hw_set}} that
 includes user specifications (e.g., the path to the output directory, the
-path to the input climate projections, the dataframe withcity
+path to the input climate projections, the dataframe with city
 locations).}
 }
 \value{

@@ -187,7 +187,8 @@ gen_hw_set <- function(out,
                                             timeFilenames = timeFilenames,
                                             models_to_run = models_to_run,
                                             dataDirectories = dataDirectories,
-                                            threshold_ensemble = threshold_ensemble)
+                                            threshold_ensemble = threshold_ensemble,
+                                            thresholdBoundaries = thresholdBoundaries)
 
         # Read the cities data file
         cities <- utils::read.csv(citycsv) %>%
@@ -223,7 +224,8 @@ gen_hw_set <- function(out,
         referenceEnsembles <- sapply(models, processModel,
                                      global = global,
                                      custom = custom,
-                                     accumulators = accumulators)
+                                     accumulators = accumulators,
+                                     dataDirectories = dataDirectories)
 
         # Write the model information from the model information accumulator
         out <- accumulators("return model information")

@@ -11,13 +11,13 @@ formHwFrame(ensembleSeries, thresholds, global, custom)
 well as a variety of other information for a single ensemble member.
 This is the output of \code{\link{processEnsemble}}.}
 
-\item{thresholds}{A vector with the thresholds to use within eachcity
-in thatcity's heat wave definition.These are typically automatically
+\item{thresholds}{A vector with the thresholds to use within each city
+in that city's heat wave definition.These are typically automatically
 determine during the run of the \code{gen_hw_set} function.}
 
 \item{global}{An list object created by \code{\link{gen_hw_set}} that
 includes user specifications (e.g., the path to the output directory, the
-path to the input climate projections, the dataframe withcity
+path to the input climate projections, the dataframe with city
 locations).}
 
 \item{custom}{An list object created by \code{\link{gen_hw_set}} that

@@ -23,7 +23,7 @@ An index corresponding to the column in the climate projections
 }
 \description{
 This function identifies the closest grid points in a climate model to a
-city based on thecity's latitude and longitude using the
+city based on the city's latitude and longitude using the
 Euclidean distance.
 }
 

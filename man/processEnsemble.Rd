@@ -18,7 +18,7 @@ name is generated from the subdirectory name for the climate model within
 
 \item{global}{An list object created by \code{\link{gen_hw_set}} that
 includes user specifications (e.g., the path to the output directory, the
-path to the input climate projections, the dataframe withcity
+path to the input climate projections, the dataframe with city
 locations).}
 
 \item{custom}{An list object created by \code{\link{gen_hw_set}} that
@@ -41,7 +41,7 @@ member, from one of the two experiment subdirectories.
 }
 \note{
 This function calls another function that uses Euclidean distance for
-   the distance between eachcity given in the
+   the distance between each city given in the
    \code{citycsv} file and the nearest grid point for the climate model
    for the specified ensemble member.
 }

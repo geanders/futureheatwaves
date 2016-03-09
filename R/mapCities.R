@@ -11,7 +11,7 @@
 #'    edited using \code{ggplot2} functions.
 #'
 #' @examples
-#' out <- system.file("example_results", package = "futureheatwaves")
+#' out <- system.file("extdata/example_results", package = "futureheatwaves")
 #' map_grid(plot_model = "bcc1", out = out)
 #'
 #' @export

@@ -1,7 +1,7 @@
 library(futureheatwaves)
 context("Acquiring directory structure")
 
-dataFolder <- system.file("cmip5", package = "futureheatwaves")
+dataFolder <- system.file("extdata/cmip5", package = "futureheatwaves")
 coordinateFilenames <- "latitude_longitude_NorthAmerica_12mo.csv"
 tasFilenames <- "tas_NorthAmerica_12mo.csv"
 timeFilenames <- "time_NorthAmerica_12mo.csv"

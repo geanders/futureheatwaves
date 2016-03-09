@@ -52,11 +52,9 @@ There are a few cases near the edges of data frames when this function
    early or late in the calendar year.
 }
 \examples{
-\donttest{
 data(datafr)
 hw_ids <- IDHeatwavesCPPwrapper(threshold = 80, datafr,
                                 numDays = 3)
-}
 
 }
 

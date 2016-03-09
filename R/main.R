@@ -114,6 +114,22 @@
 #'    projections and dates. For more information on customizing this function,
 #'    see the \code{futureheatwaves} vignette.
 #'
+#' @examples
+#' \donttest{
+#' projection_dir_location <- system.file("extdata/cmip5",
+#'                                       package = "futureheatwaves")
+#' city_file_location <- system.file("extdata/cities.csv",
+#'                                  package = "futureheatwaves")
+#' gen_hw_set(out = "example_results",
+#'            dataFolder = projection_dir_location ,
+#'            dataDirectories = list("historical" = c(1990, 1999),
+#'                                   "rcp85" = c(2060, 2079)),
+#'            citycsv = city_file_location,
+#'            coordinateFilenames = "latitude_longitude_NorthAmerica_12mo.csv",
+#'            tasFilenames = "tas_NorthAmerica_12mo.csv",
+#'            timeFilenames = "time_NorthAmerica_12mo.csv")
+#' }
+#'
 #' @export
 #'
 #' @importFrom dplyr %>%

@@ -4,10 +4,10 @@ Title: Find, Characterize, and Explore Heat Waves in Climate Projections
 Version: 0.0.0.9000
 Date: 2016-01-31
 Authors@R: c(
-    person("Colin", "Eason", , "aimesce@gmail.com", c("aut")),
-    person("Elizabeth", "Barnes", , "eabarnes@atmos.colostate.edu", c("aut")),
     person("Brooke", "Anderson", , "brooke.anderson@colostate.edu",
-    c("aut", "cre"))
+    c("aut", "cre")),
+    person("Colin", "Eason", , "aimesce@gmail.com", c("aut")),
+    person("Elizabeth", "Barnes", , "eabarnes@atmos.colostate.edu", c("aut"))
     )
 Description: Takes a directory of climate projection files and, for each,
     identifies and characterizes all heat waves. The definition used to identify
@@ -17,7 +17,7 @@ Description: Takes a directory of climate projection files and, for each,
     This work was supported in part by grants from the National Institute of
     Environmental Health Sciences (R00ES022631), the National Science Foundation
     (1331399), and the Colorado State University Vice President for Research.
-License: MIT + file LICENSE
+License: GPL (>= 2)
 LazyData: TRUE
 Depends:
     R (>= 2.10)

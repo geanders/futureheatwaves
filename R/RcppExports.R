@@ -31,7 +31,6 @@ IDHeatwavesCPP <- function(heatwaveLength, tempsExceedingCutoff) {
 #' @param hwNumber A reference of the vector that contains the heat wave
 #'    numbers.
 #'
-#' @export
 storeHeatwaveEntry <- function(index, hwSize, hwCounter, hw, hwNumber) {
     invisible(.Call('futureheatwaves_storeHeatwaveEntry', PACKAGE = 'futureheatwaves', index, hwSize, hwCounter, hw, hwNumber))
 }
@@ -48,7 +47,6 @@ storeHeatwaveEntry <- function(index, hwSize, hwCounter, hw, hwNumber) {
 #'    numbers.
 #' @inheritParams storeHeatwaveEntry
 #'
-#' @export
 storeZeroes <- function(index, potentialHeatwave, hw, hwNumber) {
     invisible(.Call('futureheatwaves_storeZeroes', PACKAGE = 'futureheatwaves', index, potentialHeatwave, hw, hwNumber))
 }

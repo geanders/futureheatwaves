@@ -88,7 +88,6 @@ DataFrame IDHeatwavesCPP(int heatwaveLength, NumericVector tempsExceedingCutoff)
 //' @param hwNumber A reference of the vector that contains the heat wave
 //'    numbers.
 //'
-//' @export
 // [[Rcpp::export]]
 void storeHeatwaveEntry(int index, int hwSize, int hwCounter, std::vector<int>& hw, std::vector<int>& hwNumber){
         index = index - hwSize;
@@ -114,7 +113,6 @@ void storeHeatwaveEntry(int index, int hwSize, int hwCounter, std::vector<int>& 
 //'    numbers.
 //' @inheritParams storeHeatwaveEntry
 //'
-//' @export
 // [[Rcpp::export]]
 void storeZeroes(int index, int potentialHeatwave, std::vector<int>& hw, std::vector<int>& hwNumber){
         index = index - potentialHeatwave;

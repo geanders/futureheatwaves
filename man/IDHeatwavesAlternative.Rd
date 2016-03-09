@@ -31,8 +31,9 @@ Returns the dataframe entered as \code{datafr}, but with new
 }
 \description{
 This function identifies heat waves in a time series of temperature
-data using a heat wave definition that a heat wave must be five or more
-days with temperatures equal to or above some threshold temperature.
+data using a heat wave definition that a heat wave must be a certain
+number of days above the greater of either a given threshold or
+80 degrees Fahrenheit.
 }
 \note{
 There are a few cases near the edges of data frames when this function
@@ -47,5 +48,13 @@ There are a few cases near the edges of data frames when this function
    when using this function either with Southern Hemisphere cities
    or when exploring exposures that, unlike heat waves, may occur very
    early or late in the calendar year.
+}
+\examples{
+\donttest{
+data(datafr)
+hw_ids <- IDHeatwavesAlternative(threshold = 80, datafr,
+                                 numDays = 3)
+}
+
 }
 

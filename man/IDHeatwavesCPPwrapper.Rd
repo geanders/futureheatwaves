@@ -51,4 +51,12 @@ There are a few cases near the edges of data frames when this function
    or when exploring exposures that, unlike heat waves, may occur very
    early or late in the calendar year.
 }
+\examples{
+\donttest{
+data(datafr)
+hw_ids <- IDHeatwavesCPPwrapper(threshold = 80, datafr,
+                                numDays = 3)
+}
+
+}
 

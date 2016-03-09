@@ -72,6 +72,14 @@ IDheatwaves <- function(threshold, datafr, global, custom){
 #'    when using this function either with Southern Hemisphere cities
 #'    or when exploring exposures that, unlike heat waves, may occur very
 #'    early or late in the calendar year.
+#'
+#' @examples
+#' \donttest{
+#' data(datafr)
+#' hw_ids <- IDHeatwavesR(threshold = 80, datafr,
+#'                        numDays = 3)
+#' }
+#'
 #' @export
 IDHeatwavesR <- function(threshold, datafr, numDays){
 
@@ -138,8 +146,9 @@ IDHeatwavesR <- function(threshold, datafr, numDays){
 #' Identify heat waves in a time series
 #'
 #' This function identifies heat waves in a time series of temperature
-#' data using a heat wave definition that a heat wave must be five or more
-#' days with temperatures equal to or above some threshold temperature.
+#' data using a heat wave definition that a heat wave must be a certain
+#' number of days above the greater of either a given threshold or
+#' 80 degrees Fahrenheit.
 #'
 #' @inheritParams closest_point
 #' @inheritParams IDheatwaves
@@ -163,6 +172,14 @@ IDHeatwavesR <- function(threshold, datafr, numDays){
 #'    when using this function either with Southern Hemisphere cities
 #'    or when exploring exposures that, unlike heat waves, may occur very
 #'    early or late in the calendar year.
+#'
+#' @examples
+#' \donttest{
+#' data(datafr)
+#' hw_ids <- IDHeatwavesAlternative(threshold = 80, datafr,
+#'                                  numDays = 3)
+#' }
+#'
 #' @export
 IDHeatwavesAlternative <- function(threshold, datafr, numDays){
 
@@ -260,6 +277,11 @@ IDHeatwavesAlternative <- function(threshold, datafr, numDays){
 #'    when using this function either with Southern Hemisphere cities
 #'    or when exploring exposures that, unlike heat waves, may occur very
 #'    early or late in the calendar year.
+#'
+#' @examples
+#' data(datafr)
+#' hw_ids <- IDHeatwavesCPPwrapper(threshold = 80, datafr,
+#'                                 numDays = 3)
 #'
 #' @export
 IDHeatwavesCPPwrapper <- function(datafr, threshold, numDays){

@@ -106,7 +106,7 @@ To ensure that the size of this example data is reasonably small, we have only i
 These location of these files within the downloaded package be determined using  `system.file`: 
 
 ```{r}
-system.file("cities.csv", package = "futureheatwaves")
+system.file("extdata/cities.csv", package = "futureheatwaves")
 ```
 
 In the later sections of this vignette, we show how to use the package functions with these example files as inputs. 
@@ -142,7 +142,7 @@ If your community locations file has different column names for the latitude and
 For these functions to work correctly, you must have climate projection files saved in a specific structure locally on your computer. An example of a directory with the required set-up is given as the `cmip5` directory that comes installed with this package. To identify the location on your own computer of this directory, you can run:
 
 ```{r}
-system.file("cmip5", package = "futureheatwaves")
+system.file("extdata/cmip5", package = "futureheatwaves")
 ```
 
 You must have a directory that has within it separately subdirectories names "rcp85" and "historical" that contain, respectively, all files drawn from projections for future dates ("rcp85") and all for dates up to 2005 ("historical"). Within each of these subdirectories, you need a subdirectory for each climate model. Within each climate model directory, you need subdirectories for each ensemble member of the model (even if the model only has one ensemble member). Within each ensemble-member directory, you will need three comma-separated files: one file with the climate model output, with columns corresponding to climate grid point and rows corresponding to time, one file that gives the time values corresponding to each row in the climate model output file, and one file giving the latitude and longitude corresponding to the grid locations used in the columns of the climate model output file. 
@@ -242,8 +242,10 @@ These selections will be sufficient to run the main function of this package, `g
 If you are happy with these defaults, you can create files with future heatwaves and their characteristics by calling `gen_hw_set`. For example, if you wanted to use the example city location and climate projection data, and save results to a directory called "example_results" in your current working directory, you could run:
 
 ```{r eval = FALSE}
-projection_dir_location <- system.file("cmip5", package = "futureheatwaves")
-city_file_location <- system.file("cities.csv", package = "futureheatwaves")
+projection_dir_location <- system.file("extdata/cmip5",
+                                       package = "futureheatwaves")
+city_file_location <- system.file("extdata/cities.csv",
+                                  package = "futureheatwaves")
 
 gen_hw_set(out = "example_results",
            dataFolder = projection_dir_location ,
@@ -381,7 +383,7 @@ average_mean_temp <- function(hw_datafr){
 ```
 
 ```{r}
-out <- system.file("example_results", package = "futureheatwaves")
+out <- system.file("extdata/example_results", package = "futureheatwaves")
 apply_all_models(out = out, 
                  FUN = average_mean_temp)
 ```
@@ -430,20 +432,20 @@ data(hw_datafr)
 The package also has a function that allows you to plot the locations of grid points for each climate model that match study communities, as well as show the links between climate grid points and associated communities. The `map_grid` function allows you to specify a model (`plot_model`), as well as the location of your output directory (usually, this will be the directory specified using the `out` argument in `gen_hw_set`) and will create a plot of the model grid points associated with your community locations, as well as draw lines between each community and its closest model grid point for that climate model: 
 
 ```{r fig.width = 5, message = FALSE, warning = FALSE}
-out <- system.file("example_results", package = "futureheatwaves")
+out <- system.file("extdata/example_results", package = "futureheatwaves")
 map_grid(plot_model = "bcc1", out = out)
 ```
 
-Because the resulting plot is a "ggplot" object, you can use `ggplot2` functions to change the formatting for this output. For example, you could change the title and theme with the following code:
+Because the resulting plot is a "ggplot" object, you can use `ggplot2` functions to change the formatting for this output. For example, you could change the title and theme with the following code (results not shown):
 
-```{r fig.width = 5, message = FALSE, warning = FALSE}
+```{r fig.width = 5, message = FALSE, warning = FALSE, eval = FALSE}
 a <- map_grid(plot_model = "bcc1", out = out)
 a + ggtitle("BCC1 CMIP5 model") + theme_dark()
 ```
 
-If you want to plot several of these maps for different climate models and then plot them together, you can use the `grid.arrange` function from the `gridExtra` package: 
+If you want to plot several of these maps for different climate models and then plot them together, you can use the `grid.arrange` function from the `gridExtra` package (results not shown): 
 
-```{r fig.width = 5, fig.height = 7}
+```{r fig.width = 5, fig.height = 7, eval = FALSE}
 library(gridExtra)
 a <- map_grid(plot_model = "bcc1", out = out)
 b <- map_grid(plot_model = "ccsm", out = out)
@@ -500,8 +502,10 @@ The custom function can then be referenced using the `IDheatwavesFunction` optio
 
 ```{r, eval = FALSE}
 # Set up path names to example data
-projection_dir_location <- system.file("cmip5", package = "futureheatwaves")
-city_file_location <- system.file("cities.csv", package = "futureheatwaves")
+projection_dir_location <- system.file("extdata/cmip5",
+                                       package = "futureheatwaves")
+city_file_location <- system.file("extdata/cities.csv",
+                                  package = "futureheatwaves")
 
 gen_hw_set(out = "example_results",
            dataFolder = projection_dir_location ,

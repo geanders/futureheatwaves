@@ -6,3 +6,5 @@
 ^paper_drafts$
 ^\.travis\.yml$
 ^..pdf$
+^README\.Rmd$
+^README-.*\.png$

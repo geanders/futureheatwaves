@@ -51,7 +51,8 @@ The function input as \code{FUN} must follow a very specific
 ex_results <- system.file("extdata/example_results",
                           package = "futureheatwaves")
 apply_all_models(ex_results, FUN = average_mean_temp)
-apply_all_models(ex_results, FUN = average_mean_temp, city_specific = TRUE)
+apply_all_models(ex_results, FUN = average_mean_temp,
+                 city_specific = TRUE)
 
 }
 

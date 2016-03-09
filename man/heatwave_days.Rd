@@ -25,4 +25,9 @@ This function is an example of a function that can be created and
    used to explore heat waves using the \code{\link{apply_all_models}}
    function.
 }
+\examples{
+data(hw_datafr)
+heatwave_days(hw_datafr)
+
+}
 

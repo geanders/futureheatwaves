@@ -18,6 +18,10 @@
 #'    used to explore heat waves using the \code{\link{apply_all_models}}
 #'    function.
 #'
+#' @examples
+#' data(hw_datafr)
+#' number_of_heatwaves(hw_datafr)
+#'
 #' @export
 number_of_heatwaves <- function(hw_datafr){
         out <- nrow(hw_datafr)
@@ -41,6 +45,10 @@ number_of_heatwaves <- function(hw_datafr){
 #'    used to explore heat waves using the \code{\link{apply_all_models}}
 #'    function.
 #'
+#' @examples
+#' data(hw_datafr)
+#' heatwave_days(hw_datafr)
+#'
 #' @export
 heatwave_days <- function(hw_datafr){
         out <- sum(hw_datafr$length)
@@ -62,6 +70,10 @@ heatwave_days <- function(hw_datafr){
 #' @note This function is an example of a function that can be created and
 #'    used to explore heat waves using the \code{\link{apply_all_models}}
 #'    function.
+#'
+#' @examples
+#' data(hw_datafr)
+#' average_length(hw_datafr)
 #'
 #' @export
 average_length <- function(hw_datafr){
@@ -88,6 +100,10 @@ average_length <- function(hw_datafr){
 #' @note This function is an example of a function that can be created and
 #'    used to explore heat waves using the \code{\link{apply_all_models}}
 #'    function.
+#'
+#' @examples
+#' data(hw_datafr)
+#' average_mean_temp(hw_datafr)
 #'
 #' @export
 average_mean_temp <- function(hw_datafr){

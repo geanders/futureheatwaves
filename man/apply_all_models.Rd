@@ -47,4 +47,11 @@ The function input as \code{FUN} must follow a very specific
    applying a custom function to explore the heat waves identified and
    characterized by \code{\link{gen_hw_set}}.
 }
+\examples{
+ex_results <- system.file("extdata/example_results",
+                          package = "futureheatwaves")
+apply_all_models(ex_results, FUN = average_mean_temp)
+apply_all_models(ex_results, FUN = average_mean_temp, city_specific = TRUE)
+
+}
 

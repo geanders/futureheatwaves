@@ -167,7 +167,11 @@ consolidate <- function(hwDataframeList){
 #' Characterize heat waves
 #'
 #' This function takes a dataframe with identified heat waves and returns
-#' a dataframe that lists and characterizes all of the heat waves.
+#' a dataframe that lists and characterizes all of the heat waves. If no
+#' heat waves were identified in a city, it returns a data frame with the
+#' same columns but no observations, to allow the empty dataframe to be
+#' joined without error to the dataframes for cities that do have heat
+#' waves under the definition.
 #'
 #' @param city A character vector with the identification of the city
 #'    being processed.
@@ -294,29 +298,39 @@ createHwDataframe <- function(city, threshold, heatwaves,
                                                 stats::quantile(ref_temps, .995,
                                                          na.rm = TRUE)]))
 
-        hw.frame$first.in.season <- c(1, rep(NA, nrow(hw.frame) - 1))
-        for(i in 2:nrow(hw.frame)){
-                if(as.POSIXlt(hw.frame$start.date)$year[i] !=
-                   as.POSIXlt(hw.frame$start.date)$year[i - 1]){
-                        hw.frame$first.in.season[i] <- 1
-                } else {
-                        hw.frame$first.in.season[i] <- 0
+        if(nrow(hw.frame) == 0){
+                hw.frame$first.in.season <- numeric()
+                hw.frame$threshold <- numeric()
+                hw.frame$mean.temp.quantile <- numeric()
+                hw.frame$max.temp.quantile <- numeric()
+                hw.frame$min.temp.quantile <- numeric()
+                hw.frame$mean.temp.1 <- numeric()
+                hw.frame$mean.summer.temp <- numeric()
+                hw.frame$city <- character()
+        } else {
+                hw.frame$first.in.season <- c(1, rep(NA, nrow(hw.frame) - 1))
+                for(i in 2:nrow(hw.frame)){
+                        if(as.POSIXlt(hw.frame$start.date)$year[i] !=
+                           as.POSIXlt(hw.frame$start.date)$year[i - 1]){
+                                hw.frame$first.in.season[i] <- 1
+                        } else {
+                                hw.frame$first.in.season[i] <- 0
+                        }
                 }
+                hw.frame$threshold <- threshold
+
+                dist.tmpd <- stats::ecdf(ref_temps)
+                hw.frame$mean.temp.quantile <- dist.tmpd(hw.frame$mean.temp)
+                hw.frame$max.temp.quantile <- dist.tmpd(hw.frame$max.temp)
+                hw.frame$min.temp.quantile <- dist.tmpd(hw.frame$min.temp)
+
+                hw.frame$mean.temp.1 <- mean(ref_temps)
+                # Summertime is months May through September
+                summertime <- as.POSIXlt(ref_dates)$mon %in% c(4:8)
+                hw.frame$mean.summer.temp <- mean(ref_temps[summertime])
+
+                hw.frame$city <- city
         }
-
-        hw.frame$threshold <- threshold
-
-        dist.tmpd <- stats::ecdf(ref_temps)
-        hw.frame$mean.temp.quantile <- dist.tmpd(hw.frame$mean.temp)
-        hw.frame$max.temp.quantile <- dist.tmpd(hw.frame$max.temp)
-        hw.frame$min.temp.quantile <- dist.tmpd(hw.frame$min.temp)
-
-        hw.frame$mean.temp.1 <- mean(ref_temps)
-        # Summertime is months May through September
-        summertime <- as.POSIXlt(ref_dates)$mon %in% c(4:8)
-        hw.frame$mean.summer.temp <- mean(ref_temps[summertime])
-
-        hw.frame$city <- city
 
         return(hw.frame)
 }

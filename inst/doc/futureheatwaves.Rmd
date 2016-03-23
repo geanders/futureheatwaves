@@ -25,6 +25,22 @@ references:
   type: article-journal
   issued: 
     year: 2011
+- id: smith2013
+  title: "Heat waves in the United States: definitions, patterns and trends"
+  author: 
+  - family: Smith
+    given: Tiffany T 
+  - family: Zaitchik
+    given: Benjamin F
+  - family: Gohlke
+    given: Julia M
+  container-title: Climatic Change
+  volume: 118
+  DOI: 10.1007/s10584-012-0659-2
+  page: 811-825
+  type: article-journal
+  issued: 
+    year: 2013
 - id: taylor2012
   title: An Overview of CMIP5 and the Experiment Design
   author: 
@@ -60,21 +76,22 @@ references:
     year: 2013
 ---
 
-```{r echo = FALSE, message = FALSE}
+```{r echo = FALSE, message = FALSE, warning = FALSE}
 library(futureheatwaves)
+library(ggplot2)
 ```
 
 ## What the package does
 
-Often, it is of interest in climate impact research to explore impact estimates for climate projections from many different climate models, some of which have multiple ensemble members. The scope of this data means that researchers often must spend a lot of time writing code scripts to process the data from different climate models or ensemble members. This is the case, for example, in studying the climate impacts of heatwaves, since multi-day heatwave events must be indentified and characterized for each cliamte model and ensemble member before impacts can be estimated. We have created this package to automate this process in a way that still allows extensive customization by the user in choices like how to define a heatwave. 
+Often, it is of interest in climate impact research to explore impact estimates for climate projections from many different climate models, some of which have multiple ensemble members. The scope of this data means that researchers often must spend a lot of time writing code scripts to process the data from different climate models or ensemble members. This is the case, for example, in studying the impacts of heat waves under climate change, since multi-day heatwave events must be indentified and characterized for each climate model and ensemble member before impacts can be estimated. We have created this package to automate this process in a way that still allows extensive customization by the user in choices like how to define a heatwave. 
 
-The `futureheatwaves` package can process climate files, which are stored locally on your computer, to generate a list of the heatwaves in each projection as well as characteristics of each heatwave (e.g., length, intensity, timing in the year). You can identify heatwaves based either on a default definition (two or more days with temperatures at or above the community's $98^{th}$ percentile of year-round temperature), or you can write your own R function to use any heatwave definition of your choice, or to explore several heatwave definitions. The package identifies community-specific heatwaves, based on an input file listing each community and its latitude and longitude. of each climate model are output as files in a directory specified by the user.
+The `futureheatwaves` package can process climate files, which are stored locally on your computer, to generate a list of the heatwaves in each projection as well as characteristics of each heatwave (e.g., length, intensity, timing in the year). You can identify heatwaves based either on a default definition (two or more days with temperatures at or above the community's $98^{th}$ percentile of year-round temperature), or you can write your own R function to use any heat wave definition of your choice, or to explore several heat wave definitions. The package identifies community-specific heat waves, based on an input file listing each community and its latitude and longitude. of each climate model are output as files in a directory specified by the user.
 
-Once you create these dataframes of community-specific heatwaves, another function in the package allows you to apply custom functions across all the heatwave dataframes that were generated. This functionality can be used to generate summary statistics (e.g., determine average heatwave length or total heatwave days), or can be used to apply more complex functions (e.g., apply epidemiologic effect estimates across the heatwaves to generate health impact estimates).
+Once you create these dataframes of community-specific heat waves, another function in the package allows you to apply custom functions across all the heat wave dataframes that were generated. This functionality can be used to generate summary statistics (e.g., determine average heat wave length or total heat wave days), or can be used to apply more complex functions (e.g., apply epidemiologic effect estimates across the heat waves to generate health impact estimates).
 
-This package does require some pre-processing, in terms of getting climate projection data into a specific format and storing files in a specific directory structure. However, once the user has completed this pre-processing and directory set-up, the package allows the user to quickly process through data from many projections, generate heatwave datasets for each, and apply custom functions across each heatwave definition.
+This package does require some pre-processing, in terms of getting climate projection data into a specific format and storing files in a specific directory structure. However, once the user has completed this pre-processing and directory set-up, the package allows the user to quickly process through data from many projections, generate heat wave datasets for each, and apply custom functions across each heat wave definition.
 
-This package requires you to have data on community locations and climate projection data set up in a specific way on your local computer. You then use arguments in the main package function, `gen_hw_set`, to direct the function to these files so it can process them and output heatwave projections. The final projection files will be written out to your local computer, in a directory that you select and specify through `gen_hw_set`. You can then apply user-created R functions to all heatwaves in the output using the `apply_all_models` function.
+This package requires you to have data on community locations and climate projection data set up in a specific way on your local computer. You then use arguments in the main package function, `gen_hw_set`, to direct the function to these files so it can process them and output heat wave projections. The final projection files will be written out to your local computer, in a directory that you select and specify through `gen_hw_set`. You can then apply user-created R functions to all heat waves in the output using the `apply_all_models` function.
 
 ## A basic example of using the package
 
@@ -84,21 +101,154 @@ We have included data files in the package to serve as example files so users ca
 
 We used, as an example, data from two climate models used for the fifth Coupled Model Intercomparison Project (CMIP5) [@taylor2012]: (1) the model of the Beijing Climate Center, China Meteorological Administration (BCC) [@xin2013] and (2) the National Center for Atmospheric Research's (NCAR's) Community Climate System Model (CCSM4) [@gent2011]. We include one ensemble member from BCC (r1i1p1) and two from CCSM (r1i1p1 and r2i1p1).
 
-To ensure that the size of this example data is reasonably small, we have only included projection data for model grid points near several major East Coast cities: New York, NY; Philadelphia, PA; Newark, NJ; Baltimore, MD, Providence, RI. Further, to keep the file sizes reasonably small, the historical projections range over the years ... to ..., while the future projections range over the years ... to ... .
+To ensure that the size of this example data is reasonably small, we have only included projection data for model grid points near several major East Coast cities: New York, NY; Philadelphia, PA; Newark, NJ; Baltimore, MD, Providence, RI. Further, to keep the file sizes reasonably small, the historical projections range over the years 1990 to 1999, while the future projections range over the years 2060 to 2079.
 
-These location of these files within the downloaded package be determined using  `system.file`: 
+These files are all stored in the package's `extdata` directory. These location of these files within the downloaded package can be determined using `system.file`: 
 
 ```{r}
-system.file("cities.csv", package = "futureheatwaves")
+system.file("extdata/cities.csv", package = "futureheatwaves")
 ```
 
-In the later sections of this vignette, we show how to use the package functions with these example files as inputs. 
+In the later sections of this vignette, we show how to use these example files as inputs in the package functions. 
+
+### Processing climate projections with the example data
+
+The `gen_hw_set` function processes a directory of climate projections and creates files of identified and characterized heat waves. For example, if you wanted to use the example city location and climate projection data, and save results to a directory called "example_results" in your current working directory, you could run:
+
+```{r eval = FALSE}
+projection_dir_location <- system.file("extdata/cmip5",
+                                       package = "futureheatwaves")
+city_file_location <- system.file("extdata/cities.csv",
+                                  package = "futureheatwaves")
+
+gen_hw_set(out = "example_results",
+           dataFolder = projection_dir_location ,
+           dataDirectories = list("historical" = c(1990, 1999),
+                                       "rcp85" = c(2060, 2079)),
+           citycsv = city_file_location,
+           coordinateFilenames = "latitude_longitude_NorthAmerica_12mo.csv",
+           tasFilenames = "tas_NorthAmerica_12mo.csv",
+           timeFilenames = "time_NorthAmerica_12mo.csv")
+```
+
+Notice that, in this call, you must specify the directory where you would like results written (`out`), the location of the directory of climate projections (`dataFolder`), the names of the two main subdirectories of that climate projection directory, as well as their year boundaries (`dataDirectories`), the file name of the community location file (`citycsv`), and the names used for the final grid coordinate, climate projection, and projection date files (`coordinateFilenames`, `tasFilenames`, and `timeFilenames`). There are more details later in this vignette describing how to set-up the input directory and location files for your own projection data. 
+
+When you run this call, you will first be advised that the function will write files to your computer, and you will need to confirm that you want to proceed: 
+
+```
+ Warning: This function will write new files to your computer in the 
+ ~/tmp/results/ directory of your computer. If that directory already exists,
+running this function will write over it. 
+ Do you want to continue? (y / n): 
+```
+
+This warning reminds you that this function will create subdirectories and write out files to the directory you specified when defining `out`. If you agree that it is okay to write files and subdirectories to this directory, enter "y" at the prompt, and the function will continue running. (If you do not want to get this warning when running the function-- for example, when looping and calling this function repeatedly-- choose the option `printWarning = FALSE` when calling `gen_hw_set`.)
+
+If your file structure is set up correctly, you should get output that looks something like this:
+
+```
+Processing thresholds for bcc1 
+Reading ---> r1i1p1 
+Read operation complete 
+Processing projections for  bcc1 
+Reading ---> r1i1p1 
+Read operation complete 
+Creating heatwave dataframe ~~ City:  balt  ~~ City Number:  1  ~~ Cutoff:  84.25436 
+Creating heatwave dataframe ~~ City:  ny  ~~ City Number:  2  ~~ Cutoff:  78.11672 
+Creating heatwave dataframe ~~ City:  nwk  ~~ City Number:  3  ~~ Cutoff:  78.11672 
+Creating heatwave dataframe ~~ City:  phil  ~~ City Number:  4  ~~ Cutoff:  84.25436 
+Creating heatwave dataframe ~~ City:  prov  ~~ City Number:  5  ~~ Cutoff:  74.498 
+Writing bcc1: r1i1p1
+Processing thresholds for ccsm 
+Reading ---> r1i1p1 
+Read operation complete 
+Processing projections for  ccsm 
+Reading ---> r1i1p1 
+Read operation complete 
+Creating heatwave dataframe ~~ City:  balt  ~~ City Number:  1  ~~ Cutoff:  82.92344 
+Creating heatwave dataframe ~~ City:  ny  ~~ City Number:  2  ~~ Cutoff:  81.212 
+Creating heatwave dataframe ~~ City:  nwk  ~~ City Number:  3  ~~ Cutoff:  81.212 
+Creating heatwave dataframe ~~ City:  phil  ~~ City Number:  4  ~~ Cutoff:  81.44672 
+Creating heatwave dataframe ~~ City:  prov  ~~ City Number:  5  ~~ Cutoff:  80.88872 
+Writing ccsm: r1i1p1
+Processing projections for  ccsm 
+Reading ---> r2i1p1 
+Read operation complete 
+Creating heatwave dataframe ~~ City:  balt  ~~ City Number:  1  ~~ Cutoff:  82.92344 
+Creating heatwave dataframe ~~ City:  ny  ~~ City Number:  2  ~~ Cutoff:  81.212 
+Creating heatwave dataframe ~~ City:  nwk  ~~ City Number:  3  ~~ Cutoff:  81.212 
+Creating heatwave dataframe ~~ City:  phil  ~~ City Number:  4  ~~ Cutoff:  81.44672 
+Creating heatwave dataframe ~~ City:  prov  ~~ City Number:  5  ~~ Cutoff:  80.88872 
+Writing ccsm: r2i2p2
+Writing accumulators 
+All operations completed. Exiting. 
+```
+
+The `gen_hw_set` function provides status reports on its progress in generating the heat wave projections. This helps you see that the function call is progressing, as this process can take a while if you include many cities and / or many climate model projections. 
+
+Once the function has completed running, you will have one new subdirectory in the `out` directory you specified called "Heatwaves". This directory will contain dataframes with all identified heat waves and their characteristics for each ensemble member of each climate model in your original directory. The `out` directory specified will also have a file called `hwModelInfo.csv` that contains some basic information about the climate models and the number of ensemble members included for each as well as `locationList.csv`, a file that gives the closest model gridpoint to each community for each climate model, and `hwModelInfo.csv`, a file that lists each of the climate models and the number of ensemble members for each within each subdirectory (e.g., "historical" and "rcp85" for the example).
+
+The full output directory structure will look something like this: 
+
+- `out`
+    - `Heatwaves`
+        - `Projections`
+            - `bcc1`
+                - `1.csv`
+            - `ccsm`
+                - `1.csv`
+                - `2.csv`
+    - `hwModelInfo.csv`
+    - `locationList.csv`
+    
+Each of the heat wave files will have one heat wave per row, covering all the heat waves identified for that particular ensemble member. The dataframe has the following columns with characteristics of each heat wave: 
+
+- `hw.number`: The number of the heat wave out of all heat waves identified in the location;
+- `mean.temp`: Average daily temperature across days in the heat wave, in degrees Fahrenheit;
+- `max.temp`: Highest daily temperature across days in the heat wave, in degrees Fahrenheit;
+- `min.temp`: Lowest daily temperature across days in the heat wave, in degrees Fahrenheit
+- `length`: Number of days in the heat wave;
+- `start.date`: Date of the first day of the heat wave;
+- `end.date`: Date of the last day of the heat wave;
+- `start.doy`: Day of the year of the first day of the heat wave (1 = Jan. 1, etc.);
+- `start.month`: Month in which the heat wave started (1 = January, etc.);
+- `days.above.80`: Number of days in the heat wave above $80^oF$;
+- `days.above.85`: Number of days in the heat wave above $85^oF$;
+- `days.above.90`: Number of days in the heat wave above $90^oF$;
+- `days.above.95`: Number of days in the heat wave above $95^oF$;
+- `days.above.99th`: Number of days in the heat wave above the $99^{th}$ percentile temperature for the location, using the period specified by the user with the `referenceBoundaries` argument in `gen_hw_set` as a reference for determining these percentiles;
+- `days.above.99.5th`: Number of days in the heat wave above the $99.5^{th}$ percentile temperature for the location, using the period specified by the user with the `referenceBoundaries` argument in `gen_hw_set` as a reference for determining these percentiles;
+- `first.in.season`: Whether the heat wave was the first to occur in its calendar year in its location (Note: this characteristic is likely not useful in southern hemisphere studies.);
+- `threshold.temp`: The temperature used as the threshold for the heat wave definition in the location;
+- `mean.temp.quantile`: The percentile of the average daily mean temperature during the heat wave compared to the location's year-round temperature distribution, based on the temperatures for the city during the period specified by the `referenceBoundaries` argument in `gen_hw_set`;
+- `max.temp.quantile`: The percentile of the highest daily mean temperature during the heat wave compared to the location's year-round temperature distribution;
+- `min.temp.quantile`: The percentile of the lowest daily mean temperature during the heat wave compared to the location's year-round temperature distribution;
+- `mean.temp.1`: The location's average year-round temperature, based on the temperatures for the location during the period specified by the `referenceBoundaries` argument in `gen_hw_set`;
+- `mean.summer.temp`: The location's average May--September temperature, based on the temperatures for the location during the period specified by the `referenceBoundaries` argument in `gen_hw_set`; and
+- `city`: The identifier for the location, as given in the file specified in the `citycsv` argument of `gen_hw_set`.
+
+An example of one of these heat wave dataframes is given in the `hw_datafr` dataset included with the package. You can access this data using: 
+
+```{r}
+data(hw_datafr)
+```
+
+This will load the example dataframe into your R session as the object `hw_datafr`:
+
+```{r}
+hw_datafr[1:3, c("hw.number", "mean.temp", "length", "start.date",
+                 "mean.temp.quantile", "city")]
+```
+
+You will need to select a directory pathname where all the heat wave files will be saved. For example, if you wanted to create a new directory called "example_results" in the current working directory and output files there, you could specify `out = "example_results"` in `gen_hw_set`. If you use a pathname to a directory that does not yet exist, the function will create that directory and then write the results to it. If you specify a directory that does already exist, the function will overwrite it with the results from the function run. You therefore should be careful when specifying this directory path and be sure to confirm that the function will not overwrite a directory you do not want to lose. You will specify the output directory using the `out` argument in the `gen_hw_set` function. 
 
 ### Required files and directory set-up
 
+To apply `gen_hw_set` to your own data, rather than the example data, you will need to set up your files and directory using a certain structure, to allow the function to process it correctly.
+
 #### File with community locations
 
-First, you must have a comma-separated (csv) file the gives unique identifiers for each community for which you wish to make projections, as well as their latitude and longitude. The latitude and longitude should be expressed in the same way that latitude and longitude are expressed in the climate projection files to be processed (e.g., if latitude for New York City is expressed as 286 in the climate projection files, it cannot be expressed as -74 or 74 W in the community file). The community location file should have three columns, with the following column names: 
+First, you must input to `gen_hw_set` a comma-separated (csv) file with the unique identifiers for each community for which you wish to make projections, as well as their latitude and longitude. The latitude and longitude should be expressed in the same way that latitude and longitude are expressed in the climate projection files to be processed (e.g., if latitude for New York City is expressed as 286 in the climate projection files, it cannot be expressed as -74 or 74 W in the community file). The community location file should have three columns, with the following column names: 
 
 - `city`: A unique identifier for each community you will be analyzing.
 - `lat`: The communities' latitudes
@@ -115,22 +265,27 @@ Here is an example of the correct format for a community locations file for five
 "prov",41.82195,288.5803
 ```
 
-You will specify the location of this community locations file within your computer file directory when running the main function (`gen_hw_set`) by using the argument `citycsv`. For example, if I had this file saved as "my_cities.csv" in my working directory, I would specify `citycsv = "my_cities.csv"` in the `gen_hw_set` function call. You can use either absolute or relative filepaths in this argument. 
+You must specify the filepath of thislocations file using the argument `citycsv` when running the main function (`gen_hw_set`). For example, if you had this file saved as "my_cities.csv" in your current working directory, you would specify `citycsv = "my_cities.csv"` in the `gen_hw_set` function call. You can use either absolute or relative filepaths in this argument. 
 
 If your community locations file has different column names for the latitude and longitude columns, you can specify this using the `lat_lon_colnames` argument in `gen_hw_set`. For example, if these columns were named "latitude" and "longitude", you could specify `lat_lon_colnames = c("latitude", "longitude")` when calling `gen_hw_set`.
-
 
 #### Directory structure for climate projection files
 
 For these functions to work correctly, you must have climate projection files saved in a specific structure locally on your computer. An example of a directory with the required set-up is given as the `cmip5` directory that comes installed with this package. To identify the location on your own computer of this directory, you can run:
 
 ```{r}
-system.file("cmip5", package = "futureheatwaves")
+system.file("extdata/cmip5", package = "futureheatwaves")
 ```
 
-You must have a directory that has within it separately subdirectories names "rcp85" and "historical" that contain, respectively, all files drawn from projections for future dates ("rcp85") and all for dates up to 2005 ("historical"). Within each of these subdirectories, you need a subdirectory for each climate model. Within each climate model directory, you need subdirectories for each ensemble member of the model (even if the model only has one ensemble member). Within each ensemble-member directory, you will need three comma-separated files: one file with the climate model output, with columns corresponding to climate grid point and rows corresponding to time, one file that gives the time values corresponding to each row in the climate model output file, and one file giving the latitude and longitude corresponding to the grid locations used in the columns of the climate model output file. 
+You must have a directory that has within it two separate subdirectories. This set-up is required because this package was developed to work with CMIP5 projection data, in which climate projections up to 2004 or 2005 are stored in "historical experiment" files, while projections from 2006 and later are stored in separate files for each climate model ensemble member. The `gen_hw_set` function requires two subdirectories within the climate projection directory, to match up with this structure, where one subdirectory includes time series that cover one range of dates (e.g., 1980--2004) and the other subdirectory includes climate projections for the same climate model ensemble members, but for a different range of dates (e.g., 2006--2099). 
 
-For example, the following shows the file structure for the files in the example data included with the package. This example directory includes separate historical (with years 1980--2004) and RCP8.5 (with years 2006--2099) directories, each of which has the required climate projection, grid point locations, and projection time files for two separate models (`bcc1` and `ccsm`) with one and two separate ensemble members, respectively(`r1i1p1` for `bcc1`; `r1i1p1` and `r2i1p1` for `ccsm`). The user specifies that name and location of the directory (through the `dataFolder` option in `gen_hw_set`) as well as the names and year ranges of the two subdirectories (through the `dataDirectories` option in `gen_hw_set`; e.g., `dataDirectories = list("historical" = c(1980, 2004), "rcp85" = c(2006, 2099))` if the two subdirectories have the names "historical" and "rcp85").
+You can still use `gen_hw_set` if the full time range you are interested in are saved in a single set of files, but the function does require you to set up your climate projections directory to have two subdirectories. To work around this requirement in this case, you could copy the single subdirectory to have two copies and leave the second subdirectory in as a "dummy" subdirectory. 
+
+You must specify in the `gen_hw_set` function the names of the two subdirectories as well as the date ranges that each of the subdirectories covers. For example, for a set-up with climate projection files for 1980--2004 in a subdirectory called "historical" and files for 2006--2099 in a subdirectory called "rcp85", you would include in `gen_hw_set` the argument: `dataDirectories = list("historical" = c(1980, 2004), "rcp85" = c(2006, 2099))`. The function uses this information to figure out which directory to search in for temperature data based on the user's choices of custom date ranges for certain arguments (e.g., dates for which to get projections).
+
+Within each climate model's directory, you need subdirectories for each ensemble member of the model (even if the model only has one ensemble member). Within each ensemble-member directory, you will need three comma-separated files: one file with the climate model output, with columns corresponding to climate grid point and rows corresponding to time, one file that gives the time values corresponding to each row in the climate model output file, and one file giving the latitude and longitude corresponding to the grid locations used in the columns of the climate model output file (more details on the required set-up of these files are given later in the vignette). 
+
+For example, the following shows the file structure for the files in the example data included with the package. This example directory includes separate historical (with years 1990--1999) and RCP8.5 (with years 2060--2079) directories, each of which has the required climate projection, grid point locations, and projection time files for two separate models (`bcc1` and `ccsm`) with one and two separate ensemble members, respectively(`r1i1p1` for `bcc1`; `r1i1p1` and `r2i1p1` for `ccsm`). 
 
 - `cmip5`
     - `historical`
@@ -160,262 +315,92 @@ For example, the following shows the file structure for the files in the example
                 - `latitude_longitude_NorthAmerica_12mo.csv`
                 - `time_NorthAmerica_12mo.csv`
 
-Notice that each subdirectory has all required levels-- for example, even though the `bcc1` model only has one ensemble member (in this example), we've still included a directory level for ensembles in the directory structure. Also notice that the final subdirectory always includes three files (with climate projections, grid point locations, and times; these files are explained in the next section), even if multiple ensemble members of the same climate model share the same grid point locations or times. 
-
-Throughout the directory, subdirectories should be named using names reflecting the climate model they contain. The output files will be written using the same type of directory structure and the same names, so this output will be easier to interpret and use if the directory uses meaningful names for subdirectories. 
-
-Once you have your files set up in this structure, you will specify the location of the start of the directory using the `dataFolder` argument in the `gen_hw_set` function. In the example directory structure above, if the `cmip5` directory was in your current working directory, you would specify `dataFolder = "cmip5"` when calling `gen_hw_set`. 
+The user specifies the filepath of this directory of climate projections (through the `dataFolder` option in `gen_hw_set`). Notice that each subdirectory in this example has all required levels of the directory structure-- for example, even though the `bcc1` model only has one ensemble member (in this example), we've still included a directory level for ensemble members in the directory structure. Also notice that the final subdirectory always includes three files (with climate projections, grid point locations, and times; these files are explained in the next section), even if multiple ensemble members of the same climate model share the same grid point locations or times.
 
 #### Files with climate projections
 
 For each ensemble member of each climate model, you must have three files: one giving the gridded climate model output by date, one giving the location of each of the climate model grids, and one giving the date of each of the climate model projections. 
 
-These files must be in a certain structure to run correctly through the `gen_hw_set` function. Therefore, the function currently requires a certain amount of preprocessing of climate projection files from a format like .`netCDF` to prepare them to go through this function. In the future, we plan to extend this package to allow the `gen_hw_set` function to directly process `.netCDF` files. In the meantime, you must preprocess the file for the projection from each ensemble member to conform to the formats listed below. 
+These files must be in a certain structure to run correctly through the `gen_hw_set` function. Therefore, the function currently requires a certain amount of preprocessing of climate projection files from a format like `.netCDF` to prepare them to be processed by this function. You must preprocess the file for the projection from each ensemble member to conform to the formats listed below. 
 
-**Climate projection file**: The climate projection file should be a comma-separated file of temperatures (in Kelvin) that looks something like this:
+**Climate projection file**: The climate projection file should be a comma-separated file of temperatures that looks something like this:
 
 ```
-"275.74","282.32","285.03"
-"275.94","283.14","285.47"
-"272.9","280.26","284.6"
-"273.61","280.82","284.67"
-"273.97","281.18","284.83"
+267.6,281.17,285.69
+269.33,280.48,285.28
+269.29,280.12,285.05
+271.35,280.19,284.97
+272.97,281.57,285.22
 ```
 
-This is a projection file covering three grid points of a climate model, giving projections for five dates. Each column corresponds to one grid point in the climate model. Each row corresponds to one date. The file does not have a header row; rather, the observations begin immediately on the first row of the file. Similarly, the file does not have a column of row numbers. Most projection files will include many more columns and rows than this small example, since they will usually cover all the grid points in a climate model and a long time series of observations.
-
-In the current version of this package, these projection files must not have gaps in dates and cannot have any missing observations. Each climate model ensemble member will need to have a climate projection file like this one. They will all be saved in separate, ensemble-specific directories and should all be given the same file name. In our example data, these climate projection files are always saved with the filename "tas_NorthAmerica_12mo.csv". You will need to specify this filename in the `tasFilenames` argument when running `gen_hw_set`.
+This is a projection file covering three grid points of a climate model, giving projections for five dates. Each column corresponds to one grid point in the climate model. Each row corresponds to one date. The file does not have a header row; rather, the observations begin immediately on the first row of the file. Similarly, the file does not have a column of row numbers. Most projection files will include many more columns and rows than this small example, since they will usually cover all the grid points in a climate model and a long time series of observations. These projection files must not have gaps in dates (e.g., they should be year-round and not limited to the warm season) and cannot have any missing observations. In our example data, these climate projection files are saved for all ensemble members with the filename "tas_NorthAmerica_12mo.csv". You will need to specify this filename in the `tasFilenames` argument when running `gen_hw_set`.
 
 **Grid point location file**: The grid point location file should be a comma-separated file that looks something like this:
 
 ```
-"40.464","284.06"
-"40.464","286.88"
-"40.464","289.69"
+40.464,284.06
+40.464,286.88
+40.464,289.69
 ```
 
-For this file, each row gives the location for the grid point for the corresponding column in the climate projection files. For example, the first row gives the latitude (first column) and longitude (second column) for the projections given in the first column of the climate projection file, the second row of this file gives the latitude and longitude for the projection given in the second column of the climate projection file, and so on. 
+For this file, each row gives the location for the grid point for the corresponding column in the climate projection files. For example, the first row gives the latitude (first column) and longitude (second column) for the projections given in the first column of the climate projection file, the second row of this file gives the latitude and longitude for the projection given in the second column of the climate projection file, and so on. The file should not have a header row or a separate column of row names. 
 
-The first column of this file should give latitude and the second column should give longitude. The file should not have a header row or a separate column of row names. 
-
-Each climate model ensemble member will need to have a grid-point location file like this one. They will all be saved in separate, ensemble-specific directories and should all be given the same file name. In our example data, these grid-point location files are always saved with the filename "latitude_longitude_NorthAmerica_12mo.csv". You will need to specify this filename in the `coordinateFilenames` argument when running `gen_hw_set`.
+In our example data, these grid-point location files are saved for all climate model ensemble members with the filename "latitude_longitude_NorthAmerica_12mo.csv". You will need to specify this filename in the `coordinateFilenames` argument when running `gen_hw_set`.
 
 **Projection times data file**: The projection times data file should be a comma-separated file that looks something like this:
 
 ```
-"0","2006","1","1"
-"1","2006","1","2"
-"2","2006","1","3"
-"3","2006","1","4"
-"4","2006","1","5"
+51100,1990,1,1
+51101,1990,1,2
+51102,1990,1,3
+51103,1990,1,4
+51104,1990,1,5
 ```
 
-This file gives a date that corresponds to each row of the climate projection file. The file should have four columns: one with row numbers, and then one each with year, month, and day. Year should be given with four digits. The file should not have a header row. 
+This file gives a date that corresponds to each row of the climate projection file. The file should have four columns: one with row numbers, and then one each with year, month, and day. Year should be given with four digits. The file should not have a header row. In our example data, these grid-point location files are always saved with the filename "time_NorthAmerica_12mo.csv". You will need to specify this filename in the `timeFilenames` argument when running `gen_hw_set`.
 
-Each climate model ensemble member will need to have a separate projection times data file like this one. They will all be saved in separate, ensemble-specific directories and should all be given the same file name. In our example data, these grid-point location files are always saved with the filename "time_NorthAmerica_12mo.csv". You will need to specify this filename in the `timeFilenames` argument when running `gen_hw_set`.
+### Applying functions across all heat wave datasets
 
-#### Specifying where to output results
+Once you have created a directory of files with characterized heat waves for each ensemble member, you can explore or extend your results by using the `apply_all_models` function. This function allows you to apply custom R functions across all heat wave dataframes created by the `gen_hw_sets` call. 
 
-You will need to select a directory pathname where all the heatwave projection files generated by the function will be saved. For example, if you wanted to create a new directory called "example_results" in the current working directory and output files there, you could specify `out = "example_results"` in `gen_hw_set`. If you use a pathname to a directory that does not yet exist, the function will create that directory and then write the results to it. If you specify a directory that does already exist, the function will overwrite it with the results from the function run. You therefore should be careful when specifying this directory path and be sure to confirm that the function will not overwrite a directory you do not want to lose. You will specify the output directory using the `out` argument in the `gen_hw_set` function. 
+You specify the location of the directory with the heat wave dataframes using the `out` argument when calling `apply_all_models`. Typically, this will be the same value as that for the `out` argument in `gen_hw_set`. You can apply any R function you have created, as long as it follows certain standards in accepting input and returning output.
 
-### Running the code to generate heatwave datasets
-
-These selections will be sufficient to run the main function of this package, `gen_hw_set`, using a basic example with default values for things like the heatwave definition and years for which to generate the heatwave datasets (default is 2061--2080; further default values and ways to customize are fully explained in a later section).
-
-If you are happy with these defaults, you can create files with future heatwaves and their characteristics by calling `gen_hw_set`. For example, if you wanted to use the example city location and climate projection data, and save results to a directory called "example_results" in your current working directory, you could run:
-
-```{r eval = FALSE}
-projection_dir_location <- system.file("cmip5", package = "futureheatwaves")
-city_file_location <- system.file("cities.csv", package = "futureheatwaves")
-
-gen_hw_set(out = "example_results",
-           dataFolder = projection_dir_location ,
-           dataDirectories = list("historical" = c(1980, 2004),
-                                        "rcp85" = c(2006, 2099)),
-           citycsv = city_file_location,
-           coordinateFilenames = "latitude_longitude_NorthAmerica_12mo.csv",
-           tasFilenames = "tas_NorthAmerica_12mo.csv",
-           timeFilenames = "time_NorthAmerica_12mo.csv",
-           lat_lon_colnames = c("lat", "long"))
-```
-
-Notice that, in this call, you must specify the directory where you would like results written (`out`), the location of the directory of climate projections (`dataFolder`), the names of the two main subdirectories of that climate projection directory, as well as their year boundaries (`dataDirectories`), the file name of the community location file (`citycsv`), and the names used for the final grid coordinate, climate projection, and projection date files (`coordinateFilenames`, `tasFilenames`, and `timeFilenames`). In this example, the `lat_lon_colnames` is also required, because the community locations file uses the column name "long", rather than the default "lon", to specify the longitude column.
-
-When you run this call, you will first be advised that the function will write files to your computer, and you will need to confirm that you want to proceed: 
-
-```
- Warning: This function will write new files to your computer in the 
- ~/tmp/results/ directory of your computer. If that directory already exists,
-running this function will write over it. 
- Do you want to continue? (y / n): 
-```
-
-This warning reminds you that this function will create subdirectories and write out files to the directory you specified when defining `out`. If you agree that it is okay to write files and subdirectories to this directory, enter "y" at the prompt, and the function will continue running. (If you do not want to get this warning when running the function-- for example, when looping and calling this function repeatedly-- choose the option `printWarning = FALSE` when calling `gen_hw_set`.)
-
-If your file structure is set up correctly, you should get output that looks like this:
-
-```
-Processing thresholds for bcc1 
-Reading ---> r1i1p1 
-Read operation complete 
-Processing projections for  bcc1 
-Reading ---> r1i1p1 
-Read operation complete 
-Creating heatwave dataframe ~~ City:  balt  ~~ City Number:  1  ~~ Cutoff:  84.632 
-Creating heatwave dataframe ~~ City:  ny  ~~ City Number:  2  ~~ Cutoff:  78.77876 
-Creating heatwave dataframe ~~ City:  nwk  ~~ City Number:  3  ~~ Cutoff:  78.77876 
-Creating heatwave dataframe ~~ City:  phil  ~~ City Number:  4  ~~ Cutoff:  84.632 
-Creating heatwave dataframe ~~ City:  prov  ~~ City Number:  5  ~~ Cutoff:  75.074 
-Writing bcc1: r1i1p1
-Processing thresholds for ccsm 
-Reading ---> r1i1p1 
-Read operation complete 
-Processing projections for  ccsm 
-Reading ---> r1i1p1 
-Read operation complete 
-Creating heatwave dataframe ~~ City:  balt  ~~ City Number:  1  ~~ Cutoff:  82.36076 
-Creating heatwave dataframe ~~ City:  ny  ~~ City Number:  2  ~~ Cutoff:  79.55276 
-Creating heatwave dataframe ~~ City:  nwk  ~~ City Number:  3  ~~ Cutoff:  79.55276 
-Creating heatwave dataframe ~~ City:  phil  ~~ City Number:  4  ~~ Cutoff:  80.474 
-Creating heatwave dataframe ~~ City:  prov  ~~ City Number:  5  ~~ Cutoff:  79.34 
-Writing ccsm: r1i1p1
-Processing projections for  ccsm 
-Reading ---> r2i1p1 
-Read operation complete 
-Creating heatwave dataframe ~~ City:  balt  ~~ City Number:  1  ~~ Cutoff:  82.36076 
-Creating heatwave dataframe ~~ City:  ny  ~~ City Number:  2  ~~ Cutoff:  79.55276 
-Creating heatwave dataframe ~~ City:  nwk  ~~ City Number:  3  ~~ Cutoff:  79.55276 
-Creating heatwave dataframe ~~ City:  phil  ~~ City Number:  4  ~~ Cutoff:  80.474 
-Creating heatwave dataframe ~~ City:  prov  ~~ City Number:  5  ~~ Cutoff:  79.34 
-Writing ccsm: r2i2p2
-Writing accumulators 
-All operations completed. Exiting.
-```
-
-The function provides status reports on its progress in generating the heatwave projections. This helps you see that the function call is progressing, as this process can take a while if you include many cities and / or many climate model projections. 
-
-Once the function has completed running, you will have one new subdirectory in the `out` directory you specified called "Heatwaves". This directory will contain dataframes with all identified heatwaves and their characteristics for each ensemble member of each climate model in your original directory. The `out` directory specified will also have a file called `hwModelInfo.csv` that contains some basic information about the climate models and the number of ensemble members included for each as well as `locationList.csv`, a file that gives the closest model gridpoint to each community for each climate model, and `hwModelInfo.csv`, a file that lists each of the climate models and the number of ensemble members for each within each subdirectory (e.g., "historical" and "rcp85" for the example).
-
-The full output directory structure will look something like this: 
-
-- `out`
-    - `Heatwaves`
-        - `Projections`
-            - `bcc1`
-                - `1.csv`
-            - `ccsm`
-                - `1.csv`
-                - `2.csv`
-    - `hwModelInfo.csv`
-    - `locationList.csv`
-    
-Each of the heatwave files will have one heatwave per row, covering all the heatwaves identified for that particular ensemble member. The dataframe has the following columns with characteristics of each heatwave: 
-
-Column name | Description
------------ | --------------
-`hw.number` | A sequential number identifying each heatwave in each community
-`mean.temp` | Average of mean daily temperature across all days in the heatwave
-`max.temp` | Highest value of mean daily temperature across days in the heatwave
-`min.temp` | Lowest value of mean daily temperature across days in the heatwave
-`length` | Number of days in the heatwave
-`start.date` | Date of the first day of the heatwave 
-`end.date` | Date of the last day of the heatwave 
-`start.doy` | Numeric day of the year of the first day of the heatwave (1 = Jan. 1, etc.)
-`start.month` | Numeric value indicating the month in which the heatwave started (1 = January) 
-`days.above.80` | Number of days in the heatwave above 80 degrees Fahrenheit 
-`days.above.85` | Number of days in the heatwave above 85 degrees Fahrenheit 
-`days.above.90` | Number of days in the heatwave above 90 degrees Fahrenheit
-`days.above.95` | Number of days in the heatwave above 90 degrees Fahrenheit
-`days.above.99th` | Number of days in the heatwave above the 99th percentile temperature for the community, using the period specified by the user with the `referenceBoundaries` argument in `gen_hw_set` as a reference for determining these percentiles
-`days.above.99.5th` | Number of days in the heatwave above the 99.5th percentile temperature for the community
-`first.in.season` | Whether the heatwave was the first to occur in its season (as determined by whether the heatwave was the first in its calendar year)
-`threshold.temp` | The temperature used as the threshold for the heatwave definition in the selected community
-`mean.temp.quantile` | The percentile of the average daily mean temperature during the heatwave compared to the community's year-round temperature distribution, based on the temperatures for the community during the period specified by the `referenceBoundaries` argument in `gen_hw_set`
-`max.temp.quantile` | The percentile of the highest daily mean temperature during the heatwave compared to the community's year-round temperature distribution 
-`min.temp.quantile` | The percentile of the lowest daily mean temperature during the heatwave compared to the community's year-round temperature distribution 
-`mean.temp.1` | The community's average year-round temperature, based on the temperatures for the community during the period specified by the `referenceBoundaries` argument in `gen_hw_set`
-`mean.summer.temp` | The community's average May--September temperature, based on the temperatures for the community during the period specified by the `referenceBoundaries` argument in `gen_hw_set` 
-`city` | The identifier for the community, as given in the file specified in the `citycsv` argument of `gen_hw_set`.
-
-An example of one of these dataframes is given in the `hw_datafr` dataset included with the package. This gives heatwaves projected using the r1i1p1 ensemble of NCAR's CCSM for 2061-2080, using thresholds for the heatwave definition based on present temperature distributions (1981-2004) and the temperature distributions from 2061-2080 as reference values for relative heatwave characteristics. 
-
-You can access this data using: 
-
-```{r}
-data(hw_datafr)
-```
-
-This will load the example dataframe into your R session as the object `hw_datafr`:
-
-```{r}
-hw_datafr[1:3, c("hw.number", "mean.temp", "length", "start.date",
-                 "mean.temp.quantile", "city")]
-```
-
-### Applying functions across all heatwave datasets
-
-Once you have created a directory of files with characterized heatwaves for each ensemble member, you can explore or extend your results by using the `apply_all_models` function. This function allows you to apply custom R functions across all heatwave dataframes created by the `gen_hw_sets` call. You specify the location of the directory with the heatwave dataframes using the `out` argument when calling `apply_all_models`. Typically, this will be the same value as that for the `out` argument in `gen_hw_set`. You can apply any R function you have created, as long as it follows certain standards in accepting input and returning output.
-
-As an example, if you wanted to to get the average length of the heatwaves identified within each ensemble member, you could write a simple function to calculate average length and then use `apply_all_models` to apply it across the dataframes for heatwaves for all ensemble members in all climate models: 
+As an example, if you wanted to to get the average length of the heat waves identified within each ensemble member, you could write a simple function to calculate average length and then use `apply_all_models` to apply it across the dataframes for heat waves for all ensemble members in all climate models: 
 
 ```{r, eval = FALSE}
 # Define the function
-average_length <- function(hw_datafr){
-        ave_length <- mean(hw_datafr$length)
-        return(ave_length)
-}
+average_mean_temp <- function(hw_datafr){
+        out <- mean(hw_datafr$mean.temp)
+        return(out)
+        }
 ```
 
-```{r, eval = FALSE}
-# Apply across all heatwave dataframes from all ensemble members
-apply_all_models(out = "results", 
-                 FUN = average_length)
+This function can then be applied across an example output directory included in the package, `example_results`, using: 
+
+```{r}
+out <- system.file("extdata/example_results", package = "futureheatwaves")
+apply_all_models(out = out, 
+                 FUN = average_mean_temp)
 ```
 
-```
-  model ensemble    value
-1  bcc1        1 9.830108
-2  ccsm        1 9.673943
-3  ccsm        2 8.795396
-```
+You can also use the `city_specific` argument in `apply_all_models` to apply the function separately by location. For example: 
 
-You can also use the `city_specific` argument in `apply_all_models` to apply the function separately by community. For example: 
-
-```{r, eval = FALSE}
-apply_all_models(out = "results", 
-                 FUN = average_length,
+```{r}
+apply_all_models(out = out, 
+                 FUN = average_mean_temp,
                  city_specific = TRUE)
 ```
 
-```
-   model ensemble city     value
-1   bcc1        1 balt  5.196078
-2   bcc1        1  nwk  9.287037
-3   bcc1        1   ny  9.287037
-4   bcc1        1 phil  5.196078
-5   bcc1        1 prov 33.444444
-6   ccsm        1 balt  8.192308
-7   ccsm        1  nwk 10.060811
-8   ccsm        1   ny 10.060811
-9   ccsm        1 phil  9.739437
-10  ccsm        1 prov 10.446043
-11  ccsm        2 balt  7.083333
-12  ccsm        2  nwk  9.455128
-13  ccsm        2   ny  9.455128
-14  ccsm        2 phil  8.128049
-15  ccsm        2 prov 10.181159
-```
-
-To work, the functions you apply using `apply_all_models` must follow a certain structure. They must require only a dataframe of heatwaves, in the format of those output by `gen_hw_set`, as the input, and they must output a single-value vector (i.e., a vector of length one).
+To work, the functions you apply using `apply_all_models` must follow a certain structure. They must input a dataframe of heat waves, in the format of those output by `gen_hw_set`, and they must output a single-value vector (i.e., a vector of length one). You can use this functionality to either explore characteristics of the identified heat waves or to estimate the health impacts of the identified heat waves. 
 
 We have included several functions as simple examples of the type of functions that can be used with `apply_all_models`: 
 
-- `number_of_heatwaves`: Determines the number of heatwaves ; 
-- `heatwave_days`: Sums up the total number of heatwave days by adding the lengths of all heatwaves; 
-- `average_length`: Calculates the average length of heatwaves; and 
-- `average_mean_temp`: Calculates the average mean temperature across all heatwaves
+- `number_of_heatwaves`: Determines the number of heat waves ; 
+- `heatwave_days`: Sums up the total number of heat wave days by adding the lengths of all heat waves; 
+- `average_length`: Calculates the average length of heat waves; and 
+- `average_mean_temp`: Calculates the average mean temperature across all heat waves.
 
-You can see the code of any of these functions, to use to develop your own, by typing just the function name (with no parentheses) in your R console. 
+You can see the code of any of these functions, to use as examples when developing your own, by typing just the function name (with no parentheses) in your R console. 
 
 ```{r, eval = FALSE}
 average_mean_temp
@@ -429,200 +414,145 @@ function(hw_datafr){
 <environment: namespace:futureheatwaves>
 ```
 
-You can use this functionality to either explore characteristics of the identified heatwaves or to estimate the health impacts of the identified heatwaves. 
-
-To help users create their own functions, we have included an example dataframe representative of the heatwave dataframes that `gen_hw_set` outputs. This data can be loaded using the call: 
+To help users create their own functions, we have included an example dataframe representative of the heat wave dataframes that `gen_hw_set` outputs. This data can be loaded using the call: 
 
 ```{r eval = FALSE}
 data(hw_datafr)
 ```
 
+## Using custom options
+
+### Using a custom heat wave definition
+
+A variety of different heat wave definitions have been used to identify heat waves in a time series of temperature data [@smith2013]. Researchers might want to use a specific definition, for example, because it matches the definition used by local health officials to declare heat wave warnings or, in the case of health impact assessments, to match with a definition used in an epidemiologic study. 
+
+The default is for this package to use the following definition to identify heat waves: 
+
+> A heat wave is two or more days at or above a community-specific threshold temperature, with the threshold determined as the $98^{th}$ percentile of year-round temperature in the community during some reference period (by default, 1981--2004).
+
+Three components of this definition can be easily customized, without creating a new R function to use to identify heat waves. With a bit more work, in terms of writing a custom R function, the customization of the heat wave definition is quite extensive.
+
+First, the percentile used to identify a heat wave can be changed using the `probThreshold` option when calling the `gen_hw_set` function. This option can take values between 0 and 1. The default value is 0.98, or a definition with a threshold of the $98^{th}$ percentile of the community's temperature. Second, the number of days required in the heat wave definition can similarly be specified using the `numDays` argument in `gen_hw_set`.
+
+Third, it is possible to specify the range of years of data for the community that should be used when determining this threshold. For example, if you wanted to base the threshold for each community on current community climates, you could leave this option as its default, which uses climate projections from the years 1981 to 2004 to determine the thresholds. If you wanted to use a different set of years, you could set the start and end year bounds for this period using the option `thresholdBoundaries` in the function `gen_hw_set`.
+
+It is also possible to use a completely customized heat wave definition. To do this, you will need to write and load a function that implements your chosen heat wave definition. You can then reference the custom function using the `IDheatwavesFunction` option in `gen_hw_set`. To work correctly, this custom function must allow only specific inputs and generate only specific outputs. 
+
+The function must allow the following inputs (even if it does not use them within the function code):
+
+- `datafr`: A dataframe with columns for date and temperature for a community. The first column should be the date of each observation, in the Date class. The second column should be the temperature. At this point in the normal processing of the `gen_hw_set` function, temperatures have been converted to Fahrenheit. Therefore, if you are writing a custom function that uses an absolute temperature threshold, it should be included in the function in Fahrenheit units.
+- `threshold`: A single-value numerical vector; in the default definition, this is the threshold temperature for each community, as determined earlier in the function call, calculated as a percentile of the community's year-round temperature. This should be an absolute temperature value, in degrees Fahrenheit. 
+- `numDays`: The number of days above the threshold required for a heat wave. 
+
+The function must return only the input dataframe (`datafr`), with the following columns added: 
+
+- `hw`: A binary variable indicating whether a day was part of a heat wave (1: day in a heat wave; 0: not in a heat wave) and
+- `hw.number`: A non-negative integer that is 0 for all days that are not in heat waves and, for days in heat waves, gives a unique number for each separate heat wave. For example, all days in the second heat waves in the time series would get the value 2 for this column, while all days in the fifth heat wave would get the value 5, and all days not in heat waves would get the value 0. 
+
+To help in developing your own heat wave identification functions, the package includes an example of the required input dataframe, `datafr`. You can load this dataframe by calling: 
+
+```{r}
+data(datafr)
+```
+
+If your heat wave function is properly set up to use in this package, it can take as input this example dataframe and a threshold value and will return the original dataframe with the columns `hw` and `hw.number`, as defined above, returned:
+
+```{r}
+head(datafr, 3)
+id_of_hws <- IDHeatwavesR(datafr = datafr, threshold = 95, numDays = 2)
+head(id_of_hws, 3)
+```
+
+The custom function can then be referenced using the `IDheatwavesFunction` option in `gen_hw_set`, and it will be used to identify heat waves in the dataset. You should specify the function name in quotation marks for this argument. For example, we have included an alternative ID definition function in this package, called `IDHeatwavesAlternative`, which identifies heat waves two or more days above the higher of either a community's $98^{th}$ percentile temperature or $80^oF$. To use this as the heat wave definition, you would run:
+
+```{r, eval = FALSE}
+# Set up path names to example data
+projection_dir_location <- system.file("extdata/cmip5",
+                                       package = "futureheatwaves")
+city_file_location <- system.file("extdata/cities.csv",
+                                  package = "futureheatwaves")
+
+gen_hw_set(out = "example_results",
+           dataFolder = projection_dir_location ,
+           dataDirectories = list("historical" = c(1990, 1999),
+                                       "rcp85" = c(2060, 2079)),
+           citycsv = city_file_location,
+           coordinateFilenames = "latitude_longitude_NorthAmerica_12mo.csv",
+           tasFilenames = "tas_NorthAmerica_12mo.csv",
+           timeFilenames = "time_NorthAmerica_12mo.csv",
+           IDheatwavesFunction = "IDHeatwavesAlternative")
+```
+
+### Customizing projection dates
+
+By default, the function will generate heat wave projections for the selected communities for the years 2070 to 2079. This projection date range can be changed by specifying alternative starting and ending years in the `projectionBoundaries` option in the `gen_hw_set` function. The starting year cannot be earlier than the starting date specified for the earlier subdirectory (e.g., "historical") or later than the last date of the later subdirectory (e.g., "rcp85"). Further, the custom date boundaries cannot span between the two subdirectories.
+
+For example, to create projections for 2060 to 2069, you could call: 
+
+```{r, eval = FALSE}
+gen_hw_set(out = "example_results",
+           dataFolder = projection_dir_location ,
+           dataDirectories = list("historical" = c(1990, 1999),
+                                  "rcp85" = c(2060, 2079)),
+           citycsv = city_file_location,
+           coordinateFilenames = "latitude_longitude_NorthAmerica_12mo.csv",
+           tasFilenames = "tas_NorthAmerica_12mo.csv",
+           timeFilenames = "time_NorthAmerica_12mo.csv",
+           projectionBoundaries = c(2060, 2069))
+```
+
+### Customizing dates for reference data
+
+The heat wave datasets characterize heat wave in several ways that are based on relative temperature. These characteristics are measured by taking the absolute temperature measures of the heat wave (e.g., average temperature during the heat wave is $90^oF$) and comparing them to the location’s typical temperature distributions. This process generates relative measures of how intense the heat wave is compared to what is normal in that loaction (e.g., $90^oF$ is in the $99^{th}$ percentile of year-round
+temperatures in the location). The default is to use temperatures for the period 2070 to 2079 for these reference temperatures, to align with the example data. However, the user can change this specification using the `referenceBoundaries` option of `gen_hw_set` to specify which years to use for these reference temperatures. This functionality can be useful in exploring the role of adaptation in future heat waves. 
+
+For example, to use temperature projections for 1990 to 1999 when calculating relative characteristics of heat waves, to explore the assumption that cities remain adapted to their present-day climate, rather than changing in adaptation as climate change increases temperatures, you could run:
+
+```{r, eval = FALSE}
+gen_hw_set(out = "example_results",
+           dataFolder = projection_dir_location ,
+           dataDirectories = list("historical" = c(1990, 1999),
+                                       "rcp85" = c(2060, 2079)),
+           citycsv = city_file_location,
+           coordinateFilenames = "latitude_longitude_NorthAmerica_12mo.csv",
+           tasFilenames = "tas_NorthAmerica_12mo.csv",
+           timeFilenames = "time_NorthAmerica_12mo.csv",
+           referenceBoundaries = c(1990, 1999))
+```
+
+As with the `projectionBoundaries` option, there are some restrictions on which year ranges can be selected. The starting year cannot be earlier than the first year in the earlier subdirectory and the ending year cannot be later than the last year of the later subdirectory. Further, the custom date boundaries cannot span the two directories.
+
 ### Mapping grid points
 
-The package also has a function that allows you to plot the locations of grid points for each climate model that match study communities, as well as show the links between climate grid points and associated communities. The `map_grid` function allows you to specify a model (`plot_model`), as well as the location of your output directory (usually, this will be the directory specified using the `out` argument in `gen_hw_set`) and will create a plot of the model grid points associated with your community locations, as well as draw lines between each community and its closest model grid point for that climate model: 
+The package also has a function that allows you to plot the locations of grid points for each climate model that match study locations, as well as show the links between climate grid points and associated locations. The `map_grid` function allows you to specify a model (`plot_model`), as well as the location of your output directory (usually, this will be the directory specified using the `out` argument in `gen_hw_set`) and will create a plot of the model grid points associated with your community locations, as well as draw lines between each community and its closest model grid point for that climate model: 
 
 ```{r fig.width = 5, message = FALSE, warning = FALSE}
-out <- system.file(package = "futureheatwaves")
+out <- system.file("extdata/example_results", package = "futureheatwaves")
 map_grid(plot_model = "bcc1", out = out)
 ```
 
-If you want to plot several of these maps for different climate models and then plot them together, you can use the `grid.arrange` function from the `gridExtra` package: 
+Because the resulting plot is a "ggplot" object, you can use `ggplot2` functions to change the formatting for this output. For example, you could change the title and theme with the following code (results not shown):
 
-```{r fig.width = 5, fig.height = 7}
+```{r fig.width = 5, message = FALSE, warning = FALSE, eval = FALSE}
+a <- map_grid(plot_model = "bcc1", out = out)
+a + ggtitle("BCC1 CMIP5 model") + theme_dark()
+```
+
+If you want to plot several of these maps for different climate models and then plot them together, you can use the `grid.arrange` function from the `gridExtra` package (results not shown): 
+
+```{r fig.width = 5, fig.height = 7, eval = FALSE}
 library(gridExtra)
 a <- map_grid(plot_model = "bcc1", out = out)
 b <- map_grid(plot_model = "ccsm", out = out)
 grid.arrange(a, b, ncol = 1)
 ```
 
-## Using custom options
+## Extensions
 
-A strength of this package is that it allows extensive customization by the user. This section describes which features can be customized and how. 
+The functionality of this package can be easily expanded by loops. For example, to explore the role of the heat wave definition on projections, the user could create a loop to run `gen_hw_set` and `apply_all_models` to the same directory of climate projections but with a variety of different functions used to pick out the heat waves in the projections. 
 
-### Using a custom heatwave definition
+Also, while this package was created to be used for research on heat waves in climate change projections, with some adaptations it can also be used more broadly. For example, there are other exposures like wildfires and air pollution where it may be interesting to identify extended periods of high exposures in projection time series. This package could be applied to explore these exposures. The directory of projection data would need to be set up in the same structure as for exploring heat waves, and the `input_metric` should be set as `fahrenheit`, to pass the exposure values through to the characterized datasets without performing a conversion. A user could also use this package to explore events that must be lower than some minimum threshold (e.g., cold waves), but it would take some extra coding and conversions, since the functions in this package are written to identify periods above a threshold (for example, the user could multiple all projected temperatures by -1, and then the coldest temperatures would register as being the highest). 
 
-The default is for this package to use the following definition to identify heatwaves: 
-
-> A heatwave is two or more days at or above a community-specific threshold temperature, with the threshold determined as the $98^{th}$ percentile of year-round temperature in the community during some reference period (by default, 1981--2004).
-
-Two components of this definition can be easily customized, without creating a new R function to use to identify heatwaves. With a bit more work, in terms of writing a custom R function, the customization of the heatwave definition is almost limitless.
-
-First, the percentile used to identify a heatwave can be changed using the `probThreshold` option when calling the `gen_hw_set` function. This option can take values between 0 and 1. The default value is 0.98, or a definition with a threshold of the $98^{th}$ percentile of the community's temperature.
-
-Second, it is possible to specify the range of years of data for the community that should be used when determining this threshold. For example, if you wanted to base the threshold for each community on current community climates, you could leave this option as its default, which uses climate projections from the years 1981 to 2004 to determine the thresholds. If you wanted to use a different set of years, you could set the start and end year
-bounds for this reference period within the first two values of the option `dataBoundaries` in the function `gen_hw_set`.
-
-It is also possible to use a completely customized heatwave definition. To do this, you will need to write and load a function that implements your chosen heatwave definition. You can then reference the custom function using the `IDheatwavesFunction` option in `gen_hw_set`. To work correctly, this custom function must allow only specific inputs and generate only specific outputs. 
-
-The function must allow the following inputs (even if it does not use them within the function code):
-
-- `datafr`: A dataframe with columns for date and temperature for a community. The first column should be the date of each observation, in the Date class. The second column should be the temperature. At this point in the normal processing of the `gen_hw_set` function, temperatures have been converted from Kelvin (the expected units for the climate projection files) to Fahrenheit. Therefore, if you are writing a custom function that uses an absolute temperature threshold, it should be included in the function in Fahrenheit units.
-- `threshold`: A single-value numerical vector; in the default definition, this is the threshold temperature for each community, as determined earlier in the function call, calculated as a percentile of the community's year-round temperature.
-
-The function must return only the input dataframe (`datafr`), with the following columns added: 
-
-- `hw`: A binary variable indicating whether a day was part of a heatwave (1: day in a heatwave; 0: not in a heatwave) and
-- `hw.number`: A non-negative integer that is 0 for all days that are not in heatwaves and, for days in heatwaves, gives a unique number for each separate heatwave. For example, all days in the second heatwaves in the time series would get the value 2 for this column, while all days in the fifth heatwave would get the value 5, and all days not in heatwaves would get the value 0. 
-
-To help in developing your own heatwave identification functions, the package includes an example of the required input dataframe, `datafr`. You can load this dataframe by calling: 
-
-```{r}
-data(datafr)
-```
-
-If your heatwave function is properly set up to use in this package, it can take as input this example dataframe and a threshold value and will return the original dataframe with the columns `hw` and `hw.number`, as defined above, returned:
-
-```{r}
-head(datafr, 3)
-id_of_hws <- IDHeatwavesR(datafr = datafr, threshold = 95)
-head(id_of_hws, 3)
-```
-
-The custom function can then be referenced using the `IDheatwavesFunction` option in `gen_hw_set`, and it will be used to identify heatwaves in the dataset. You should specify the function name in quotation marks for this argument. For example, we have included an alternative ID definition function in this package, called `IDHeatwavesAlternative`, which identifies heatwaves as five or more days (compared to two or more days required by the default definition) above a community's $98^{th}$ percentile temperature. To use this as the heatwave definition, you would run:
-
-```{r, eval = FALSE}
-# Set up path names to example data
-projection_dir_location <- system.file("cmip5", package = "futureheatwaves")
-city_file_location <- system.file("cities.csv", package = "futureheatwaves")
-
-gen_hw_set(out = "example_results",
-           dataFolder = projection_dir_location ,
-           dataDirectories = list("historical" = c(1980, 2004),
-                                        "rcp85" = c(2006, 2099)),
-           citycsv = city_file_location,
-           coordinateFilenames = "latitude_longitude_NorthAmerica_12mo.csv",
-           tasFilenames = "tas_NorthAmerica_12mo.csv",
-           timeFilenames = "time_NorthAmerica_12mo.csv",
-           lat_lon_colnames = c("lat", "long"),
-           IDheatwavesFunction = "IDHeatwavesAlternative")
-```
-
-### Customizing projection dates
-
-By default, the function will generate heatwave projections for the selected communities for the years 2061 to 2080. This projection date range can be changed by specifying alternative starting and ending years as the third and fourth values of the `projectionBoundaries` option in the `gen_hw_set` function. The starting year cannot be earlier than the starting date specified for the first subdirectory (e.g., "historical") or later than the last date of the second subdirectory (e.g., "rcp85"). Further, the custom date boundaries cannot span between the two subdirectories.
-
-For example, to create projections for 2071 to 2090, you could call: 
-
-```{r, eval = FALSE}
-gen_hw_set(out = "example_results",
-           dataFolder = projection_dir_location ,
-           dataDirectories = list("historical" = c(1980, 2004),
-                                        "rcp85" = c(2006, 2099)),
-           citycsv = city_file_location,
-           coordinateFilenames = "latitude_longitude_NorthAmerica_12mo.csv",
-           tasFilenames = "tas_NorthAmerica_12mo.csv",
-           timeFilenames = "time_NorthAmerica_12mo.csv",
-           lat_lon_colnames = c("lat", "long"),
-           IDheatwavesFunction = "IDHeatwavesAlternative",
-           projectionBoundaries = c(2071, 2090))
-```
-
-### Customizing dates used to determine thresholds or reference data
-
-Similarly, while the default is to use data from 1981 to 2004 to determine the threshold temperature for each community's heatwave definition, the user can customize which date range to use when pulling the temperature data to use to calculate these thresholds. This option is specified using the `thresholdBoundaries` option in `gen_hw_set`. For example, to use the years 2061 to 2080 to calculate these threshold temperatures, you could run: 
-
-```{r, eval = FALSE}
-gen_hw_set(out = "example_results",
-           dataFolder = projection_dir_location ,
-           dataDirectories = list("historical" = c(1980, 2004),
-                                        "rcp85" = c(2006, 2099)),
-           citycsv = city_file_location,
-           coordinateFilenames = "latitude_longitude_NorthAmerica_12mo.csv",
-           tasFilenames = "tas_NorthAmerica_12mo.csv",
-           timeFilenames = "time_NorthAmerica_12mo.csv",
-           lat_lon_colnames = c("lat", "long"),
-           IDheatwavesFunction = "IDHeatwavesAlternative",
-           thresholdBoundaries = c(2061, 2080))
-```
-
-You can customize one other set of time boundaries. The heatwave datasets include several heatwave characteristics that incorporate relative temperature. These take the absolute temperature measures of heatwave and compare them to the community's typical temperature distributions to generate relative measures of the intensity of the heatwave. The default is to use temperatures from a community for the period 2061 to 2080 for these reference temperatures to calculate relative temperatures of each heatwave. However, you can use the `referenceBoundaries` option of `gen_hw_set` to specify which years you would like to use for these reference temperatures. This can be useful in exploring the role of adaptation in future heatwaves. For example, if you wanted to use temperature projections for 2031 to 2040 when calculating relative characteristics of heatwaves, you could run: 
-
-```{r, eval = FALSE}
-gen_hw_set(out = "example_results",
-           dataFolder = projection_dir_location ,
-           dataDirectories = list("historical" = c(1980, 2004),
-                                        "rcp85" = c(2006, 2099)),
-           citycsv = city_file_location,
-           coordinateFilenames = "latitude_longitude_NorthAmerica_12mo.csv",
-           tasFilenames = "tas_NorthAmerica_12mo.csv",
-           timeFilenames = "time_NorthAmerica_12mo.csv",
-           lat_lon_colnames = c("lat", "long"),
-           IDheatwavesFunction = "IDHeatwavesAlternative",
-           referencdeBoundaries = c(2031, 2040))
-```
-
-As with the `projectionBoundaries` option, there are some restrictions on which year ranges can be selected. The starting year cannot be earlier than the first year in the first subdirectory and the ending year cannot be later than the last year of the second subdirectory. Further, the custom date boundaries cannot span the two directories.
-
-## How the package works
-
-### Parsing the directory structure
-
-The function reads in the structure of the directory specified by `dataFolder` and uses the names of subdirectories to create a list of all of the climate models and their ensemble members within the directory. 
-
-The function that does this parsing, `acquireDirectoryStructure`, returns a list object outlining the file structure of the directory containing the climate projections. This list has an element for each climate model (e.g. ,"ccsm"). The first element within each of these elements is the name of the model. The second element within the first-level element gives the file paths for location grids, climate projections, and projection times for each ensemble run of the model.
-
-This parsed version of the directory structure allows later functions to walk through all of the climate projections for different models and ensembles within the specified projections directory.
-
-If you only specify some of the models to run, this part of the package will prune any unneeded models from the parsed directory structure before proceeding with the rest of the functions.
-
-### Determining thresholds for heatwave definition
-
-To determine the threshold value for each community, the function pulls climate projection data from either the default historical years (1981--2004) or from a customized range of dates, as specified by the first two values in the `dataBoundaries` option for the `gen_hw_set` function. This option allows the user to select years to use when determining these threshold temperatures.
-
-All climate projection data for the grid point closest to each community is pulled and use to estimate the community-specific thresholds. The percentile value calculated for each community is either a default of 0.98 or is specified by the user using the `probThreshold` option in the `gen_hw_set` function.
-
-These community-specific thresholds are then passed through to later calls in the function, where they are used to identify heatwaves in a time series of climate projection data. 
-
-### Identifying heatwaves in an ensemble member's projection data
-
-...
-
-### Characterizing heatwaves
-
-...
-
-### Aggregating heatwave projections
-
-Once the function has generated a list describing the climate models and ensemble members included in the user-specified `dataFolder` directory of climate projections, the function will run through all ensemble members of any climate model within this directory, identify and characterize the heatwaves for that ensemble member, and save the resulting dataframe to output. 
-
-The package uses closures to aggregate data over all the different ensemble members of all climate models included in the directory of projection data ...
-
-### Writing out results to the user's local computer
-
-...
-
-### Applying user-specified functions across all heatwave datasets
-
-...
-
-## Caveats
-
-- Heatwaves near the start / end of the dataset
-- Downscaling
-
-## Possible future developments
-
-- Allowing netCDF for input files
-- Allowing to specify exact date for boundaries, not year (would allow easier use for southern hemisphere-- reduce problems with "edge-case" heatwaves)
+Users doing these kinds of extensions will need to pay attention to a few points. First, some of the event characteristics (first in the calendar year, average of May--September temperatures, days above $90^{o}F$) might not be meaningful for studies of other types of events. Further, because event periods are usually defined as a string of multiple days exceeding some threshold, the functions in this package may miss the first and last event of the year. For example, if the first day of the time series is the last day of an event, this function would not identify that event because it lacks data from the earlier days that make allow this day to meet the event definition. This issues would lead to, a most, missing two events out of each projection, but should be considered if studying events that might occur near the start and end of projection data. If there is adequate interest from researchers, in the future we may adapt the package to make these secondary uses more straightforward. 
 
 ## References

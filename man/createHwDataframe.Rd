@@ -112,7 +112,11 @@ A dataframe of identified and characterized heat waves for a single
 }
 \description{
 This function takes a dataframe with identified heat waves and returns
-a dataframe that lists and characterizes all of the heat waves.
+a dataframe that lists and characterizes all of the heat waves. If no
+heat waves were identified in a city, it returns a data frame with the
+same columns but no observations, to allow the empty dataframe to be
+joined without error to the dataframes for cities that do have heat
+waves under the definition.
 }
 \note{
 When calculating relative characteristics of heat waves, like the

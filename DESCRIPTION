@@ -17,7 +17,7 @@ Description: Takes a directory of climate projection files and, for each,
     This work was supported in part by grants from the National Institute of
     Environmental Health Sciences (R00ES022631), the National Science Foundation
     (1331399), and the Colorado State University Vice President for Research.
-License: GPL (>= 2)
+License: GPL-2
 LazyData: TRUE
 Depends:
     R (>= 2.10)

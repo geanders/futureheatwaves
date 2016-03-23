@@ -1,3 +1,4 @@
+# skip_on_os(windows)
 library(futureheatwaves)
 context("Identifying heatwaves")
 

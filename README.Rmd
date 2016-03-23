@@ -32,9 +32,10 @@ Because this package includes some C++ functions, this installation from GitHub 
 
 # Using the package
 
-There are extensive details on using this package in the vignette that comes with the package and can be accessed using: 
+There are extensive details on using this package in the package vignette, which can be accessed once you install the package using: 
 
 ```{r eval = FALSE}
 vignette("futureheatwaves")
 ```
 
+An uncompiled version of the vignette can be found, without having to install the package, [here](https://github.com/geanders/futureheatwaves/blob/master/vignettes/futureheatwaves.Rmd).

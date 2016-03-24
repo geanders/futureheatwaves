@@ -15,5 +15,5 @@ This is a new release, so there are no reverse dependencies.
 
 ## Other points
 
-- One function in this package writes out files to the user's computer. The function requires the user's explicit permission before doing this by printing a warning message through a prompt and requiring the user's explicit permission before proceeding to write the files.
-- The package has several functions that process comma-separated files. Therefore, I have included some example data for function examples and the vignette as comma-separated files in the `inst/extdata` directory rather than saving these example datasets as `.rda` files in the `data` directory.
+- One function in this package writes out files to the user's computer. The function requires the user's explicit permission before doing this by printing a warning message through a prompt and requiring the user's explicit permission before proceeding to write the files. The exact warning is: "Warning: This function will write new files to your computer in the [user-selected] directory of your computer. If that directory already exists, running this function will write over it. Do you want to continue? (y / n):". The function will abort if the user does not enter "y" or "yes" at this prompt.
+- Some of the example files are included as comma-separated (.csv) files, rather than as saved R objects, because one of the main package functions requires a directory of comma-separated files as input. These example files are in the `inst/extdata` directory of the package.

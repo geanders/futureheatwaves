@@ -4,7 +4,7 @@ author: "G. Brooke Anderson, Colin Eason, and Elizabeth A. Barnes"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{`futureheatwaves` package vignette}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 references:

@@ -18,7 +18,6 @@ references:
   container-title: Epidemiology
   volume: 20
   number: 2
-  DOI: 10.1097/EDE.0b013e318190ee08
   page: 205-213
   type: article-journal
   issued: 
@@ -109,7 +108,6 @@ references:
   container-title: Journal of Statistical Software
   volume: 59
   number: 10
-  DOI: 0.18637/jss.v059.i10
   page: 1-23
   type: article-journal
   issued: 

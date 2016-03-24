@@ -1,9 +1,10 @@
 #' Create and write heat wave projections
 #'
 #' This function creates datasets of identified and characterized heat waves
-#' for all ensemble members in a directory of climate projections for a
-#' user-specified set of cities.The resulting heat wave projections are written
-#' out to a specified directory on the user's local computer.
+#' for all ensemble members in all climate models in a directory of climate
+#' projections for a user-specified set of locations.The resulting heat wave
+#' projections are written out to a specified directory on the user's local
+#' computer.
 #'
 #' @param out Character string with pathway to directory to which
 #'    heat wave files will be written. This should be a pathname to a directory
@@ -19,62 +20,68 @@
 #' @param citycsv Character string giving the filepath to a
 #'    comma-separated (.csv) file with, for each study city, a unique city
 #'    identifier, latitude, and longitude. These values must be specified with
-#'    the column names \code{city}, \code{lat}, and \code{lon}.
+#'    the column names \code{city}, \code{lat}, and \code{lon}. See the
+#'    \code{futureheatwaves} vignette for guidance on setting up this
+#'    file.
 #' @param coordinateFilenames Character string the with filename of each
-#'    grid point location file. This filename should be identical for all ensemble
-#'    members included in the \code{dataFolder} directory. See the package
-#'    vignette for an example of the required structure for this file.
+#'    grid point location file. This filename should be identical for all
+#'    ensemble member subdirectories included in the \code{dataFolder} directory.
+#'    See the package vignette for an example of the required structure for this
+#'    file.
 #' @param tasFilenames Character string the with filename of each climate
 #'    projection file. This filename should be identical for all ensemble
-#'    members included in the \code{dataFolder} directory. See the package
-#'    vignette for an example of the required structure for this file.
+#'    member subdirectories included in the \code{dataFolder} directory. See the
+#'    package vignette for an example of the required structure for this file.
 #' @param timeFilenames Character string the with filename of each projection
 #'    dates file. This filename should be identical for all ensemble
-#'    members included in the \code{dataFolder} directory. See the package
-#'    vignette for an example of the required structure for this file.
+#'    member  subdirectories included in the \code{dataFolder} directory. See
+#'    the package vignette for an example of the required structure for this
+#'    file.
 #' @param IDheatwavesFunction A character string with the name of the R function
 #'    to use to identify heat waves. This function may be a user-specified custom
-#'    function to, but it must be loaded into the current R session. The
+#'    function, but it must be loaded into the current R session. The
 #'    function name must be put in quotation marks. For more guidance on how to
 #'    write and use a custom function to identify heat waves, see the package
 #'    vignette for \code{futureheatwaves}.
 #' @param thresholdBoundaries A numeric vector with the custom time boundaries
 #'    to be used to determine the threshold temperatures for the heat wave
 #'    definition. The required format for this vector is c(start year, end
-#'    year), with the restrictions that bounds must be contained within the
+#'    year), with the restriction that bounds must be contained within the
 #'    time boundaries of one of the two experiment subdirectories specified
 #'    by the \code{dataDirectories} argument in \code{\link{gen_hw_set}}.
 #'    The default value is 1990 to 1999.
 #' @param projectionBoundaries A numeric vector with the custom time boundaries
 #'    for which the user wants to create heat wave projections. The required
-#'    format for this vector is c(start year, end
-#'    year), with the restrictions that bounds must be contained within the
-#'    time boundaries of one of the two experiment subdirectories specified
-#'    by the \code{dataDirectories} argument in \code{\link{gen_hw_set}}.
-#'    The default value is 2070 to 2079.
+#'    format for this vector is c(start year, end year), with the restriction
+#'    that bounds must be contained within the time boundaries of one of the two
+#'    experiment subdirectories specified by the \code{dataDirectories} argument
+#'    in \code{\link{gen_hw_set}}. The default value is 2070 to 2079.
 #' @param referenceBoundaries A numeric vector with the custom time boundaries
 #'    to use in calculating relative characteristics for heat waves (i.e., to use
 #'    when exploring the role of adaptation in projections). For more
 #'    information on how reference temperatures are used, see the package
 #'    vignette for \code{futureheatwaves}. The required format for this vector
-#'    is c(start year, end year), with the restrictions that bounds must be
+#'    is c(start year, end year), with the restriction that bounds must be
 #'    contained within the time boundaries of one of the two experiment
 #'    subdirectories specified by the \code{dataDirectories} argument in
-#'    \code{\link{gen_hw_set}}. The default value is 2070 to 2079.
-#' @param probThreshold Numerical value between 0 and 1 specifying the threshold
-#'    of temperature to use when defining heat waves. The default value is 0.98
-#'    (i.e., a heat wave is two or more days above the city's 98th
-#'    percentile temperature).
-#' @param numDays Numerical value greater than 0 giving the number of days to
-#'    use in the heat wave definition (e.g., `numDays = 2` would define a
+#'    \code{\link{gen_hw_set}}. The default value is 2070 to 2079. If the
+#'    time bounds used differ from those used for projections, these reference
+#'    temperatures will be pulled from the ensemble member for each climate
+#'    model specified by \code{threshold_ensemble}.
+#' @param probThreshold Numerical value between 0 and 1 specifying the
+#'    percentile to be used for the threshold temperature used to define heat
+#'    waves. The default value is 0.98 (i.e., a heat wave is a certain number of
+#'    days above the city's 98th percentile temperature).
+#' @param numDays Integer greater than 0 giving the number of days to
+#'    use in the heat wave definition (e.g., \code{numDays = 2} would define a
 #'    heat wave as two or more days above the threshold temperature).
 #' @param printWarning TRUE / FALSE, specifies whether to print out a warning
 #'    informing the user that the function will write out results to the local
 #'    directory specified by the user with \code{out}. This warning prints out
-#'    by default; the user must opt-out of this warning by specifying FALSE
-#'    for this argument.
+#'    by default; the user must opt out of this warning by specifying FALSE
+#'    for this argument, for example if running this function within a loop.
 #' @param lat_lon_colnames A character vector of length two with the column names
-#'    in the \code{cities} dataframe for latitude (first vector element) and
+#'    in the \code{citycsv} dataframe for latitude (first vector element) and
 #'    longitude (second vector element)
 #' @param models_to_run A character vector with either "all" (the default),
 #'    in which case the function runs through all models in the \code{dataFolder}
@@ -84,10 +91,9 @@
 #' @param dataDirectories A list object, with two elements, one for each of the
 #'    two subdirectories included in the main directory. Typically, these will
 #'    be separate directories of historical and projection experiments from
-#'    climate models. Each element
-#'    of the list should be named with the name of the subdirectory and
-#'    should provide a numeric vector with the starting and ending years of
-#'    the data within each of the two subdirectories (e.g.,
+#'    climate models. Each element of the list should be named with the name of
+#'    the subdirectory and should provide a numeric vector with the starting and
+#'    ending years of the data within each of the two subdirectories (e.g.,
 #'    \code{list("historical" = c(1990, 1999), "rcp85" = c(2060, 2079))}
 #'    for a \code{dataFolder} with historical experiment data for 1990 to 1999
 #'    and RCP8.5 projections for 2060 to 2079).
@@ -103,19 +109,18 @@
 #'    of the climate projection data being processed. Choices are "kelvin",
 #'    "fahrenheit", and "celsius".
 #'
-#' @return This function returns a dataframe listing the name of each climate
-#'    model used, as well as the number of historical and future projection
-#'    ensembles for each model. This output can be used as a check
-#'    that the function processed through the directory of input files
-#'    specified using the \code{dataFolder} argument.
-#'
-#' This function also creates, and writes to the user's computer, files with
+#' @return This function creates, and writes to the user's computer, files with
 #'    the heat waves and their characteristics for the specified climate
 #'    projections and dates. For more information on customizing this function,
-#'    see the \code{futureheatwaves} vignette.
+#'    see the \code{futureheatwaves} vignette. This function also returns a
+#'    dataframe listing the name of each climate model processed, as well as the
+#'    number of historical and future projection ensemble members for each
+#'    model. This output can be used as a check that the function processed
+#'    through the directory of input files specified using the \code{dataFolder}
+#'    argument.
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' projection_dir_location <- system.file("extdata/cmip5",
 #'                                       package = "futureheatwaves")
 #' city_file_location <- system.file("extdata/cities.csv",
@@ -167,6 +172,8 @@ gen_hw_set <- function(out,
                 out <- paste0(out, "/")
         }
 
+        input_metric <- tolower(input_metric)
+
         # Check the parameters for errors
         check_params(out = out,
                      dataFolder = dataFolder,
@@ -191,7 +198,7 @@ gen_hw_set <- function(out,
                     "Do you want to continue? (y / n): \n")
                 user_prompt <- scan(n = 1, what = "character")
                 user_prompt <- tolower(user_prompt)
-                if(user_prompt %in% c("n", "no")){
+                if(!(user_prompt %in% c("y", "yes"))){
                         stop("User chose to exit at prompt.")
                 }
         }
@@ -220,7 +227,7 @@ gen_hw_set <- function(out,
                        "tasFilenames" = tasFilenames,
                        "timeFilenames" = timeFilenames,
                        "threshold_ensemble" = threshold_ensemble,
-                       "input_metric" = tolower(input_metric))
+                       "input_metric" = input_metric)
 
         # Create the "custom" list object that will hold all of the user's
         # custom settings.
@@ -288,8 +295,8 @@ check_params <- function(out,
         tryCatch(
                 dir.exists(dataFolder),
                 error = function(){
-                        stop(paste("Pathway containing projection data",
-                                   "(`dataFolder`) invalid. Stopping."))
+                        stop(paste("The pathway to the projection data directory",
+                                   "(`dataFolder`) is invalid."))
                 },
                 finally = {}
         )
@@ -299,20 +306,20 @@ check_params <- function(out,
         tryCatch(
                 utils::read.csv(citycsv, header = TRUE),
                 error = function(x){
-                        stop(paste("Cannot read city information .csv",
-                                   "(`citycsv`). Stopping."))
+                        stop(paste("The community location file ",
+                                   "(`citycsv`) cannot be opened."))
                 }
         )
 
         # Check 'Filenames' parameters for .csv extension.
         if(!grepl(".csv", coordinateFilenames)){
-                stop("Invalid format: coordinateFilenames. Stopping.")
+                stop("The `coordinateFilenames` is not a .csv file.")
         }
         if(!grepl(".csv", tasFilenames)){
-                stop("Invalid format: tasFilenames. Stopping.")
+                stop("The `tasFilenames` is not a .csv file.")
         }
         if(!grepl(".csv", timeFilenames)){
-                stop("Invalid format: timeFilenames. Stopping.")
+                stop("The `timeFilenames` is not a .csv file.")
         }
 
         if(!(input_metric %in% c("kelvin", "fahrenheit", "celsius"))){
@@ -360,11 +367,13 @@ checkCustomBounds <- function(boundList, dataDirectories){
                 stop(paste0("Date boundaries must be within the years ",
                            dataDirectories[[1]][1],
                            " and ",
-                           dataDirectories[[2]][2], "."))
+                           dataDirectories[[2]][2], ", the years you",
+                           " have specified as being covered by your ",
+                           " `dataDirectories`."))
         }
 
         if(boundList[1] <= dataDirectories[[1]][2]){
-                if(boundList[2] > dataDirectories[[1]][2]){
+                if(boundList[2] >= dataDirectories[[2]][1]){
                         stop(paste0("Date boundaries cannot span between ",
                                    "the first (",
                                    dataDirectories[[1]][1],

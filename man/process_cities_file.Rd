@@ -14,7 +14,7 @@ latitude and longitude. Other columns may be included in the dataset, but
 will not be passed through to later code.}
 
 \item{lat_lon_colnames}{A character vector of length two with the column names
-in the \code{cities} dataframe for latitude (first vector element) and
+in the \code{citycsv} dataframe for latitude (first vector element) and
 longitude (second vector element)}
 }
 \value{

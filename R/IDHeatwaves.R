@@ -44,11 +44,8 @@ IDheatwaves <- function(threshold, datafr, global, custom){
 #' Identify heat waves in a time series
 #'
 #' This function identifies heat waves in a time series of temperature
-#' data using a heat wave definition that a heat wave must be two or more
-#' days with temperatures equal to or above some threshold temperature.
-#'
-#' This function is the default function used to identify heat waves in
-#' \code{\link{gen_hw_set}}.
+#' data using a heat wave definition that a heat wave must be a certain number
+#' of days with temperatures equal to or above some threshold temperature.
 #'
 #' @inheritParams closest_point
 #' @inheritParams IDheatwaves
@@ -76,7 +73,7 @@ IDheatwaves <- function(threshold, datafr, global, custom){
 #' @examples
 #' \donttest{
 #' data(datafr)
-#' hw_ids <- IDHeatwavesR(threshold = 80, datafr,
+#' hw_ids <- IDHeatwavesR(threshold = 80, datafr = datafr,
 #'                        numDays = 3)
 #' }
 #'
@@ -176,7 +173,7 @@ IDHeatwavesR <- function(threshold, datafr, numDays){
 #' @examples
 #' \donttest{
 #' data(datafr)
-#' hw_ids <- IDHeatwavesAlternative(threshold = 80, datafr,
+#' hw_ids <- IDHeatwavesAlternative(threshold = 80, datafr = datafr,
 #'                                  numDays = 3)
 #' }
 #'
@@ -249,11 +246,14 @@ IDHeatwavesAlternative <- function(threshold, datafr, numDays){
 #' Identify heat waves in a time series
 #'
 #' This function identifies heat waves in a time series of temperature
-#' data using a heat wave definition that a heat wave must be two or more
-#' days with temperatures equal to or above some threshold temperature. This
+#' data using a heat wave definition that a heat wave must be a certain number
+#' of days with temperatures equal to or above some threshold temperature. This
 #' function uses a compiled C++ function for part of the process, making it
 #' faster than the R analogue, \code{\link{IDHeatwavesR}}, although the two
 #' functions give identical results.
+#'
+#' This function is the default function used to identify heat waves in
+#' \code{\link{gen_hw_set}}.
 #'
 #' @inheritParams closest_point
 #' @inheritParams IDheatwaves
@@ -280,7 +280,7 @@ IDHeatwavesAlternative <- function(threshold, datafr, numDays){
 #'
 #' @examples
 #' data(datafr)
-#' hw_ids <- IDHeatwavesCPPwrapper(threshold = 80, datafr,
+#' hw_ids <- IDHeatwavesCPPwrapper(threshold = 80, datafr = datafr,
 #'                                 numDays = 3)
 #'
 #' @export

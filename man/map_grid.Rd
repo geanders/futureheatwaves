@@ -9,22 +9,29 @@ map_grid(plot_model, out)
 \arguments{
 \item{plot_model}{A character string with the name of the model to plot}
 
-\item{out}{Character string with pathway to directory to which
-heat wave files will be written. This should be a pathname to a directory
-on the user's local computer. If the directory already exists, it will
-be overwritten by this function, so the user should either specify a
-pathname for a directory that does not yet exist or be willing to
-overwrite the existing directory. The parent directory of the specified
-directory must exist.}
+\item{out}{Character string with pathname to which heat wave files were
+written by \code{\link{gen_hw_set}}. Typically, this will be the same
+pathname as that specified with \code{out} when running
+\code{\link{gen_hw_set}}.}
+}
+\value{
+A \code{ggplot2} object with a map of grid points for the climate
+   model that were used in processing heat waves for the study locations,
+   with a line drawn from each study locations to the grid point used for
+   it.
 }
 \description{
 This function creates a map of the grid points of a climate model used for
-the study cities and draws lines connecting each study city to its climate
-model grid point.
+the study locations and draws lines connecting each study city to its climate
+model grid point. It currently can only be used for studies within the
+United States.
 }
 \note{
 This function creates a \code{ggplot2} object, so the output can be
-   edited using \code{ggplot2} functions.
+   edited using \code{ggplot2} functions. For this function to work
+   correctly, longitude must be expressed using non-negative decimal
+   degrees when setting up the climate projection files and community
+   location file for \code{\link{gen_hw_set}}.
 }
 \examples{
 out <- system.file("extdata/example_results", package = "futureheatwaves")

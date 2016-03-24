@@ -109,7 +109,7 @@ processModel <- function(model, global, custom, accumulators,
 #'    components of the dataframe of climate model grid locations that will
 #'    ultimately be output as the climate model grid locations file.
 processThresholds <- function(model, global, custom){
-        name <- model[[1]]
+        mod_name <- model[[1]]
 
         # To find the threshold, use the first ensemble member within
         # the relevant directory, historical or rcp
@@ -122,11 +122,11 @@ processThresholds <- function(model, global, custom){
                 global$threshold_ensemble
         thresholdDirs <- thresholdDirs_model[r1i1p1_i][[1]]
 
-        cat("Processing thresholds for", name, "\n")
+        cat("Processing thresholds for", mod_name, "\n")
 
         # Acquire characteristics of the first historical ensemble
         thresholdEnsemble <- processEnsemble(ensemble = thresholdDirs,
-                                              modelName = name,
+                                              modelName = mod_name,
                                               global = global,
                                               custom = custom,
                                               type = "threshold")
@@ -213,7 +213,7 @@ processProjections <- function(ensemble, modelName, ensembleWriter,
                                thresholds, global, custom, accumulators,
                                reference, reference_dates){
 
-        cat("Processing projections for ", modelName, "\n")
+        cat("Processing projections for", modelName, "\n")
 
         # Acquire desired characteristics of the projection ensemble
         ensembleSeries <- processEnsemble(ensemble = ensemble,
@@ -283,7 +283,8 @@ processEnsemble <- function(ensemble, modelName, global, custom, type){
         end <- bounds[2]
 
         # Get a vector containing the dates of days we are dealing with
-        dates <- formDates(times, bounds)
+        dates <- formDates(times = times,
+                           bounds = bounds)
 
         # Acquire time series for every city
         series <- data.frame(tas[start:end, locations])
@@ -333,9 +334,8 @@ closest_point <- function(city, latlong){
         aSQ <- abs(latlong[,1] - latitude) ^ 2
         bSQ <- abs(latlong[,2] - longitude) ^ 2
         cSQ <- aSQ + bSQ
-        c <- sqrt(cSQ)
-        smallest <- min(c)
-        index <- match(smallest, c)
+        c_distance <- sqrt(cSQ)
+        index <- which.min(c_distance)
         return(index)
 }
 

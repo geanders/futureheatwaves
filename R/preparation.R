@@ -23,14 +23,6 @@ acquireDirectoryStructure <- function(dataFolder, coordinateFilenames,
                                       threshold_ensemble,
                                       thresholdBoundaries){
 
-        # If `dataFolder` does not end in "/", add it.
-        # (Only need to repeat here to use with in-package examples)
-        split_dataFolder <- unlist(strsplit(dataFolder, split = ""))
-        last_char <- split_dataFolder[length(split_dataFolder)]
-        if(last_char != "/"){
-                dataFolder <- paste0(dataFolder, "/")
-        }
-
         # Acquire all pathnames to csv files rooted at dataPath
         all <- list.files(dataFolder, recursive = TRUE,
                           pattern = "\\.csv$")
@@ -114,16 +106,23 @@ buildStructureModels <- function(modelName, experiments,
                                  coordinateFilenames, tasFilenames,
                                  timeFilenames, dataDirectories){
         return(list(modelName,
-                    buildStructureExperiments(modelName, experiments[1],
-                                              dataFolder,
-                                              coordinateFilenames,
-                                              tasFilenames, timeFilenames,
-                                              dataDirectories),
-                    buildStructureExperiments(modelName, experiments[2],
-                                              dataFolder,
-                                              coordinateFilenames,
-                                              tasFilenames, timeFilenames,
-                                              dataDirectories)))
+                    buildStructureExperiments(modelName = modelName,
+                                              experiment = experiments[1],
+                                              dataPath = dataFolder,
+                                              coordinateFilenames =
+                                                      coordinateFilenames,
+                                              tasFilenames = tasFilenames,
+                                              timeFilenames = timeFilenames,
+                                              dataDirectories = dataDirectories),
+                    buildStructureExperiments(modelName = modelName,
+                                              experiment = experiments[2],
+                                              dataPath = dataFolder,
+                                              coordinateFilenames =
+                                                      coordinateFilenames,
+                                              tasFilenames = tasFilenames,
+                                              timeFilenames = timeFilenames,
+                                              dataDirectories =
+                                                      dataDirectories)))
 }
 
 #' Generate file structure for an experiment
@@ -150,11 +149,8 @@ buildStructureExperiments <- function(modelName, experiment,
                                       dataDirectories){
 
         # List all ensembles in the given experiment
-        ensembles <- list.dirs(paste0(dataPath, experiment, "/", modelName))
-
-        # Trim off the first element of 'ensembles' list, since it does
-        # not contain information about an ensemble's data.
-        ensembles <- ensembles[-1]
+        ensembles <- list.files(paste0(dataPath, experiment, "/", modelName),
+                                full.names = TRUE)
 
         # Build the directory structure of each ensemble
         ret <- lapply(ensembles, buildStructureEnsembles,
@@ -189,16 +185,23 @@ buildStructureEnsembles <- function(ensemblePath, coordinateFilenames,
         ensemble_name_index <- which(sapply(splist,
                                          function(x) x %in%
                                                  names(dataDirectories)))
+        # If the user has some earlier directories that match subdirectory
+        # names, only take the last match (after that, should just be
+        # climate models and projection files).
+        if(length(ensemble_name_index) > 1){
+                ensemble_name_index <- utils::tail(ensemble_name_index, 1)
+        }
+
         ensemble_name_index <- ensemble_name_index + 2
         ensembleName <- splist[[1]][ensemble_name_index]
 
         # remove any irrelevant files from the file structure
-        files <- list.files(ensemblePath)
-        coor <- files[grep(coordinateFilenames, files)]
-        tas <- files[grep(tasFilenames, files)]
-        time <- files[grep(timeFilenames, files)]
-        files <- c(coor, tas, time)
-        directories <- unlist(lapply(files, function(x){
+        ens_files <- list.files(ensemblePath)
+        coor <- ens_files[grep(coordinateFilenames, ens_files)]
+        tas <- ens_files[grep(tasFilenames, ens_files)]
+        time_file <- ens_files[grep(timeFilenames, ens_files)]
+        ens_files <- c(coor, tas, time_file)
+        directories <- unlist(lapply(ens_files, function(x){
                 return(paste(ensemblePath, x, sep = "/"))
         }))
         return(c(ensembleName, directories))

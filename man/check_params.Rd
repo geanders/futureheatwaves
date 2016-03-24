@@ -25,10 +25,9 @@ directory.}
 \item{dataDirectories}{A list object, with two elements, one for each of the
 two subdirectories included in the main directory. Typically, these will
 be separate directories of historical and projection experiments from
-climate models. Each element
-of the list should be named with the name of the subdirectory and
-should provide a numeric vector with the starting and ending years of
-the data within each of the two subdirectories (e.g.,
+climate models. Each element of the list should be named with the name of
+the subdirectory and should provide a numeric vector with the starting and
+ending years of the data within each of the two subdirectories (e.g.,
 \code{list("historical" = c(1990, 1999), "rcp85" = c(2060, 2079))}
 for a \code{dataFolder} with historical experiment data for 1990 to 1999
 and RCP8.5 projections for 2060 to 2079).}
@@ -36,26 +35,30 @@ and RCP8.5 projections for 2060 to 2079).}
 \item{citycsv}{Character string giving the filepath to a
 comma-separated (.csv) file with, for each study city, a unique city
 identifier, latitude, and longitude. These values must be specified with
-the column names \code{city}, \code{lat}, and \code{lon}.}
+the column names \code{city}, \code{lat}, and \code{lon}. See the
+\code{futureheatwaves} vignette for guidance on setting up this
+file.}
 
 \item{coordinateFilenames}{Character string the with filename of each
-grid point location file. This filename should be identical for all ensemble
-members included in the \code{dataFolder} directory. See the package
-vignette for an example of the required structure for this file.}
+grid point location file. This filename should be identical for all
+ensemble member subdirectories included in the \code{dataFolder} directory.
+See the package vignette for an example of the required structure for this
+file.}
 
 \item{tasFilenames}{Character string the with filename of each climate
 projection file. This filename should be identical for all ensemble
-members included in the \code{dataFolder} directory. See the package
-vignette for an example of the required structure for this file.}
+member subdirectories included in the \code{dataFolder} directory. See the
+package vignette for an example of the required structure for this file.}
 
 \item{timeFilenames}{Character string the with filename of each projection
 dates file. This filename should be identical for all ensemble
-members included in the \code{dataFolder} directory. See the package
-vignette for an example of the required structure for this file.}
+member  subdirectories included in the \code{dataFolder} directory. See
+the package vignette for an example of the required structure for this
+file.}
 
 \item{IDheatwavesFunction}{A character string with the name of the R function
 to use to identify heat waves. This function may be a user-specified custom
-function to, but it must be loaded into the current R session. The
+function, but it must be loaded into the current R session. The
 function name must be put in quotation marks. For more guidance on how to
 write and use a custom function to identify heat waves, see the package
 vignette for \code{futureheatwaves}.}
@@ -63,35 +66,37 @@ vignette for \code{futureheatwaves}.}
 \item{thresholdBoundaries}{A numeric vector with the custom time boundaries
 to be used to determine the threshold temperatures for the heat wave
 definition. The required format for this vector is c(start year, end
-year), with the restrictions that bounds must be contained within the
+year), with the restriction that bounds must be contained within the
 time boundaries of one of the two experiment subdirectories specified
 by the \code{dataDirectories} argument in \code{\link{gen_hw_set}}.
 The default value is 1990 to 1999.}
 
 \item{projectionBoundaries}{A numeric vector with the custom time boundaries
 for which the user wants to create heat wave projections. The required
-format for this vector is c(start year, end
-year), with the restrictions that bounds must be contained within the
-time boundaries of one of the two experiment subdirectories specified
-by the \code{dataDirectories} argument in \code{\link{gen_hw_set}}.
-The default value is 2070 to 2079.}
+format for this vector is c(start year, end year), with the restriction
+that bounds must be contained within the time boundaries of one of the two
+experiment subdirectories specified by the \code{dataDirectories} argument
+in \code{\link{gen_hw_set}}. The default value is 2070 to 2079.}
 
 \item{referenceBoundaries}{A numeric vector with the custom time boundaries
 to use in calculating relative characteristics for heat waves (i.e., to use
 when exploring the role of adaptation in projections). For more
 information on how reference temperatures are used, see the package
 vignette for \code{futureheatwaves}. The required format for this vector
-is c(start year, end year), with the restrictions that bounds must be
+is c(start year, end year), with the restriction that bounds must be
 contained within the time boundaries of one of the two experiment
 subdirectories specified by the \code{dataDirectories} argument in
-\code{\link{gen_hw_set}}. The default value is 2070 to 2079.}
+\code{\link{gen_hw_set}}. The default value is 2070 to 2079. If the
+time bounds used differ from those used for projections, these reference
+temperatures will be pulled from the ensemble member for each climate
+model specified by \code{threshold_ensemble}.}
 
 \item{input_metric}{A character string indicating the temperature metric
 of the climate projection data being processed. Choices are "kelvin",
 "fahrenheit", and "celsius".}
 
-\item{numDays}{Numerical value greater than 0 giving the number of days to
-use in the heat wave definition (e.g., `numDays = 2` would define a
+\item{numDays}{Integer greater than 0 giving the number of days to
+use in the heat wave definition (e.g., \code{numDays = 2} would define a
 heat wave as two or more days above the threshold temperature).}
 }
 \value{

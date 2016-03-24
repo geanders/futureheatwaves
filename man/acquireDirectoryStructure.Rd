@@ -15,19 +15,21 @@ see the \code{futureheatwaves} vignette for guidance on setting up this
 directory.}
 
 \item{coordinateFilenames}{Character string the with filename of each
-grid point location file. This filename should be identical for all ensemble
-members included in the \code{dataFolder} directory. See the package
-vignette for an example of the required structure for this file.}
+grid point location file. This filename should be identical for all
+ensemble member subdirectories included in the \code{dataFolder} directory.
+See the package vignette for an example of the required structure for this
+file.}
 
 \item{tasFilenames}{Character string the with filename of each climate
 projection file. This filename should be identical for all ensemble
-members included in the \code{dataFolder} directory. See the package
-vignette for an example of the required structure for this file.}
+member subdirectories included in the \code{dataFolder} directory. See the
+package vignette for an example of the required structure for this file.}
 
 \item{timeFilenames}{Character string the with filename of each projection
 dates file. This filename should be identical for all ensemble
-members included in the \code{dataFolder} directory. See the package
-vignette for an example of the required structure for this file.}
+member  subdirectories included in the \code{dataFolder} directory. See
+the package vignette for an example of the required structure for this
+file.}
 
 \item{models_to_run}{A character vector with either "all" (the default),
 in which case the function runs through all models in the \code{dataFolder}
@@ -38,10 +40,9 @@ model's subdirectory within the data directory (e.g.,
 \item{dataDirectories}{A list object, with two elements, one for each of the
 two subdirectories included in the main directory. Typically, these will
 be separate directories of historical and projection experiments from
-climate models. Each element
-of the list should be named with the name of the subdirectory and
-should provide a numeric vector with the starting and ending years of
-the data within each of the two subdirectories (e.g.,
+climate models. Each element of the list should be named with the name of
+the subdirectory and should provide a numeric vector with the starting and
+ending years of the data within each of the two subdirectories (e.g.,
 \code{list("historical" = c(1990, 1999), "rcp85" = c(2060, 2079))}
 for a \code{dataFolder} with historical experiment data for 1990 to 1999
 and RCP8.5 projections for 2060 to 2079).}
@@ -58,7 +59,7 @@ processing.}
 \item{thresholdBoundaries}{A numeric vector with the custom time boundaries
 to be used to determine the threshold temperatures for the heat wave
 definition. The required format for this vector is c(start year, end
-year), with the restrictions that bounds must be contained within the
+year), with the restriction that bounds must be contained within the
 time boundaries of one of the two experiment subdirectories specified
 by the \code{dataDirectories} argument in \code{\link{gen_hw_set}}.
 The default value is 1990 to 1999.}

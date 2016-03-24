@@ -32,10 +32,9 @@ a growing list.}
 \item{dataDirectories}{A list object, with two elements, one for each of the
 two subdirectories included in the main directory. Typically, these will
 be separate directories of historical and projection experiments from
-climate models. Each element
-of the list should be named with the name of the subdirectory and
-should provide a numeric vector with the starting and ending years of
-the data within each of the two subdirectories (e.g.,
+climate models. Each element of the list should be named with the name of
+the subdirectory and should provide a numeric vector with the starting and
+ending years of the data within each of the two subdirectories (e.g.,
 \code{list("historical" = c(1990, 1999), "rcp85" = c(2060, 2079))}
 for a \code{dataFolder} with historical experiment data for 1990 to 1999
 and RCP8.5 projections for 2060 to 2079).}

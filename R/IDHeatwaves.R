@@ -296,7 +296,7 @@ IDHeatwavesCPPwrapper <- function(datafr, threshold, numDays){
         tempsExceedingthreshold <- c(tempsExceedingthreshold, 0)
 
         # Identify heat waves using the C++ functions.
-        heatwaves <- IDHeatwavesCPP(heatwaveLength = as.integer(numDays),
+        heatwaves <- IDHeatwavesCPP(heatwaveLength = as.numeric(numDays),
                                     tempsExceedingCutoff = tempsExceedingthreshold)
 
 

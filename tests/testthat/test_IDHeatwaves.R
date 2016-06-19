@@ -1,4 +1,5 @@
 # skip_on_os(windows)
+# determine error in build
 library(futureheatwaves)
 context("Identifying heatwaves")
 

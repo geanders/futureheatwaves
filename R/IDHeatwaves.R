@@ -286,6 +286,7 @@ IDHeatwavesAlternative <- function(threshold, datafr, numDays){
 #' @export
 IDHeatwavesCPPwrapper <- function(datafr, threshold, numDays){
         colnames(datafr) <- c("date", "tmpd")
+        numDays <- as.integer(numDays)
 
         # Find temperatures that exceed the threshold. One means the
         # measurement equals or exceeds threshold.
@@ -296,9 +297,8 @@ IDHeatwavesCPPwrapper <- function(datafr, threshold, numDays){
         tempsExceedingthreshold <- c(tempsExceedingthreshold, 0)
 
         # Identify heat waves using the C++ functions.
-        heatwaves <- IDHeatwavesCPP(heatwaveLength = as.numeric(numDays),
+        heatwaves <- IDHeatwavesCPP(heatwaveLength = numDays,
                                     tempsExceedingCutoff = tempsExceedingthreshold)
-
 
         # Attach heat waves columns onto the data in the datafr
         # variable. Note that the final row, which contains zeroes as

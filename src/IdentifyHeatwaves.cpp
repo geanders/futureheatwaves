@@ -134,10 +134,11 @@ void storeZeroes(int index, int potentialHeatwave, std::vector<int>& hw, std::ve
 
 /*** R
 data(datafr, package = "futureheatwaves")
+numDays <- as.integer(2)
 threshold <- 84.632
 tempsExceedingthreshold <- as.numeric(datafr[ , 2] >= threshold)
 tempsExceedingthreshold <- c(tempsExceedingthreshold, 0)
-heatwaves <- IDHeatwavesCPP(heatwaveLength = 2,
+heatwaves <- IDHeatwavesCPP(heatwaveLength = numDays,
                             tempsExceedingCutoff = tempsExceedingthreshold)
 heatwaves <- heatwaves[-nrow(heatwaves), ]
 heatwaves <- cbind(datafr, heatwaves)

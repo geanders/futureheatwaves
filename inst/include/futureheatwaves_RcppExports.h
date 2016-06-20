@@ -24,11 +24,11 @@ namespace futureheatwaves {
         }
     }
 
-    inline DataFrame IDHeatwavesCPP(int heatwaveLength, NumericVector tempsExceedingCutoff) {
+    inline Rcpp::DataFrame IDHeatwavesCPP(int heatwaveLength, Rcpp::NumericVector tempsExceedingCutoff) {
         typedef SEXP(*Ptr_IDHeatwavesCPP)(SEXP,SEXP);
         static Ptr_IDHeatwavesCPP p_IDHeatwavesCPP = NULL;
         if (p_IDHeatwavesCPP == NULL) {
-            validateSignature("DataFrame(*IDHeatwavesCPP)(int,NumericVector)");
+            validateSignature("Rcpp::DataFrame(*IDHeatwavesCPP)(int,Rcpp::NumericVector)");
             p_IDHeatwavesCPP = (Ptr_IDHeatwavesCPP)R_GetCCallable("futureheatwaves", "futureheatwaves_IDHeatwavesCPP");
         }
         RObject __result;
@@ -40,7 +40,7 @@ namespace futureheatwaves {
             throw Rcpp::internal::InterruptedException();
         if (__result.inherits("try-error"))
             throw Rcpp::exception(as<std::string>(__result).c_str());
-        return Rcpp::as<DataFrame >(__result);
+        return Rcpp::as<Rcpp::DataFrame >(__result);
     }
 
     inline void storeHeatwaveEntry(int index, int hwSize, int hwCounter, std::vector<int>& hw, std::vector<int>& hwNumber) {

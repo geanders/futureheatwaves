@@ -7,7 +7,7 @@ using namespace Rcpp;
 //Prototypes
 //Note: The code may work without prototypes on certain systems, but not on
 // systems like Solaris. It is best to keep the prototypes in.
-DataFrame IDHeatwavesCPP(int, NumericVector);
+Rcpp::DataFrame IDHeatwavesCPP(int, Rcpp::NumericVector);
 void storeHeatwaveEntry(int, int, int, std::vector<int> &, std::vector<int> &);
 void storeZeroes(int, int, std::vector<int> &, std::vector<int> &);
 
@@ -26,7 +26,7 @@ void storeZeroes(int, int, std::vector<int> &, std::vector<int> &);
 //'    series. It contains two columns: \code{hw} and \code{hw.number}.
 //' @export
 // [[Rcpp::export]]
-DataFrame IDHeatwavesCPP(int heatwaveLength, NumericVector tempsExceedingCutoff){
+Rcpp::DataFrame IDHeatwavesCPP(int heatwaveLength, Rcpp::NumericVector tempsExceedingCutoff){
 
         // Declare vectors that will form columns of the dataframe; Allocate memory.
         int dataLength = tempsExceedingCutoff.size();
@@ -70,10 +70,10 @@ DataFrame IDHeatwavesCPP(int heatwaveLength, NumericVector tempsExceedingCutoff)
         }
 
         // wrap the C++ datastructures to analogous R forms
-        NumericVector heat = wrap(hw);
-        NumericVector hwNum = wrap(hwNumber);
+        Rcpp::IntegerVector heat = Rcpp::wrap(hw);
+        Rcpp::IntegerVector hwNum = Rcpp::wrap(hwNumber);
 
-        return DataFrame::create(_["hw"] = heat, _["hw.number"] = hwNum);
+        return Rcpp::DataFrame::create(_["hw"]= heat, _["hw.number"]= hwNum);
 }
 
 //' Helper function that adds entries

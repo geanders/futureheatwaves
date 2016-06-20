@@ -9,12 +9,12 @@
 using namespace Rcpp;
 
 // IDHeatwavesCPP
-DataFrame IDHeatwavesCPP(int heatwaveLength, NumericVector tempsExceedingCutoff);
+Rcpp::DataFrame IDHeatwavesCPP(int heatwaveLength, Rcpp::NumericVector tempsExceedingCutoff);
 static SEXP futureheatwaves_IDHeatwavesCPP_try(SEXP heatwaveLengthSEXP, SEXP tempsExceedingCutoffSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::traits::input_parameter< int >::type heatwaveLength(heatwaveLengthSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type tempsExceedingCutoff(tempsExceedingCutoffSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type tempsExceedingCutoff(tempsExceedingCutoffSEXP);
     __result = Rcpp::wrap(IDHeatwavesCPP(heatwaveLength, tempsExceedingCutoff));
     return __result;
 END_RCPP_RETURN_ERROR
@@ -109,7 +109,7 @@ RcppExport SEXP futureheatwaves_storeZeroes(SEXP indexSEXP, SEXP potentialHeatwa
 static int futureheatwaves_RcppExport_validate(const char* sig) { 
     static std::set<std::string> signatures;
     if (signatures.empty()) {
-        signatures.insert("DataFrame(*IDHeatwavesCPP)(int,NumericVector)");
+        signatures.insert("Rcpp::DataFrame(*IDHeatwavesCPP)(int,Rcpp::NumericVector)");
         signatures.insert("void(*storeHeatwaveEntry)(int,int,int,std::vector<int>&,std::vector<int>&)");
         signatures.insert("void(*storeZeroes)(int,int,std::vector<int>&,std::vector<int>&)");
     }

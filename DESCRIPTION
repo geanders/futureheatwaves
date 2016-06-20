@@ -2,7 +2,7 @@ Package: futureheatwaves
 Type: Package
 Title: Find, Characterize, and Explore Heat Waves in Climate Projections
 Version: 1.0.1
-Date: 2016-03-23
+Date: 2016-06-19
 Authors@R: c(
     person("Brooke", "Anderson", , "brooke.anderson@colostate.edu",
     c("aut", "cre")),

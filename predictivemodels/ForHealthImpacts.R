@@ -24,9 +24,10 @@ land_area <- read.csv("predictivemodels/land_area.csv",
 pull_proj_pops <- function(proj_pops, start_year){
         end_year <- start_year + 19
         year_range <- paste(c(start_year, end_year), collapse = "-")
-        colnames(proj_pops)[colnames(proj_pops) == year_range] <- "pop"
+        pop_data <- proj_pops
+        colnames(pop_data)[colnames(pop_data) == year_range] <- "pop"
 
-        pop_data <- proj_pops %>%
+        pop_data <- pop_data %>%
                 dplyr::select(city, pop) %>%
                 dplyr::group_by(city) %>%
                 dplyr::summarize(pop100 = sum(pop)) %>%
@@ -45,24 +46,24 @@ out <- "~/tmp/results"  ## Replace with the path to where you have heatwave
                         ## dataframes stored
 
 # Predict frequency of very dangerous heatwaves using the bagging model
-apply_all_models(out = out, FUN = "tree_frequency")
+apply_all_models(out = out, FUN = "tree_frequency", start_year = 2076)
 apply_all_models(out = out, FUN = "tree_frequency",
-                 city_specific = TRUE)
+                 city_specific = TRUE, start_year = 1985)
 
 # Predict exposure (person-days) to very dangerous heatwaves using the bagging
 # model
-apply_all_models(out = out, FUN = "tree_exposure")
+apply_all_models(out = out, FUN = "tree_exposure", start_year = 1985)
 apply_all_models(out = out, FUN = "bag_exposure",
-                 city_specific = TRUE)
+                 city_specific = TRUE, start_year = 1985)
 
 # Predict exposure (days) to very dangerous heatwaves using the bagging model
-apply_all_models(out = out, FUN = "bag_days")
+apply_all_models(out = out, FUN = "bag_days", start_year = 1985)
 apply_all_models(out = out, FUN = "bag_days",
-                 city_specific = TRUE)
+                 city_specific = TRUE, start_year = 1985)
 
 # Example of saving model results to file
 to_save <- apply_all_models(out = out, FUN = "bag_frequency",
-                            city_specific = TRUE)
+                            city_specific = TRUE, start_year = 1985)
 write.csv(to_save, file = "~/tmp/To_Save.csv", ## Replace with filename you want
           row.names = FALSE)
 
@@ -79,8 +80,8 @@ custom_tree_frequency <- function(hw_datafr){
         return(adj_very)
 }
 
-custom_tree_exposure <- function(hw_datafr){
-        hw_datafr <- add_pop_area(hw_datafr)
+custom_tree_exposure <- function(hw_datafr, start_year){
+        hw_datafr <- add_pop_area(hw_datafr, start_year = start_year)
 
         predictions <- ifelse(hw_datafr$max.temp.quantile >= 0.9989,
                               "very", "other" )
@@ -92,8 +93,8 @@ custom_tree_exposure <- function(hw_datafr){
         return(adj_exp)
 }
 
-custom_tree_days <- function(hw_datafr){
-        hw_datafr <- add_pop_area(hw_datafr)
+custom_tree_days <- function(hw_datafr, start_year){
+        hw_datafr <- add_pop_area(hw_datafr, start_year = start_year)
 
         predictions <- ifelse(hw_datafr$max.temp.quantile >= 0.9989,
                               "very", "other" )
@@ -105,8 +106,8 @@ custom_tree_days <- function(hw_datafr){
         return(adj_days)
 }
 
-tree_frequency <- function(hw_datafr){
-        hw_datafr <- add_pop_area(hw_datafr)
+tree_frequency <- function(hw_datafr, start_year){
+        hw_datafr <- add_pop_area(hw_datafr, start_year = start_year)
 
         predictions <- predict(unpr.tree.rose,
                                newdata = hw_datafr,
@@ -118,8 +119,8 @@ tree_frequency <- function(hw_datafr){
         return(adj_very)
 }
 
-tree_exposure <- function(hw_datafr){
-        hw_datafr <- add_pop_area(hw_datafr)
+tree_exposure <- function(hw_datafr, start_year){
+        hw_datafr <- add_pop_area(hw_datafr, start_year = start_year)
 
         predictions <- predict(unpr.tree.rose,
                                newdata = hw_datafr,
@@ -132,8 +133,8 @@ tree_exposure <- function(hw_datafr){
         return(adj_exp)
 }
 
-tree_days <- function(hw_datafr){
-        hw_datafr <- add_pop_area(hw_datafr)
+tree_days <- function(hw_datafr, start_year){
+        hw_datafr <- add_pop_area(hw_datafr, start_year = start_year)
 
         predictions <- predict(unpr.tree.rose,
                                newdata = hw_datafr,
@@ -146,8 +147,8 @@ tree_days <- function(hw_datafr){
         return(adj_days)
 }
 
-bag_frequency <- function(hw_datafr){
-        hw_datafr <- add_pop_area(hw_datafr)
+bag_frequency <- function(hw_datafr, start_year){
+        hw_datafr <- add_pop_area(hw_datafr, start_year = start_year)
 
         predictions <- predict(bag.tree.rose,
                                newdata = hw_datafr)
@@ -158,8 +159,8 @@ bag_frequency <- function(hw_datafr){
         return(adj_very)
 }
 
-bag_exposure <- function(hw_datafr){
-        hw_datafr <- add_pop_area(hw_datafr)
+bag_exposure <- function(hw_datafr, start_year){
+        hw_datafr <- add_pop_area(hw_datafr, start_year = start_year)
 
         predictions <- predict(bag.tree.rose,
                                newdata = hw_datafr)
@@ -171,8 +172,8 @@ bag_exposure <- function(hw_datafr){
         return(adj_exp)
 }
 
-bag_days <- function(hw_datafr){
-        hw_datafr <- add_pop_area(hw_datafr)
+bag_days <- function(hw_datafr, start_year){
+        hw_datafr <- add_pop_area(hw_datafr, start_year = start_year)
 
         predictions <- predict(bag.tree.rose,
                                newdata = hw_datafr)
@@ -184,8 +185,8 @@ bag_days <- function(hw_datafr){
         return(adj_days)
 }
 
-boost_frequency <- function(hw_datafr){
-        hw_datafr <- add_pop_area(hw_datafr)
+boost_frequency <- function(hw_datafr, start_year){
+        hw_datafr <- add_pop_area(hw_datafr, start_year = start_year)
 
         predictions <- predict(boost.tree.rose,
                                newdata = hw_datafr,
@@ -198,8 +199,8 @@ boost_frequency <- function(hw_datafr){
         return(adj_very)
 }
 
-boost_exposure <- function(hw_datafr){
-        hw_datafr <- add_pop_area(hw_datafr)
+boost_exposure <- function(hw_datafr, start_year){
+        hw_datafr <- add_pop_area(hw_datafr, start_year = start_year)
 
         predictions <- predict(boost.tree.rose,
                                newdata = hw_datafr,
@@ -213,8 +214,8 @@ boost_exposure <- function(hw_datafr){
         return(adj_exp)
 }
 
-boost_days <- function(hw_datafr){
-        hw_datafr <- add_pop_area(hw_datafr)
+boost_days <- function(hw_datafr, start_year){
+        hw_datafr <- add_pop_area(hw_datafr, start_year = start_year)
 
         predictions <- predict(boost.tree.rose,
                                newdata = hw_datafr,
@@ -282,10 +283,10 @@ adj_for_precision <- function(predictions, precision, false_omission){
         return(out)
 }
 
-add_pop_area <- function(hw_datafr){
+add_pop_area <- function(hw_datafr, start_year){
         hw_datafr$city <- as.character(hw_datafr$city)
-        proj_pops$city <- as.character(proj_pops$city)
+        pop_data <- pull_proj_pops(proj_pops, start_year)
 
-        hw_datafr <- left_join(hw_datafr, proj_pops, by = "city")
+        hw_datafr <- left_join(hw_datafr, pop_data, by = "city")
         return(hw_datafr)
 }

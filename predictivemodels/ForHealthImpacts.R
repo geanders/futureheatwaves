@@ -5,6 +5,7 @@ library(dplyr)
 library(tree)
 library(randomForest)
 library(gbm)
+library(readxl)
 
 # Load predictive models
 load("predictivemodels/unpr.tree.rose.RData")
@@ -12,15 +13,29 @@ load("predictivemodels/bag.tree.rose.RData")
 load("predictivemodels/boost.tree.rose.RData")
 
 # Load data on population projections and land area
-proj_pops <- read.csv("predictivemodels/projected_populations.csv",
-                      header = TRUE)
+proj_pops <- read_excel("predictivemodels/CountyPop_Brooke.xlsx")
+colnames(proj_pops) <- gsub(" ", "", colnames(proj_pops))
+#proj_pops <- read.csv("predictivemodels/projected_populations.csv",
+#                      header = TRUE)
 land_area <- read.csv("predictivemodels/land_area.csv",
-                      header = TRUE)
-proj_pops <- group_by(proj_pops, city) %>%
-        summarise(pop100 = sum(SSP5)) %>%
-        left_join(land_area) %>%
-        mutate(pop.density = pop100 / arealand) %>%
-        dplyr::select(-arealand)
+                      header = TRUE, as.is = TRUE)
+
+# Function to pull population data based on a start year
+pull_proj_pops <- function(proj_pops, start_year){
+        end_year <- start_year + 19
+        year_range <- paste(c(start_year, end_year), collapse = "-")
+        colnames(proj_pops)[colnames(proj_pops) == year_range] <- "pop"
+
+        pop_data <- proj_pops %>%
+                dplyr::select(city, pop) %>%
+                dplyr::group_by(city) %>%
+                dplyr::summarize(pop100 = sum(pop)) %>%
+                left_join(land_area, by = "city") %>%
+                mutate(pop.density = pop100 / arealand) %>%
+                dplyr::select(-arealand)
+
+        return(pop_data)
+}
 
 ## ------------------------------------------------------------------------
 

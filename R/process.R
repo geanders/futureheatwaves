@@ -269,7 +269,6 @@ processEnsemble <- function(ensemble, modelName, global, custom, type){
 
         # Find indices of the closest points of measurement
         locations <- apply(global$cities, 1, closest_point, latlong = latlong)
-
         out_locations <- cbind(global$cities, latlong[locations, ])
         colnames(out_locations)[4:5] <- c("lat_grid", "long_grid")
 

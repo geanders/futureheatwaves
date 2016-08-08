@@ -11,14 +11,14 @@ library(readxl)
 load("predictivemodels/unpr.tree.rose.RData")
 load("predictivemodels/bag.tree.rose.RData")
 load("predictivemodels/boost.tree.rose.RData")
+load("predictivemodels/rf_mod.RData")
 
 # Load data on population projections and land area
 proj_pops <- read_excel("predictivemodels/CountyPop_Brooke.xlsx")
 colnames(proj_pops) <- gsub(" ", "", colnames(proj_pops))
-#proj_pops <- read.csv("predictivemodels/projected_populations.csv",
-#                      header = TRUE)
 land_area <- read.csv("predictivemodels/land_area.csv",
                       header = TRUE, as.is = TRUE)
+load("predictivemodels/base_deaths.RData")
 
 # Function to pull population data based on a start year
 pull_proj_pops <- function(proj_pops, start_year){
@@ -31,9 +31,10 @@ pull_proj_pops <- function(proj_pops, start_year){
                 dplyr::select(city, pop) %>%
                 dplyr::group_by(city) %>%
                 dplyr::summarize(pop100 = sum(pop)) %>%
-                left_join(land_area, by = "city") %>%
-                mutate(pop.density = pop100 / arealand) %>%
-                dplyr::select(-arealand)
+                dplyr::left_join(land_area, by = "city") %>%
+                dplyr::mutate(pop.density = pop100 / arealand) %>%
+                dplyr::select(-arealand) %>%
+                dplyr::left_join(base_deaths, by = "city")
 
         return(pop_data)
 }
@@ -59,6 +60,11 @@ apply_all_models(out = out, FUN = "bag_exposure",
 # Predict exposure (days) to very dangerous heatwaves using the bagging model
 apply_all_models(out = out, FUN = "bag_days", start_year = 1985)
 apply_all_models(out = out, FUN = "bag_days",
+                 city_specific = TRUE, start_year = 1985)
+
+# Predict excess deaths
+apply_all_models(out = out, FUN = "bag_excess_deaths", start_year = 1985)
+apply_all_models(out = out, FUN = "bag_excess_deaths",
                  city_specific = TRUE, start_year = 1985)
 
 # Example of saving model results to file
@@ -228,6 +234,21 @@ boost_days <- function(hw_datafr, start_year){
                                  false_omission = 0.0)
         return(adj_days)
 }
+
+bag_excess_deaths <- function(hw_datafr, start_year){
+        hw_datafr <- add_pop_area(hw_datafr, start_year = start_year)
+
+        pred_log_rr <- predict(rf_mod,
+                               newdata = hw_datafr)
+
+        hw_length <- hw_datafr$length
+        base_mort <- hw_datafr$base_mort
+
+        exp_excess <- hw_length * base_mort * (exp(pred_log_rr) - 1)
+
+        return(sum(exp_excess))
+}
+
 
 # Helper functions for those functions (don't use directory in
 # `apply_all_models`)

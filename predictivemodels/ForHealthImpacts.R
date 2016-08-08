@@ -63,8 +63,8 @@ apply_all_models(out = out, FUN = "bag_days",
                  city_specific = TRUE, start_year = 1985)
 
 # Predict excess deaths
-apply_all_models(out = out, FUN = "bag_excess_deaths", start_year = 1985)
-apply_all_models(out = out, FUN = "bag_excess_deaths",
+apply_all_models(out = out, FUN = "rf_excess_deaths", start_year = 1985)
+apply_all_models(out = out, FUN = "rf_excess_deaths",
                  city_specific = TRUE, start_year = 1985)
 
 # Example of saving model results to file
@@ -235,7 +235,7 @@ boost_days <- function(hw_datafr, start_year){
         return(adj_days)
 }
 
-bag_excess_deaths <- function(hw_datafr, start_year){
+rf_excess_deaths <- function(hw_datafr, start_year){
         hw_datafr <- add_pop_area(hw_datafr, start_year = start_year)
 
         pred_log_rr <- predict(rf_mod,

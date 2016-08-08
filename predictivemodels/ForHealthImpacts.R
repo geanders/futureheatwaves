@@ -236,10 +236,18 @@ boost_days <- function(hw_datafr, start_year){
 }
 
 rf_excess_deaths <- function(hw_datafr, start_year){
-        hw_datafr <- add_pop_area(hw_datafr, start_year = start_year)
+        hw_datafr <- add_pop_area(hw_datafr, start_year = start_year) %>%
+                dplyr::select(mean.temp, max.temp, min.temp, length,
+                              start.doy, start.month, days.above.80,
+                              days.above.85, days.above.90,
+                              days.above.95, days.above.99th,
+                              days.above.99.5th, first.in.season,
+                              mean.temp.quantile, max.temp.quantile,
+                              min.temp.quantile, mean.temp.1,
+                              mean.summer.temp, pop100, pop.density,
+                              base_mort)
 
-        pred_log_rr <- predict(rf_mod,
-                               newdata = hw_datafr)
+        pred_log_rr <- predict(rf_mod, newdata = hw_datafr)
 
         hw_length <- hw_datafr$length
         base_mort <- hw_datafr$base_mort
@@ -248,7 +256,6 @@ rf_excess_deaths <- function(hw_datafr, start_year){
 
         return(sum(exp_excess))
 }
-
 
 # Helper functions for those functions (don't use directory in
 # `apply_all_models`)

@@ -252,7 +252,8 @@ rf_excess_deaths <- function(hw_datafr, start_year){
         hw_length <- hw_datafr$length
         base_mort <- hw_datafr$pop100 * hw_datafr$mort_rate
 
-        exp_excess <- hw_length * base_mort * (exp(pred_log_rr) - 1)
+        AF <- 1 - exp(-projs_rf)
+        exp_excess <- hw_length * base_mort * AF
 
         return(sum(exp_excess))
 }

@@ -245,12 +245,12 @@ rf_excess_deaths <- function(hw_datafr, start_year){
                               mean.temp.quantile, max.temp.quantile,
                               min.temp.quantile, mean.temp.1,
                               mean.summer.temp, pop100, pop.density,
-                              base_mort)
+                              mort_rate)
 
         pred_log_rr <- predict(rf_mod, newdata = hw_datafr)
 
         hw_length <- hw_datafr$length
-        base_mort <- hw_datafr$base_mort
+        base_mort <- hw_datafr$pop100 * hw_datafr$mort_rate
 
         exp_excess <- hw_length * base_mort * (exp(pred_log_rr) - 1)
 

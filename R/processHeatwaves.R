@@ -80,6 +80,7 @@
 #' \code{\link{hw_datafr}} dataset and can be accessed using
 #' \code{data(hw_datafr)}.
 formHwFrame <- function(ensembleSeries, thresholds, global, custom){
+
         # Acquire list of heat wave dataframes for each city
         hwDataframeList <- apply(data.frame(thresholds), 1,
                                  createCityProcessor(global = global),
@@ -325,14 +326,17 @@ createHwDataframe <- function(city, threshold, heatwaves,
                 hw.frame$city <- character()
         } else {
                 hw.frame$first.in.season <- c(1, rep(NA, nrow(hw.frame) - 1))
-                for(i in 2:nrow(hw.frame)){
-                        if(as.POSIXlt(hw.frame$start.date)$year[i] !=
-                           as.POSIXlt(hw.frame$start.date)$year[i - 1]){
-                                hw.frame$first.in.season[i] <- 1
-                        } else {
-                                hw.frame$first.in.season[i] <- 0
+                if(nrow(hw.frame) >= 2){
+                        for(i in 2:nrow(hw.frame)){
+                                if(as.POSIXlt(hw.frame$start.date)$year[i] !=
+                                   as.POSIXlt(hw.frame$start.date)$year[i - 1]){
+                                        hw.frame$first.in.season[i] <- 1
+                                } else {
+                                        hw.frame$first.in.season[i] <- 0
+                                }
                         }
                 }
+
                 hw.frame$threshold <- threshold
 
                 dist.tmpd <- stats::ecdf(ref_temps)

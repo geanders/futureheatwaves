@@ -26,8 +26,8 @@ process_cities_file <- function(cities, lat_lon_colnames){
 
         cities <- cities %>%
                 dplyr::select_(~ city,
-                              lat = ~ matches(lat_lon_colnames[1]),
-                              lon = ~ matches(lat_lon_colnames[2]))
+                              lat = ~ dplyr::matches(lat_lon_colnames[1]),
+                              lon = ~ dplyr::matches(lat_lon_colnames[2]))
 
         return(cities)
 }

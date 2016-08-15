@@ -318,3 +318,35 @@ add_pop_area <- function(hw_datafr, start_year){
         hw_datafr <- left_join(hw_datafr, pop_data, by = "city")
         return(hw_datafr)
 }
+
+########################
+## Make histogram for Fig. 1
+########################
+# example_ens <- read.csv("predictivemodels/1-4.csv", as.is = TRUE)
+#
+# example_ens <- add_pop_area(example_ens, start_year = 1985) %>%
+#         dplyr::select(mean.temp, max.temp, min.temp, length,
+#                       start.doy, start.month, days.above.80,
+#                       days.above.85, days.above.90,
+#                       days.above.95, days.above.99th,
+#                       days.above.99.5th, first.in.season,
+#                       mean.temp.quantile, max.temp.quantile,
+#                       min.temp.quantile, mean.temp.1,
+#                       mean.summer.temp, pop100, pop.density,
+#                       mort_rate)
+#
+# pred_log_rr <- predict(rf_mod, newdata = example_ens)
+# to_plot <- data.frame(rr = exp(pred_log_rr))
+#
+# library(ggplot2)
+# library(ggthemes)
+#
+# pdf("predictivemodels/Fig1.pdf", width = 6, height = 3.7)
+# ggplot(to_plot, aes(x = rr)) +
+#         geom_histogram(bins = 30, fill = "gray", color = "black") +
+#         xlab("Relative risk compared to non-heatwave day") +
+#         ylab("# of heatwaves") +
+#         geom_vline(aes(xintercept = 1.057), color = "darkred",
+#                    alpha = 0.7, size = 2) +
+#         theme_few()
+# dev.off()

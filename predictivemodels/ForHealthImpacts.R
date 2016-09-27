@@ -67,6 +67,12 @@ apply_all_models(out = out, FUN = "rf_excess_deaths", start_year = 1985)
 apply_all_models(out = out, FUN = "rf_excess_deaths",
                  city_specific = TRUE, start_year = 1985)
 
+# Predict excess deaths with a simple model (assume all heat waves increase)
+# risk 5%
+apply_all_models(out = out, FUN = "simple_excess_deaths", start_year = 1985)
+apply_all_models(out = out, FUN = "simple_excess_deaths",
+                 city_specific = TRUE, start_year = 1985)
+
 # Example of saving model results to file
 to_save <- apply_all_models(out = out, FUN = "bag_frequency",
                             city_specific = TRUE, start_year = 1985)
@@ -235,6 +241,28 @@ boost_days <- function(hw_datafr, start_year){
         return(adj_days)
 }
 
+simple_excess_deaths <- function(hw_datafr, start_year){
+        hw_datafr <- add_pop_area(hw_datafr, start_year = start_year) %>%
+                dplyr::select(mean.temp, max.temp, min.temp, length,
+                              start.doy, start.month, days.above.80,
+                              days.above.85, days.above.90,
+                              days.above.95, days.above.99th,
+                              days.above.99.5th, first.in.season,
+                              mean.temp.quantile, max.temp.quantile,
+                              min.temp.quantile, mean.temp.1,
+                              mean.summer.temp, pop100, pop.density,
+                              mort_rate)
+
+        pred_log_rr <- log(1.05)
+
+        hw_length <- hw_datafr$length
+        base_mort <- hw_datafr$pop100 * hw_datafr$mort_rate
+
+        exp_excess <- hw_length * base_mort * (exp(pred_log_rr) - 1)
+
+        return(sum(exp_excess))
+}
+
 rf_excess_deaths <- function(hw_datafr, start_year){
         hw_datafr <- add_pop_area(hw_datafr, start_year = start_year) %>%
                 dplyr::select(mean.temp, max.temp, min.temp, length,
@@ -352,73 +380,72 @@ add_pop_area <- function(hw_datafr, start_year){
 # dev.off()
 
 #load("predictivemodels/ListOfAllHeatwaves.Rdata")
-load("predictivemodels/ListOfAllHeatwaves.Rdata")
-all.hws <- hw_data
-
-example_obs <- all.hws %>%
-        dplyr::select(mean.temp, max.temp, min.temp, length,
-                      start.doy, start.month, days.above.80,
-                      days.above.85, days.above.90,
-                      days.above.95, days.above.99th,
-                      days.above.99.5th, first.in.season,
-                      mean.temp.quantile, max.temp.quantile,
-                      min.temp.quantile, mean.temp.1,
-                      mean.summer.temp, pop100, pop.density)
-
-pred_log_rr <- predict(rf_mod, newdata = example_obs)
-to_plot <- data.frame(pred_rr = exp(pred_log_rr))
-
-library(ggplot2)
-library(ggthemes)
-
-pdf("predictivemodels/Fig1_obs.pdf", width = 6, height = 3.7)
-ggplot(to_plot, aes(x = rr)) +
-        geom_histogram(bins = 30, fill = "gray", color = "black") +
-        xlab("Relative risk compared to non-heatwave day") +
-        ylab("# of heatwaves") +
-        geom_vline(aes(xintercept = exp(mean(pred_log_rr))), color = "darkred",
-                   alpha = 0.7, size = 2) +
-        theme_few()
-dev.off()
-
-all.hws <- cbind(all.hws, to_plot)
-worst_hws <- all.hws %>%
-        arrange(desc(pred_rr)) %>%
-        slice(1:50) %>%
-        mutate(type = "worst")
-least_hws <- all.hws %>%
-        arrange(pred_rr) %>%
-        slice(1:50) %>%
-        mutate(type = "least")
-extremes <- rbind(worst_hws, least_hws)
-
-ggplot(extremes, aes(x = mean.temp.quantile)) +
-        geom_histogram() +
-        facet_wrap(~ type, ncol = 1)
-ggplot(extremes, aes(x = days.above.80)) +
-        geom_histogram() +
-        facet_wrap(~ type, ncol = 1)
-ggplot(extremes, aes(x = max.temp.quantile)) +
-        geom_histogram() +
-        facet_wrap(~ type, ncol = 1)
-ggplot(extremes, aes(x = pop100)) +
-        geom_histogram() +
-        facet_wrap(~ type, ncol = 1)
-ggplot(extremes, aes(x = pop.density)) +
-        geom_histogram() +
-        facet_wrap(~ type, ncol = 1)
-ggplot(extremes, aes(x = days.above.99th)) +
-        geom_histogram() +
-        facet_wrap(~ type, ncol = 1)
-ggplot(extremes, aes(x = mean.temp.1)) +
-        geom_histogram() +
-        facet_wrap(~ type, ncol = 1)
-ggplot(extremes, aes(x = min.temp.quantile)) +
-        geom_histogram() +
-        facet_wrap(~ type, ncol = 1)
-ggplot(extremes, aes(x = start.doy)) +
-        geom_histogram() +
-        facet_wrap(~ type, ncol = 1)
-ggplot(extremes, aes(x = length)) +
-        geom_histogram() +
-        facet_wrap(~ type, ncol = 1)
+# all.hws <- hw_data
+#
+# example_obs <- all.hws %>%
+#         dplyr::select(mean.temp, max.temp, min.temp, length,
+#                       start.doy, start.month, days.above.80,
+#                       days.above.85, days.above.90,
+#                       days.above.95, days.above.99th,
+#                       days.above.99.5th, first.in.season,
+#                       mean.temp.quantile, max.temp.quantile,
+#                       min.temp.quantile, mean.temp.1,
+#                       mean.summer.temp, pop100, pop.density)
+#
+# pred_log_rr <- predict(rf_mod, newdata = example_obs)
+# to_plot <- data.frame(pred_rr = exp(pred_log_rr))
+#
+# library(ggplot2)
+# library(ggthemes)
+#
+# pdf("predictivemodels/Fig1_obs.pdf", width = 6, height = 3.7)
+# ggplot(to_plot, aes(x = rr)) +
+#         geom_histogram(bins = 30, fill = "gray", color = "black") +
+#         xlab("Relative risk compared to non-heatwave day") +
+#         ylab("# of heatwaves") +
+#         geom_vline(aes(xintercept = exp(mean(pred_log_rr))), color = "darkred",
+#                    alpha = 0.7, size = 2) +
+#         theme_few()
+# dev.off()
+#
+# all.hws <- cbind(all.hws, to_plot)
+# worst_hws <- all.hws %>%
+#         arrange(desc(pred_rr)) %>%
+#         slice(1:50) %>%
+#         mutate(type = "worst")
+# least_hws <- all.hws %>%
+#         arrange(pred_rr) %>%
+#         slice(1:50) %>%
+#         mutate(type = "least")
+# extremes <- rbind(worst_hws, least_hws)
+#
+# ggplot(extremes, aes(x = mean.temp.quantile)) +
+#         geom_histogram() +
+#         facet_wrap(~ type, ncol = 1)
+# ggplot(extremes, aes(x = days.above.80)) +
+#         geom_histogram() +
+#         facet_wrap(~ type, ncol = 1)
+# ggplot(extremes, aes(x = max.temp.quantile)) +
+#         geom_histogram() +
+#         facet_wrap(~ type, ncol = 1)
+# ggplot(extremes, aes(x = pop100)) +
+#         geom_histogram() +
+#         facet_wrap(~ type, ncol = 1)
+# ggplot(extremes, aes(x = pop.density)) +
+#         geom_histogram() +
+#         facet_wrap(~ type, ncol = 1)
+# ggplot(extremes, aes(x = days.above.99th)) +
+#         geom_histogram() +
+#         facet_wrap(~ type, ncol = 1)
+# ggplot(extremes, aes(x = mean.temp.1)) +
+#         geom_histogram() +
+#         facet_wrap(~ type, ncol = 1)
+# ggplot(extremes, aes(x = min.temp.quantile)) +
+#         geom_histogram() +
+#         facet_wrap(~ type, ncol = 1)
+# ggplot(extremes, aes(x = start.doy)) +
+#         geom_histogram() +
+#         facet_wrap(~ type, ncol = 1)
+# ggplot(extremes, aes(x = length)) +
+#         geom_histogram() +
+#         facet_wrap(~ type, ncol = 1)

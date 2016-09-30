@@ -68,7 +68,7 @@ apply_all_models(out = out, FUN = "rf_excess_deaths",
                  city_specific = TRUE, start_year = 1985)
 
 # Predict excess deaths with a simple model (assume all heat waves increase)
-# risk 5%
+# relative risk 1.057763
 apply_all_models(out = out, FUN = "simple_excess_deaths", start_year = 1985)
 apply_all_models(out = out, FUN = "simple_excess_deaths",
                  city_specific = TRUE, start_year = 1985)
@@ -253,7 +253,7 @@ simple_excess_deaths <- function(hw_datafr, start_year){
                               mean.summer.temp, pop100, pop.density,
                               mort_rate)
 
-        pred_log_rr <- log(1.05)
+        pred_log_rr <- log(1.057763)
 
         hw_length <- hw_datafr$length
         base_mort <- hw_datafr$pop100 * hw_datafr$mort_rate
@@ -379,7 +379,7 @@ add_pop_area <- function(hw_datafr, start_year){
 #         theme_few()
 # dev.off()
 
-#load("predictivemodels/ListOfAllHeatwaves.Rdata")
+# load("predictivemodels/ListOfAllHeatwaves.Rdata")
 # all.hws <- hw_data
 #
 # example_obs <- all.hws %>%
@@ -399,7 +399,7 @@ add_pop_area <- function(hw_datafr, start_year){
 # library(ggthemes)
 #
 # pdf("predictivemodels/Fig1_obs.pdf", width = 6, height = 3.7)
-# ggplot(to_plot, aes(x = rr)) +
+# ggplot(to_plot, aes(x = pred_rr)) +
 #         geom_histogram(bins = 30, fill = "gray", color = "black") +
 #         xlab("Relative risk compared to non-heatwave day") +
 #         ylab("# of heatwaves") +

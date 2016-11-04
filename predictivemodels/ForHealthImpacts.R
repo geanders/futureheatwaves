@@ -398,14 +398,15 @@ add_pop_area <- function(hw_datafr, start_year){
 # library(ggplot2)
 # library(ggthemes)
 #
-# pdf("predictivemodels/Fig1_obs.pdf", width = 6, height = 3.7)
+# # pdf("predictivemodels/Fig1_obs.pdf", width = 6, height = 3.7)
+# png("predictivemodels/Fig1_obs.png", width = 800, height = 490)
 # ggplot(to_plot, aes(x = pred_rr)) +
-#         geom_histogram(bins = 30, fill = "gray", color = "black") +
+#         geom_histogram(bins = 30, fill = "black", alpha = 0.7) +
 #         xlab("Relative risk compared to non-heatwave day") +
 #         ylab("# of heatwaves") +
 #         geom_vline(aes(xintercept = exp(mean(pred_log_rr))), color = "darkred",
 #                    alpha = 0.7, size = 2) +
-#         theme_few()
+#         theme_few(base_size = 20)
 # dev.off()
 #
 # all.hws <- cbind(all.hws, to_plot)

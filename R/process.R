@@ -89,7 +89,7 @@ processModel <- function(model, global, custom, accumulators,
                                reference = reference,
                                reference_dates = reference_dates)
 
-        return(projectionEnsembles)
+        return(NULL)
 }
 
 #' Calculate threshold temperatures

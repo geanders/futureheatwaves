@@ -1,3 +1,7 @@
+# futureheatwaves 1.0.2.9000
+
+* Improve memory management for some of the functions. Some functions write to global objects. In previous versions, the functions also returned what they were writing to the global objects. However, this is unnecessary, so these functions have been changed to return `NULL` and so use less memory.
+
 # futureheatwaves 1.0.2
 
 * Add code so that package can process climate projections that include Feb. 29 or Feb. 30 (it defaults the start day and month of those heat waves to be Mar. 1). (Note: If there is a heatwave that starts on Feb. 29 in a non-leap year and only lasts two days, you may get an error. I think this will be a very rare case, but please email the package maintainer if you experience this problem.)

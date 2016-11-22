@@ -1,5 +1,8 @@
 # futureheatwaves 1.0.2.9000
 
+* Add a function to create interactive leaflet maps to explore relationship
+between study cities and associated climate model grid points for each 
+climate model. 
 * Improve memory management for some of the functions. Some functions write to global objects. In previous versions, the functions also returned what they were writing to the global objects. However, this is unnecessary, so these functions have been changed to return `NULL` and so use less memory.
 
 # futureheatwaves 1.0.2

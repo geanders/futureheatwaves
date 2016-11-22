@@ -236,7 +236,7 @@ processProjections <- function(ensemble, modelName, ensembleWriter,
         ensembleWriter(hwFrame)
 
         # Return the ensemble used as the reference
-        return(ensembleSeries)
+        return(NULL)
 }
 
 #' Extract projections from ensemble member

@@ -27,7 +27,9 @@ Imports:
     dplyr (>= 0.4.3),
     ggplot2 (>= 2.0.0),
     ggthemes (>= 3.0.0),
-    Rcpp (>= 0.12.5)
+    leaflet (>= 1.0.1),
+    Rcpp (>= 0.12.5),
+    stringr (>= 1.1.0)
 Suggests:
     gridExtra (>= 2.0.0),
     knitr (>= 1.10.5),

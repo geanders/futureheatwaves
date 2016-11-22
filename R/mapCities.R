@@ -57,3 +57,95 @@ map_grid <- function(plot_model, out){
         map <- map + ggplot2::ggtitle(plot_model)
         return(map)
 }
+
+#' Create an interactive map of model grid
+#'
+#' This function creates an interactive map of the grid points of a
+#' climate model used for the study locations and draws lines connecting each
+#' study city to its climate model grid point. This map is made using the
+#' \code{leaflet} package.
+#'
+#' @param lon_transform Logical value indicating whether longitude is in a
+#'    format that needs to be transformed. Often, U.S. locations will give
+#'    longitude as an absolute value, which needs to be transformed using
+#'    \eqn{360 - longitude} before mapping. If using longitude values that
+#'    do not require transformation, set this value to FALSE.
+#' @inheritParams map_grid
+#' @inheritParams apply_all_models
+#'
+#' @return A \code{leaflet} object with a map of grid points for the climate
+#'    model that were used in processing heat waves for the study locations,
+#'    with a line drawn from each study locations to the grid point used for
+#'    it. This map can be explored interactively.
+#'
+#' @examples
+#' out <- system.file("extdata/example_results", package = "futureheatwaves")
+#' map_grid_leaflet(plot_model = "bcc1", out = out)
+#'
+#' @export
+#'
+#' @importFrom dplyr %>%
+map_grid_leaflet <- function(plot_model, out, lon_transform = TRUE){
+        cities <- utils::read.csv(paste(out, "locationList.csv", sep = "/"),
+                                  col.names = c("city","lat", "lon",
+                                                "lat_grid", "lon_grid",
+                                                "model")) %>%
+                dplyr::filter_(~ model == plot_model)
+
+        if(lon_transform){
+                cities <- cities %>%
+                        dplyr::mutate_(lon = ~ lon - 360,
+                                       lon_grid = ~ lon_grid - 360)
+        }
+
+        cities <- cities %>%
+                dplyr::mutate_(city_popup = ~ paste0("<b>City:</b> ",
+                                                     city,
+                                                     "<br/>",
+                                                     "<b>Latitude:</b> ",
+                                                     lat,
+                                                     "<br/>",
+                                                     "<b>Longitude:</b> ",
+                                                     lon))
+
+        grid_data <- cities %>%
+                dplyr::select_(~ lat_grid, ~ lon_grid, ~ model) %>%
+                dplyr::distinct_() %>%
+                dplyr::mutate_(grid_popup = ~ paste0("<b>Latitude:</b> ",
+                                                     lat_grid,
+                                                     "<br/>",
+                                                     "<b>Longitude:</b> ",
+                                                     lon_grid,
+                                                     "<br/>",
+                                                     "<b>Model:</b> ",
+                                                     model))
+
+        map_lines <- cities %>%
+                dplyr::select_(~ city, ~ lat, ~ lon, ~ lat_grid, ~ lon_grid) %>%
+                tidyr::gather_(key_col = "key", value_col = "value",
+                               gather_cols = c("lat", "lon", "lat_grid",
+                                               "lon_grid")) %>%
+                dplyr::mutate_(city_or_grid = ~ ifelse(str_detect(key, "grid"),
+                                                       "grid", "city"),
+                               key = ~ gsub("_grid", "", key)) %>%
+                tidyr::spread_(key_col = "key", value_col = "value")
+
+        out_map <- leaflet::leaflet() %>%
+                leaflet::addTiles() %>%
+                leaflet::addMarkers(data = cities, lng = ~lon, lat = ~lat,
+                                    popup = ~ city_popup) %>%
+                leaflet::addCircleMarkers(data = grid_data,
+                                          lng = ~lon_grid, lat = ~lat_grid,
+                                          color = "red", popup = ~ grid_popup)
+        for(map_city in unique(map_lines$city)){
+                out_map <- out_map %>%
+                        leaflet::addPolylines(data = dplyr::filter_(map_lines,
+                                                            ~ city == map_city),
+                                     lat = ~lat,
+                                     lng = ~lon)
+        }
+        return(out_map)
+}
+
+
+

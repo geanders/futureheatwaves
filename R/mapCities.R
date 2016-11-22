@@ -125,8 +125,9 @@ map_grid_leaflet <- function(plot_model, out, lon_transform = TRUE){
                 tidyr::gather_(key_col = "key", value_col = "value",
                                gather_cols = c("lat", "lon", "lat_grid",
                                                "lon_grid")) %>%
-                dplyr::mutate_(city_or_grid = ~ ifelse(str_detect(key, "grid"),
-                                                       "grid", "city"),
+                dplyr::mutate_(city_or_grid =
+                                       ~ ifelse(stringr::str_detect(key, "grid"),
+                                                "grid", "city"),
                                key = ~ gsub("_grid", "", key)) %>%
                 tidyr::spread_(key_col = "key", value_col = "value")
 

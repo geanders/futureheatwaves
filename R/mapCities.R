@@ -148,5 +148,70 @@ map_grid_leaflet <- function(plot_model, out, lon_transform = TRUE){
         return(out_map)
 }
 
+#' Create a map of model grid using ggmap
+#'
+#' This function creates a map of the grid points of a climate model used for
+#' the study locations and draws lines connecting each study city to its climate
+#' model grid point, using as a base a map pulled from Google Maps with
+#' \code{ggmap}.
+#'
+#' @inheritParams map_grid
+#' @inheritParams map_grid_leaflet
+#' @inheritParams apply_all_models
+#'
+#' @return A \code{ggplot2} object with a map of grid points for the climate
+#'    model that were used in processing heat waves for the study locations,
+#'    with a line drawn from each study locations to the grid point used for
+#'    it.
+#'
+#' @note This function creates a \code{ggplot2} object, so the output can be
+#'    edited using \code{ggplot2} functions.
+#'
+#' @examples
+#' out <- system.file("extdata/example_results", package = "futureheatwaves")
+#' map_grid_ggmap(plot_model = "bcc1", out = out)
+#'
+#' @export
+#'
+#' @importFrom dplyr %>%
+map_grid_ggmap <- function(plot_model, out, lon_transform = TRUE){
+        cities <- utils::read.csv(paste(out, "locationList.csv", sep = "/"),
+                                  col.names = c("city","lat", "lon",
+                                                "lat_grid", "lon_grid", "model")) %>%
+                dplyr::filter_(~ model == plot_model)
+
+        if(lon_transform){
+                cities <- cities %>%
+                        dplyr::mutate_(lon = ~ lon - 360,
+                                       lon_grid = ~ lon_grid - 360)
+        }
+
+        bbox <- ggmap::make_bbox(lon = cities$lon, lat = cities$lat, f = 1)
+        if(nrow(cities) == 1){
+                map <- suppressMessages(suppressWarnings(ggmap::get_map(location = bbox[1:2],
+                                                                        maptype = "hybrid")))
+        } else {
+                map <- suppressMessages(suppressWarnings(ggmap::get_map(location = bbox,
+                                                                        maptype = "hybrid")))
+        }
+
+        latlong <- unique(cities[ , c("lon_grid", "lat_grid")])
+
+        map <- ggmap::ggmap(map) +
+                ggplot2::geom_point(data = latlong,
+                                    ggplot2::aes_string(x = "lon_grid",
+                                                        y = "lat_grid"),
+                                    color = "red", alpha = 0.6)
+        map <- map + ggplot2::geom_segment(data = cities,
+                                           ggplot2::aes_string(x = "lon",
+                                                               y = "lat",
+                                                               xend = "lon_grid",
+                                                               yend = "lat_grid"),
+                                           size = 0.9, alpha = 0.6,
+                                           color = "red")
+        map <- map + ggthemes::theme_map()
+        map <- map + ggplot2::ggtitle(plot_model)
+        return(map)
+}
 
 

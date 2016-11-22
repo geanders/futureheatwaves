@@ -29,7 +29,8 @@ Imports:
     ggthemes (>= 3.0.0),
     leaflet (>= 1.0.1),
     Rcpp (>= 0.12.5),
-    stringr (>= 1.1.0)
+    stringr (>= 1.1.0),
+    tidyr (>= 0.6.0)
 Suggests:
     gridExtra (>= 2.0.0),
     knitr (>= 1.10.5),

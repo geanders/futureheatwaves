@@ -158,6 +158,22 @@ gen_hw_set <- function(out,
                        lat_lon_colnames = c("lat", "lon"),
                        input_metric = "kelvin"){
 
+        # Add warning for user that this will write new files
+        if(printWarning){
+                cat("\n", "Warning: This function will write new files",
+                    "to your computer in the \n", out,
+                    "directory of your computer. If that directory already",
+                    "exists,\nrunning this function will write over it. \n",
+                    "Do you want to continue? (y / n): \n")
+                user_prompt <- scan(n = 1, what = "character", quiet = TRUE)
+                user_prompt <- tolower(user_prompt)
+                if(!(user_prompt %in% c("y", "yes"))){
+                        message(paste("User chose to exit at prompt. This function",
+                                      "cannot be run without writing files locally."))
+                        return()
+                }
+        }
+
         # If `dataFolder` does not end in "/", add it.
         split_dataFolder <- unlist(strsplit(dataFolder, split = ""))
         last_char <- split_dataFolder[length(split_dataFolder)]
@@ -188,20 +204,6 @@ gen_hw_set <- function(out,
                      referenceBoundaries = referenceBoundaries,
                      input_metric = input_metric,
                      numDays = numDays)
-
-  # Add warning for user that this will write new files
-        if(printWarning){
-                cat("\n", "Warning: This function will write new files",
-                    "to your computer in the \n", out,
-                    "directory of your computer. If that directory already",
-                    "exists,\nrunning this function will write over it. \n",
-                    "Do you want to continue? (y / n): \n")
-                user_prompt <- scan(n = 1, what = "character")
-                user_prompt <- tolower(user_prompt)
-                if(!(user_prompt %in% c("y", "yes"))){
-                        stop("User chose to exit at prompt.")
-                }
-        }
 
         # Put the directories into nested list form
         models <- acquireDirectoryStructure(dataFolder = dataFolder,

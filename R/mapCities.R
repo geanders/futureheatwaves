@@ -69,7 +69,7 @@ map_grid <- function(plot_model, out){
 #'    format that needs to be transformed. Often, U.S. locations will give
 #'    longitude as an absolute value, which needs to be transformed using
 #'    \eqn{360 - longitude} before mapping. If using longitude values that
-#'    do not require transformation, set this value to FALSE.
+#'    require transformation, set this value to TRUE.
 #' @inheritParams map_grid
 #' @inheritParams apply_all_models
 #'
@@ -80,12 +80,12 @@ map_grid <- function(plot_model, out){
 #'
 #' @examples
 #' out <- system.file("extdata/example_results", package = "futureheatwaves")
-#' map_grid_leaflet(plot_model = "bcc1", out = out)
+#' map_grid_leaflet(plot_model = "bcc1", out = out, lon_transform = TRUE)
 #'
 #' @export
 #'
 #' @importFrom dplyr %>%
-map_grid_leaflet <- function(plot_model, out, lon_transform = TRUE){
+map_grid_leaflet <- function(plot_model, out, lon_transform = FALSE){
         cities <- utils::read.csv(paste(out, "locationList.csv", sep = "/"),
                                   col.names = c("city","lat", "lon",
                                                 "lat_grid", "lon_grid",
@@ -169,12 +169,12 @@ map_grid_leaflet <- function(plot_model, out, lon_transform = TRUE){
 #'
 #' @examples
 #' out <- system.file("extdata/example_results", package = "futureheatwaves")
-#' map_grid_ggmap(plot_model = "bcc1", out = out)
+#' map_grid_ggmap(plot_model = "bcc1", out = out, lon_transform = TRUE)
 #'
 #' @export
 #'
 #' @importFrom dplyr %>%
-map_grid_ggmap <- function(plot_model, out, lon_transform = TRUE){
+map_grid_ggmap <- function(plot_model, out, lon_transform = FALSE){
         cities <- utils::read.csv(paste(out, "locationList.csv", sep = "/"),
                                   col.names = c("city","lat", "lon",
                                                 "lat_grid", "lon_grid", "model")) %>%
@@ -186,14 +186,12 @@ map_grid_ggmap <- function(plot_model, out, lon_transform = TRUE){
                                        lon_grid = ~ lon_grid - 360)
         }
 
-        bbox <- ggmap::make_bbox(lon = cities$lon, lat = cities$lat, f = 1)
-        if(nrow(cities) == 1){
-                map <- suppressMessages(suppressWarnings(ggmap::get_map(location = bbox[1:2],
-                                                                        maptype = "hybrid")))
-        } else {
-                map <- suppressMessages(suppressWarnings(ggmap::get_map(location = bbox,
-                                                                        maptype = "hybrid")))
-        }
+        bbox <- ggmap::make_bbox(lon = c(cities$lon, cities$lon_grid),
+                                 lat = c(cities$lat, cities$lat_grid),
+                                 f = 0.5)
+        map <- suppressWarnings(get_map(location = bbox,
+                                        source = "stamen",
+                                        maptype = "watercolor"))
 
         latlong <- unique(cities[ , c("lon_grid", "lat_grid")])
 
@@ -201,14 +199,14 @@ map_grid_ggmap <- function(plot_model, out, lon_transform = TRUE){
                 ggplot2::geom_point(data = latlong,
                                     ggplot2::aes_string(x = "lon_grid",
                                                         y = "lat_grid"),
-                                    color = "red", alpha = 0.6)
+                                    size = 2, color = "black", alpha = 0.8)
         map <- map + ggplot2::geom_segment(data = cities,
                                            ggplot2::aes_string(x = "lon",
                                                                y = "lat",
                                                                xend = "lon_grid",
                                                                yend = "lat_grid"),
-                                           size = 0.9, alpha = 0.6,
-                                           color = "red")
+                                           size = 1.2, alpha = 0.8,
+                                           color = "black")
         map <- map + ggthemes::theme_map()
         map <- map + ggplot2::ggtitle(plot_model)
         return(map)

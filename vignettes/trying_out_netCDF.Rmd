@@ -1,0 +1,187 @@
+---
+title: "Trying reading netCDF directly"
+output:
+  html_document: default
+  html_notebook: default
+---
+
+```{r message = FALSE, warning = FALSE}
+library(dplyr)
+```
+
+Load the `ncdf4` package: 
+
+```{r}
+library(ncdf4)
+```
+
+Open an example historical output file:
+
+```{r}
+gfdl_hist <- nc_open("~/Downloads/tas_day_GFDL-ESM2G_historical_r1i1p1_19810101-19851231.nc")
+print(gfdl_hist)
+```
+
+Try getting the location coordinates: 
+
+```{r}
+lon <- ncvar_get(gfdl_hist, "lon")
+summary(lon)
+```
+
+Try getting latitude coordinates: 
+
+```{r}
+lat <- ncvar_get(gfdl_hist, "lat")
+summary(lat)
+```
+
+Plot all coordinates:
+
+```{r}
+all_coords <- expand.grid(lon, lat) %>%
+        rename(lon = Var1, lat = Var2) %>%
+        mutate(lon2 = ifelse(lon > 180, -(360 - lon), lon))
+head(all_coords)
+```
+
+```{r fig.width = 8, fig.height = 4}
+library(ggplot2)
+library(ggmap)
+library(viridis)
+ggplot() + 
+        borders("world", colour="gray50", fill="gray50") + 
+        geom_point(data = all_coords, aes(x = lon2, y = lat, color = lon),
+                   size = 0.1) + 
+        scale_color_viridis()
+```
+
+Get time from the file: 
+
+```{r}
+output_time <- ncvar_get(gfdl_hist, "time")
+summary(output_time)
+```
+
+Get time units from attributes: 
+
+```{r}
+time_units <- ncatt_get(gfdl_hist, "time", "units")
+time_units
+```
+
+Things seem a little off:
+
+```{r}
+as.Date(43800, origin = "1861-01-01")
+```
+
+```{r}
+as.Date(45620, origin = "1861-01-01")
+```
+
+Pull some of the temperature values: 
+
+```{r}
+tas <- ncvar_get(gfdl_hist, "tas")
+summary(tas)
+```
+
+This is in Kelvin: 
+
+```{r}
+ncatt_get(gfdl_hist, "tas", "units")
+```
+
+This has one measure for every latitude-longitude-time combination: 
+
+```{r}
+length(lon) * length(lat) * length(output_time) == length(tas)
+```
+
+```{r}
+dim(tas)
+```
+
+```{r}
+class(tas)
+```
+
+Here's an example map of temperature on the first day of this file:
+
+```{r fig.width = 8, fig.height = 4}
+library(weathermetrics)
+all_coords %>% 
+        mutate(tas_day = as.vector(tas[ , , 1]),
+               tas_day = convert_temperature(tas_day, "k", "c")) %>%
+        ggplot() + 
+        borders("world", colour="gray50", fill="gray50") + 
+        geom_point(aes(x = lon2, y = lat, color = tas_day),
+                   size = 0.5) + 
+        scale_color_viridis(name = "Temperature (C)")
+```
+
+Here's a plot for half-way through the first year (summer in the Northern Hemisphere):
+
+```{r fig.width = 8, fig.height = 4}
+library(weathermetrics)
+all_coords %>% 
+        mutate(tas_day = as.vector(tas[ , , 180]),
+               tas_day = convert_temperature(tas_day, "k", "c")) %>%
+        ggplot() + 
+        borders("world", colour="gray50", fill="gray50") + 
+        geom_point(aes(x = lon2, y = lat, color = tas_day),
+                   size = 0.5) + 
+        scale_color_viridis(name = "Temperature (C)")
+```
+
+Get some other metadata from the file:
+
+```{r}
+ncatt_get(gfdl_hist, 0, "title")
+```
+
+```{r}
+ncatt_get(gfdl_hist, 0, "institution")
+```
+
+```{r}
+ncatt_get(gfdl_hist, 0, "references")
+```
+
+```{r}
+ncatt_get(gfdl_hist, 0, "history")
+```
+
+```{r}
+ncatt_get(gfdl_hist, 0, "Conventions")
+```
+
+Try handling the time a different way, using the `ncdf.helpers` package: 
+
+```{r}
+library(ncdf4.helpers)
+library(PCICt)
+ts <- nc.get.time.series(gfdl_hist, v = "tas", time.dim.name = "time")
+head(ts)
+tail(ts)
+```
+
+This seems to work correctly for getting the times.
+
+```{r}
+class(ts)
+```
+
+```{r}
+gfdl_dates <- as.Date(format(ts), "%Y-%m-%d %H:%M:%s")
+summary(gfdl_dates)
+```
+
+
+Close the connection:
+
+```{r}
+nc_close(gfdl_hist)
+```
+

@@ -178,6 +178,14 @@ gfdl_dates <- as.Date(format(ts), "%Y-%m-%d %H:%M:%s")
 summary(gfdl_dates)
 ```
 
+Try using the `wux` package. Here is one of the example time series from CMIP5 data. It appears to be aggregated to the yearly level. 
+
+```{r}
+data(alpinesummer)
+head(alpinesummer)
+unique(alpinesummer$year)
+```
+
 
 Close the connection:
 

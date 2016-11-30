@@ -181,11 +181,24 @@ summary(gfdl_dates)
 Try using the `wux` package. Here is one of the example time series from CMIP5 data. It appears to be aggregated to the yearly level. 
 
 ```{r}
-data(alpinesummer)
-head(alpinesummer)
-unique(alpinesummer$year)
+library(wux)
+data("CMIP5_example_timeseries")
+head(CMIP5_example_timeseries)
 ```
 
+Try some of the functions in `RCMIP5`. It works for processing the file information: 
+
+```{r}
+library(RCMIP5)
+getFileInfo("~/tmp")
+```
+
+```{r}
+gfdl <- loadCMIP5("tas", "GFDL-ESM2G", "rcp85", path = "~/tmp/", yearRange = c(2071, 2072))
+str(gfdl)
+head(gfdl$time)
+tail(gfdl$time)
+```
 
 Close the connection:
 

@@ -69,7 +69,7 @@ readLatLong <- function(ensemble, global){
 #'    to a date of observation.
 readtas <- function(ensemble, global){
         loc_file <- grep(global$tasFilenames, ensemble)
-        return(utils::read.csv(ensemble[loc_file], header = FALSE))
+        return(data.table::fread(ensemble[loc_file]))
 }
 
 #' Read projection dates data

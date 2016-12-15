@@ -67,9 +67,13 @@ readLatLong <- function(ensemble, global){
 #' @return A dataframe of climate projection data where each column
 #'    corresponds to a climate model grid point and each row corresponds
 #'    to a date of observation.
-readtas <- function(ensemble, global){
+readtas <- function(ensemble, global, locations){
         loc_file <- grep(global$tasFilenames, ensemble)
-        return(data.table::fread(ensemble[loc_file]))
+        tas <- data.table::fread(ensemble[loc_file],
+                                 select = unique(locations),
+                                 header = FALSE)
+        tas <- tas[ , paste0("V", locations)]
+        return(tas)
 }
 
 #' Read projection dates data

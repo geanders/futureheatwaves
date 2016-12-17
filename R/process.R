@@ -260,17 +260,43 @@ processProjections <- function(ensemble, modelName, ensembleWriter,
 #'    for the specified ensemble member.
 processEnsemble <- function(ensemble, modelName, global, custom, type){
 
+        # loc_file <- "~/Downloads/tas_day_GFDL-ESM2G_historical_r1i1p1_19810101-19851231.nc"
+        # ncdf_file <- ncdf4::nc_open(loc_file)
+
         # Read the ensemble data
         cat("Reading --->", ensemble[1], "\n")
+
         latlong <- readLatLong(ensemble = ensemble, global = global)
-        tas <- readtas(ensemble = ensemble, global = global)
+        climate_lats <- unique(latlong[ , 1])
+        climate_longs <- unique(latlong[ , 2])
+
+        # climate_lats <- ncdf4::ncvar_get(ncdf_file, "lat")
+        # climate_longs <- ncdf4::ncvar_get(ncdf_file, "lon")
+        # latlong <- expand.grid(climate_lats, climate_longs)
+
         times <- readTimes(ensemble = ensemble, global = global)
+
         cat("Read operation complete", "\n")
 
         # Find indices of the closest points of measurement
         locations <- apply(global$cities, 1, closest_point, latlong = latlong)
         out_locations <- cbind(global$cities, latlong[locations, ])
         colnames(out_locations)[4:5] <- c("lat_grid", "long_grid")
+
+        # lat_grid <- sapply(global$cities$lat, FUN = function(x){
+        #         closest_index <- which.min(abs(x - climate_lats))
+        #         return(data.frame(closest_index = closest_index,
+        #                           closest_lat = climate_lats[closest_index]))
+        # })
+        # long_grid <- sapply(global$cities$lon, FUN = function(x){
+        #         closest_index <- which.min(abs(x - climate_longs))
+        #         return(data.frame(closest_index = closest_index,
+        #                           closest_long = climate_longs[closest_index]))
+        # })
+        # out_locations <- cbind(global$cities,
+        #                        lat_grid = lat_grid["closest_lat", ],
+        #                        long_grid = long_grid["closest_long", ])
+
 
         # Acquire the boundaries for the time series
         # Structure: c(start index, end index, # of elements spanning
@@ -286,7 +312,18 @@ processEnsemble <- function(ensemble, modelName, global, custom, type){
                            bounds = bounds)
 
         # Acquire time series for every city
-        series <- data.frame(tas[start:end, locations])
+        tas <- readtas(ensemble = ensemble, global = global, locations = locations)
+        series <- data.frame(tas[start:end, ])
+
+        # tas <- ncdf4::ncvar_get(ncdf_file, "tas")
+        # tas <- apply(cbind(long_grid["closest_index", ], lat_grid["closest_index", ]),
+        #             MARGIN = 1,
+        #             FUN = function(x){
+        #                     tas[x[[1]], x[[2]], ]
+        #             })
+
+        #
+        # ncdf4::nc_close(ncdf_file)
 
         # Convert the time series data to Fahrenheit
         if(global$input_metric == "kelvin"){

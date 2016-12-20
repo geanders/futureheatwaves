@@ -157,7 +157,8 @@ gen_hw_set <- function(out,
                        threshold_ensemble = "r1i1p1",
                        lat_lon_colnames = c("lat", "lon"),
                        input_metric = "kelvin",
-                       seasonal_months = c(5:9)){
+                       seasonal_months = c(5:9),
+                       absolute_thresholds = c(80, 85, 90, 95)){
 
         # Add warning for user that this will write new files
         if(printWarning){
@@ -205,7 +206,8 @@ gen_hw_set <- function(out,
                      referenceBoundaries = referenceBoundaries,
                      input_metric = input_metric,
                      numDays = numDays,
-                     seasonal_months = seasonal_months)
+                     seasonal_months = seasonal_months,
+                     absolute_thresholds = absolute_thresholds)
 
         # Put the directories into nested list form
         models <- acquireDirectoryStructure(dataFolder = dataFolder,
@@ -243,7 +245,8 @@ gen_hw_set <- function(out,
                                                        referenceBoundaries),
                        "probThreshold" = probThreshold,
                        "numDays" = as.integer(floor(numDays)),
-                       "seasonal_months" = seasonal_months)
+                       "seasonal_months" = seasonal_months,
+                       "absolute_thresholds" = absolute_thresholds)
 
         # Create accumulator closure
         accumulators <- createAccumulators()
@@ -295,7 +298,8 @@ check_params <- function(out,
                          referenceBoundaries,
                          input_metric,
                          numDays,
-                         seasonal_months){
+                         seasonal_months,
+                         absolute_thresholds){
 
         # Check to see if the folder that holds the climate data exists.
         tryCatch(
@@ -340,6 +344,13 @@ check_params <- function(out,
 
         if(any(!(seasonal_months %in% 1:12))){
                 stop("`seasonal_months` must be integers between 1 and 12")
+        }
+
+        if(any(!is.numeric(absolute_thresholds))){
+                stop("All absolute thresholds must be numeric.")
+        }
+        if(length(absolute_thresholds != 4)){
+                stop("If customizing absolute thresholds, you must include four values.")
         }
 
         checkCustomBounds(boundList = thresholdBoundaries,

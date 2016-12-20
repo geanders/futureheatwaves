@@ -107,6 +107,6 @@ average_length <- function(hw_datafr){
 #'
 #' @export
 average_mean_temp <- function(hw_datafr){
-        out <- mean(hw_datafr$mean.temp)
+        out <- mean(hw_datafr$mean.var)
         return(out)
 }

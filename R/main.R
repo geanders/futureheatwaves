@@ -156,7 +156,8 @@ gen_hw_set <- function(out,
                        printWarning = TRUE,
                        threshold_ensemble = "r1i1p1",
                        lat_lon_colnames = c("lat", "lon"),
-                       input_metric = "kelvin"){
+                       input_metric = "kelvin",
+                       seasonal_months = c(5:9)){
 
         # Add warning for user that this will write new files
         if(printWarning){
@@ -203,7 +204,8 @@ gen_hw_set <- function(out,
                      projectionBoundaries = projectionBoundaries,
                      referenceBoundaries = referenceBoundaries,
                      input_metric = input_metric,
-                     numDays = numDays)
+                     numDays = numDays,
+                     seasonal_months = seasonal_months)
 
         # Put the directories into nested list form
         models <- acquireDirectoryStructure(dataFolder = dataFolder,
@@ -240,7 +242,8 @@ gen_hw_set <- function(out,
                        "createHwDataframe" = !identical(projectionBoundaries,
                                                        referenceBoundaries),
                        "probThreshold" = probThreshold,
-                       "numDays" = as.integer(floor(numDays)))
+                       "numDays" = as.integer(floor(numDays)),
+                       "seasonal_months" = seasonal_months)
 
         # Create accumulator closure
         accumulators <- createAccumulators()
@@ -291,7 +294,8 @@ check_params <- function(out,
                          projectionBoundaries,
                          referenceBoundaries,
                          input_metric,
-                         numDays){
+                         numDays,
+                         seasonal_months){
 
         # Check to see if the folder that holds the climate data exists.
         tryCatch(
@@ -332,6 +336,10 @@ check_params <- function(out,
                 stop("`numDays` must be 1 or larger.")
         } else if(!is.numeric(numDays)){
                 stop("`numDays` must be a numeric value.")
+        }
+
+        if(any(!(seasonal_months %in% 1:12))){
+                stop("`seasonal_months` must be integers between 1 and 12")
         }
 
         checkCustomBounds(boundList = thresholdBoundaries,

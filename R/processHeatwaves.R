@@ -345,8 +345,10 @@ createHwDataframe <- function(city, threshold, heatwaves,
                 hw.frame$min.var.quantile <- dist.tmpd(hw.frame$min.var)
 
                 hw.frame$mean.yearround.var <- mean(ref_temps)
-                # Summertime is months May through September
-                seasontime <- as.POSIXlt(ref_dates)$mon %in% c(4:8)
+                # Determine season time based on custom input
+                seasontime <- as.POSIXlt(ref_dates)$mon %in%
+                        (custom$seasonal_months - 1) # as.POSIX uses months 1 lower than
+                                                     # typical human conventions (i.e., Jan = 0, not 1)
                 hw.frame$mean.seasonal.var <- mean(ref_temps[seasontime])
 
                 hw.frame$city <- city

@@ -316,11 +316,14 @@ processEnsemble <- function(ensemble, modelName, global, custom, type){
         series <- data.frame(tas[start:end, ])
 
         # tas <- ncdf4::ncvar_get(ncdf_file, "tas")
+        ## Are we reading everything in? Is there a better way to read in
+        ## just the locations we want?
         # tas <- apply(cbind(long_grid["closest_index", ], lat_grid["closest_index", ]),
         #             MARGIN = 1,
         #             FUN = function(x){
         #                     tas[x[[1]], x[[2]], ]
         #             })
+        ## series <- [-- restrict tas to only days we want --]
 
         #
         # ncdf4::nc_close(ncdf_file)

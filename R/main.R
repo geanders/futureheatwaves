@@ -105,9 +105,6 @@
 #'    If any climate model lacks that ensemble member for the specified
 #'    dates for calculating the threshold, it will be excluded from the
 #'    processing.
-#' @param input_metric A character string indicating the temperature metric
-#'    of the climate projection data being processed. Choices are "kelvin",
-#'    "fahrenheit", and "celsius".
 #'
 #' @return This function creates, and writes to the user's computer, files with
 #'    the heat waves and their characteristics for the specified climate
@@ -156,9 +153,8 @@ gen_hw_set <- function(out,
                        printWarning = TRUE,
                        threshold_ensemble = "r1i1p1",
                        lat_lon_colnames = c("lat", "lon"),
-                       input_metric = "kelvin",
                        seasonal_months = c(5:9),
-                       absolute_thresholds = c(80, 85, 90, 95)){
+                       absolute_thresholds = c(299.82, 302.60, 305.37, 308.15)){
 
         # Add warning for user that this will write new files
         if(printWarning){
@@ -190,8 +186,6 @@ gen_hw_set <- function(out,
                 out <- paste0(out, "/")
         }
 
-        input_metric <- tolower(input_metric)
-
         # Check the parameters for errors
         check_params(out = out,
                      dataFolder = dataFolder,
@@ -204,7 +198,6 @@ gen_hw_set <- function(out,
                      thresholdBoundaries = thresholdBoundaries,
                      projectionBoundaries = projectionBoundaries,
                      referenceBoundaries = referenceBoundaries,
-                     input_metric = input_metric,
                      numDays = numDays,
                      seasonal_months = seasonal_months,
                      absolute_thresholds = absolute_thresholds)
@@ -232,8 +225,7 @@ gen_hw_set <- function(out,
                        "coordinateFilenames" = coordinateFilenames,
                        "tasFilenames" = tasFilenames,
                        "timeFilenames" = timeFilenames,
-                       "threshold_ensemble" = threshold_ensemble,
-                       "input_metric" = input_metric)
+                       "threshold_ensemble" = threshold_ensemble)
 
         # Create the "custom" list object that will hold all of the user's
         # custom settings.
@@ -296,7 +288,6 @@ check_params <- function(out,
                          thresholdBoundaries,
                          projectionBoundaries,
                          referenceBoundaries,
-                         input_metric,
                          numDays,
                          seasonal_months,
                          absolute_thresholds){
@@ -332,10 +323,6 @@ check_params <- function(out,
                 stop("The `timeFilenames` is not a .csv file.")
         }
 
-        if(!(input_metric %in% c("kelvin", "fahrenheit", "celsius"))){
-                stop("`input_metric` must be `kelvin`, `fahrenheit`, or `celsius`.")
-        }
-
         if(numDays <= 0){
                 stop("`numDays` must be 1 or larger.")
         } else if(!is.numeric(numDays)){
@@ -349,7 +336,7 @@ check_params <- function(out,
         if(any(!is.numeric(absolute_thresholds))){
                 stop("All absolute thresholds must be numeric.")
         }
-        if(length(absolute_thresholds != 4)){
+        if(length(absolute_thresholds) != 4){
                 stop("If customizing absolute thresholds, you must include four values.")
         }
 

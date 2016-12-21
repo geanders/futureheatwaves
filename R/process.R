@@ -325,18 +325,6 @@ processEnsemble <- function(ensemble, modelName, global, custom, type){
         #
         # ncdf4::nc_close(ncdf_file)
 
-        # Convert the time series data to Fahrenheit
-        if(global$input_metric == "kelvin"){
-                series <- apply(series, 1:2, function(element) {
-                        return((element * 9/5) - 459.67)
-                })
-        } else if(global$input_metric == "celsius"){
-                series <- apply(series, 1:2, function(element) {
-                        return((element * 9/5) + 32)
-                })
-        }
-
-
         # Prepare return value
         ret <- list(locations = locations,
                     bounds = bounds,

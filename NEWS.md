@@ -7,6 +7,7 @@ climate model.
 * Improve memory management for some of the functions. Some functions write to global objects. In previous versions, the functions also returned what they were writing to the global objects. However, this is unnecessary, so these functions have been changed to return `NULL` and so use less memory.
 * Change to use `fread` from `data.table` instead of `read.csv` to read in climate data from csv.
 * Change to have more general column names for output dataset (e.g., `mean.var` rather than `mean.temp` and `mean.seasonal.var` rather than `mean.summer.temp`), so results make more sense if using the package for something other than heat waves (e.g., severe air pollution episodes)
+* Parameter `input_metric` in `gen_hw_set` removed to make the package more generalizable to variables other than temperature. 
 
 # futureheatwaves 1.0.2
 

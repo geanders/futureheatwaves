@@ -118,8 +118,13 @@ createCityProcessor <- function(global){
 
         function(threshold, ensembleSeries, custom){
                 city <- as.character(global$cities[i,1])
-                cat("Creating heat wave dataframe ~~ City: ", city,
-                    " ~~ City Number: ", i, " ~~ Cutoff: ", threshold, "\n")
+                if(global$above_threshold == FALSE){
+                        print_threshold <- -1 * threshold
+                } else {
+                        print_threshold <- threshold
+                }
+                cat("Creating dataframe ~~ City: ", city,
+                    " ~~ City Number: ", i, " ~~ Cutoff: ", print_threshold, "\n")
 
                 datafr <- data.frame(ensembleSeries$dates,
                                      ensembleSeries$series[,i])
@@ -352,6 +357,31 @@ createHwDataframe <- function(city, threshold, heatwaves,
                 hw.frame$mean.seasonal.var <- mean(ref_temps[seasontime])
 
                 hw.frame$city <- city
+
+                if(global$above_threshold == FALSE){
+                        hw.frame <- hw.frame %>%
+                                dplyr::mutate_(mean.var = ~ -1 * mean.var,
+                                               max.var = ~ -1 * min.var, # min and max need to be switched for below threshold
+                                               min.var = ~ -1 * max.var,
+                                               threshold = ~ -1 * threshold,
+                                               mean.var.quantile = ~ 1 - mean.var.quantile,
+                                               max.var.quantile = ~ 1 - min.var.quantile,
+                                               min.var.quantile = ~ 1 - max.var.quantile,
+                                               mean.yearround.var = ~ -1 * mean.yearround.var,
+                                               mean.seasonal.var = ~ -1 * mean.seasonal.var) %>%
+                                dplyr::rename_(.dots = setNames(list("days.above.abs.thresh.1",
+                                                                     "days.above.abs.thresh.2",
+                                                                     "days.above.abs.thresh.3",
+                                                                     "days.above.abs.thresh.4",
+                                                                     "days.above.99th",
+                                                                     "days.above.99.5th"),
+                                                                list("days.below.abs.thresh.1",
+                                                                     "days.below.abs.thresh.2",
+                                                                     "days.below.abs.thresh.3",
+                                                                     "days.below.abs.thresh.4",
+                                                                     "days.below.1st",
+                                                                     "days.below.0.5th")))
+                }
         }
 
         return(hw.frame)

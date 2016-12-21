@@ -154,7 +154,8 @@ gen_hw_set <- function(out,
                        threshold_ensemble = "r1i1p1",
                        lat_lon_colnames = c("lat", "lon"),
                        seasonal_months = c(5:9),
-                       absolute_thresholds = c(299.82, 302.60, 305.37, 308.15)){
+                       absolute_thresholds = c(299.82, 302.60, 305.37, 308.15),
+                       above_threshold = TRUE){
 
         # Add warning for user that this will write new files
         if(printWarning){
@@ -225,10 +226,15 @@ gen_hw_set <- function(out,
                        "coordinateFilenames" = coordinateFilenames,
                        "tasFilenames" = tasFilenames,
                        "timeFilenames" = timeFilenames,
-                       "threshold_ensemble" = threshold_ensemble)
+                       "threshold_ensemble" = threshold_ensemble,
+                       "above_threshold" = above_threshold)
 
         # Create the "custom" list object that will hold all of the user's
         # custom settings.
+        if(above_threshold == FALSE){  # Flip threshold if calculating below a threshold
+                probThreshold <- 1 - probThreshold
+                absolute_thresholds <- -1 * absolute_thresholds
+        }
         custom <- list("IDheatwaves" = IDheatwavesFunction,
                        "getBounds" = c(thresholdBoundaries,
                                        projectionBoundaries),

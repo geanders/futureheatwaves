@@ -325,6 +325,12 @@ processEnsemble <- function(ensemble, modelName, global, custom, type){
         #
         # ncdf4::nc_close(ncdf_file)
 
+        # If the user wants to identify periods below, rather than above,
+        # a threshold, make all values in the series negative
+        if(global$above_threshold == FALSE){
+                series <- -1 * series
+        }
+
         # Prepare return value
         ret <- list(locations = locations,
                     bounds = bounds,

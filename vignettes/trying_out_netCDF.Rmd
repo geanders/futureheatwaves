@@ -206,3 +206,55 @@ Close the connection:
 nc_close(gfdl_hist)
 ```
 
+
+```{r eval = FALSE}
+library(ncdf4)
+library(ncdf4.helpers)
+library(PCICt)
+library(readr)
+library(dplyr)
+library(tidyr)
+
+gfdl_hist <- nc_open("~/Downloads/tas_day_GFDL-ESM2G_historical_r1i1p1_19810101-19851231.nc")
+lon <- ncvar_get(gfdl_hist, "lon")
+lat <- ncvar_get(gfdl_hist, "lat")
+tas_time <- nc.get.time.series(gfdl_hist, v = "tas", time.dim.name = "time")
+tas <- ncvar_get(gfdl_hist, "tas")
+nc_close(gfdl_hist)
+
+time_output <- data_frame(index = 1:length(tas_time),
+                          time = format(tas_time, "%Y-%m-%d")) %>%
+        separate(time, c("year", "month", "day")) %>%
+        mutate(year = as.integer(year),
+               month = as.integer(month),
+               day = as.integer(day))
+coordinate_output <- expand.grid(lon, lat)
+tas_output <- matrix(unlist(tas), 
+                     ncol = length(lon) * length(lat),
+                     byrow = TRUE) %>%
+        as.data.frame()
+
+write_csv(time_output, 
+          path = "~/tmp/dataFolder/historical/GFDL/r1i1p1/time_day.csv",
+          col_names = FALSE)
+write_csv(coordinate_output, 
+          path = "~/tmp/dataFolder/historical/GFDL/r1i1p1/latitude_longitude_day.csv", 
+          col_names = FALSE)
+write_csv(tas_output,
+          path = "~/tmp/dataFolder/historical/GFDL/r1i1p1/tas_day.csv",
+          col_names = FALSE)
+
+gen_hw_set(out = "~/tmp/example_results",
+           dataFolder = "~/tmp/dataFolder",
+           dataDirectories = list("historical" = c(1981, 1985),
+                                  "rcp85" = c(2060, 2079)),
+           citycsv = city_file_location,
+           coordinateFilenames = "latitude_longitude_day.csv",
+           tasFilenames = "tas_day.csv",
+           timeFilenames = "time_day.csv",
+           thresholdBoundaries = c(1981, 1985),
+           projectionBoundaries = c(1981, 1985),
+           referenceBoundaries = c(1981, 1985))
+
+```
+

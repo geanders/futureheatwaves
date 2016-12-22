@@ -3,3 +3,5 @@
 .RData
 paper_drafts/*
 ..pdf
+.DS_Store
+vignettes/.DS_Store

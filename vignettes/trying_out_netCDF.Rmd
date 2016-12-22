@@ -215,7 +215,7 @@ library(readr)
 library(dplyr)
 library(tidyr)
 
-gfdl_hist <- nc_open("~/Downloads/tas_day_GFDL-ESM2G_historical_r1i1p1_19810101-19851231.nc")
+gfdl_hist <- nc_open("~/Downloads/tas_day_GFDL-ESM2G_historical_r1i1p1_19860101-19901231.nc")
 lon <- ncvar_get(gfdl_hist, "lon")
 lat <- ncvar_get(gfdl_hist, "lat")
 tas_time <- nc.get.time.series(gfdl_hist, v = "tas", time.dim.name = "time")
@@ -228,7 +228,10 @@ time_output <- data_frame(index = 1:length(tas_time),
         mutate(year = as.integer(year),
                month = as.integer(month),
                day = as.integer(day))
-coordinate_output <- expand.grid(lon, lat)
+coordinate_output <- expand.grid(lon, lat) %>%
+        rename("lon" = Var1) %>%
+        rename("lat" = Var2) %>%
+        select(lat, lon)
 tas_output <- matrix(unlist(tas), 
                      ncol = length(lon) * length(lat),
                      byrow = TRUE) %>%
@@ -244,17 +247,29 @@ write_csv(tas_output,
           path = "~/tmp/dataFolder/historical/GFDL/r1i1p1/tas_day.csv",
           col_names = FALSE)
 
+city_file_location <- system.file("extdata/cities.csv",
+                                 package = "futureheatwaves")
 gen_hw_set(out = "~/tmp/example_results",
            dataFolder = "~/tmp/dataFolder",
-           dataDirectories = list("historical" = c(1981, 1985),
+           dataDirectories = list("historical" = c(1986, 1990),
                                   "rcp85" = c(2060, 2079)),
            citycsv = city_file_location,
            coordinateFilenames = "latitude_longitude_day.csv",
            tasFilenames = "tas_day.csv",
            timeFilenames = "time_day.csv",
-           thresholdBoundaries = c(1981, 1985),
-           projectionBoundaries = c(1981, 1985),
-           referenceBoundaries = c(1981, 1985))
+           thresholdBoundaries = c(1986, 1990),
+           projectionBoundaries = c(1986, 1990),
+           referenceBoundaries = c(1986, 1990))
 
+out <- "~/tmp/example_results"
+apply_all_models(out = out, FUN = average_mean_temp,
+                 city_specific = TRUE) %>% 
+        mutate(value = convert_temperature(value, "k", "f"))
+
+ex_results <- system.file("extdata/example_results",
+                          package = "futureheatwaves")
+apply_all_models(ex_results, FUN = average_mean_temp,
+                 city_specific = TRUE) %>%
+        mutate(value = convert_temperature(value, "k", "f"))
 ```
 

@@ -1,0 +1,286 @@
+---
+title: "Starting from netCDF files"
+author: "G. Brooke Anderson"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Starting from netCDF files}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+Climate model output files are available for CMIP5 in the netCDF file format. This vignette explains how files in this format can be opened and worked with in R to generate the required delimited format to use with the `futureheatwaves` package. 
+
+Three R packages--- `ncdf4`, `ncdf4.helpers`, and `PCICt`---provide useful tools for working with netCDF climate model output files. 
+
+```{r message = FALSE, warning = FALSE}
+library(ncdf4)
+library(ncdf4.helpers)
+library(PCICt)
+```
+
+Some of the standard tidyverse packages are also helpful and should be loaded to run the example code in this vignette: 
+
+```{r message = FALSE, warning = FALSE}
+library(readr)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+```
+
+As an example, say you have a climate model output file saved locally called "tas_day_GFDL-ESM2G_historical_r1i1p1_19860101-19901231.nc". As a note, the CMIP5 file names encode information about the climate model output given in the file, including the variable (here, "tas", for ...), the experiment ("historical"), the dates covered by the output (Jan. 1, 1986 to Dec. 31, 1990), the climate model ("GFDL-ESM2G"), the time step of the output ("day"), and the ensemble member ("r1i1p1").
+
+You can use the `nc_open` function from the `ncdf4` package to open a connection to a netCDF file. The version of netCDF changed from version 3 to version 4 in 2008, and some R packages for netCDF files will only work with the older version 3, but the `ncdf4` package can work with either. 
+
+```{r}
+climate_filepath <- paste0("~/Downloads/tas_day_GFDL-ESM2G_historical",
+                           "_r1i1p1_19860101-19901231.nc")
+climate_output <- nc_open(climate_filepath)
+```
+
+The `nc_open` function opens a connection to the netCDF file, but does not read all the data in the file into memory. Instead, this function reads into memory some information about the file, and it opens a connection that can be used in conjunction with other commands to read in specific parts of the data. Once you no longer need the file connection, you should close the connection with `nc_close`.
+
+If you print the object created by `nc_open`, you will get some metadata on the file, including the variables that are available in the file, which are used for dimensions, and what units each are in:
+
+```{r}
+climate_output
+```
+
+Once you know the names of variables in the file, you can use the `ncvar_get` function to read all values of that variable into an R object. For example, to get all the values of longitude and latitude in the example file, which define two of the dimensions of the array for the temperature values reported in the file, you can run:
+
+```{r}
+lon <- ncvar_get(climate_output, varid = "lon")
+lat <- ncvar_get(climate_output, varid = "lat")
+
+summary(lon)
+summary(lat)
+```
+
+In addition to the longitude and latitude dimensions, the climate model output files also include a time dimension. The metadata for the file includes information on how this time is reported, which is typically in days since some origin date for climate model output. This information is included in the `$dim$time$units` element of the R object returns with `nc_open`:
+
+```{r}
+climate_output$dim$time$units
+```
+
+While the R function `as.Date` allows the user to specify an origin to compute a date, this function typically will not work correctly with climate model output files, as climate models often provide output using calendars other than the standard Gregorian calendar. Climate model output can be tied to a number of different calendars, including a "no-leap" calendar, which omits leap days from the calendar, a 360-day calendar, which uses 30-day months for all 12 months, and a number of other calendars. You can determine the calendar used to a netCDF file from the `$dim$time$calendar` element of the R object returns with `nc_open`:
+
+```{r}
+climate_output$dim$time$calendar
+```
+
+This use of non-standard calendars messes up the calculations of `as.Date`, so you must use a more specialized function to read in the time variable of the climate model output and map it to standard calendar dates. You can do this with the `nc.get.time.series` function from the `ncdf4.helpers` package (you should also load the `PCICt` package to use this function): 
+
+```{r}
+tas_time <- nc.get.time.series(climate_output, v = "tas",
+                               time.dim.name = "time")
+tas_time[c(1:3, length(tas_time) - 2:0)]
+```
+
+The longitude, latitude, and time variables define the dimensions for the climate model output, which for this file is the [tas] at a specific grid point (longitude, latitude) and day (time). You can read in this main variable using `ncvar_get`: 
+
+```{r}
+tas <- ncvar_get(climate_output, "tas")
+```
+
+This variable is in a 3-dimensional array, with dimensions ordered as first longitude, then latitude, then time: 
+
+```{r}
+dim(tas)
+length(lon)
+length(lat)
+length(tas_time)
+```
+
+Once you have read all variables into R objects, you can close the file using: 
+
+```{r}
+nc_close(climate_output)
+```
+
+You can use indexing to pull the modeled temperature at a certain location and time step. For example, Beijing, China, is at latitude 39.9 degrees north and 116.4 degrees east. To get the value of the modeled temperature on July 7, 1986, at the model grid point closest to Beijing, you can run (the units on the output are Kelvin):
+
+```{r}
+lon_index <- which.min(abs(lon - 116.4))
+lat_index <- which.min(abs(lat - 39.9))
+time_index <- which(format(tas_time, "%Y-%m-%d") == "1986-07-01")
+tas[lon_index, lat_index, time_index]
+```
+
+To get the full time series of modeled temperature at the grid point closest to Beijing, you can run: 
+
+```{r fig.width = 6, fig.height = 3}
+beijing_output <- data_frame(time = tas_time,
+                             tas = tas[lon_index, lat_index, ]) %>%
+        mutate(time = as.Date(format(time, "%Y-%m-%d")))
+beijing_output %>%
+        ggplot(aes(x = time, y = tas)) + 
+        geom_point(alpha = 0.7) + 
+        xlab("Date") + ylab("Temperature (K)")
+```
+
+Note that this code uses `format` and `as.Date` to convert the PCICt object to a date object, to allow use of a date axis when plotting with `ggplot2`.
+
+To get the modeled temperature on July 1, 1986, at all grid point locations, you can run: 
+
+```{r}
+july_1_1986 <- tas[ , , time_index]
+july_1_1986[1:3, 1:3]
+```
+
+This data is a two-dimensional matrix, where the column is specific to longitude and the row to latitude. To tidy this data to make it easier to map with `ggplot2`, you can use `expand.grid` to create a dataframe with every combination of longitude and latitude, and then use `as.vector` with the temperature values for July 1, 1986, to add temperature values at each of these longitudes and latitudes. Because the longitude dimension precedes the latitude dimension in the `tas` array, it should be put first in the `expand.grid` so that longitude and latitude values align correctly with the unlisted temperature data. Longitude should be mutated to have values between -180 and 180 (in the original data, it is between 0 and 360) to work better with `ggplot2` mapping. 
+
+```{r}
+all_coords <- expand.grid(lon, lat) %>%
+        rename(lon = Var1, lat = Var2) %>%
+        mutate(lon = ifelse(lon > 180, -(360 - lon), lon),
+               tas = as.vector(july_1_1986))
+```
+
+This modeled temperature data for a single day can be mapped using `ggmap` and `ggplot2` functions (the `viridis` package is also used here for the color scale and the `weathermetrics` package to convert the temperature from Kelvin to Celsius):
+
+```{r fig.width = 8, fig.height = 4, message = FALSE, warning = FALSE}
+library(ggmap)
+library(viridis)
+library(weathermetrics)
+
+all_coords %>% 
+        mutate(tas = convert_temperature(tas, "k", "c")) %>%
+        ggplot() + 
+        borders("world", colour="gray50", fill="gray50") + 
+        geom_point(aes(x = lon, y = lat, color = tas),
+                   size = 0.5) + 
+        scale_color_viridis(name = "Temperature (C)") + 
+        theme_void() + 
+        coord_quickmap() + 
+        ggtitle("Modeled temperature on July 1, 1986",
+                subtitle = "GFDL-ESM2G model, historical experiment, r1i1p1 ensemble member") 
+```
+
+The `futureheatwaves` package requires that climate output files are in a certain output to be processed. The data in the climate model output netCDF must be saved in three files: one for time, one for grid point location (latitude and longitude), and one for the climate model output variable (e.g., temperature in the example file used in this case). The following code can be used to correctly format and save the data from the climate model output netCDF file in a way that will allow processing by the `futureheatwaves` package: 
+
+```{r}
+# Load required libraries
+library(ncdf4)
+library(ncdf4.helpers)
+library(PCICt)
+library(readr)
+library(dplyr)
+library(tidyr)
+
+# Open connection to netCDF file, read in variables, and close connection
+climate_filepath <- paste0("~/Downloads/tas_day_GFDL-ESM2G_",
+                           "historical_r1i1p1_19860101-19901231.nc")
+climate_output <- nc_open(climate_filepath)
+lon <- ncvar_get(climate_output, "lon")
+lat <- ncvar_get(climate_output, "lat")
+tas_time <- nc.get.time.series(climate_output,
+                               v = "tas", time.dim.name = "time")
+tas <- ncvar_get(climate_output, "tas")
+nc_close(climate_output)
+
+# Change to appropriate format for futureheatwaves package
+time_output <- data_frame(index = 1:length(tas_time),
+                          time = format(tas_time, "%Y-%m-%d")) %>%
+        separate(time, c("year", "month", "day")) %>%
+        mutate(year = as.integer(year),
+               month = as.integer(month),
+               day = as.integer(day))
+coordinate_output <- expand.grid(lon, lat) %>%
+        rename("lon" = Var1) %>%
+        rename("lat" = Var2) %>%
+        select(lat, lon)
+tas_output <- matrix(unlist(tas), 
+                     ncol = length(lon) * length(lat),
+                     byrow = TRUE) %>%
+        as.data.frame()
+
+# Save data as three comma-separated files
+if(!dir.exists("~/tmp/dataFolder/historical/GFDL/r1i1p1")){
+        dir.create("~/tmp/dataFolder/historical/GFDL/r1i1p1",
+                   recursive = TRUE)
+}
+write_csv(time_output, 
+          path = "~/tmp/dataFolder/historical/GFDL/r1i1p1/time_day.csv",
+          col_names = FALSE)
+write_csv(coordinate_output, 
+          path = "~/tmp/dataFolder/historical/GFDL/r1i1p1/latitude_longitude_day.csv", 
+          col_names = FALSE)
+write_csv(tas_output,
+          path = "~/tmp/dataFolder/historical/GFDL/r1i1p1/tas_day.csv",
+          col_names = FALSE)
+```
+
+If you are only using this dataset and do not also have a future experiment to include, you should create a "dummy" rcp85 folder to get the `futureheatwaves` functions to run correctly. To do this, you can just save the same files in an `rcp` subdirectory: 
+
+```{r}
+if(!dir.exists("~/tmp/dataFolder/rcp85/GFDL/r1i1p1")){
+        dir.create("~/tmp/dataFolder/rcp85/GFDL/r1i1p1",
+                   recursive = TRUE)
+}
+write_csv(time_output, 
+          path = "~/tmp/dataFolder/rcp85/GFDL/r1i1p1/time_day.csv",
+          col_names = FALSE)
+write_csv(coordinate_output, 
+          path = "~/tmp/dataFolder/rcp85/GFDL/r1i1p1/latitude_longitude_day.csv", 
+          col_names = FALSE)
+write_csv(tas_output,
+          path = "~/tmp/dataFolder/rcp85/GFDL/r1i1p1/tas_day.csv",
+          col_names = FALSE)
+```
+
+The data can now be processed by the `futureheatwaves` package. For example, to identify and characterize all heatwaves between 1986 and 1990 at the cities listed in the "cities.csv" file that comes with the package:
+
+```{r}
+library(futureheatwaves)
+city_file_location <- system.file("extdata/chinese_cities.csv",
+                                 package = "futureheatwaves")
+gen_hw_set(out = "~/tmp/example_results",
+           dataFolder = "~/tmp/dataFolder",
+           dataDirectories = list("historical" = c(1986, 1990),
+                                  "rcp85" = c(2060, 2079)),
+           citycsv = city_file_location,
+           coordinateFilenames = "latitude_longitude_day.csv",
+           tasFilenames = "tas_day.csv",
+           timeFilenames = "time_day.csv",
+           thresholdBoundaries = c(1986, 1990),
+           projectionBoundaries = c(1986, 1990),
+           referenceBoundaries = c(1986, 1990),
+           printWarning = FALSE)
+```
+
+You can then work with this output as with any output from `gen_hw_set`. For example, you can create a plot of city and matching grid point locations using:
+
+```{r message = FALSE, fig.width = 6, fig.height = 6}
+out <- "~/tmp/example_results"
+map_grid_ggmap(plot_model = "GFDL", out = out)
+```
+
+You can use `apply_all_models` to apply functions to explore the heatwave output. For example, you can determine the number of heatwaves in each community and the average temperature of heatwaves in each community using: 
+
+```{r}
+library(forcats)
+apply_all_models(out = out, FUN = number_of_heatwaves,
+                 city_specific = TRUE) %>%
+        mutate(city = fct_reorder(city, value)) %>%
+        ggplot(aes(x = city, y = value)) + 
+        geom_bar(stat = "identity") + 
+        coord_flip() + 
+        theme_classic() + 
+        ylab("# of heatwaves") + 
+        xlab("")
+```
+
+```{r fig.height = 6, fig.width = 4}
+apply_all_models(out = out, FUN = average_mean_temp,
+                 city_specific = TRUE) %>%
+        mutate(value = convert_temperature(value, "k", "c")) %>%
+        mutate(city = fct_reorder(city, value)) %>%
+        ggplot(aes(x = value, y = city)) + 
+        geom_point() +  
+        ylab("") + 
+        xlab(expression(paste("Average temperature during heatwaves (",
+                              degree*C, ")")))
+```
+
+
+

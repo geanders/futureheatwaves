@@ -658,6 +658,18 @@ b <- map_grid(plot_model = "ccsm", out = out)
 grid.arrange(a, b, ncol = 1)
 ```
 
+As of version 1.0.3, the package has two other plotting options that are more useful for non-U.S. studies. First, the `map_grid_ggmap` function draws on `ggmap` functions to plot study cities and their matching climate model grid points on map background from Stamen Maps. The function is written to pull a background map just large enough to show all cities and climate model grid points. This mapping function works for study cities anywhere in the world. Here is the code to use to map study cities and matching climate model grid points for the example data included with the package:
+
+```{r message = FALSE, warning = FALSE, fig.width = 5}
+map_grid_ggmap(plot_model = "bcc1", out = out)
+```
+
+The other new mapping function, `map_grid_leaflet`, allows you to create interactive maps using the `leaflet` package and will also work for study cities anywhere. This function adds pop-ups labeling city locations and climate model grid point locations. The map, like any leaflet map, allows panning and zooming. 
+
+```{r}
+map_grid_leaflet(plot_model = "bcc1", out = out)
+```
+
 ## Extensions
 
 The functionality of this package can be easily expanded by loops. For example, to explore the role of the heat wave definition on projections, the user could create a loop to run `gen_hw_set` and `apply_all_models` to the same directory of climate projections but with a variety of different functions used to identify the heat waves in the projections. 

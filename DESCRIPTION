@@ -28,6 +28,7 @@ Imports:
     ggmap (>= 2.6.1),
     ggplot2 (>= 2.0.0),
     ggthemes (>= 3.0.0),
+    ggmap (>= 2.7.0),
     leaflet (>= 1.0.1),
     Rcpp (>= 0.12.5),
     stringr (>= 1.1.0),

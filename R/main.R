@@ -153,9 +153,9 @@ gen_hw_set <- function(out,
                        printWarning = TRUE,
                        threshold_ensemble = "r1i1p1",
                        lat_lon_colnames = c("lat", "lon"),
-                       seasonal_months = c(5:9),
+                       above_threshold = TRUE,
                        absolute_thresholds = c(299.82, 302.60, 305.37, 308.15),
-                       above_threshold = TRUE){
+                       seasonal_months = c(5:9)){
 
         # Add warning for user that this will write new files
         if(printWarning){

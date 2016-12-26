@@ -191,24 +191,29 @@ map_grid_ggmap <- function(plot_model, out, lon_transform = FALSE){
                                  f = 0.5)
         map <- suppressWarnings(get_map(location = bbox,
                                         source = "stamen",
-                                        maptype = "watercolor"))
+                                        maptype = "toner-lite"))
 
         latlong <- unique(cities[ , c("lon_grid", "lat_grid")])
 
         map <- ggmap::ggmap(map) +
+                ggplot2::geom_segment(data = cities,
+                                      ggplot2::aes_string(x = "lon",
+                                                          y = "lat",
+                                                          xend = "lon_grid",
+                                                          yend = "lat_grid"),
+                                      size = 1.2, alpha = 0.8,
+                                      color = "darkred") +
+                ggplot2::geom_point(data = cities,
+                                    ggplot2::aes_string(x = "lon",
+                                                        y = "lat"),
+                                    size = 1.5, color = "darkred",
+                                    alpha = 0.8) +
                 ggplot2::geom_point(data = latlong,
                                     ggplot2::aes_string(x = "lon_grid",
                                                         y = "lat_grid"),
-                                    size = 2, color = "black", alpha = 0.8)
-        map <- map + ggplot2::geom_segment(data = cities,
-                                           ggplot2::aes_string(x = "lon",
-                                                               y = "lat",
-                                                               xend = "lon_grid",
-                                                               yend = "lat_grid"),
-                                           size = 1.2, alpha = 0.8,
-                                           color = "black")
-        map <- map + ggthemes::theme_map()
-        map <- map + ggplot2::ggtitle(plot_model)
+                                    size = 2, color = "red", alpha = 0.8) +
+                ggthemes::theme_map() +
+                ggplot2::ggtitle(plot_model)
         return(map)
 }
 

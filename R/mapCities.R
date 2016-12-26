@@ -127,7 +127,7 @@ map_grid_leaflet <- function(plot_model, out){
 
         out_map <- leaflet::leaflet() %>%
                 leaflet::addTiles() %>%
-                leaflet::addMarkers(data = cities, lng = ~lon, lat = ~lat,
+                leaflet::addCircleMarkers(data = cities, lng = ~lon, lat = ~lat,
                                     popup = ~ city_popup) %>%
                 leaflet::addCircleMarkers(data = grid_data,
                                           lng = ~lon_grid, lat = ~lat_grid,
@@ -183,9 +183,9 @@ map_grid_ggmap <- function(plot_model, out){
         bbox <- ggmap::make_bbox(lon = c(cities$lon, cities$lon_grid),
                                  lat = c(cities$lat, cities$lat_grid),
                                  f = 0.5)
-        map <- suppressWarnings(get_map(location = bbox,
-                                        source = "stamen",
-                                        maptype = "toner-lite"))
+        map <- suppressWarnings(ggmap::get_map(location = bbox,
+                                               source = "stamen",
+                                                maptype = "toner-lite"))
 
         latlong <- unique(cities[ , c("lon_grid", "lat_grid")])
 

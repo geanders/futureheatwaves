@@ -664,9 +664,9 @@ As of version 1.0.3, the package has two other plotting options that are more us
 map_grid_ggmap(plot_model = "bcc1", out = out)
 ```
 
-The other new mapping function, `map_grid_leaflet`, allows you to create interactive maps using the `leaflet` package and will also work for study cities anywhere. This function adds pop-ups labeling city locations and climate model grid point locations. The map, like any leaflet map, allows panning and zooming. 
+The other new mapping function, `map_grid_leaflet`, allows you to create interactive maps using the `leaflet` package and will also work for study cities anywhere. This function adds pop-ups labeling city locations (using the "city" column in the file designated with the `citycsv` parameter in `gen_hw_set`) and climate model grid point locations. The map, like any leaflet map, allows panning and zooming. 
 
-```{r}
+```{r fig.width = 8}
 map_grid_leaflet(plot_model = "bcc1", out = out)
 ```
 

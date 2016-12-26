@@ -317,7 +317,10 @@ processEnsemble <- function(ensemble, modelName, global, custom, type){
 
         # tas <- ncdf4::ncvar_get(ncdf_file, "tas")
         ## Are we reading everything in? Is there a better way to read in
-        ## just the locations we want?
+        ## just the locations we want? Maybe try nc.get.var.subset.by.axes
+        ## from ncdf4.helpers. Also, check the `start` and `count` parameters
+        ## in the `ncvar_get` function in `ncdf4`. -1 in `count` means "everything
+        ## on that dimension"
         # tas <- apply(cbind(long_grid["closest_index", ], lat_grid["closest_index", ]),
         #             MARGIN = 1,
         #             FUN = function(x){

@@ -6,7 +6,8 @@
 \usage{
 check_params(out, dataFolder, dataDirectories, citycsv, coordinateFilenames,
   tasFilenames, timeFilenames, IDheatwavesFunction, thresholdBoundaries,
-  projectionBoundaries, referenceBoundaries, input_metric, numDays)
+  projectionBoundaries, referenceBoundaries, numDays, seasonal_months,
+  absolute_thresholds)
 }
 \arguments{
 \item{out}{Character string with pathway to directory to which
@@ -90,10 +91,6 @@ subdirectories specified by the \code{dataDirectories} argument in
 time bounds used differ from those used for projections, these reference
 temperatures will be pulled from the ensemble member for each climate
 model specified by \code{threshold_ensemble}.}
-
-\item{input_metric}{A character string indicating the temperature metric
-of the climate projection data being processed. Choices are "kelvin",
-"fahrenheit", and "celsius".}
 
 \item{numDays}{Integer greater than 0 giving the number of days to
 use in the heat wave definition (e.g., \code{numDays = 2} would define a

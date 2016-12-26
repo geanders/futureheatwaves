@@ -4,7 +4,7 @@
 \alias{map_grid_leaflet}
 \title{Create an interactive map of model grid}
 \usage{
-map_grid_leaflet(plot_model, out, lon_transform = TRUE)
+map_grid_leaflet(plot_model, out)
 }
 \arguments{
 \item{plot_model}{A character string with the name of the model to plot}
@@ -18,7 +18,7 @@ pathname as that specified with \code{out} when running
 format that needs to be transformed. Often, U.S. locations will give
 longitude as an absolute value, which needs to be transformed using
 \eqn{360 - longitude} before mapping. If using longitude values that
-do not require transformation, set this value to FALSE.}
+require transformation, set this value to TRUE.}
 }
 \value{
 A \code{leaflet} object with a map of grid points for the climate
@@ -34,7 +34,7 @@ study city to its climate model grid point. This map is made using the
 }
 \examples{
 out <- system.file("extdata/example_results", package = "futureheatwaves")
-map_grid_leaflet(plot_model = "bcc1", out = out)
+map_grid_leaflet(plot_model = "bcc1", out = out, lon_transform = TRUE)
 
 }
 

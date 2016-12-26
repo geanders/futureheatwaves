@@ -4,7 +4,7 @@
 \alias{map_grid_ggmap}
 \title{Create a map of model grid using ggmap}
 \usage{
-map_grid_ggmap(plot_model, out, lon_transform = TRUE)
+map_grid_ggmap(plot_model, out)
 }
 \arguments{
 \item{plot_model}{A character string with the name of the model to plot}
@@ -13,12 +13,6 @@ map_grid_ggmap(plot_model, out, lon_transform = TRUE)
 written by \code{\link{gen_hw_set}}. Typically, this will be the same
 pathname as that specified with \code{out} when running
 \code{\link{gen_hw_set}}.}
-
-\item{lon_transform}{Logical value indicating whether longitude is in a
-format that needs to be transformed. Often, U.S. locations will give
-longitude as an absolute value, which needs to be transformed using
-\eqn{360 - longitude} before mapping. If using longitude values that
-do not require transformation, set this value to FALSE.}
 }
 \value{
 A \code{ggplot2} object with a map of grid points for the climate

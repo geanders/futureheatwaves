@@ -247,8 +247,7 @@ write_csv(tas_output,
           path = "~/tmp/dataFolder/historical/GFDL/r1i1p1/tas_day.csv",
           col_names = FALSE)
 
-city_file_location <- system.file("extdata/cities.csv",
-                                 package = "futureheatwaves")
+city_file_location <- "predictivemodels/cities.csv"
 gen_hw_set(out = "~/tmp/example_results",
            dataFolder = "~/tmp/dataFolder",
            dataDirectories = list("historical" = c(1986, 1990),
@@ -261,15 +260,56 @@ gen_hw_set(out = "~/tmp/example_results",
            projectionBoundaries = c(1986, 1990),
            referenceBoundaries = c(1986, 1990))
 
+map_grid(plot_model = "GFDL", out = out)
+map_grid_leaflet(plot_model = "GFDL", out = out)
+map_grid_ggmap(plot_model = "GFDL", out = out, lon_transform = TRUE)
+
 out <- "~/tmp/example_results"
 apply_all_models(out = out, FUN = average_mean_temp,
                  city_specific = TRUE) %>% 
-        mutate(value = convert_temperature(value, "k", "f"))
+        mutate(value = convert_temperature(value, "k", "f")) %>%
+        arrange(value) %>%
+        mutate(city = factor(city, levels = city)) %>%
+        ggplot(aes(x = value, y = city)) + 
+        geom_point() + 
+        xlab("Mean temperature during\nheatwaves (F)") + ylab("")
 
-ex_results <- system.file("extdata/example_results",
-                          package = "futureheatwaves")
-apply_all_models(ex_results, FUN = average_mean_temp,
-                 city_specific = TRUE) %>%
-        mutate(value = convert_temperature(value, "k", "f"))
+
+## Map temperature quantiles
+library(viridis)
+us_tas <- tas[which(lon > 233 & lon < 294), 
+              which(lat > 25 & lat < 50),
+              ]
+
+get_locs <- coordinate_output %>%
+        mutate(us_lat = lat > 25 & lat < 50,
+               us_lon = lon > 233 & lon < 294,
+               us_point = us_lat & us_lon)
+
+us_tas <- tas_output[ , which(get_locs$us_point)]
+us_mean <- apply(us_tas, 2, mean)
+
+us_coords <- coordinate_output %>%
+        filter(lon > 233 & lon < 294 & lat > 25 & lat < 50) %>%
+        mutate(lon2 = ifelse(lon > 180, -(360 - lon), lon),
+               us_mean = convert_temperature(apply(us_tas, 2, mean),
+                                             "k", "f"),
+               us_max = convert_temperature(apply(us_tas, 2, max),
+                                             "k", "f"),
+               us_thresh = convert_temperature(apply(us_tas, 2, 
+                                                     quantile, probs = 0.98),
+                                             "k", "f"))
+
+ggplot() + 
+        borders("state", colour="gray50", fill="gray90") + 
+        geom_point(data = us_coords, aes(x = lon2, y = lat,
+                                         color = us_mean),
+                   size = 2, alpha = 0.8) + 
+        scale_color_viridis() + 
+        coord_map() + 
+        theme_void()
 ```
+
+
+
 

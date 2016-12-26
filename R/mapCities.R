@@ -85,18 +85,12 @@ map_grid <- function(plot_model, out){
 #' @export
 #'
 #' @importFrom dplyr %>%
-map_grid_leaflet <- function(plot_model, out, lon_transform = FALSE){
+map_grid_leaflet <- function(plot_model, out){
         cities <- utils::read.csv(paste(out, "locationList.csv", sep = "/"),
                                   col.names = c("city","lat", "lon",
                                                 "lat_grid", "lon_grid",
                                                 "model")) %>%
                 dplyr::filter_(~ model == plot_model)
-
-        if(lon_transform){
-                cities <- cities %>%
-                        dplyr::mutate_(lon = ~ lon - 360,
-                                       lon_grid = ~ lon_grid - 360)
-        }
 
         cities <- cities %>%
                 dplyr::mutate_(city_popup = ~ paste0("<b>City:</b> ",
@@ -169,22 +163,22 @@ map_grid_leaflet <- function(plot_model, out, lon_transform = FALSE){
 #'
 #' @examples
 #' out <- system.file("extdata/example_results", package = "futureheatwaves")
-#' map_grid_ggmap(plot_model = "bcc1", out = out, lon_transform = TRUE)
+#' map_grid_ggmap(plot_model = "bcc1", out = out)
 #'
 #' @export
 #'
 #' @importFrom dplyr %>%
-map_grid_ggmap <- function(plot_model, out, lon_transform = FALSE){
+map_grid_ggmap <- function(plot_model, out){
         cities <- utils::read.csv(paste(out, "locationList.csv", sep = "/"),
                                   col.names = c("city","lat", "lon",
                                                 "lat_grid", "lon_grid", "model")) %>%
                 dplyr::filter_(~ model == plot_model)
 
-        if(lon_transform){
-                cities <- cities %>%
-                        dplyr::mutate_(lon = ~ lon - 360,
-                                       lon_grid = ~ lon_grid - 360)
-        }
+        cities <- cities %>%
+                dplyr::mutate_(lon = ~ ifelse(lon > 180, -(360 - lon), lon),
+                               lon_grid = ~ ifelse(lon_grid > 180,
+                                                   -(360 - lon_grid),
+                                                   lon_grid))
 
         bbox <- ggmap::make_bbox(lon = c(cities$lon, cities$lon_grid),
                                  lat = c(cities$lat, cities$lat_grid),

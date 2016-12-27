@@ -697,16 +697,22 @@ b <- map_grid(plot_model = "ccsm", out = out)
 grid.arrange(a, b, ncol = 1)
 ```
 
-As of version 1.0.3, the package has two other plotting options that are more useful for non-U.S. studies. First, the `map_grid_ggmap` function draws on `ggmap` functions to plot study cities and their matching climate model grid points on map background from Stamen Maps. The function is written to pull a background map just large enough to show all cities and climate model grid points. This mapping function works for study cities anywhere in the world. Here is the code to use to map study cities and matching climate model grid points for the example data included with the package:
-
-```{r message = FALSE, warning = FALSE, fig.width = 5}
-map_grid_ggmap(plot_model = "bcc1", out = out)
-```
-
-The other new mapping function, `map_grid_leaflet`, allows you to create interactive maps using the `leaflet` package and will also work for study cities anywhere. This function adds pop-ups labeling city locations (using the "city" column in the file designated with the `citycsv` parameter in `gen_hw_set`) and climate model grid point locations. The map, like any leaflet map, allows panning and zooming. 
+As of version 1.0.3, the package has a new mapping function, `map_grid_leaflet`, which allows you to create interactive maps using the `leaflet` package and will also work for study cities anywhere. This function adds pop-ups labeling city locations (using the "city" column in the file designated with the `citycsv` parameter in `gen_hw_set`) and climate model grid point locations. The map, like any leaflet map, allows panning and zooming. 
 
 ```{r fig.width = 7}
 map_grid_leaflet(plot_model = "bcc1", out = out)
+```
+
+The development version, available on GitHub under the `devel` branch, also has the `map_grid_ggmap` function, which draws on `ggmap` functions to plot study cities and their matching climate model grid points on map background from Stamen Maps. The function is written to pull a background map just large enough to show all cities and climate model grid points. This mapping function works for study cities anywhere in the world. Here is the code to use to map study cities and matching climate model grid points for the example data included with the package:
+
+```{r eval = FALSE, message = FALSE, warning = FALSE, fig.width = 5, echo = 2}
+png("figures/grid_map_example.png", height = 400, width = 600)
+map_grid_ggmap(plot_model = "bcc1", out = out)
+dev.off()
+```
+
+```{r echo = FALSE}
+knitr::include_graphics("figures/grid_map_example.png")
 ```
 
 ## Extensions

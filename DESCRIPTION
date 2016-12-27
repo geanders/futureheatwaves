@@ -26,7 +26,6 @@ Depends:
 Imports:
     data.table (>= 1.10.0),
     dplyr (>= 0.4.3),
-    ggmap (>= 2.7.0),
     ggplot2 (>= 2.0.0),
     ggthemes (>= 3.0.0),
     leaflet (>= 1.0.1),

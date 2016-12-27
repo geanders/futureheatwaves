@@ -3,6 +3,7 @@ title: "Starting from netCDF files"
 author: "G. Brooke Anderson"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
+bibliography: Anderson.bib
 vignette: >
   %\VignetteIndexEntry{Starting from netCDF files}
   %\VignetteEngine{knitr::rmarkdown}
@@ -10,6 +11,27 @@ vignette: >
 ---
 
 Climate model output files are available for CMIP5 in the netCDF file format. This vignette explains how files in this format can be opened and worked with in R to generate the required delimited format to use with the `futureheatwaves` package. 
+
+## Downloading netCDF files for CMIP5
+
+The Coupled Model Intercomparison Project is a key source of climate model output data for researchers studying the potential impact of climate change. This project is currently in its fifth phase (CMIP5). You can download netCDF files from CMIP5 from the World Climate Research Programme CMIP5 website at https://pcmdi.llnl.gov/search/cmip5/, hosted by the Department of Energy's Lawrence Livermore National Laboratory. The data is stored distributed across multiple data nodes at different institutions, but this and other data portals allow access to all available data through one website. You will need to register to download climate model output data. 
+
+There are a number of parameters that can be used to search files, including:
+
+- **"Institute"**: The climate modeling group that created the climate model. A list with the full names and IDs for each of these is available at http://cmip-pcmdi.llnl.gov/cmip5/docs/CMIP5_modeling_groups.pdf. Output from a few groups is restricted to non-commercial use. Several institutes have multiple models.
+- **"Climate model"**: The name of the climate model used to produce the output. Chapter 9 of the Intergovernmental Panel on Climate Change (IPCC)'s Fifth Assessment Report provides an evaluation of climate models [available at https://www.ipcc.ch/pdf/assessment-report/ar5/wg1/WG1AR5_Chapter09_FINAL.pdf; @flato2013evaluation]. 
+- **"Experiment"**: The scenario of external, time-varying values (e.g., greenhouse gas concentrations) that are input to the model. Standard experiments are "historical" (uses observed values from [year] to [year] as model inputs), [control-- "historicalMisc?"] (uses values from a scenario of pre-Industrial concentrations [?] from [year] to [year]), "rcp45" (uses concentrations based on a scenario of ... from [year] to [year]), and "rcp85" (uses concentrations based on a scenario of ... from [year] to [year]). For more information on the CMIP5 experiment design, see Taylor et al. [-@taylor2012overview] and  http://cmip-pcmdi.llnl.gov/cmip5/experiment_design.html. 
+- **"Time frequency"**: The time step of model output (e.g., day, month, year)
+- **"Ensemble"**: The ensemble member. Many climate models are run with multiple ensemble members, to allow exploration of uncertainty related to internal climate variability. For different ensemble member run for a climate model and experiment, the initial conditions are changed by a small amount, but the model and time-varying inputs are identical. The most common ensemble member is "ri1ip1". 
+- **"Variable"**: The variable output by the model. Examples available at the near-surface include "tas" (near-surface air temperature), "tasmin" (daily minimum near-surface air temperature), "tasmax" (daily maximum near-surface air temperature), "hurs" (near-surface relative humidity), "pr" (precipitation). Explanations of variable abbreviations are available at http://cmip-pcmdi.llnl.gov/cmip5/docs/standard_output.pdf. 
+
+You can download files from https://pcmdi.llnl.gov/search/cmip5/ using a point-and-click interface, but you can also use their ... [search API] to create a wget script that can be used to download many files at once and to later update files by only downloading those that have changed since the last download. These climate model output files can be very large, so be sure you have adequate disk space before downloading.
+
+## Working with netCDF files in R
+
+To try out the examples in this section, you will need to download the following climate model output file to your own computer from https://pcmdi.llnl.gov/search/cmip5/ [and have it in your current working directory?]: 
+
+- tas_day_GFDL-ESM2G_historical_r1i1p1_19860101-19901231.nc
 
 Three R packages--- `ncdf4`, `ncdf4.helpers`, and `PCICt`---provide useful tools for working with netCDF climate model output files. 
 
@@ -28,7 +50,7 @@ library(tidyr)
 library(ggplot2)
 ```
 
-As an example, say you have a climate model output file saved locally called "tas_day_GFDL-ESM2G_historical_r1i1p1_19860101-19901231.nc". As a note, the CMIP5 file names encode information about the climate model output given in the file, including the variable (here, "tas", for ...), the experiment ("historical"), the dates covered by the output (Jan. 1, 1986 to Dec. 31, 1990), the climate model ("GFDL-ESM2G"), the time step of the output ("day"), and the ensemble member ("r1i1p1").
+As an example, say you have a climate model output file saved locally called "tas_day_GFDL-ESM2G_historical_r1i1p1_19860101-19901231.nc". As a note, the CMIP5 file names encode information about the climate model output given in the file, including the variable (here, "tas", the near-surface air temperature), the experiment ("historical"), the dates covered by the output (Jan. 1, 1986 to Dec. 31, 1990), the climate model ("GFDL-ESM2G", from the NOAA Geophysical Fluid Dynamics Laboratory), the time step of the output ("day"), and the ensemble member ("r1i1p1").
 
 You can use the `nc_open` function from the `ncdf4` package to open a connection to a netCDF file. The version of netCDF changed from version 3 to version 4 in 2008, and some R packages for netCDF files will only work with the older version 3, but the `ncdf4` package can work with either. 
 
@@ -156,6 +178,34 @@ all_coords %>%
                 subtitle = "GFDL-ESM2G model, historical experiment, r1i1p1 ensemble member") 
 ```
 
+### Working with other R packages
+
+#### The `RCMIP5` package
+
+Some functions only work with monthly or less frequent data (`checkTimePeriod`, `cmip5data`, functions that work with `cmip5data` objects like `filterDimensions` and `getProjectionMatrix`). The package's `getFileInfo` function, however, will work with CMIP5 files of any time step; this function identifies all CMIP5 files in a directory and creates a dataframe that parses the information contained in the file name. For example:
+
+```{r}
+library(RCMIP5)
+getFileInfo("~/Downloads")
+```
+
+While the `loadCMIP5` function seems to load the daily data as a `cmip5data` object, it seems that most of the methods for this object type do not do anything meaningful for data at this time resolution.
+
+#### The `wux` package
+
+This package includes functions that allow the user to download CMIP5 monthly-aggregated output directly from within R with the `CMIP5fromESGF` function. However, this function does not allow downloading of climate model output with finer time steps, including daily data. 
+
+Other functions in this pacakage similarly will only work for monthly climate model output, including `CMIP5toModelinput`
+
+## Processing climate model output data to use with `futureheatwaves`
+
+To try out the examples in this section, you will need to download the following climate model output files to your own computer from https://pcmdi.llnl.gov/search/cmip5/ [and have them in your current working directory?]: 
+
+- tas_day_GFDL-ESM2G_historical_r1i1p1_19860101-19901231.nc
+- tas_day_GFDL-ESM2G_historical_r1i1p1_19910101-19951231.nc
+- tas_day_GFDL-ESM2G_rcp85_r1i1p1_20710101-20751231.nc
+- tas_day_GFDL-ESM2G_rcp85_r1i1p1_20760101-20801231.nc
+
 The `futureheatwaves` package requires that climate output files are in a certain output to be processed. The data in the climate model output netCDF must be saved in three files: one for time, one for grid point location (latitude and longitude), and one for the climate model output variable (e.g., temperature in the example file used in this case). The following code can be used to correctly format and save the data from the climate model output netCDF file in a way that will allow processing by the `futureheatwaves` package: 
 
 ```{r}
@@ -282,5 +332,4 @@ apply_all_models(out = out, FUN = average_mean_temp,
                               degree*C, ")")))
 ```
 
-
-
+## References

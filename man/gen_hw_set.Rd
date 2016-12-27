@@ -11,8 +11,8 @@ gen_hw_set(out, dataFolder, dataDirectories = list(historical = c(1980, 2004),
   referenceBoundaries = c(2070, 2079), models_to_run = "all",
   probThreshold = 0.98, numDays = 2, printWarning = TRUE,
   threshold_ensemble = "r1i1p1", lat_lon_colnames = c("lat", "lon"),
-  seasonal_months = c(5:9), absolute_thresholds = c(299.82, 302.6, 305.37,
-  308.15), above_threshold = TRUE)
+  above_threshold = TRUE, absolute_thresholds = c(299.82, 302.6, 305.37,
+  308.15), seasonal_months = c(5:9))
 }
 \arguments{
 \item{out}{Character string with pathway to directory to which

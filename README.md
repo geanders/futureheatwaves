@@ -7,6 +7,12 @@ The `futureheatwaves` package takes a directory of climate projection files and,
 Installing
 ==========
 
+You can download the latest stable version of this package directly from CRAN:
+
+``` r
+install.packages("futureheatwaves")
+```
+
 The development version of this package can be installed directly from GitHub using `install_github` from the `devtools` package:
 
 ``` r
@@ -26,4 +32,10 @@ There are extensive details on using this package in the package vignette, which
 vignette("futureheatwaves")
 ```
 
-An uncompiled version of the vignette can be found, without having to install the package, [here](https://github.com/geanders/futureheatwaves/blob/master/vignettes/futureheatwaves.Rmd).
+A version of this vignette is also available through CRAN [here](https://cran.r-project.org/web/packages/futureheatwaves/vignettes/futureheatwaves.html).
+
+The development version of the package also includes a vignette with details on how to prepare CMIP5 netCDF climate model output files for use with this package. If you have downloaded the development version of the package directly from GitHub, you can access that vignette with:
+
+``` r
+vignette("starting_from_netcdf")
+```

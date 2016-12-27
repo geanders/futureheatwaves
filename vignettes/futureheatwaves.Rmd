@@ -261,35 +261,35 @@ The full output directory structure will look something like this:
 Each of the heat wave files will have one heat wave per row, covering all the heat waves identified for that particular ensemble member in each study location. The data frame has the following columns with characteristics of each heat wave: 
 
 - `hw.number`: The number of the heat wave out of all heat waves identified in the location;
-- `mean.temp`: Average daily temperature across days in the heat wave, in degrees Fahrenheit;
-- `max.temp`: Highest daily temperature across days in the heat wave, in degrees Fahrenheit;
-- `min.temp`: Lowest daily temperature across days in the heat wave, in degrees Fahrenheit
-- `length`: Number of days in the heat wave;
-- `start.date`: Date of the first day of the heat wave;
-- `end.date`: Date of the last day of the heat wave;
-- `start.doy`: Day of the year of the first day of the heat wave (1 = Jan. 1, etc.);
-- `start.month`: Month in which the heat wave started (1 = January, etc.);
-- `days.above.80`: Number of days in the heat wave above $80^oF$;
-- `days.above.85`: Number of days in the heat wave above $85^oF$;
-- `days.above.90`: Number of days in the heat wave above $90^oF$;
-- `days.above.95`: Number of days in the heat wave above $95^oF$;
-- `days.above.99th`: Number of days in the heat wave above the $99^{th}$ percentile temperature for the location, using the period specified by the user with the `referenceBoundaries` argument in `gen_hw_set` as a reference for determining these percentiles (this reference period is explained in more depth later in the vignette);
-- `days.above.99.5th`: Number of days in the heat wave above the $99.5^{th}$ percentile temperature for the location, using the period specified by the user with the `referenceBoundaries` argument in `gen_hw_set` as a reference for determining these percentiles;
-- `first.in.season`: Whether the heat wave was the first to occur in its calendar year in its location (Note: this characteristic is likely not useful in southern hemisphere studies.);
-- `threshold.temp`: The temperature used as the threshold for the heat wave definition in the location;
-- `mean.temp.quantile`: The percentile of the average daily temperature during the heat wave compared to the location's year-round temperature distribution, based on the temperatures for the city during the period specified by the `referenceBoundaries` argument in `gen_hw_set`;
-- `max.temp.quantile`: The percentile of the highest daily temperature during the heat wave compared to the location's year-round temperature distribution;
-- `min.temp.quantile`: The percentile of the lowest daily temperature during the heat wave compared to the location's year-round temperature distribution;
-- `mean.temp.1`: The location's average year-round temperature, based on the temperatures for the location during the period specified by the `referenceBoundaries` argument in `gen_hw_set`;
-- `mean.summer.temp`: The location's average May--September temperature, based on the temperatures for the location during the period specified by the `referenceBoundaries` argument in `gen_hw_set`; and
+- `mean.var`: Average value of the variable (e.g., temperature) across days in the event (e.g., heat wave), in the units in which the variable is expressed in the input files;
+- `max.var`: Highest value of the variable across days in the event, in the units in which the variable is expressed in the input files;
+- `min.var`: Lowest value of the variable across days in the event, in the units in which the variable is expressed in the input files;
+- `length`: Number of days of the event;
+- `start.date`: Date of the first day of the event;
+- `end.date`: Date of the last day of the event;
+- `start.doy`: Day of the year of the first day of the event (1 = Jan. 1, etc.);
+- `start.month`: Month in which the event started (1 = January, etc.);
+- `days.above.abs.threshold.1`: Number of days in the heat wave above a certain absolute threshold (default is $80^oF$, but this and the absolute thresholds used for the following three variables can be customized using the `absolute_threshold` parameter in the `gen_hw_set` function);
+- `days.above.abs.threshold.2`: Number of days in the heat wave above a certain absolute threshold (default is $85^oF$);
+- `days.above.abs.threshold.3`: Number of days in the heat wave above a certain absolute threshold (default is $90^oF$);
+- `days.above.abs.threshold.4`: Number of days in the heat wave above a certain absolute threshold (default is $95^oF$);
+- `days.above.99th`: Number of days in the event above the $99^{th}$ percentile year-round value of the variable for the location, using the period specified by the user with the `referenceBoundaries` argument in `gen_hw_set` as a reference for determining these percentiles (this reference period is explained in more depth later in the vignette);
+- `days.above.99.5th`: Number of days in the event above the $99.5^{th}$ percentile year-round value of the variable for the location, using the period specified by the user with the `referenceBoundaries` argument in `gen_hw_set` as a reference for determining these percentiles;
+- `first.in.year`: Whether the heat wave was the first to occur in its calendar year in its location (Note: this characteristic is likely not useful in southern hemisphere studies.);
+- `threshold`: The variable value used as the threshold for the event definition in the location;
+- `mean.var.quantile`: The percentile of the average variable value during the event compared to the location's year-round variable distribution, based on the variable values for the city during the period specified by the `referenceBoundaries` argument in `gen_hw_set`;
+- `max.var.quantile`: The percentile of the highest variable value during the event compared to the location's year-round variable distribution;
+- `min.var.quantile`: The percentile of the lowest variable value during the event compared to the location's year-round variable distribution;
+- `mean.yearround.var`: The location's average year-round variable value, based on the variable distribution for the location during the period specified by the `referenceBoundaries` argument in `gen_hw_set`;
+- `mean.seasonal.var`: The location's average seasonal variable value (by default, the season is May--September, although the months included for this seasonal metric can be changed using the `seasonal_months` parameter in the `gen_hw_set` function), based on the variable values for the location during the years specified by the `referenceBoundaries` argument in `gen_hw_set`; and
 - `city`: A unique identifier for the location, as given in the file specified in the `citycsv` argument of `gen_hw_set`.
 
 An example of one of these heat wave data frames is given in the `hw_datafr` data set included with the package. You can load and explore this example data frame: 
 
 ```{r}
-data(hw_datafr)
-hw_datafr[1:3, c("hw.number", "mean.temp", "length", "start.date",
-                 "mean.temp.quantile", "city")]
+data(hw_datafr) 
+hw_datafr[1:3, c("hw.number", "mean.var", "length", "start.date",
+                 "mean.var.quantile", "city")]
 ```
 
 ### Required files and directory set-up
@@ -433,7 +433,7 @@ As an example, if the user wanted to to get the average temperature of the heat 
 
 ```{r}
 average_mean_temp <- function(hw_datafr){
-        out <- mean(hw_datafr$mean.temp)
+        out <- mean(hw_datafr$mean.var)
         return(out)
         }
 ```
@@ -558,8 +558,8 @@ It is also possible to use a completely customized heat wave definition. To do t
 
 The function must allow the following inputs (even if it does not use them within the function code):
 
-- `datafr`: A data frame with columns for date and temperature for a community. The first column should be the date of each observation, in the Date class. The second column should be the temperature. At this point in the normal processing of the `gen_hw_set` function, temperatures have been converted to Fahrenheit. Therefore, if you are writing a custom function that uses an absolute temperature threshold, it should be included in the function in Fahrenheit units.
-- `threshold`: A single-value numerical vector; in the default definition, this is the threshold temperature for each community, as determined earlier in the function call, calculated as a percentile of the community's year-round temperature. This should be an absolute temperature value, in degrees Fahrenheit. Note: The code in the body of the function does not need to use this argument, and would not if you are setting the heat wave definition using an absolute temperature value, like $90^oF$. However, even if the body of the code does not use this argument, you must include `threshold` as a possible argument in the header when defining your function, or you will get an error when you try to use the function with `gen_hw_set`.
+- `datafr`: A data frame with columns for date and temperature for a community. The first column should be the date of each observation, in the Date class. The second column should be the temperature. If you are writing a custom function that uses an absolute threshold, it should be included in the function in the same units used for the input datasets (e.g., it should be based on Kelvin if using CMIP5 climate model output data).
+- `threshold`: A single-value numerical vector; in the default definition, this is the threshold temperature for each community, as determined earlier in the function call, calculated as a percentile of the community's year-round temperature. This should be an absolute temperature value, in the same units as the variable is expressed in the input data (Kelvin for CMIP5 climate model output data). Note: The code in the body of the function does not need to use this argument, and would not if you are setting the heat wave definition using an absolute temperature value, like $90^oF$. However, even if the body of the code does not use this argument, you must include `threshold` as a possible argument in the header when defining your function, or you will get an error when you try to use the function with `gen_hw_set`.
 - `numDays`: The number of days above the threshold required for a heat wave. 
 
 The function must return only the input data frame (`datafr`), with the following columns added: 
@@ -630,6 +630,45 @@ gen_hw_set(out = "example_results",
 If the date range used for these reference temperatures does not correspond to the dates used for the projection period, the reference temperatures will be pulled only from the ensemble member for each climate model specified using the `threshold_ensemble` argument in `gen_hw_set`.
 
 For these date range specifications, there are some restrictions on which year ranges can be selected. The starting year cannot be earlier than the first year in the first subdirectory, the ending year cannot be later than the last year of the second subdirectory, and the custom date boundaries cannot span the two subdirectories.
+
+### Customizing settings for characterizing heatwaves
+
+Two parameters in the `gen_hw_set` function can be set to customize the characteristics in the output dataframes. First, the heatwave characteristics output files include the column "mean.seasonal.var", which by default gives the mean value of the temperature in a study location for the months of May--September. If working with a variable or in a location for which different months comprise the most relevant season, you can use the `seasonal_months` argument to customize the months included in this seasonal average, using a vector with numerical values for months (1 = January, 2 = February, etc.). For example, to set the season to the months of June through August in the earlier example of using `gen_hw_set`, you could call:
+
+```{r eval = FALSE}
+gen_hw_set(out = "example_results",
+           dataFolder = projection_dir_location ,
+           dataDirectories = list("historical" = c(1990, 1999),
+                                        "rcp85" = c(2060, 2079)),
+           citycsv = city_file_location,
+           coordinateFilenames = "latitude_longitude_NorthAmerica_12mo.csv",
+           tasFilenames = "tas_NorthAmerica_12mo.csv",
+           timeFilenames = "time_NorthAmerica_12mo.csv",
+           seasonal_months = c(6, 7, 8))
+```
+
+Note that this option does not restrict the period when heat waves are identified; rather, it specifies which subset of daily data should be used to calculate the "mean.seasonal.var" column in the output datasets. 
+
+Second, the heat wave characteristic datasets output by the package include four columns listing how many days in each heat wave were above specific absolute thresholds ("days.above.abs.threshold.1", "days.above.abs.threshold.2", "days.above.abs.threshold.3", "days.above.abs.threshold.4"). By default, these thresholds are at the values of Kelvin that correspond to $80^oF$, $85^oF$, $90^oF$, and $95^oF$. You can customize these thresholds using the `absolute_thresholds` parameter in the `gen_hw_set` function. For example, to set thresholds at the Kelvin equivalents for $26^oC$, $28^oC$, $30^oC$, and $32^oC$, you can run: 
+
+```{r eval = FALSE}
+library(weathermetrics)
+gen_hw_set(out = "example_results",
+           dataFolder = projection_dir_location ,
+           dataDirectories = list("historical" = c(1990, 1999),
+                                        "rcp85" = c(2060, 2079)),
+           citycsv = city_file_location,
+           coordinateFilenames = "latitude_longitude_NorthAmerica_12mo.csv",
+           tasFilenames = "tas_NorthAmerica_12mo.csv",
+           timeFilenames = "time_NorthAmerica_12mo.csv",
+           absolute_thresholds = convert_temperature(c(26, 28, 30, 32), 
+                                                     old_metric = "c",
+                                                     new_metric = "k"))
+```
+
+Note that the `absolute_thresholds` parameter only affects the thresholds used to calculate the four columns of the output that start with "days.above.abs.threshold". Further, note that if you customize with `absolute_thresholds`, you must use a numerical vector with four values, and the values should be in the same units as the variable in the input data (e.g., Kelvin for CMIP5 climate model output data).
+
+This functionality is likely to be especially useful when using this package to identify and characterize extended extreme events other than heat waves, like cold waves or air pollution events. A later section of this vignette gives more details of how to use the `futureheatwaves` package for these other types of events.
 
 ### Mapping grid points
 

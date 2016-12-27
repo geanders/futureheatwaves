@@ -9,6 +9,7 @@ climate model.
 * Change to have more general column names for output dataset (e.g., `mean.var` rather than `mean.temp` and `mean.seasonal.var` rather than `mean.summer.temp`), so results make more sense if using the package for something other than heat waves (e.g., severe air pollution episodes)
 * Parameter `input_metric` in `gen_hw_set` removed to make the package more generalizable to variables other than temperature. 
 * Add capability to identify and characterize periods below a certain temperature (e.g., for "cold waves")
+* Add new vignette "Starting from netCDF" to provide more guidance in preparing climate model output netCDF files to use with this package
 
 # futureheatwaves 1.0.2
 

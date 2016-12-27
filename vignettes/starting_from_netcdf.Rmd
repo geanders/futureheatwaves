@@ -35,7 +35,7 @@ To try out the examples in this section, you will need to download the following
 
 Three R packages--- `ncdf4`, `ncdf4.helpers`, and `PCICt`---provide useful tools for working with netCDF climate model output files. 
 
-```{r message = FALSE, warning = FALSE}
+```{r eval = FALSE, message = FALSE, warning = FALSE}
 library(ncdf4)
 library(ncdf4.helpers)
 library(PCICt)

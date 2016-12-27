@@ -16,6 +16,10 @@ for the selected climate model.}
 includes user specifications (e.g., the path to the output directory, the
 path to the input climate projections, the dataframe with city
 locations).}
+
+\item{locations}{A numerical vector giving the column numbers that
+correspond to the closest grid point location for each study
+location in the temperature input data.}
 }
 \value{
 A dataframe of climate projection data where each column

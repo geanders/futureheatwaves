@@ -54,16 +54,16 @@ readLatLong <- function(ensemble, global){
         return(locations)
 }
 
-readLatLong_ncdf <- function(ensemble, global){
-        loc_file <- "~/Downloads/tas_day_GFDL-ESM2G_historical_r1i1p1_19810101-19851231.nc"
-        ncdf_file <- ncdf4::nc_open(loc_file)
-        ncdf_lon <- ncdf4::ncvar_get(ncdf_file, "lon")
-        ncdf_lat <- ncdf4::ncvar_get(ncdf_file, "lat")
-        ncdf4::nc_close(ncdf_file)
-        locations <- expand.grid(ncdf_lat, ncdf_lon)
-        colnames(locations) <- c("V1", "V2")
-        return(locations)
-}
+# readLatLong_ncdf <- function(ensemble, global){
+#         loc_file <- "~/Downloads/tas_day_GFDL-ESM2G_historical_r1i1p1_19810101-19851231.nc"
+#         ncdf_file <- ncdf4::nc_open(loc_file)
+#         ncdf_lon <- ncdf4::ncvar_get(ncdf_file, "lon")
+#         ncdf_lat <- ncdf4::ncvar_get(ncdf_file, "lat")
+#         ncdf4::nc_close(ncdf_file)
+#         locations <- expand.grid(ncdf_lat, ncdf_lon)
+#         colnames(locations) <- c("V1", "V2")
+#         return(locations)
+# }
 
 #' Read climate projection data
 #'
@@ -72,6 +72,9 @@ readLatLong_ncdf <- function(ensemble, global){
 #' the directory specified by the \code{dataFolder} argument of
 #' \code{\link{gen_hw_set}}.
 #'
+#' @param locations A numerical vector giving the column numbers that
+#'    correspond to the closest grid point location for each study
+#'    location in the temperature input data.
 #' @inheritParams readLatLong
 #' @inheritParams processModel
 #'
@@ -105,18 +108,18 @@ readTimes <- function(ensemble, global){
         return(utils::read.csv(ensemble[loc_file], header = FALSE))
 }
 
-readTimes_ncdf <- function(ensemble, global){
-        library(PCICt)
-        loc_file <- "~/Downloads/tas_day_GFDL-ESM2G_historical_r1i1p1_19810101-19851231.nc"
-        ncdf_file <- ncdf4::nc_open(loc_file)
-        ncdf_time <- ncdf4.helpers::nc.get.time.series(ncdf_file, v = "tas", time.dim.name = "time")
-        ncdf4::nc_close(ncdf_file)
-        times <- data.frame(V1 = 1:length(ncdf_time),
-                                V2 = as.integer(format(ncdf_time, "%Y")),
-                                V3 = as.integer(format(ncdf_time, "%m")),
-                                V4 = as.integer(format(ncdf_time, "%d")))
-        return(times)
-}
+# readTimes_ncdf <- function(ensemble, global){
+#         library(PCICt)
+#         loc_file <- "~/Downloads/tas_day_GFDL-ESM2G_historical_r1i1p1_19810101-19851231.nc"
+#         ncdf_file <- ncdf4::nc_open(loc_file)
+#         ncdf_time <- ncdf4.helpers::nc.get.time.series(ncdf_file, v = "tas", time.dim.name = "time")
+#         ncdf4::nc_close(ncdf_file)
+#         times <- data.frame(V1 = 1:length(ncdf_time),
+#                                 V2 = as.integer(format(ncdf_time, "%Y")),
+#                                 V3 = as.integer(format(ncdf_time, "%m")),
+#                                 V4 = as.integer(format(ncdf_time, "%d")))
+#         return(times)
+# }
 
 #' Ensemble writer factory function
 #'

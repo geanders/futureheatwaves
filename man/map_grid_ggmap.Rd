@@ -31,8 +31,10 @@ This function creates a \code{ggplot2} object, so the output can be
    edited using \code{ggplot2} functions.
 }
 \examples{
+\dontrun{
 out <- system.file("extdata/example_results", package = "futureheatwaves")
 map_grid_ggmap(plot_model = "bcc1", out = out)
+}
 
 }
 

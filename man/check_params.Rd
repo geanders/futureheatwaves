@@ -95,6 +95,21 @@ model specified by \code{threshold_ensemble}.}
 \item{numDays}{Integer greater than 0 giving the number of days to
 use in the heat wave definition (e.g., \code{numDays = 2} would define a
 heat wave as two or more days above the threshold temperature).}
+
+\item{seasonal_months}{A numeric vector giving the months to use to
+calculate the "mean.seasonal.var" column in the heat wave characteristics
+output file. For example, if \code{seasonal_months} is set to \code{6:8},
+daily temperatures from June through August each day during the reference
+years would be used to calculate this mean seasonal value. The default
+is \code{5:9} (May--September).}
+
+\item{absolute_thresholds}{A numeric vector with four values giving the
+absolute thresholds to use when calculating the "days.above.abs.thershold"
+columns in the heatwave characteristic output files. These values must be
+given in the units in which temperature is expressed in the input data
+(typically Kelvin for climate model output data). The default values are the
+values in Kelvin corresponding to 80, 85, 90, and 95 degrees Fahrenheit. If
+this parameter is customized, it must include four values.}
 }
 \value{
 Only stops and returns an error if any parameters are incorrect.

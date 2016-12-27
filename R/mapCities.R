@@ -65,11 +65,6 @@ map_grid <- function(plot_model, out){
 #' study city to its climate model grid point. This map is made using the
 #' \code{leaflet} package.
 #'
-#' @param lon_transform Logical value indicating whether longitude is in a
-#'    format that needs to be transformed. Often, U.S. locations will give
-#'    longitude as an absolute value, which needs to be transformed using
-#'    \eqn{360 - longitude} before mapping. If using longitude values that
-#'    require transformation, set this value to TRUE.
 #' @inheritParams map_grid
 #' @inheritParams apply_all_models
 #'
@@ -80,7 +75,7 @@ map_grid <- function(plot_model, out){
 #'
 #' @examples
 #' out <- system.file("extdata/example_results", package = "futureheatwaves")
-#' map_grid_leaflet(plot_model = "bcc1", out = out, lon_transform = TRUE)
+#' map_grid_leaflet(plot_model = "bcc1", out = out)
 #'
 #' @export
 #'
@@ -161,9 +156,10 @@ map_grid_leaflet <- function(plot_model, out){
 #' @note This function creates a \code{ggplot2} object, so the output can be
 #'    edited using \code{ggplot2} functions.
 #'
-#' @examples
+#' @examples \dontrun{
 #' out <- system.file("extdata/example_results", package = "futureheatwaves")
 #' map_grid_ggmap(plot_model = "bcc1", out = out)
+#' }
 #'
 #' @export
 #'

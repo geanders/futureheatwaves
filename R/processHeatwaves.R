@@ -369,18 +369,18 @@ createHwDataframe <- function(city, threshold, heatwaves,
                                                min.var.quantile = ~ 1 - max.var.quantile,
                                                mean.yearround.var = ~ -1 * mean.yearround.var,
                                                mean.seasonal.var = ~ -1 * mean.seasonal.var) %>%
-                                dplyr::rename_(.dots = setNames(list("days.above.abs.thresh.1",
-                                                                     "days.above.abs.thresh.2",
-                                                                     "days.above.abs.thresh.3",
-                                                                     "days.above.abs.thresh.4",
-                                                                     "days.above.99th",
-                                                                     "days.above.99.5th"),
-                                                                list("days.below.abs.thresh.1",
-                                                                     "days.below.abs.thresh.2",
-                                                                     "days.below.abs.thresh.3",
-                                                                     "days.below.abs.thresh.4",
-                                                                     "days.below.1st",
-                                                                     "days.below.0.5th")))
+                                dplyr::rename_(.dots = stats::setNames(list("days.above.abs.thresh.1",
+                                                                            "days.above.abs.thresh.2",
+                                                                            "days.above.abs.thresh.3",
+                                                                            "days.above.abs.thresh.4",
+                                                                            "days.above.99th",
+                                                                            "days.above.99.5th"),
+                                                                      list("days.below.abs.thresh.1",
+                                                                           "days.below.abs.thresh.2",
+                                                                           "days.below.abs.thresh.3",
+                                                                           "days.below.abs.thresh.4",
+                                                                           "days.below.1st",
+                                                                           "days.below.0.5th")))
                 }
         }
 

@@ -24,22 +24,29 @@ LazyData: TRUE
 Depends:
     R (>= 2.10)
 Imports:
+    data.table (>= 1.10.0),
     dplyr (>= 0.4.3),
-    ggmap (>= 2.6.1),
+    ggmap (>= 2.7.0),
     ggplot2 (>= 2.0.0),
     ggthemes (>= 3.0.0),
-    ggmap (>= 2.7.0),
     leaflet (>= 1.0.1),
     Rcpp (>= 0.12.5),
     stringr (>= 1.1.0),
     tidyr (>= 0.6.0)
 Suggests:
+    forcats (>= 0.1.1),
     gridExtra (>= 2.0.0),
     knitr (>= 1.10.5),
     mapproj (>= 1.2.4),
     maps (>= 3.0.2),
+    ncdf4 (>= 1.15.0),
+    ncdf4.helpers (>= 0.3.3),
+    PCICt (>= 0.5.4),
+    readr (>= 1.0.0),
     rmarkdown (>= 0.7.0),
-    testthat (>= 0.11.0)
+    testthat (>= 0.11.0),
+    viridis (>= 0.3.4),
+    weathermetrics (>= 1.2.2)
 VignetteBuilder: knitr
 RoxygenNote: 5.0.1
 LinkingTo: Rcpp

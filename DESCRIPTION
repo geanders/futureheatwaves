@@ -35,6 +35,8 @@ Imports:
 Suggests:
     gridExtra (>= 2.0.0),
     knitr (>= 1.10.5),
+    mapproj (>= 1.2.4),
+    maps (>= 3.0.2),
     rmarkdown (>= 0.7.0),
     testthat (>= 0.11.0),
     weathermetrics (>= 1.2.2)

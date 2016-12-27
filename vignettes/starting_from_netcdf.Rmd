@@ -270,7 +270,7 @@ apply_all_models(out = out, FUN = number_of_heatwaves,
         xlab("")
 ```
 
-```{r fig.height = 6, fig.width = 4}
+```{r fig.height = 4, fig.width = 4}
 apply_all_models(out = out, FUN = average_mean_temp,
                  city_specific = TRUE) %>%
         mutate(value = convert_temperature(value, "k", "c")) %>%

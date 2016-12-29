@@ -1,0 +1,112 @@
+\documentclass[tikz, border=5pt, multi]{standalone}
+\usepackage{tikz}
+\usetikzlibrary{arrows,decorations.pathmorphing,backgrounds,positioning,fit,petri}
+\usetikzlibrary{trees}
+\usepackage{tikz-qtree}
+\usetikzlibrary{trees,calc,arrows.meta,positioning,decorations.pathreplacing,bending}
+
+\begin{document}
+
+\tikzset{
+    edge from parent/.style={draw, thick, black},
+    no edge from this parent/.style={
+        every child/.append style={
+        edge from parent/.style={draw=none}}},
+    level 3/.style={yshift=5cm},
+         }
+
+% % % \begin{tikzpicture}[auto, bend left, grow via three points={%
+%one child at (0, -1) and two children at (-.6, -1) and (.6, -1)},
+%    text=blue!70!black,
+%    font=\sffamily]
+%  \node (projections) at (-3, 2) {Climate projections}
+%                        child {[fill] circle (2pt)
+%                               child {[fill] circle (2pt)}
+%                               child {[fill] circle (2pt)}}
+%                        child {[fill] circle (2pt)
+%                               child {[fill] circle (2pt)}}
+%                        child {[fill] circle (2pt)
+%                               child {[fill] circle (2pt)}}
+%                        child {[fill] circle (2pt)
+%                               child {[fill] circle (2pt)}
+%                               child {[fill] circle (2pt)}};
+%  \node (heatwaves) at (3, 2) {Characterized heat waves}
+%                        child {[fill] circle (2pt)
+%                               child {[fill] circle (2pt)}
+%                               child {[fill] circle (2pt)}}
+%                        child {[fill] circle (2pt)
+%                               child {[fill] circle (2pt)}}
+%                        child {[fill] circle (2pt)
+%                               child {[fill] circle (2pt)}}
+%                        child {[fill] circle (2pt)
+%                               child {[fill] circle (2pt)}
+%                               child {[fill] circle (2pt)}};
+%   %\draw [->] (projections.east) to [out=50,in=130] (heatwaves.west);
+%   \draw [->] (projections.east) to node {\textcolor{red}{gen\_hw\_set}} %(heatwaves.west);
+%\end{tikzpicture}
+
+\begin{tikzpicture}[grow via three points={%
+one child at (0, -1) and two children at (-.6, -1) and (.6, -1)},
+    text=black,
+    font=\sffamily]
+\begin{scope}
+  \node (projections) at (-3, 2) {Climate projections}
+                        child {node (a) {1}
+                               child { node (b){1} }
+                               child {node (c){2}}}
+                        child {node (d) {2}
+                               child {node (e) {1}}}
+                        child {node (f) {3}
+                               child {node (g) {1}}}
+                        child {node (h) {4}
+                               child {node (i) {1}}
+                               child {node (j) {2}}};
+
+  \node[left=3.5 of projections]  (ln1) {}[no edge from this parent]
+    child {node (ln2) {climate models}[no edge from this parent]
+        child {node (ln3) {ensemble members}[no edge from this parent]}};
+
+  \draw[black,dashed,thick]
+    ($(a.west)+(-1em,0)$) -- (ln2.east);
+\draw[black,dashed,thick]
+    ($(b.west)+(-1em,0)$) -- (ln3);
+\end{scope}
+
+\begin{scope}[xshift = 6cm]
+  \node (heatwaves) at (-3, 2) {Extreme event data sets}
+                        child {node (k) {1}
+                               child { node (l){1} }
+                               child {node (m){2}}}
+                        child {node (n) {2}
+                               child {node (o) {1}}}
+                        child {node (p) {3}
+                               child {node (g) {1}}}
+                        child {node (q) {4}
+                               child {node (r) {1}}
+                               child {node (s) {2}}};
+\end{scope}
+
+\begin{scope}[xshift = 8cm]
+\draw[black,thick] (0,0) -- (2,0) -- (2,1.75) -- (0,1.75) -- (0,0);
+\node[above] (summary) at (1,1.75){Summary data frame};
+\end{scope}
+
+\begin{scope}[on background layer]
+\node (r1) [fill=black!10,rounded corners,fit=(projections)] {};
+\node (r2) [fill=black!10,rounded corners,fit=(heatwaves)] {};
+\node (r3) [fill=black!10,rounded corners,fit=(summary)] {};
+\end{scope}
+
+% \draw [auto, bend left, ->]
+%(r1) -- (r2) node [above=1mm,midway,text width=3cm,align=center]
+%{\textcolor{red}{gen\_hw\_set} };
+
+\draw [->, auto, bend left, blue!70!black]
+  (r1.east) to node {\textcolor{blue!70!black}{gen\_hw\_set}} (r2.west);
+
+\draw [->, auto, bend left, blue!70!black]
+  (r2.east) to node {\textcolor{blue!70!black}{apply\_all\_models}} (r3.west);
+
+\end{tikzpicture}
+
+\end{document}

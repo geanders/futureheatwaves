@@ -761,85 +761,51 @@ an example of how the \code{apply\_all\_models} function can be used in
 conjunction with epidemiologic results to estimate the potential health
 impacts of extreme events with climate change.
 
-\subsection{Customizing dates for projections and reference
+\section{Customizing dates for projections and reference
 temperatures}\label{customizing-dates-for-projections-and-reference-temperatures}
 
-By default, the \texttt{gen\_hw\_set} function will generate heat wave
-projections for the years 2070 to 2079, to align with the example data.
-This projection date range can be changed by specifying alternative
-starting and ending years in the \texttt{projectionBoundaries} argument
-of the \texttt{gen\_hw\_set} function. For example, to create
-projections for 2060 to 2079, the user would call:
+Depending on the climate model output data used and the research
+question, different projection periods may be of interest. For example,
+one research may want to explore extreme events in the 2050--2075
+period, while another may be interested in 2090--2100. The projection
+date range can be changed by specifying starting and ending years in the
+\code{projectionBoundaries} argument of the \code{gen\_hw\_set}
+function.
 
-\begin{Schunk}
-\begin{Sinput}
-gen_hw_set(out = "example_results",
-           dataFolder = projection_dir_location ,
-           dataDirectories = list("historical" = c(1990, 1999),
-                                        "rcp85" = c(2060, 2079)),
-           citycsv = city_file_location,
-           coordinateFilenames = "latitude_longitude_NorthAmerica_12mo.csv",
-           tasFilenames = "tas_NorthAmerica_12mo.csv",
-           timeFilenames = "time_NorthAmerica_12mo.csv",
-           projectionBoundaries = c(2060, 2079))
-\end{Sinput}
-\end{Schunk}
-
-The heat wave data sets characterize heat wave in several ways that are
-based on relative temperature (for example, the
-\texttt{mean.temp.quantile}, \texttt{max.temp.quantile}, and
-\texttt{min.temp.quantile} columns described in Table
-\ref{tab:hwcharacteristics}). These characteristics are measured for
-each of the heat waves identified by the \texttt{gen\_hw\_set} function
-by taking the absolute temperature of the heat wave (e.g., average
-temperature during the heat wave is 90\textsuperscript{o}F) and
-comparing it to the heat wave location's typical temperature
-distribution. This process generates relative measures of how intense
-the heat wave is compared to what is normal in that location (e.g.,
-90\textsuperscript{o}F is in the 99\textsuperscript{th} percentile of
+Further, some of the event characteristics (e.g.,
+\code{mean.temp.quantile}, Table \ref{tab:hwcharacteristics}) are
+calculated based on relative temperature, which is a measure of how the
+value of the variable of interest during an extreme event compares to
+the typical distribution of that variable at that location. These
+characteristics are measured for each of the extreme events identified
+by the \code{gen\_hw\_set} function by taking the absolute value of the
+variable during the event (e.g., average temperature during the heat
+wave is 90\textsuperscript{o}F ~32.2\textsuperscript{o}C) and comparing
+it to the location's typical variable distribution. This process
+generates relative measures of how intense the event is compared to what
+is normal in that location (e.g., 90\textsuperscript{o}F
+~32.2\textsuperscript{o}C is in the 99\textsuperscript{th} percentile of
 year-round temperatures in the location).
 
-The values of these relative heat wave characteristics will depend on
-what time period is used to determine the location's typical temperature
-distribution. For example, the same heat wave would likely have much
-higher values for these relative characteristics if the temperature
-during the heat wave is compared to typical temperatures in the present
-day for that location versus if the temperature is compared to typical
-temperatures much later in the 21\textsuperscript{st} century for the
-same location.
-
-The default in the \texttt{gen\_hw\_set} function is to use temperatures
-for the period 2070 to 2079 for these reference temperatures to
-calculate all relative heat wave characteristics. However, the user can
-change this specification using the \texttt{referenceBoundaries} option
-of \texttt{gen\_hw\_set}. This functionality can be useful in exploring
-the role of adaptation in future heat waves. For example, to use
-temperature projections for 1990 to 1999 when calculating relative
-characteristics of heat waves, to explore the assumption that cities
-remain adapted to their present-day climate, rather than changing in
-adaptation as climate change increases temperatures, a user could run:
-
-\begin{Schunk}
-\begin{Sinput}
-gen_hw_set(out = "example_results",
-           dataFolder = projection_dir_location ,
-           dataDirectories = list("historical" = c(1990, 1999),
-                                        "rcp85" = c(2060, 2079)),
-           citycsv = city_file_location,
-           coordinateFilenames = "latitude_longitude_NorthAmerica_12mo.csv",
-           tasFilenames = "tas_NorthAmerica_12mo.csv",
-           timeFilenames = "time_NorthAmerica_12mo.csv",
-           referenceBoundaries = c(1990, 1999))
-\end{Sinput}
-\end{Schunk}
-
-For these date range specifications, there are some restrictions on
-which year ranges can be selected. The starting year cannot be earlier
-than the first year in the first subdirectory, the ending year cannot be
-later than the last year of the second subdirectory, and the custom date
-boundaries cannot span the two subdirectories.
+These relative event characteristics will vary depending on whether you
+calculate them based on a location's present-day variable distribution
+or on the location's variable distribution in the future, since the
+distributions of many relevant variables (e.g., temperature,
+precipitation) are expected to change in many locations with climate
+change. The package therefore allows the user to specify date ranges of
+the temperature distributions to be used in calculating these relative
+temperature metrics in each location, which can be done using the
+\code{referenceBoundaries} option of \code{gen\_hw\_set}.
 
 \subsection{Mapping grid points}\label{mapping-grid-points}
+
+\begin{figure}
+\begin{center}
+\includegraphics[width = 0.9\textwidth]{ExampleLeaflet}
+\end{center}
+\caption{Snapshot of an example interactive map created using the \code{map\_grid\_leaflet} showing the locations of study cities and their matching climate model grid points for the BCC climate model example data included with \pkg{futureheatwaves}. The lines on the map connect each climate model grid point to the study location(s) for which that grid point was used. The interactive maps include pop-ups with city identiers; one is shown open in this snapshot as an example. From this map, you can see that the climate model grid point closest to New York City for this climate model is over the Atlantic Ocean.}
+\label{fig:gridmap}
+\end{figure}
 
 It can be useful to explore the location of the climate model grid point
 used to pull climate model output for each study location with a given
@@ -858,90 +824,23 @@ map_grid_leaflet(plot_model = "bcc1", out = out)
 \end{Sinput}
 \end{Schunk}
 
-\begin{figure}
-\begin{center}
-\includegraphics[width = 0.9\textwidth]{ExampleLeaflet}
-\end{center}
-\caption{Snapshot of an example interactive map created using the \code{map\_grid\_leaflet} showing the locations of study cities and their matching climate model grid points for the BCC climate model example data included with \pkg{futureheatwaves}. The lines on the map connect each climate model grid point to the study location(s) for which that grid point was used. The interactive maps include pop-ups with city identiers; one is shown open in this snapshot as an example. From this map, you can see that the climate model grid point closest to New York City for this climate model is over the Atlantic Ocean.}
-\label{fig:gridmap}
-\end{figure}
-
 \subsection{Extensions}\label{extensions}
 
-The functionality of this package can be easily expanded by loops. For
-example, to explore the role of the heat wave definition on projections,
-the user could create a loop to run \texttt{gen\_hw\_set} and
-\texttt{apply\_all\_models} to the same directory of climate projections
-but with a variety of different functions used to identify the heat
-waves in the projections.
-
-Also, while this package was created to be used for research on heat
-waves in climate change projections, with some modifications it can be
-used more broadly. For example, there are other episodes like wildfires
-and air pollution where it may be interesting to identify extended
-periods of high exposures in projection time series, and this package
-could be applied to explore these exposures. The directory of projection
-data would need to be set up in the same structure as for exploring heat
-waves, and the \texttt{input\_metric} should be set as
-\texttt{fahrenheit}, to pass the exposure values through to the
-characterized data sets without performing a conversion. A user could
-also use this package to explore events that must be lower than some
-minimum threshold (e.g., cold waves), but it would take some extra
-coding and conversions, since the functions in this package are written
-to identify periods above a threshold (for example, the user could
-multiple all projected temperatures by -1, and then the coldest
-temperatures would register as being the highest).
-
-\begin{Schunk}
-\begin{Sinput}
-## Cold wave example
-gen_hw_set(out = "example_results",
-           dataFolder = projection_dir_location ,
-           dataDirectories = list("historical" = c(1990, 1999),
-                                  "rcp85" = c(2060, 2079)),
-           citycsv = city_file_location,
-           coordinateFilenames = "latitude_longitude_NorthAmerica_12mo.csv",
-           tasFilenames = "tas_NorthAmerica_12mo.csv",
-           timeFilenames = "time_NorthAmerica_12mo.csv", 
-           probThreshold = 0.10, 
-           above_threshold = FALSE, 
-           absolute_thresholds = c(266, 263, 260, 258), 
-           seasonal_months = c(12, 1, 2))
-\end{Sinput}
-\end{Schunk}
-
-\begin{quote}
-Extreme statistics and spell-lengths: ``A `frost day' is defined as one
-during which the minimum temperature falls below freezing point (0
-degC). This is described as a climatological statistic, in which the
-minimum temperature is first calculated within each day, and then the
-number of days or spell lengths meeting the specified condition are
-evaluated.'' (from one example in
-\url{http://cfconventions.org/Data/cf-conventions/cf-conventions-1.6/build/cf-conventions.html\#calendar})
-\end{quote}
-
-Users doing these kinds of extensions will need to pay attention to a
-few points. First, some of the event characteristics (first in the
-calendar year, average of May--September temperatures, days above
-90\textsuperscript{o}F) might not be meaningful for studies of other
-types of events. Further, because event periods are usually defined as a
-string of multiple days exceeding some threshold, the functions in this
-package may miss the first and last event of the time period. For
-example, if the first day of the time series is the last day of an
-event, this function would not identify that event because it lacks data
-from the earlier days that allow this day to meet the event definition.
-This issue would lead to, at most, missing two events out of each
-projection, but should be considered if studying events that might occur
-near the start and end of projection data. If there is adequate interest
-from researchers, in the future we may adapt the package to make these
-secondary applications part of the package.
+While this package was created to be used for research on extreme events
+in climate change projections, it can be used more broadly. For example,
+there are other episodes like wildfires and air pollution where it may
+be interesting to identify extended periods of high exposures in
+projection time series, and this package could be applied to gridded air
+pollution model output to explore these exposures.
 
 \section{Acknowledgements}\label{acknowledgements}
 
 This work was supported by grants from the National Institute of
 Environmental Health Sciences (R00ES022631), the National Science
 Foundation (1331399), and the Colorado State University Vice President
-for Research.
+for Research. Thank you to early testers of the package: Julia
+Bromberek, Wande Benka-Coker, Josh Ferreri, Ryan Gan, Molly Gutilla,
+Mike Lyons, Casey Quinn, Rachel Severson, and Meilin Yan.
 
 \bibliography{Anderson}
 

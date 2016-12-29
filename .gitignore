@@ -10,6 +10,8 @@ paper_drafts/RJournalDraft/*
 *.gz
 *.docx
 *.blg
+*.brf
+*.bbl
 *.aux
 *.out
 paper_drafts/RJournalRevisions/review_1_1-2.txt

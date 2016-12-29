@@ -24,7 +24,7 @@ author:
     - Fort Collins, CO 80523
     email:  eabarnes@atmos.colostate.edu
 abstract: >
-  Research on climate change impacts can require extensive processing, to incorporate output from ensembles of different climate models and different simulations of each model. This processing can be particularly extensive when identifying and characterizing extreme events like heat waves and frost day spells, as these must be processed from model output with daily time steps and may use identification threholds based on local distributions (e.g., 98th percentile temperature for that location). Here, we provide an overview of working with daily climate model output data in R. Further, we present the \pkg{futureheatwaves} package, which we developed to ease the process of identifying, characterizing, and exploring multi-day extreme events in climate model output. This package takes as input a directory of projection files from many climate models, identify all heat waves for multiple cities using a user-specified heat wave definition, and write an output directory of files with these heat waves and their characteristics (e.g., length, absolute and relative temperatures). The \pkg{futureheatwaves} package then allows the user to create custom functions and apply them across all heat wave files; this functionality can be used either to explore heat wave patterns (e.g., average length and intensity across different climate models) or to apply epidemiological estimates to project health impacts under different scenarios.
+  Research on climate change impacts can require extensive processing, to incorporate output from ensembles of different climate models and different simulations of each model. This processing can be particularly extensive when identifying and characterizing extreme events like heat waves and frost day spells, as these must be processed from model output with daily time steps and may use identification threholds based on local distributions (e.g., 98\textsuperscript{th} percentile temperature for that location). Here, we provide an overview of working with daily climate model output data in R. Further, we present the \pkg{futureheatwaves} package, which we developed to ease the process of identifying, characterizing, and exploring multi-day extreme events in climate model output. This package takes as input a directory of projection files from one or many climate models, identifies all of a specific type of extreme event (e.g., heat waves) for multiple cities using a user-specified event definition, and writes an output directory of files with these extreme events and their characteristics (e.g., length, absolute and relative temperatures). The \pkg{futureheatwaves} package then allows the user to create custom functions and apply them across all event files; this functionality can be used either to explore extreme event patterns (e.g., average length and intensity across different climate models) or to apply epidemiological estimates to project health impacts under different scenarios.
 preamble: >
   % Supposedly allows you to add stuff to LaTeX preamble. Not for me.
 output: rticles::rjournal_article
@@ -42,11 +42,11 @@ Research on climate change impacts can require extensive processing. This is not
 
 For example, the Coupled Model Intercomparison Project, phase 5 (CMIP5; \citet{taylor2012overview}) brought together dozens of major climate modeling groups around the world to simulate the same future radiative forcing scenarios, but with their own models. This created an ensemble of state-of-the-art climate model projections that allow researchers to study projections and their uncertainties. Most of these modeling groups additionally performed more than one simulation for each scenario and model (i.e. multiple ensemble members), perturbing the initial conditions by a very tiny amount to quantify uncertainties due to internal climate variability.
 
-This processing is particularly intensive for smaller time steps, like daily climate model output. While some climate impacts can be assessed using climate model output at monthly, seasonal, or yearly time steps, the impacts of multi-day extreme events must be assessed using output in daily time steps. Such multi-day extreme events include heat waves, cold spells, frost day spells, and droughts. The assessment is further complicated if extreme events are identified based on conditions that are rare for a certain location (e.g., 98th percentile of local temperature distribution for identifying heat waves) \citep{IPCCch1}, as this event definition must be determined at each study location from climate model output. Further, it is often of interest to create summaries of multiple characteristics of these extreme events. One interest, for example, in interpreting climate change scenarios output is whether frequency of heat waves or warm spells will change, as well as how certain characteristics of these extreme events (e.g., length, intensity) will change under different scenarios \citep{IPCCch1}.
+Processing climate output data is particularly intensive for data in smaller time steps, like daily output. While some climate impacts can be assessed using climate model output at monthly, seasonal, or yearly time steps, the impacts of multi-day extreme events must be assessed using output in daily time steps. Such multi-day extreme events include heat waves, cold spells, frost day spells, and droughts. The assessment is further complicated if extreme events are identified based on conditions that are rare for a certain location (e.g., 98th percentile of local temperature distribution for identifying heat waves) \citep{IPCCch1}, as this event definition must be determined at each study location from climate model output. Further, it is often of interest to create summaries of multiple characteristics of these extreme events. One interest, for example, in interpreting climate change scenarios output is whether frequency of heat waves or warm spells will change, as well as how certain characteristics of these extreme events (e.g., length, intensity) will change under different scenarios \citep{IPCCch1}.
 
 We begin this article with an overview of climate model output data, particularly daily data, for R users. We outline where data from CMIP5 can be obtained as well as how to work with the file format (netCDF) from R. We overview some R packages that can be useful when working with this data, as well as aspects of the data (e.g., non-standard calendars) of which users should be aware when working with daily climate model output in R.
 
-After this overview, we present the \pkg{futureheatwaves} package. which we created to aid in identifying and characterizing any type of multi-day extreme event from daily climate model output (Table \ref{tab:goals}). Further, this package provides some functionality particularly useful in identifying and characterizing heat waves specifically. Quantifying the impacts of heat waves on human health suffer from additional sources of uncertainty beyond those inherent in projections of regional changes in surface temperature. These include: (1) uncertainty in the ability of communities to adapt to changing temperatures (the adaptation scenario) and (2) uncertainty in the definition of a heat wave itself. Thus, identifying and characterizing the impacts of future heat waves in state-of-the-art climate models requires analyzing hundreds of projections based on combinations of anthropogenic activity, climate model and ensemble member, adaptation scenario, and heat wave definition. Such an analysis is non-trivial. For example, to estimate the possible impacts of heat waves using 32 ensemble members of CMIP5, two forcing scenarios, two different heat wave definitions, and five progressive assumptions about adaptation to heat, would require that one identify and characterize heat waves in 640 separate temperature time series for each region of interest.
+After this overview, we present the \pkg{futureheatwaves} package. which we created to aid in identifying and characterizing any type of multi-day extreme event from daily climate model output (Table \ref{tab:goals}). This package can be used to identify and characterize a variety of multi-day extreme events, but provides some functionality particularly useful in identifying and characterizing heat waves specifically. Quantifying the impacts of heat waves on human health suffer from additional sources of uncertainty beyond those inherent in projections of regional changes in surface temperature. These include: (1) uncertainty in the ability of communities to adapt to changing temperatures (the adaptation scenario) and (2) uncertainty in the definition of a heat wave itself. Thus, identifying and characterizing the impacts of future heat waves in state-of-the-art climate models requires analyzing hundreds of projections based on combinations of anthropogenic activity, climate model and ensemble member, adaptation scenario, and heat wave definition. Such an analysis is non-trivial. For example, to estimate the possible impacts of heat waves using 32 ensemble members of CMIP5, two forcing scenarios, two different heat wave definitions, and five progressive assumptions about adaptation to heat, would require that one identify and characterize heat waves in 640 separate temperature time series for each region of interest.
 
 \begin{table}[t]
 \begin{center}
@@ -69,7 +69,7 @@ After this overview, we present the \pkg{futureheatwaves} package. which we crea
 \label{tab:goals}
 \end{table}
 
-The \pkg{futureheatwaves} package automates the process of identifying and characterizing multi-day extreme events across different ensemble members of one or more climate models. A variety of different heat wave definitions have been used to identify heat waves in a time series of temperature data \citep{smith2013heat}, and the choice of heat wave definitions can influence both health effect estimates \citep{chen2015influence, kent2014heat} and projected heat wave trends \citep{smith2013heat}. Further, other types of extreme events will be defined differently than heat waves (for example, frost day spells may be defined as one or more days with temperature at or below $0^oC$). This package therefore allows the user to create and use a custom the extreme event definition used to identify events in the climate model output. Finally, this package allows the user to explore the extreme events identified in the climate model output with a function that can take a user-defined R function and apply it across all extreme event files generated for the separate ensemble members. 
+The \pkg{futureheatwaves} package automates the process of identifying and characterizing multi-day extreme events across different ensemble members of one or more climate models. A variety of different heat wave definitions have been used to identify heat waves in a time series of temperature data \citep{smith2013heat}, and the choice of heat wave definitions can influence both health effect estimates \citep{chen2015influence, kent2014heat} and projected heat wave trends \citep{smith2013heat}. Further, other types of extreme events will be defined differently than heat waves (for example, frost day spells may be defined as one or more days with temperature at or below 32\textsuperscript{o}F / 0\textsuperscript{o}C). This package therefore allows the user to create and use a custom the extreme event definition used to identify events in the climate model output. Finally, this package allows the user to explore the extreme events identified in the climate model output with a function that can take a user-defined R function and apply it across all extreme event files generated for the separate ensemble members. 
 
 # An overview of climate model output for R users
 
@@ -125,7 +125,9 @@ More tips on working with CMIP5 files in R are provided in the "starting_from_ne
 \label{fig:overview}
 \end{widefigure}
 
-The \pkg{futureheatwaves} package was facilitated to aid in identifying, characterizing, and exploring multi-day extreme events in daily climate model output data. Figure \ref{fig:overview} gives an overview of the two primary functions of the \pkg{futureheatwaves} package. First, the \code{gen\_hw\_set} function processes a directory of climate projection files that are stored locally on the user's computer (Figure \ref{fig:overview}, "Climate projections"), to generate a list of all extreme events in each projection, as well as over a dozen characteristics of each identified extreme event (Table \ref{tab:hwcharacteristics}). The extreme events are identified and characterized at one or more study locations (e.g., cities), with study locations specified by the user in an input file. The extreme events identified for each ensemble member are output as separate files in a directory specified by the user (Figure \ref{fig:overview}, ``Extreme events datasets"). Second, the \code{apply\_all\_models} function allows the user to apply custom functions across all the extreme event data frames generated by \code{gen\_hw\_set} to summaries of extreme events across all climate models and ensemble members (Figure \ref{fig:overview}, right).
+We created the \pkg{futureheatwaves} package to aid in identifying, characterizing, and exploring multi-day extreme events in daily climate model output data. Figure \ref{fig:overview} gives an overview of the two primary functions of the \pkg{futureheatwaves} package. First, the \code{gen\_hw\_set} function processes a directory of climate projection files that are stored locally on the user's computer (Figure \ref{fig:overview}, "Climate projections"), to generate a list of all extreme events in each projection, as well as over a dozen characteristics of each identified extreme event (Table \ref{tab:hwcharacteristics}). The extreme events are identified and characterized at one or more study locations (e.g., cities), with study locations specified by the user in an input file. The extreme events identified for each ensemble member are output as separate files in a directory specified by the user (Figure \ref{fig:overview}, ``Extreme events datasets"). 
+
+Once the user creates these data frames of location-specific heat waves, the \code{apply\_all\_models} function allows the user to apply custom functions across all the extreme event data frames generated by \code{gen\_hw\_set} to summaries of extreme events across all climate models and ensemble members (Figure \ref{fig:overview}, right). This functionality can be used to generate summary statistics (e.g., determine average heat wave length or total frost days), or can be used to apply more complex functions (e.g., apply epidemiologic effect estimates across the heat waves to generate health impact estimates).
 
 \begin{table}
 \newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
@@ -141,12 +143,12 @@ Column name & Description of characteristic \\
 \code{end.date} & Date of the last day of the event \\
 \code{start.doy} & Day of the year of the first day of the event (1 = Jan. 1, etc.)\\
 \code{start.month} & Month in which the event started (1 = January) \\
-\code{days.above.abs.thresh.1} & Number of days in the event above a specified absolute threshold (default is the number of days in the event above $80^oF$ / $26.7^oC$, but this can be changed with the \code{absolute\_thresholds} argument in \code{gen\_hw\_set}) \\
-\code{days.above.abs.thresh.2} & Number of days in the event above a specified absolute threshold (default is the number of days in the event above $85^oF$ / $29.4^oC$) \\ 
-\code{days.above.abs.thresh.3} & Number of days in the event above a specified absolute threshold (default is the number of days in the event above $90^oF$ / $32.3^oC$) \\
-\code{days.above.abs.thresh.4} & Number of days in the event above a specified absolute threshold (default is the number of days in the event above $95^oF$ / $35.0^oC$) \\
-\code{days.above.99th} & Number of days in the event above the $99^{th}$ percentile of the variable for the location, using the period specified with the \code{referenceBoundaries} argument in \code{gen\_hw\_set} as a reference for determining these percentiles \\
-\code{days.above.99.5th} & Number of days in the event above the $99.5^{th}$ percentile of the variable for the location, using the period specified with the \code{referenceBoundaries} argument in \code{gen\_hw\_set} as a reference for determining these percentiles \\
+\code{days.above.abs.thresh.1} & Number of days in the event above a specified absolute threshold (default is the number of days in the event above 80\textsuperscript{o}F / 26.7\textsuperscript{o}C, but this can be changed with the \code{absolute\_thresholds} argument in \code{gen\_hw\_set}) \\
+\code{days.above.abs.thresh.2} & Number of days in the event above a specified absolute threshold (default is the number of days in the event above 85\textsuperscript{o}F / 29.4\textsuperscript{o}C) \\ 
+\code{days.above.abs.thresh.3} & Number of days in the event above a specified absolute threshold (default is the number of days in the event above 90\textsuperscript{o}F / 32.3\textsuperscript{o}C) \\
+\code{days.above.abs.thresh.4} & Number of days in the event above a specified absolute threshold (default is the number of days in the event above 95\textsuperscript{o}F / 35.0\textsuperscript{o}C) \\
+\code{days.above.99th} & Number of days in the event above the 99\textsuperscript{th} percentile of the variable for the location, using the period specified with the \code{referenceBoundaries} argument in \code{gen\_hw\_set} as a reference for determining these percentiles \\
+\code{days.above.99.5th} & Number of days in the event above the 99.5\textsuperscript{th} percentile of the variable for the location, using the period specified with the \code{referenceBoundaries} argument in \code{gen\_hw\_set} as a reference for determining these percentiles \\
 \code{first.in.year} & Whether the event was the first to occur in its calendar year in the location \\
 \code{mean.var.quantile} & The percentile of the average variable value during the event compared to the location's year-round distribution of the variable, based on the variable distribution for the location during the period specified by the \code{referenceBoundaries} argument in \code{gen\_hw\_set} \\
 \code{max.var.quantile} & The percentile of the maximum variable value during the event compared to the location's year-round distribution of the variable, based on the variable distribution for the location during the period specified by the \code{referenceBoundaries} argument in \code{gen\_hw\_set} \\
@@ -159,24 +161,19 @@ Column name & Description of characteristic \\
 \label{tab:hwcharacteristics}
 \end{table}
 
-The user can extensively customize the definition used to identify extreme events. The default is a definition for heat waves (two or more days with temperatures at or above the city's $98^{th}$ percentile of year-round temperature), but users can write a custom R function with either a different heat wave definition or with a definition appropriate for a different type of extreme event (e.g., one or more days at or below $0^oC$ for frost day spells). 
-Some of these heat wave characteristics are based on relative temperature, which is a measure of how the temperature during a heat wave compares to the typical distribution of temperature at that location \citep{IPCCch1}. These relative temperature metrics will vary depending on whether you calculate them based on a location's present-day temperature distribution or on the location's temperature distribution in the future, since typical temperature distributions in many locations are expected to change with climate change. The package therefore allows the user to specify date ranges of the temperature distributions to be used in calculating these relative temperature metrics in each location. 
-
-Second, once the user creates these data frames of location-specific heat waves, the `apply_all_models` function allows the user to apply a custom function across all the heat wave data frames that were generated to create a summary data frame (Figure \ref{fig:overview}, right). This functionality can be used to generate summary statistics (e.g., determine average heat wave length or total heat wave days), or can be used to apply more complex functions (e.g., apply epidemiologic effect estimates across the heat waves to generate health impact estimates).
-
 ## Example data
 
-We have included data files in the package to serve as example files, so users can try this package before applying it to their own directory of climate projection files. The example files are all included as comma-separated (.csv) files, rather than as saved R objects, because the `gen_hw_set` function requires a directory of comma-separated files as input and csv is a general file format familiar to most users. This example data therefore also allow users to see how to create the appropriate directory set-up for this package. 
+We have included data files in the package to serve as example files, so users can try this package before applying it to their own directory of climate projection files. This example data comes from two climate models that are a part of CMIP5: (1) the model of the Beijing Climate Center, China Meteorological Administration (BCC) \citep{xin2013introduction} and (2) the National Center for Atmospheric Research's (NCAR's) Community Climate System Model, version 4 (CCSM4) \citep{gent2011community}. We include one ensemble member from BCC (r1i1p1) and two from CCSM (r1i1p1 and r2i1p1). 
 
-This example data comes from two climate models that are a part of CMIP5: (1) the model of the Beijing Climate Center, China Meteorological Administration (BCC) \citep{xin2013introduction} and (2) the National Center for Atmospheric Research's (NCAR's) Community Climate System Model, version 4 (CCSM4) \citep{gent2011community}. We include one ensemble member from BCC (r1i1p1) and two from CCSM (r1i1p1 and r2i1p1). To ensure that the size of this example data is reasonably small, we have only included projection data for grid points from these climate models that are near five U.S. east coast cities: New York, NY; Philadelphia, PA; Newark, NJ; Baltimore, MD, and Providence, RI. Further, to keep the file sizes reasonably small, the historical projections range over the years 1990 to 1999, while the future projections are limited to 2060 to 2079. Users' applications of this package will likely use directories with many more climate model ensemble members and more locations; however, the operation of the package is the same for this smaller example application as it would be for a much larger application.
+To ensure that the size of this example data is reasonably small, we have only included projection data for grid points from these climate models that are near five U.S. east coast cities: New York, NY; Philadelphia, PA; Newark, NJ; Baltimore, MD, and Providence, RI. Further, to keep the file sizes reasonably small, the historical projections range over the years 1990 to 1999, while the future projections are limited to 2060 to 2079. Users' applications of this package will likely use directories with many more climate model ensemble members and more locations; however, the operation of the package is the same for this smaller example application as it would be for a much larger application.
 
-Once the \pkg{futureheatwaves} package is installed and loaded, the user can find the local location of these files using R's `system.file` function. In the later sections of this article, we show how to use the package functions with these example files as inputs. 
+Once the \pkg{futureheatwaves} package is installed and loaded, the user can find the local location of these files using R's \code{system.file} function. In the later sections of this article, we show how to use the package functions with these example files as inputs. 
 
-When setting up to run climate model output data beyond this example data, any downloaded CMIP5 files will require some pre-processing, in terms of getting the getting the data into a specific format and storing these files in a specific directory structure. A file of study locations must also be saved locally in a specific format. Extensive details on the required format of files and required input directory structure is available in the \pkg{futureheatwaves} vignette "futureheatwaves", while tips on processing CMIP5 files into the required structure are given in the package's "starting_from_netcdf" vignette. 
+When using this package with data other than this example data, the climate model output data will require some pre-processing. Data will need to be saved in a specific format, with files stored in a specific directory structure. This preprocessing can be done using some of the R packages described earlier for working with CMIP5 data in R. Full details of the required file and directory structure are provided in the package's "futureheatwaves" vignette, while tips on conducting this processing starting from CMIP5 netCDF files are given in the "starting_from_netcdf" vignette.
 
-## Basic example of processing projection files
+## Basic example of identifying and characterizing extreme events
 
-Once these files and directories are set up, \pkg{futureheatwaves} can process them to identify and characterize heat waves in each ensemble member's projection for each  location using the `gen_hw_set` function. For example, to process the example climate projections directory included with the package, the user can run: 
+Once climate model output files are set up as specified in the "futureheatwaves" package vignette, the package can process them to identify and characterize heat waves in each ensemble member's projection for each  location using the \code{gen\_hw\_set} function. For example, to process the example climate model output data included with the package, the user can run: 
 
 ```{r eval = FALSE}
 projection_dir_location <- system.file("extdata/cmip5",
@@ -194,96 +191,38 @@ gen_hw_set(out = "example_results",
            timeFilenames = "time_NorthAmerica_12mo.csv")
 ```
 
-This code first identifies and saves as objects the path names on the user's computer of the example climate projections directory (`projection_dir_location`) and the file of study locations (`city_file_location`). The `gen_hw_set` function processes this example input and creates a new directory, `example_results`, with files of identified and characterized heat waves, in the user's current working directory. In this example code, this processing is done using  default values for the heat wave definition, years for which to generate the heat wave data sets, etc. Ways to customize these choices are fully explained later in the text.
+This code first identifies and saves as objects the path names on the user's computer of the example climate projections directory (\code{projection\_dir\_location}) and the file of study locations (\code{city\_file\_location}). The \code{gen\_hw\_set} function processes this example input and creates a new directory, \file{example\_results}, with files of identified and characterized heat waves, in the user's current working directory. In this example code, the processing is done using  default values for the event definition, years for which to generate the heat wave data sets, etc. How and why to customize these choices are explained later in the text. Function arguments (e.g., \code{dataDirectories}, \code{tasFilenames}) are used to specify the format of the data and the directory structure.
 
-In this call, the user must specify the directory where the results should be written (`out`), the location of the directory of climate projections (`dataFolder`), the names of the two main subdirectories of that climate projection directory, as well as their year boundaries (`dataDirectories`; see, for example, Figure \ref{fig:directories}), the location of the city location file (`citycsv`), and the names used for the grid coordinate, climate projection, and projection date files (`coordinateFilenames`, `tasFilenames`, and `timeFilenames`). When `gen_hw_set` is run, the user is advised that the function will write files to his computer and must agree to proceed: 
-
-```
- Warning: This function will write new files to your computer in the 
- ~/tmp/example_results/ directory of your computer. If that directory already exists,
-running this function will write over it. 
- Do you want to continue? (y / n): 
-```
-
-\noindent The function provides status reports while processing. This helps the user see that the function call is progressing, as `gen_hw_set` can take a while to run if it is processing many locations and / or many climate ensemble members. Once the function has completed running, results will be written locally to the directory specified by the `out` argument of `gen_hw_set`. The structure of this output directory is shown in Figure \ref{fig:directories} (right). This directory will include files with some basic information about the climate models and the closest grid points of each climate model to each location. The output directory will also include a directory with files of identified and classified heat waves for each ensemble member, including all characteristics in Table \ref{tab:hwcharacteristics}.
+Once the function has completed running, results will be written locally to the directory specified by the \code{out} argument of \code{gen\_hw\_set}. This directory will include files with some basic information about the climate models and the closest grid points of each climate model to each location, as well as a directory with files of identified and classified extreme events for each ensemble member, including all characteristics in Table \ref{tab:hwcharacteristics}.
 
 ## Customizing the extreme event definition
 
-The default heat wave definition for this package is: 
+By default, the package identifies extreme events in climate model output data using a specific definition for heat waves: 
 
-> A \dfn{heat wave} is two or more days at or above a city-specific threshold temperature, with the threshold determined as the $98^{th}$ percentile of year-round temperature in the city during some reference period (by default, 1990--1999).
+> A \dfn{heat wave} is two or more days at or above a city-specific threshold temperature, with the threshold determined as the 98\textsuperscript{th} percentile of year-round temperature in the city during some reference period (by default, 1990--1999).
 
+\noindent However, the user can extensively customize the definition used to identify extreme events. Users can write a custom R function with either a different heat wave definition (see \citet{smith2013heat} and \citet{kent2014heat} for listings of definitions used in scientific studies) or with a definition appropriate for a different type of extreme event (e.g., one or more days at or below 32\textsuperscript{o}F / 0\textsuperscript{o}C for frost day spells). For heat wave identification, researchers might want to use a specific definition, for example, because it matches the definition used by local health officials to declare heat wave warnings or, in the case of health impact assessments, to match with a definition used in an epidemiological study. For other extreme events, a heat wave definition likely will not be applicable and so a customized definition is necessary.
 
-Many different definitions of heat waves exist (e.g., \citet{smith2013heat, kent2014heat}), so researchers will often want to use alternative ways to define heat waves. Researchers might want to use a specific definition, for example, because it matches the definition used by local health officials to declare heat wave warnings or, in the case of health impact assessments, to match with a definition used in an epidemiological study. Three components of the heat wave definition can be easily customized in the `gen_hw_set` function call, without creating a new R function to use to identify heat waves. The customization of the heat wave definition is even more extensive as one has the option of writing a custom R function.
+Three components of the extreme event definition can be easily customized in the \code{gen\_hw\_set} function call, without creating a new R function to use to identify heat waves. First, often users wish to define an extreme event based on conditions that are rare in the study location \citep{IPCCch1}. In this case, the percentile of the variable of interest required for an extreme event can be changed using the \code{probThreshold} option in \code{gen\_hw\_set}. For example, this option could be used to identify heat waves based on the 99\textsuperscript{th} percentile, rather than the 98\textsuperscript{th} percentile, of a city's year-round temperature. Second, the user can change the number of days used in the heat wave definition using the \code{numDays} argument in the \code{gen\_hw\_set} function (the default is \samp{numDays = 2}, corresponding to two or more days). Combined, these two customization choices allow the user to identify heat waves using many of the heat wave definitions used in previous climate and health research-- for example, 9 of the 16 heat wave definitions used in \citet{kent2014heat} (e.g., [some examples of the 9 that could be fit]) could be fit using different combinations of these two options for specifying threshold percentile and number of days. Third, some extreme events like cold waves and frost day spells are defined as a certain number of days below, rather than above, a threshold. While the default is to identify events by searching for days above a threshold, this behavior can be changed with the \code{above\_threshold = FALSE} argument in the \code{gen\_hw\_set function}.
 
-First, the percentile used to identify a heat wave can be changed using the `probThreshold` option in `gen_hw_set`. This option can take values between 0 and 1. The default value is 0.98, or a definition with a threshold of the $98^{th}$ percentile of the location's temperature. For example, to identify heat waves as two or more days at or above the city's $99^{th}$ percentile of year-round temperature, the user could run: 
+Beyond these simpler options, the customization of the event definition is even more extensive as one has the option of writing a custom R function. This functionality allows the user to use heat wave definitions that either require a number of days above an absolute threshold (e.g., maximum temperature of $\ge$ 95\textsuperscript{o}F for $\ge1$ day \citet{kent2014heat, tan2007heat}; minimum temperature $\le$ 0\textsuperscript{o}C for $\ge1$ day for frost day spells) or that require a combination of thresholds to be met (e.g., maximum daily temperature one threshold every day of the heat wave and above a higher threshold for a certain number of days; \citet{kent2014heat, peng2011toward}). To use a customized event definition, the user can write and load an R function that implements the definition. The custom function is passed to the \code{gen\_hw\_set} function using the \code{IDheatwavesFunction} argument. To work correctly, this custom function must allow only specific inputs and generate only specific outputs. Details about this required structure are provided in the \pkg{futureheatwaves} package vignette. To increase processing speed when identifying extreme events, we coded parts of the default event definition function in C++ and synced it with R using the \CRANpkg{Rcpp} package \citep{Rcpp}. Users should consider a similar strategy for custom heat wave definitions, especially if processing a large number of climate projection files. 
 
-```{r eval = FALSE}
-gen_hw_set(out = "example_results",
-           dataFolder = projection_dir_location ,
-           dataDirectories = list("historical" = c(1990, 1999),
-                                        "rcp85" = c(2060, 2079)),
-           citycsv = city_file_location,
-           coordinateFilenames = "latitude_longitude_NorthAmerica_12mo.csv",
-           tasFilenames = "tas_NorthAmerica_12mo.csv",
-           timeFilenames = "time_NorthAmerica_12mo.csv",
-           probThreshold = 0.99)
-```
-
-\noindent Second, the user can change the number of days used in the heat wave definition using the `numDays` argument in the `gen_hw_set` function. Combined, these two customization choices can allow the user to identify heat waves using many of the heat wave definitions used in previous climate and health research-- for example, 9 of the 16 heat wave definitions used in \citet{kent2014heat} could be fit using different combinations of these two options for specifying threshold percentile and number of days.
-
-Third, it is possible to specify the range of years that should be used when determining this threshold. For example, if you wanted to base the threshold for each location on its current climate, you could leave this option as its default, while if you wanted to use a different set of years (i.e. a threshold relative to future projected temperatures), you could set the start and end year bounds for this reference period using the `thresholdBoundaries` argument in the function `gen_hw_set`. For example, to use temperatures in each city from 2070 to 2079 to determine threshold temperatures, you would run:
-
-```{r eval = FALSE}
-gen_hw_set(out = "example_results",
-           dataFolder = projection_dir_location ,
-           dataDirectories = list("historical" = c(1990, 1999),
-                                        "rcp85" = c(2060, 2079)),
-           citycsv = city_file_location,
-           coordinateFilenames = "latitude_longitude_NorthAmerica_12mo.csv",
-           tasFilenames = "tas_NorthAmerica_12mo.csv",
-           timeFilenames = "time_NorthAmerica_12mo.csv",
-           thresholdBoundaries = c(2070, 2079))
-```
-
-It is also possible to use a completely customized heat wave definition. This functionality allows the user to use heat wave definitions that either require a number of days above an absolute threshold (e.g., maximum temperature of $\ge95^oF$ for $\ge1$ day; \citet{kent2014heat, tan2007heat}) or that require a combination of thresholds to be met (e.g., maximum daily temperature above a lower threshold every day of the heat wave and above a higher threshold for a certain number of days; \citet{kent2014heat, peng2011toward}).
-
-To use a customized heat wave definition, the user can write and load an R function that implements the definition. To work correctly, this custom function must allow only specific inputs and generate only specific outputs. Details about this required structure are provided in the \pkg{futureheatwaves} package vignette.
-
-To help in developing custom heat wave identification functions, the package includes an example of the required input data frame, `datafr`, which can be loaded with `data(datafr)`. If a custom heat wave function is properly set up to use in this package, it can take as input this example data frame and a threshold value and will return the original data frame with the columns for whether the day was part of a heat wave (`hw`) and, if so, the sequential number of the heat wave out of all heat waves in that location (`hw.number`).
-
-The custom function can then be referenced using the `IDheatwavesFunction` option in `gen_hw_set`, and it will be used to identify heat waves in the data set. As an example, we have included an alternative ID definition function in this package, called `IDHeatwavesAlternative`, which identifies heat waves as two or more days above the higher of either the location's $98^{th}$ percentile temperature or $80^{o}F$, with the idea that this definition prevents the identification of heat waves at mild temperatures in locations with mild or cool climates. The following code processes the example climate projecting files using this function as the heat wave definition:
-
-```{r, eval = FALSE}
-gen_hw_set(out = "example_results",
-           dataFolder = projection_dir_location ,
-           dataDirectories = list("historical" = c(1990, 1999),
-                                        "rcp85" = c(2060, 2079)),
-           citycsv = city_file_location,
-           coordinateFilenames = "latitude_longitude_NorthAmerica_12mo.csv",
-           tasFilenames = "tas_NorthAmerica_12mo.csv",
-           timeFilenames = "time_NorthAmerica_12mo.csv",
-           IDheatwavesFunction = "IDHeatwavesAlternative")
-```
-
-With this ability to write and use a custom heat wave identification function, most heat wave definitions can be applied with this package. The exception is definitions that require two separate temperature metrics (e.g., maximum temperature above a certain threshold or minimum temperature above a different threshold; \citet{kent2014heat, robinson2001definition}), because the `gen_hw_set` function cannot take as input projections of more than one temperature metric. Definitions that use a heat metric that combines multiple inputs (e.g., heat index, which is a combined measure of temperature and air moisture) can be used, but require that the calculation of the metric is done when creating the input files to include in the ``Climate projections" directory (Figure \ref{fig:overview}, left), rather than as part of the heat wave definition function.
-
-To increase processing speed when identifying heat waves, we coded parts of the default heat wave identification function in C++ and synced it with R using the \CRANpkg{Rcpp} package \citep{Rcpp}. Users should consider a similar strategy for custom heat wave definitions, especially if processing a large number of climate projection files.
+Finally, extreme events are often based on conditions that are rare for a specific location using location-specific relative thresholds. These thresholds are often defined for climate impact studies based on a variable's distribution at that location in present-day or historical data. However, it can be interesting to explore trends in extreme events under climate change if extreme events are identified based on variable distributions during the projection period, or another future period. It is possible to specify the time period to use when determining a relative threshold for an event definition using the \code{thresholdBoundaries} argument in the function \code{gen\_hw\_set}. 
 
 ## Exploring extreme events
 
-Once you have created a directory of files with characterized heat waves for each ensemble member, the results can be explored using the `apply_all_models` function. This function allows the user to apply custom R functions across all heat wave data frames created by the `gen_hw_sets` call. The user can apply any R function that follows certain standards in accepting input and returning output. Full details on these standards are given in the \pkg{futureheatwaves} package vignette.
+Once the user has created a directory of characterized event files for each ensemble member ("Extreme event data sets", Figure \ref{fig:overview}), he or she can explore the results using the \code{apply\_all\_models} function. This function allows the user to apply custom R functions across all extreme event data frames created by the \code{gen\_hw\_sets} call. The user can apply any R function that follows certain standards in accepting input and returning output. Full details on these standards are given in the \pkg{futureheatwaves} package vignette.
 
-As an example, if the user wanted to to get the average temperature of the heat waves identified within each ensemble member, he or she could write a simple function: 
+As an example, if the user wanted to calculate the average temperature of the heat waves identified for each ensemble member, he or she could write a simple function: 
 
-\begin{verbatim}
+```
 average_mean_temp <- function(hw_datafr){
         out <- mean(hw_datafr$mean.var)
         return(out)
         }
-\end{verbatim}
+```
 
-\noindent The `apply_all_models` function can then apply this `average_mean_temp` function across the heat wave data frames for all ensemble members in all climate models:
+\noindent This function could then be applied across all extreme event data sets output by \code{gen\_hw\_set} using the \code{apply\_all\_models} function. For example, to apply this function to all the example output results that come with the package, the user could run:
 
 ```{r echo = FALSE}
 average_mean_temp <- function(hw_datafr){
@@ -297,7 +236,9 @@ out <- system.file("extdata/example_results", package = "futureheatwaves")
 apply_all_models(out = out, FUN = average_mean_temp)
 ```
 
-Note that the location of the directory with the heat wave data frames must be specified using the `out` argument when calling \code{apply\_all\_models}. Typically, this will be the directory path for the directory specified with the `out` argument in \code{gen\_hw\_set}. Location-specific results can be generated using the \code{city\_specific} argument in \code{apply\_all\_models}: 
+This output gives the results (\code{value} column) of running the custom function for each ensemble member of each climate model. Note that the location of the directory with the heat wave data frames must be specified using the \code{out} argument when calling \code{apply\_all\_models}. Typically, this will be the directory path for the directory specified with the \code{out} argument in \code{gen\_hw\_set}. 
+
+Location-specific results can be generated using the \code{city\_specific} argument in \code{apply\_all\_models}: 
 
 ```{r}
 apply_all_models(out = out, FUN = average_mean_temp, city_specific = TRUE)
@@ -305,59 +246,56 @@ apply_all_models(out = out, FUN = average_mean_temp, city_specific = TRUE)
 
 This output is structured as ``tidy" data \citep{wickham2014tidy}, allowing it to be used easily with the graphing package \CRANpkg{ggplot2} \citep{ggplot2}.
 
-The `apply_all_models` function can also be used to project the health impacts of heat waves. As a very simplistic example, \citet{anderson2009weather} estimated that heat waves, defined as two or more days at or above a community's $98^{th}$ percentile temperature, were associated with an added relative risk of 1.032 for cardiorespiratory mortality risk in 107 U.S. communities. A simple estimate of excess deaths associated with this added heat wave risk in a community can be calculated as \citep{peng2011toward}: 
+The \code{apply\_all\_models} function can also be used to project the health impacts of heat waves. A simple estimate of excess deaths associated with heat wave risk in a community can be calculated as \citep{peng2011toward}: 
 
 \begin{equation}
-E_c = N_c * (RR - 1) * L_c 
+E_c = B_c * (RR - 1) * L_c 
 \label{eq:healthimpacts}
 \end{equation}
 
 where: 
 
-- $E_c$ is the total number of excess deaths in community $c$;
-- $N_c$ is the baseline average daily mortality in community $c$; 
-- $RR$ is the relative risk of cardiorespiratory mortality per day associated with a heat wave; and 
-- $L_c$ is the total number of heat wave days in community $c$ over the study period.
+\begin{itemize}
+\item $E_c$ is the total number of excess deaths in community $c$;
+\item $B_c$ is the baseline average daily mortality in community $c$; 
+\item $RR$ is the relative risk of mortality associated with a heat wave day; and 
+\item $L_c$ is the total number of heat wave days in community $c$ over the study period.
+\end{itemize}
 
-This impact assessment equation can be translated into a function that merges each projection's heat wave data frame with a data frame of community-specific baseline mortality rates ($B_c$), calculates equation \ref{eq:healthimpacts} for each heat wave, and then sums up the total excess deaths across all heat waves: 
+This impact assessment equation can be translated into a function that merges each projection's heat wave data frame with a data frame of community-specific baseline mortality rates ($B_c$), calculates equation \ref{eq:healthimpacts} for each heat wave, and then sums up the total excess deaths across all heat waves. In this example, we have set the default relative risk for a heat wave as 1.032, based on the estimated added heat wave relative risk in 107 U.S. communities for heat waves defined as two or more days at or above a community's 98\textsuperscript{th} percentile temperature \citep{anderson2009weather}.
 
-\begin{verbatim}
+```
 excess_deaths <- function(hw_datafr, base_mortality, RR = 1.032){
         hw_datafr <- dplyr::left_join(hw_datafr, base_mortality,
                                       by = "city") %>%
-                dplyr::mutate(excess_deaths = base_mort * length * RR)
+                dplyr::mutate(excess_deaths = base_mort * (RR - 1) * length)
         out <- sum(hw_datafr$excess_deaths)
+        out <- round(out)
         return(out)
 }
-\end{verbatim}
+```
 
-\noindent Once defined in R, this function can be applied across all heat waves from all climate models' ensemble members, provided that you have a data frame called `city_mortality` with columns with each community's identifier (`city`) and baseline mortality rate (`base_mort`), using the call: 
+```{r echo = FALSE}
+excess_deaths <- function(hw_datafr, base_mortality, RR = 1.032){
+        hw_datafr <- dplyr::left_join(hw_datafr, base_mortality,
+                                      by = "city") %>%
+                dplyr::mutate(excess_deaths = base_mort * (RR - 1) * length)
+        out <- sum(hw_datafr$excess_deaths)
+        out <- round(out)
+        return(out)
+}
+```
 
-```{r eval = FALSE}
+\noindent Once defined in R, this function can be applied across all heat waves from all climate models' ensemble members, provided that you have a data frame called \code{city\_mortality} with columns with each community's identifier (\code{city}) and baseline mortality rate (\code{base\_mort}), using the call (this example uses hypothetical baseline mortality rates for the cities and requires the \CRANpkg{dplyr} package \citep{dplyr}): 
+
+```{r message = FALSE}
+library(dplyr)
+city_mortality <- data.frame(city = c("balt", "nwk", "ny", "phil", "prov"),
+                             base_mort = c(3, 2.5, 35, 6, 2.5))
 apply_all_models(out = out, FUN = excess_deaths, base_mortality = city_mortality)
 ```
 
-As examples of the type of functions that can be used with `apply_all_models`, we have included several simple functions for exploring heat waves (Table \ref{tab:applyfunctions}). We included an example data frame representative of the heat wave data frames that `gen_hw_set` outputs, to use to test new functions. This data can be loaded with `data(hw_datafr)`. The process for creating a new function to use to explore heatwaves should be to: 
-
-1. Load the example data frame with `load(hw_datafr)`;
-2. Build a function that works with `hw_datafr` as an input; and 
-3. Apply the function with `apply_all_models` to process all of the heat wave files.
-
-\begin{table}
-\centering
-\begin{tabular}{ll}
-\toprule
-Function & Description \\
-\midrule
-\code{number\_of\_heatwaves} & Determines the number of extreme events\\
-\code{heatwave\_days} & Sums up the total number of extreme event days across all heat waves\\
-\code{average\_length} & Calculates the average length of extreme events\\
-\code{average\_mean\_temp} & Calculates the average mean temperature across all extreme events\\
-\bottomrule
-\end{tabular}
-\caption{Example functions included in the \pkg{futureheatwaves} package that can be used to explore extreme events using the \code{apply\_all\_models} function.}
-\label{tab:applyfunctions}
-\end{table}
+\noindent While this example impact analysis is simplistic, it provides an example of how the \code{apply\_all\_models} function can be used in conjunction with epidemiologic results to estimate the potential health impacts of extreme events with climate change.
 
 ## Customizing dates for projections and reference temperatures
 
@@ -375,9 +313,9 @@ gen_hw_set(out = "example_results",
            projectionBoundaries = c(2060, 2079))
 ```
 
-The heat wave data sets characterize heat wave in several ways that are based on relative temperature (for example, the `mean.temp.quantile`, `max.temp.quantile`, and `min.temp.quantile` columns described in Table \ref{tab:hwcharacteristics}). These characteristics are measured for each of the heat waves identified by the `gen_hw_set` function by taking the absolute temperature of the heat wave (e.g., average temperature during the heat wave is $90^oF$) and comparing it to the heat wave location's typical temperature distribution. This process generates relative measures of how intense the heat wave is compared to what is normal in that location (e.g., $90^oF$ is in the $99^{th}$ percentile of year-round temperatures in the location). 
+The heat wave data sets characterize heat wave in several ways that are based on relative temperature (for example, the `mean.temp.quantile`, `max.temp.quantile`, and `min.temp.quantile` columns described in Table \ref{tab:hwcharacteristics}). These characteristics are measured for each of the heat waves identified by the `gen_hw_set` function by taking the absolute temperature of the heat wave (e.g., average temperature during the heat wave is 90\textsuperscript{o}F) and comparing it to the heat wave location's typical temperature distribution. This process generates relative measures of how intense the heat wave is compared to what is normal in that location (e.g., 90\textsuperscript{o}F is in the 99\textsuperscript{th} percentile of year-round temperatures in the location). 
 
-The values of these relative heat wave characteristics will depend on what time period is used to determine the location's typical temperature distribution. For example, the same heat wave would likely have much higher values for these relative characteristics if the temperature during the heat wave is compared to typical temperatures in the present day for that location versus if the temperature is compared to typical temperatures much later in the $21^{st}$ century for the same location.
+The values of these relative heat wave characteristics will depend on what time period is used to determine the location's typical temperature distribution. For example, the same heat wave would likely have much higher values for these relative characteristics if the temperature during the heat wave is compared to typical temperatures in the present day for that location versus if the temperature is compared to typical temperatures much later in the 21\textsuperscript{st} century for the same location.
 
 The default in the `gen_hw_set` function is to use temperatures for the period 2070 to 2079 for these reference temperatures to calculate all relative heat wave characteristics. However, the user can change this specification using the `referenceBoundaries` option of `gen_hw_set`. This functionality can be useful in exploring the role of adaptation in future heat waves. For example, to use temperature projections for 1990 to 1999 when calculating relative characteristics of heat waves, to explore the assumption that cities remain adapted to their present-day climate, rather than changing in adaptation as climate change increases temperatures, a user could run: 
 
@@ -436,7 +374,7 @@ gen_hw_set(out = "example_results",
 
 >  Extreme statistics and spell-lengths: "A 'frost day' is defined as one during which the minimum temperature falls below freezing point (0 degC). This is described as a climatological statistic, in which the minimum temperature is first calculated within each day, and then the number of days or spell lengths meeting the specified condition are evaluated." (from one example in http://cfconventions.org/Data/cf-conventions/cf-conventions-1.6/build/cf-conventions.html#calendar)
 
-Users doing these kinds of extensions will need to pay attention to a few points. First, some of the event characteristics (first in the calendar year, average of May--September temperatures, days above $90^{o}F$) might not be meaningful for studies of other types of events. Further, because event periods are usually defined as a string of multiple days exceeding some threshold, the functions in this package may miss the first and last event of the time period. For example, if the first day of the time series is the last day of an event, this function would not identify that event because it lacks data from the earlier days that allow this day to meet the event definition. This issue would lead to, at most, missing two events out of each projection, but should be considered if studying events that might occur near the start and end of projection data. If there is adequate interest from researchers, in the future we may adapt the package to make these secondary applications part of the package. 
+Users doing these kinds of extensions will need to pay attention to a few points. First, some of the event characteristics (first in the calendar year, average of May--September temperatures, days above 90\textsuperscript{o}F) might not be meaningful for studies of other types of events. Further, because event periods are usually defined as a string of multiple days exceeding some threshold, the functions in this package may miss the first and last event of the time period. For example, if the first day of the time series is the last day of an event, this function would not identify that event because it lacks data from the earlier days that allow this day to meet the event definition. This issue would lead to, at most, missing two events out of each projection, but should be considered if studying events that might occur near the start and end of projection data. If there is adequate interest from researchers, in the future we may adapt the package to make these secondary applications part of the package. 
 
 # Acknowledgements
 

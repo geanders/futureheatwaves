@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 
 # Overview 
 
-The `futureheatwaves` package takes a directory of climate projection files and, for each, identifies and characterizes all heat waves. The definition used to identify heat waves can be customized. Characterizations include several metrics of heat wave length, intensity, and timing in the year. Heat waves can be explored by applying custom functions across all generated heat wave files.
+The `futureheatwaves` package takes a directory of climate projection files and, for each, identifies and characterizes all of a certain type of multi-day extreme events (e.g., heat waves). The definition used to identify extreme events can be customized. Characterizations include several metrics of event length, intensity, and timing in the year. The identified extreme events can be explored by applying custom functions across all generated heat wave files.
 
 # Installing
 

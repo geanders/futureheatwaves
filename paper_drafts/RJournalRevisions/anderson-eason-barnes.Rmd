@@ -81,13 +81,13 @@ The CMIP5 climate model output data is distributed across data nodes at differen
 
 CMIP5 files are saved in Network Common Data Format (netCDF). NetCDF is a binary file format that allows storage of data representing a regular array. These climate model output files can be as large as several gigabytes [?]. For climate model output at a single level (e.g., near-surface air temperature), the data is a 3-dimensional array, with dimensions representing time and two coordinates of location (e.g., latitude and longitude) (Figure \ref{fig:netcdfexample}). Global climate models generate output at regularly-spaced time steps, typically at regularly-spaced grid points around the world. The latitude and longitude spacing of grid points vary by climate model, but are typically 1--2 degrees for atmospheric variables in CMIP5 models \citep{IPCCch9}. Each data point in the netCDF array gives the modeled value of the variable (e.g., surface temperature) for a single time point and location. For CMIP5 climate model output, the location units are in degrees east and degrees north for longitude and latitude, respectively. For daily output files, the time unit is in days since a specified origin date-time (e.g., days since 1850-01-01 00:00:00) \citep{taylor2010cmip5}. All CMIP5 output files are required to include certain metadata  \citep{taylor2010cmip5}. This required metadata includes the experiment, forcing agents input to the model to create the simulation, time step, institution and institutional contact information, climate model, and modeling realm \citep{taylor2010cmip5}. The metadata also must include units for all of the coordinate variables (e.g., longitude, latitude, time). 
 
-\begin{widefigure}
+\begin{figure}
 \begin{center}
 \includegraphics[width = \textwidth]{netcdf_figure}
 \end{center}
 \caption{Example of structure of a NetCDF climate model output file for a variable reported at a single depth, like surface air temperature. Data are stored in a three-dimensional array, with measurements at each time step and grid location. Surface temperature data are typically indexed in climate model output files by longitude, latitude, and time, in that order. For example, if the air surface temperature ("tas") is read into an R object called \code{tas}, you can access the value for the first day at the fourth longitude and third latitude with \code{tas[4, 3, 1]}. In addition to the output variable (temperature in this example), vectors with the ordered values of each dimension (longitude, latitude, and time) can also be read in from the netCDF file, as well as attribute data (e.g., units for variables, the calendar used for time).}
 \label{fig:netcdfexample}
-\end{widefigure}
+\end{figure}
 
 \citet{taylor2012overview} and \citet{meehl2007wcrp} are excellent resources for finding out more about the CMIP climate model output data. 
 

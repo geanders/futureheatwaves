@@ -20,18 +20,20 @@ There are a number of parameters that can be used to search files, including:
 
 - **"Institute"**: The climate modeling group that created the climate model. A list with the full names and IDs for each of these is available at http://cmip-pcmdi.llnl.gov/cmip5/docs/CMIP5_modeling_groups.pdf. Output from a few groups is restricted to non-commercial use. Several institutes have multiple models.
 - **"Climate model"**: The name of the climate model used to produce the output. Chapter 9 of the Intergovernmental Panel on Climate Change (IPCC)'s Fifth Assessment Report provides an evaluation of climate models [available at https://www.ipcc.ch/pdf/assessment-report/ar5/wg1/WG1AR5_Chapter09_FINAL.pdf; @IPCCch9]. 
-- **"Experiment"**: The scenario of external, time-varying values (e.g., greenhouse gas concentrations) that are input to the model. Standard experiments are "historical" (typically uses observed or reconstructed data from 1850 to 2005 as model inputs), "piControl" (pre-Industrial control), "rcp45" (uses concentrations based on a scenario of forcing agents from 2006 to 2100), and "rcp85" (same period as "rcp45", but with a different scenario of forcing agents). For more information on the CMIP5 experiment design, see Taylor et al. [-@taylor2012overview] and  http://cmip-pcmdi.llnl.gov/cmip5/experiment_design.html. 
+- **"Experiment"**: The scenario of external, time-varying values (e.g., greenhouse gas concentrations) that are input to the model. Standard experiments are "historical" (uses observed or reconstructed data typically from 1850 to 2005 as model inputs), "piControl" (pre-Industrial control), "rcp45" (uses concentrations based on a scenario of forcing agents from 2006 to 2100), and "rcp85" (same period as "rcp45", but with a different scenario of forcing agents). For more information on the CMIP5 experiment design, see Taylor et al. [-@taylor2012overview] and  http://cmip-pcmdi.llnl.gov/cmip5/experiment_design.html. 
 - **"Time frequency"**: The time step of model output (e.g., day, month, year)
 - **"Ensemble"**: The ensemble member. Many climate models are run with multiple ensemble members, to allow exploration of uncertainty related to internal climate variability. For different ensemble member run for a climate model and experiment, the initial conditions are changed by a small amount, but the model and time-varying inputs are identical. The most common ensemble member is "ri1ip1". 
 - **"Variable"**: The variable output by the model. Examples available at the near-surface include "tas" (near-surface air temperature), "tasmin" (daily minimum near-surface air temperature), "tasmax" (daily maximum near-surface air temperature), "hurs" (near-surface relative humidity), "pr" (precipitation). Explanations of variable abbreviations are available at http://cmip-pcmdi.llnl.gov/cmip5/docs/standard_output.pdf. 
 
-You can download files from https://pcmdi.llnl.gov/search/cmip5/ using a point-and-click interface, but you can also use their ... [search API] to create a wget script that can be used to download many files at once and to later update files by only downloading those that have changed since the last download. These climate model output files can be very large, so be sure you have adequate disk space before downloading.
+You can download files from https://pcmdi.llnl.gov/search/cmip5/ using a point-and-click interface, but you can also use their [ESGF Search RESTful API](https://github.com/ESGF/esgf.github.io/wiki/ESGF_Search_REST_API) to create a wget script that can be used to download many files at once and to later update files by only downloading those that have changed since the last download. These climate model output files can be very large, so be sure you have adequate disk space before downloading.
 
 ## Working with netCDF files in R
 
 To try out the examples in this section, you will need to download the following climate model output file to your own computer from https://pcmdi.llnl.gov/search/cmip5/ and save it in a "tmp" subdirectory of your home directory: 
 
-- tas_day_GFDL-ESM2G_historical_r1i1p1_19860101-19901231.nc
+- tas_day_GFDL-ESM2G_rcp85_r1i1p1_20710101-20751231.nc
+
+As a note, the CMIP5 file names encode information about the climate model output given in the file, including the variable (here, "tas", the near-surface air temperature), the experiment ("historical"), the dates covered by the output (Jan. 1, 1986 to Dec. 31, 1990), the climate model ("GFDL-ESM2G", from the NOAA Geophysical Fluid Dynamics Laboratory), the time step of the output ("day"), and the ensemble member ("r1i1p1").
 
 Three R packages--- `ncdf4`, `ncdf4.helpers`, and `PCICt`---provide useful tools for working with netCDF climate model output files. 
 
@@ -50,117 +52,115 @@ library(tidyr)
 library(ggplot2)
 ```
 
-As an example, say you have a climate model output file saved locally called "tas_day_GFDL-ESM2G_historical_r1i1p1_19860101-19901231.nc". As a note, the CMIP5 file names encode information about the climate model output given in the file, including the variable (here, "tas", the near-surface air temperature), the experiment ("historical"), the dates covered by the output (Jan. 1, 1986 to Dec. 31, 1990), the climate model ("GFDL-ESM2G", from the NOAA Geophysical Fluid Dynamics Laboratory), the time step of the output ("day"), and the ensemble member ("r1i1p1").
-
-You can use the `nc_open` function from the `ncdf4` package to open a connection to a netCDF file. The version of netCDF changed from version 3 to version 4 in 2008, and some R packages for netCDF files will only work with the older version 3, but the `ncdf4` package can work with either. 
+You can read netCDF data in R using the `ncdf4` package. You can use the `nc_open` function from the `ncdf4` package to open a connection to a netCDF file. The version of netCDF changed from version 3 to version 4 in 2008, and some R packages for netCDF files will only work with the older version 3, but the `ncdf4` package can work with either. 
 
 ```{r eval = FALSE}
-climate_filepath <- paste0("~/tmp/tas_day_GFDL-ESM2G_historical",
-                           "_r1i1p1_19860101-19901231.nc")
+climate_filepath <- paste0("~/tmp/tas_day_GFDL-ESM2G_rcp85",
+                            "_r1i1p1_20710101-20751231.nc")
 climate_output <- nc_open(climate_filepath)
 ```
 
 The `nc_open` function opens a connection to the netCDF file, but does not read all the data in the file into memory. Instead, this function reads into memory some information about the file, and it opens a connection that can be used in conjunction with other commands to read in specific parts of the data. Once you no longer need the file connection, you should close the connection with `nc_close`.
 
-If you print the object created by `nc_open`, you will get some metadata on the file, including the variables that are available in the file, which are used for dimensions, and what units each are in:
+If you print the object created by `nc_open`, you will get some metadata on the file, including the variables that are available in the file, which are used for dimensions, and what units each are in. For example, here is the output returned for the "tas_day_GFDL-ESM2G_rcp85_r1i1p1_20710101-20751231.nc" from CMIP5:
 
 ```{r eval = FALSE}
 climate_output
 ```
 
 ```
-## File ~/tmp/tas_day_GFDL-ESM2G_historical_r1i1p1_19860101-19901231.nc (NC_FORMAT_64BIT):
-## 
-##      8 variables (excluding dimension variables):
-##         double average_DT[time]   
-##             long_name: Length of average period
-##             units: days
-##         double average_T1[time]   
-##             long_name: Start time for average period
-##             units: days since 1861-01-01 00:00:00
-##         double average_T2[time]   
-##             long_name: End time for average period
-##             units: days since 1861-01-01 00:00:00
-##         float tas[lon,lat,time]   
-##             long_name: Near-Surface Air Temperature
-##             units: K
-##             valid_range: 100
-##              valid_range: 400
-##             cell_methods: time: mean
-##             coordinates: height
-##             missing_value: 1.00000002004088e+20
-##             _FillValue: 1.00000002004088e+20
-##             standard_name: air_temperature
-##             original_units: deg_k
-##             original_name: t_ref
-##             cell_measures: area: areacella
-##             associated_files: baseURL: http://cmip-pcmdi.llnl.gov/CMIP5/dataLocation areacella: areacella_fx_GFDL-ESM2G_historical_r0i0p0.nc
-##         double time_bnds[bnds,time]   
-##             long_name: time axis boundaries
-##             units: days since 1861-01-01 00:00:00
-##         double height[]   
-##             units: m
-##             positive: up
-##             long_name: height
-##             standard_name: height
-##             axis: Z
-##         double lat_bnds[bnds,lat]   
-##         double lon_bnds[bnds,lon]   
-## 
-##      4 dimensions:
-##         time  Size:1825   *** is unlimited ***
-##             long_name: time
-##             units: days since 1861-01-01 00:00:00
-##             cartesian_axis: T
-##             calendar_type: noleap
-##             calendar: noleap
-##             bounds: time_bnds
-##             standard_name: time
-##             axis: T
-##         lat  Size:90
-##             long_name: latitude
-##             units: degrees_north
-##             standard_name: latitude
-##             axis: Y
-##             bounds: lat_bnds
-##         lon  Size:144
-##             long_name: longitude
-##             units: degrees_east
-##             standard_name: longitude
-##             axis: X
-##             bounds: lon_bnds
-##         bnds  Size:2
-##             long_name: vertex number
-##             cartesian_axis: N
-## 
-##     27 global attributes:
-##         title: NOAA GFDL GFDL-ESM2G, historical (run 1) experiment output for CMIP5 AR5
-##         institute_id: NOAA GFDL
-##         source: GFDL-ESM2G 2010 ocean: TOPAZ (TOPAZ1p2,Tripolar360x210L63); atmosphere: AM2 (AM2p14,M45L24); sea ice: SIS (SISp2,Tripolar360x210L63); land: LM3 (LM3p7_cESM,M45)
-##         contact: gfdl.climate.model.info@noaa.gov
-##         project_id: CMIP5
-##         table_id: Table day (31 Jan 2011)
-##         experiment_id: historical
-##         realization: 1
-##         modeling_realm: atmos
-##         tracking_id: d5867000-34f6-4440-b05b-7c27b96f07d1
-##         Conventions: CF-1.4
-##         references: The GFDL Data Portal (http://nomads.gfdl.noaa.gov/) provides access to NOAA/GFDL's publicly available model input and output data sets. From this web site one can view and download data sets and documentation, including those related to the GFDL coupled models experiments run for the IPCC's 5th Assessment Report and the US CCSP.
-##         comment: GFDL experiment name = ESM2G-C2_all_historical_HC2. PCMDI experiment name = historical (run1). Initial conditions for this experiment were taken from 1 January of year 1861 of the parent experiment, ESM2G-C2_1700-1860_historical_HC2, which is an unpublished experiment branched from 1 January of year 1 of 1860 control model experiment, ESM2G_pi-control_C2 (piControl). This parent experiment is an extension of piControl except historical transitions of land use are applied from 1700-1860 in order to allow the terrestrial carbon stores to respond to the imposition of land use and produce realistic fluxes by the start of the historical run in 1861. Several forcing agents varied during the 145 year duration of the ESM2G-C2_all_historical_HC2 experiment in a manner based upon observations and reconstructions for the late 19th and 20th centuries. The aerosol concentrations were computed by an off-line model. The time varying forcing agents include the well-mixed greenhouse gases (CO2, CH4, N2O, halons), tropospheric and stratospheric O3, aerosol concentrations (sulfate, black and organic carbon, sea salt, dust), volcanic aerosols, solar irradiance and land use transitions. The direct effect of tropospheric aerosols is calculated by the model, but not the indirect effects.
-##         gfdl_experiment_name: ESM2G-C2_all_historical_HC2
-##         creation_date: 2011-11-19T19:42:38Z
-##         model_id: GFDL-ESM2G
-##         branch_time: 58765
-##         experiment: historical
-##         forcing: GHG,SD,Oz,LU,Sl,Vl,SS,BC,MD,OC (GHG includes CO2, CH4, N2O, CFC11, CFC12, HCFC22, CFC113)
-##         frequency: day
-##         initialization_method: 1
-##         parent_experiment_id: historicalMisc
-##         physics_version: 1
-##         product: output1
-##         institution: NOAA GFDL(201 Forrestal Rd, Princeton, NJ, 08540)
-##         history: File was processed by fremetar (GFDL analog of CMOR). TripleID: [exper_id_eDfXZpMNeR,realiz_id_rexsamlwoA,run_id_bSxBCxpGE5]
-##         parent_experiment_rip: r1i1p1
+File ~/tmp/tas_day_GFDL-ESM2G_rcp85_r1i1p1_20710101-20751231.nc (NC_FORMAT_64BIT):
+
+     8 variables (excluding dimension variables):
+        double average_DT[time]   
+            long_name: Length of average period
+            units: days
+        double average_T1[time]   
+            long_name: Start time for average period
+            units: days since 2006-01-01 00:00:00
+        double average_T2[time]   
+            long_name: End time for average period
+            units: days since 2006-01-01 00:00:00
+        float tas[lon,lat,time]   
+            long_name: Near-Surface Air Temperature
+            units: K
+            valid_range: 100
+             valid_range: 400
+            cell_methods: time: mean
+            coordinates: height
+            missing_value: 1.00000002004088e+20
+            _FillValue: 1.00000002004088e+20
+            standard_name: air_temperature
+            original_units: deg_k
+            original_name: t_ref
+            cell_measures: area: areacella
+            associated_files: baseURL: http://cmip-pcmdi.llnl.gov/CMIP5/dataLocation areacella: areacella_fx_GFDL-ESM2G_rcp85_r0i0p0.nc
+        double time_bnds[bnds,time]   
+            long_name: time axis boundaries
+            units: days since 2006-01-01 00:00:00
+        double height[]   
+            units: m
+            positive: up
+            long_name: height
+            standard_name: height
+            axis: Z
+        double lat_bnds[bnds,lat]   
+        double lon_bnds[bnds,lon]   
+
+     4 dimensions:
+        time  Size:1825   *** is unlimited ***
+            long_name: time
+            units: days since 2006-01-01 00:00:00
+            cartesian_axis: T
+            calendar_type: noleap
+            calendar: noleap
+            bounds: time_bnds
+            standard_name: time
+            axis: T
+        lat  Size:90
+            long_name: latitude
+            units: degrees_north
+            standard_name: latitude
+            axis: Y
+            bounds: lat_bnds
+        lon  Size:144
+            long_name: longitude
+            units: degrees_east
+            standard_name: longitude
+            axis: X
+            bounds: lon_bnds
+        bnds  Size:2
+            long_name: vertex number
+            cartesian_axis: N
+
+    27 global attributes:
+        title: NOAA GFDL GFDL-ESM2G, RCP8.5 (run 1) experiment output for CMIP5 AR5
+        institute_id: NOAA GFDL
+        source: GFDL-ESM2G 2010 ocean: TOPAZ (TOPAZ1p2,Tripolar360x210L63); atmosphere: AM2 (AM2p14,M45L24); sea ice: SIS (SISp2,Tripolar360x210L63); land: LM3 (LM3p7_cESM,M45)
+        contact: gfdl.climate.model.info@noaa.gov
+        project_id: CMIP5
+        table_id: Table day (31 Jan 2011)
+        experiment_id: rcp85
+        realization: 1
+        modeling_realm: atmos
+        tracking_id: 547a3ae9-d62c-4ef5-91f3-3846156ca0ce
+        Conventions: CF-1.4
+        references: The GFDL Data Portal (http://nomads.gfdl.noaa.gov/) provides access to NOAA/GFDL's publicly available model input and output data sets. From this web site one can view and download data sets and documentation, including those related to the GFDL coupled models experiments run for the IPCC's 5th Assessment Report and the US CCSP.
+        comment: GFDL experiment name = ESM2G-HC2_2006-2100_all_rcp85_ZC2. PCMDI experiment name = RCP8.5 (run1). Initial conditions for this experiment were taken from 1 January 2006 of the parent experiment, ESM2G-C2_all_historical_HC2 (historical). Several forcing agents varied during the 95 year duration of the RCP8.5 experiment based upon the MESSAGE integrated assessment model for the 21st century. The time-varying forcing agents include the well-mixed greenhouse gases (CO2, CH4, N2O, halons), tropospheric and stratospheric O3, model-derived aerosol concentrations (sulfate, black and organic carbon, sea salt and dust), and land use transitions. Volcanic  aerosols were zero and solar irradiance varied seasonally based upon late 20th century averages but with no interannual variation. The direct effect of tropospheric aerosols is calculated by the model, but not the indirect effects.
+        gfdl_experiment_name: ESM2G-HC2_2006-2100_all_rcp85_ZC2
+        creation_date: 2011-11-21T22:35:45Z
+        model_id: GFDL-ESM2G
+        branch_time: 52925
+        experiment: RCP8.5
+        forcing: GHG,SD,Oz,LU,SS,BC,MD,OC (GHG includes CO2, CH4, N2O, CFC11, CFC12, HCFC22, CFC113)
+        frequency: day
+        initialization_method: 1
+        parent_experiment_id: historical
+        physics_version: 1
+        product: output1
+        institution: NOAA GFDL(201 Forrestal Rd, Princeton, NJ, 08540)
+        history: File was processed by fremetar (GFDL analog of CMOR). TripleID: [exper_id_4Uu6vwuRdV,realiz_id_guLAFs4zpC,run_id_19LHaF9KF9]
+        parent_experiment_rip: r1i1p1
 ```
 
 Once you know the names of variables in the file, you can use the `ncvar_get` function to read all values of that variable into an R object. For example, to get all the values of longitude and latitude in the example file, which define two of the dimensions of the array for the temperature values reported in the file, you can run:
@@ -186,17 +186,17 @@ summary(lat)
 ##  -89.49  -45.00    0.00    0.00   45.00   89.49
 ```
 
-In addition to the longitude and latitude dimensions, the climate model output files also include a time dimension. The metadata for the file includes information on how this time is reported, which is typically in days since some origin date for climate model output. These origin dates can vary across climate models. This information is included in the `$dim$time$units` element of the R object returns with `nc_open`:
+In addition to the longitude and latitude dimensions, the climate model output files also include a time dimension. The metadata for the file includes information on how this time is reported, which is typically in days since some origin date for climate model output. These origin dates can vary across climate models. This information is included in the `$dim$time$units` element of the R object returned with `nc_open`:
 
 ```{r eval = FALSE}
 climate_output$dim$time$units
 ```
 
 ```
-## [1] "days since 1861-01-01 00:00:00"
+## [1] "days since 2006-01-01 00:00:00"
 ```
 
-While the R function `as.Date` allows the user to specify an origin to compute a date, this function typically will not work correctly with climate model output files, as climate models often provide output using calendars other than the standard Gregorian calendar. Climate model output can be tied to a number of different calendars, including a "no-leap" calendar, which omits leap days from the calendar, a 360-day calendar, which uses 30-day months for all 12 months, and a number of other calendars. You can determine the calendar used to a netCDF file from the `$dim$time$calendar` element of the R object returns with `nc_open`:
+While the R function `as.Date` allows the user to specify an origin to use to compute a date, this function typically will not work correctly with climate model output files, as climate models often provide output using calendars other than the standard Gregorian calendar. Climate model output can be tied to a number of different calendars, including a "no-leap" calendar, which omits leap days from the calendar, a 360-day calendar, which uses 30-day months for all 12 months, and a number of other calendars. You can determine the calendar used for a netCDF file from the `$dim$time$calendar` element of the R object returns with `nc_open`:
 
 ```{r eval = FALSE}
 climate_output$dim$time$calendar
@@ -215,8 +215,8 @@ tas_time[c(1:3, length(tas_time) - 2:0)]
 ```
 
 ```
-## [1] "1986-01-01 12:00:00" "1986-01-02 12:00:00" "1986-01-03 12:00:00"
-## [4] "1990-12-29 12:00:00" "1990-12-30 12:00:00" "1990-12-31 12:00:00"
+## [1] "2071-01-01 12:00:00" "2071-01-02 12:00:00" "2071-01-03 12:00:00"
+## [4] "2075-12-29 12:00:00" "2075-12-30 12:00:00" "2075-12-31 12:00:00"
 ```
 
 The longitude, latitude, and time variables define the dimensions for climate model output for variables given at a single depth (e.g., near-surface variables; other variables like ocean temperature may also have a depth or pressure dimension). For the example file, this is the near-surface air temperature at a specific grid point (longitude, latitude) and day (time). You can read in this main variable using `ncvar_get`: 
@@ -259,36 +259,37 @@ length(tas_time)
 ## [1] 1825
 ```
 
-Once you have read all variables into R objects, you can close the file using: 
-
-```{r eval = FALSE}
-nc_close(climate_output)
-```
-
-You can use indexing to pull the modeled temperature at a certain location and time step. For example, Beijing, China, is at latitude 39.9 degrees north and 116.4 degrees east. To get the value of the modeled temperature on July 7, 1986, at the model grid point closest to Beijing, you can run (the units on the output are Kelvin):
+You can use indexing to pull the modeled temperature at a certain location and time step. For example, Beijing, China, is at latitude 39.9 degrees north and 116.4 degrees east. To get the value of the modeled temperature on July 15, 2075, at the model grid point closest to Beijing, you can run (the units on the output are Kelvin):
 
 ```{r eval = FALSE}
 lon_index <- which.min(abs(lon - 116.4))
 lat_index <- which.min(abs(lat - 39.9))
-time_index <- which(format(tas_time, "%Y-%m-%d") == "1986-07-01")
+time_index <- which(format(tas_time, "%Y-%m-%d") == "2075-07-15")
 tas[lon_index, lat_index, time_index]
 ```
 
 ```
-## [1] 294.8351
+## [1] 293.3458
 ```
 
-To get the full time series of modeled temperature at the grid point closest to Beijing, you can run: 
+If you only want to read in a certain section of the data from the netCDF, you can do that using the `nc.get.var.subset.by.axes` function from the package `ncdf4.helpers`. For example, to get and plot the full time series of modeled temperature at the grid point closest to Beijing, you can run: 
 
-```{r eval = FALSE, fig.width = 6, fig.height = 3, echo = c(1:3, 5:8)}
-beijing_output <- data_frame(time = tas_time,
-                             tas = tas[lon_index, lat_index, ]) %>%
-        mutate(time = as.Date(format(time, "%Y-%m-%d")))
+```{r eval = FALSE, fig.width = 6, fig.height = 3, echo = 2:15}
 png("figures/beijing_timeseries.png", height = 300, width = 600)
-beijing_output %>%
+lon_index <- which.min(abs(lon - 116.4))
+lat_index <- which.min(abs(lat - 39.9))
+tas <- nc.get.var.subset.by.axes(climate_output, "tas",
+                                 axis.indices = list(X = lon_index,
+                                                     Y = lat_index))
+data_frame(time = tas_time, 
+           tas = as.vector(tas)) %>%
+        mutate(time = as.Date(format(time, "%Y-%m-%d"))) %>%
         ggplot(aes(x = time, y = tas)) + 
-        geom_point(alpha = 0.7) + 
-        xlab("Date") + ylab("Temperature (K)")
+        geom_line() + 
+        xlab("Date") + ylab("Temperature (K)") + 
+        ggtitle("Daily modeled near-surface air temprature, 2071-2075",
+                subtitle = "At model grid point nearest Beijing, China") + 
+        theme_classic()
 dev.off()
 ```
 
@@ -298,48 +299,45 @@ knitr::include_graphics("figures/beijing_timeseries.png")
 
 Note that this code uses `format` and `as.Date` to convert the PCICt object to a date object, to allow use of a date axis when plotting with `ggplot2`.
 
-To get the modeled temperature on July 1, 1986, at all grid point locations, you can run: 
+To get the modeled temperature on July 15, 2075, at all grid point locations, you can run: 
 
 ```{r eval = FALSE}
-july_1_1986 <- tas[ , , time_index]
-july_1_1986[1:3, 1:3]
+july_15_2075 <- nc.get.var.subset.by.axes(climate_output, "tas",
+                                          axis.indices = list(T = time_index))
+july_15_2075[1:3, 1:3, ]
 ```
 
 ```
 ##          [,1]     [,2]     [,3]
-## [1,] 216.6672 217.9258 220.4663
-## [2,] 216.6740 217.6868 219.7293
-## [3,] 216.6812 217.2043 218.4953
+## [1,] 218.8687 214.4591 219.0996
+## [2,] 218.8718 214.2570 218.6634
+## [3,] 218.8741 213.7723 217.6466
 ```
 
-This data is a two-dimensional matrix, where the column is specific to longitude and the row to latitude. To tidy this data to make it easier to map with `ggplot2`, you can use `expand.grid` to create a dataframe with every combination of longitude and latitude, and then use `as.vector` with the temperature values for July 1, 1986, to add temperature values at each of these longitudes and latitudes. Because the longitude dimension precedes the latitude dimension in the `tas` array, it should be put first in the `expand.grid` so that longitude and latitude values align correctly with the unlisted temperature data. If longitude is expressed between 0 and 360 degrees, it should be mutated to have values between -180 and 180 to work better with `ggplot2` mapping. 
+This modeled temperature data for a single day can be mapped using `ggmap` and `ggplot2` functions (the `viridis` package is also used here for the color scale and the `weathermetrics` package to convert the temperature from Kelvin to Celsius). Because the data is a three-dimensional array, where the first element is specific to longitude and the second to latitude. To tidy this data to make it easier to map with `ggplot2`, you can use `expand.grid` to create a dataframe with every combination of longitude and latitude, and then use `as.vector` with the temperature values for July 15, 2075, to add temperature values at each of these longitudes and latitudes. Because the longitude dimension precedes the latitude dimension in the `tas` array, it should be put first in the `expand.grid` so that longitude and latitude values align correctly with the unlisted temperature data. If longitude is expressed between 0 and 360 degrees, it should be mutated to have values between -180 and 180 to work better with `ggplot2` mapping. 
 
-```{r eval = FALSE}
-all_coords <- expand.grid(lon, lat) %>%
-        rename(lon = Var1, lat = Var2) %>%
-        mutate(lon = ifelse(lon > 180, -(360 - lon), lon),
-               tas = as.vector(july_1_1986))
-```
-
-This modeled temperature data for a single day can be mapped using `ggmap` and `ggplot2` functions (the `viridis` package is also used here for the color scale and the `weathermetrics` package to convert the temperature from Kelvin to Celsius):
-
-```{r eval = FALSE, fig.width = 8, fig.height = 4, message = FALSE, warning = FALSE, echo = c(1:4, 6:16)}
+```{r eval = FALSE, fig.width = 8, fig.height = 4, message = FALSE, warning = FALSE, echo = 2:21}
+png("figures/worldmap.png", height = 400, width = 800)
 library(ggmap)
 library(viridis)
 library(weathermetrics)
-
-png("figures/worldmap.png", height = 400, width = 800)
-all_coords %>% 
+time_index <- which(format(tas_time, "%Y-%m-%d") == "2075-07-15")
+tas <- nc.get.var.subset.by.axes(climate_output, "tas",
+                                 axis.indices = list(T = time_index))
+expand.grid(lon, lat) %>%
+        rename(lon = Var1, lat = Var2) %>%
+        mutate(lon = ifelse(lon > 180, -(360 - lon), lon),
+               tas = as.vector(tas)) %>% 
         mutate(tas = convert_temperature(tas, "k", "c")) %>%
         ggplot() + 
-        borders("world", colour="gray50", fill="gray50") + 
         geom_point(aes(x = lon, y = lat, color = tas),
-                   size = 0.7) + 
+                   size = 0.8) + 
+        borders("world", colour="black", fill=NA) + 
         scale_color_viridis(name = "Temperature (C)") + 
         theme_void() + 
         coord_quickmap() + 
-        ggtitle("Modeled temperature on July 1, 1986",
-                subtitle = "GFDL-ESM2G model, historical experiment, r1i1p1 ensemble member") 
+        ggtitle("Modeled temperature on a day in July 2075",
+                subtitle = "GFDL-ESM2G model, RCP8.5 experiment, r1i1p1 ensemble member") 
 dev.off()
 ```
 
@@ -347,11 +345,17 @@ dev.off()
 knitr::include_graphics("figures/worldmap.png")
 ```
 
+Once you have read all variables into R objects, you can close the file using: 
+
+```{r eval = FALSE}
+nc_close(climate_output)
+```
+
 ### Working with climate model output data with other R packages
 
 #### The `RCMIP5` package
 
-The `RCMIP5` package [@RCMIP5] can also be used to work with climate model output data. Some functions in this package only work with monthly or less frequent data (`checkTimePeriod`, `cmip5data`, functions that work with `cmip5data` objects like `filterDimensions` and `getProjectionMatrix`). The package's `getFileInfo` function, however, will work with CMIP5 files of any time step; this function identifies all CMIP5 files in a directory and creates a dataframe that parses the information contained in the file name. For example:
+The `RCMIP5` package [@RCMIP5] can also be used to work with climate model output data. Some functions in this package only work with monthly or less frequent data (`checkTimePeriod`, `cmip5data`, functions that work with `cmip5data` objects like `filterDimensions` and `getProjectionMatrix`). The package's `getFileInfo` function, however, will work with CMIP5 files of any time step; this function identifies all CMIP5 files in a directory and creates a dataframe that parses the information contained in the file name. For example, if you download the CMIP5 files required for the next section of the vignette in the "tmp" subdirectory of your home directory, you can parse their filenames to get information about the files by running:
 
 ```{r eval = FALSE}
 library(RCMIP5)
@@ -530,7 +534,7 @@ process_cmip5_file(filepath = paste0("~/tmp/tas_day_GFDL-ESM2G_",
 ```
 
 ```{r results = "hold", eval = FALSE}
-# Process two historical files for the GFDL-ESM2G model's r1i1p1
+# Process two scenario files for the GFDL-ESM2G model's r1i1p1
 # ensemble, RCP8.5 experiment
 process_cmip5_file(filepath = paste0("~/tmp/tas_day_GFDL-ESM2G_",
                                      "rcp85_r1i1p1_20710101-20751231.nc"),
@@ -556,7 +560,7 @@ process_cmip5_file(filepath = paste0("~/tmp/tas_day_GFDL-ESM2G_",
 ## NULL
 ```
 
-The data can now be processed by the `futureheatwaves` package. For example, to identify and characterize all heatwaves between 1986 and 1990 at the cities listed in the "chinese_cities.csv" file that comes with the package:
+The data can now be processed by the `futureheatwaves` package. For example, to identify and characterize all heatwaves between 2071 and 2080 at the cities listed in the "chinese_cities.csv" file that comes with the package:
 
 ```{r eval = FALSE}
 library(futureheatwaves)
@@ -588,14 +592,13 @@ gen_hw_set(out = "~/tmp/example_results",
 ## Read operation complete 
 ## Creating dataframe ~~ City:  Shanghai  ~~ City Number:  1  ~~ Cutoff:  300.9392 
 ## Creating dataframe ~~ City:  Beijing  ~~ City Number:  2  ~~ Cutoff:  300.7005 
-## Creating dataframe ~~ City:  Lanzhou  ~~ City Number:  3  ~~ Cutoff:  289.9989 
-## Creating dataframe ~~ City:  Xi'an  ~~ City Number:  4  ~~ Cutoff:  298.5163 
-## Creating dataframe ~~ City:  Harbin  ~~ City Number:  5  ~~ Cutoff:  295.8038 
-## Creating dataframe ~~ City:  Nanjing  ~~ City Number:  6  ~~ Cutoff:  300.9024 
-## Creating dataframe ~~ City:  Wuhan  ~~ City Number:  7  ~~ Cutoff:  300.1856 
-## Creating dataframe ~~ City:  Taiyuan  ~~ City Number:  8  ~~ Cutoff:  300.7942 
-## Creating dataframe ~~ City:  Changchun  ~~ City Number:  9  ~~ Cutoff:  296.1751 
-## Creating dataframe ~~ City:  Hangzhou  ~~ City Number:  10  ~~ Cutoff:  302.5694 
+## Creating dataframe ~~ City:  Xi'an  ~~ City Number:  3  ~~ Cutoff:  298.5163 
+## Creating dataframe ~~ City:  Harbin  ~~ City Number:  4  ~~ Cutoff:  295.8038 
+## Creating dataframe ~~ City:  Nanjing  ~~ City Number:  5  ~~ Cutoff:  300.9024 
+## Creating dataframe ~~ City:  Wuhan  ~~ City Number:  6  ~~ Cutoff:  300.1856 
+## Creating dataframe ~~ City:  Taiyuan  ~~ City Number:  7  ~~ Cutoff:  300.7942 
+## Creating dataframe ~~ City:  Changchun  ~~ City Number:  8  ~~ Cutoff:  296.1751 
+## Creating dataframe ~~ City:  Hangzhou  ~~ City Number:  9  ~~ Cutoff:  302.5694 
 ## Writing GFDL: r1i1p1
 ## Writing accumulators 
 ## All operations completed. Exiting.

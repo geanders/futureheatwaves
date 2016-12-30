@@ -6,7 +6,7 @@
 \maketitle
 
 \abstract{%
-Research on climate change impacts can require extensive processing, to
+Research on climate change impacts can require extensive processing to
 incorporate output from ensembles of different climate models and
 different simulations of each model. This processing can be particularly
 extensive when identifying and characterizing extreme events like heat
@@ -18,16 +18,17 @@ climate model output data in R. Further, we present the
 \pkg{futureheatwaves} package, which we developed to ease the process of
 identifying, characterizing, and exploring multi-day extreme events in
 climate model output. This package takes as input a directory of
-projection files from one or many climate models, identifies all of a
-specific type of extreme event (e.g., heat waves) for multiple cities
-using a user-specified event definition, and writes an output directory
-of files with these extreme events and their characteristics (e.g.,
-length, absolute and relative temperatures). The \pkg{futureheatwaves}
-package then allows the user to create custom functions and apply them
-across all event files; this functionality can be used either to explore
-extreme event patterns (e.g., average length and intensity across
-different climate models) or to apply epidemiological estimates to
-project health impacts under different scenarios.
+projection files from one or many climate models, identifies all
+occurrences of a specific type of extreme event (e.g., heat waves) for
+multiple cities using a user-specified event definition, and writes an
+output directory of files with these extreme events and their
+characteristics (e.g., length, absolute and relative temperatures). The
+\pkg{futureheatwaves} package then allows the user to create custom
+functions and apply them across all event files; this functionality can
+be used either to explore extreme event patterns (e.g., average length
+and intensity across different climate models) or to apply
+epidemiological estimates to project health impacts under different
+scenarios.
 }
 
 \section{Introduction}\label{introduction}
@@ -70,11 +71,10 @@ that are rare for a certain location (e.g., 98th percentile of local
 temperature distribution for identifying heat waves) \citep{IPCCch1}, as
 this event definition must be determined at each study location from
 climate model output. Further, it is often of interest to create
-summaries of multiple characteristics of these extreme events. One
-interest, for example, in interpreting climate change scenarios output
-is whether frequency of heat waves or warm spells will change, as well
-as how certain characteristics of these extreme events (e.g., length,
-intensity) will change under different scenarios \citep{IPCCch1}.
+summaries of multiple characteristics of these extreme events. For
+example, one may be interested in determining whether the frequency or
+characteristics (e.g., length, intensity) of heat waves or warm spells
+will change under certain climate change scenarios \citep{IPCCch1}.
 
 We begin this article with an overview of climate model output data,
 particularly daily data, for R users. We outline where data from CMIP5
@@ -84,27 +84,28 @@ this data, as well as aspects of the data (e.g., non-standard calendars)
 of which users should be aware when working with daily climate model
 output in R.
 
-After this overview, we present the \pkg{futureheatwaves} package. which
+After this overview, we present the \pkg{futureheatwaves} package which
 we created to aid in identifying and characterizing any type of
 multi-day extreme event from daily climate model output (Table
 \ref{tab:goals}). This package can be used to identify and characterize
 a variety of multi-day extreme events, but provides some functionality
 particularly useful in identifying and characterizing heat waves
-specifically. Quantifying the impacts of heat waves on human health
-suffer from additional sources of uncertainty beyond those inherent in
-projections of regional changes in surface temperature. These include:
-(1) uncertainty in the ability of communities to adapt to changing
-temperatures (the adaptation scenario) and (2) uncertainty in the
-definition of a heat wave itself. Thus, identifying and characterizing
-the impacts of future heat waves in state-of-the-art climate models
-requires analyzing hundreds of projections based on combinations of
-anthropogenic activity, climate model and ensemble member, adaptation
-scenario, and heat wave definition. Such an analysis is non-trivial. For
-example, to estimate the possible impacts of heat waves using 32
-ensemble members of CMIP5, two forcing scenarios, two different heat
-wave definitions, and five progressive assumptions about adaptation to
-heat, would require that one identify and characterize heat waves in 640
-separate temperature time series for each region of interest.
+specifically. Quantification of the impacts of heat waves on human
+health suffer from additional sources of uncertainty beyond those
+inherent in projections of regional changes in surface temperature.
+These include: (1) uncertainty in the ability of communities to adapt to
+changing temperatures (the adaptation scenario) and (2) uncertainty in
+the definition of a heat wave itself. Thus, identifying and
+characterizing the impacts of future heat waves in state-of-the-art
+climate models requires analyzing hundreds of projections based on
+combinations of anthropogenic activity, climate model and ensemble
+member, adaptation scenario, and heat wave definition. Such an analysis
+is non-trivial. For example, to estimate the possible impacts of heat
+waves using 32 ensemble members of CMIP5, two forcing scenarios, two
+different heat wave definitions, and five progressive assumptions about
+adaptation to heat, would require that one identify and characterize
+heat waves in 640 separate temperature time series for each region of
+interest.
 
 \begin{table}[t]
 \begin{center}
@@ -138,12 +139,12 @@ definitions can influence both health effect estimates
 defined differently than heat waves (for example, frost day spells may
 be defined as one or more days with temperature at or below
 32\textsuperscript{o}F / 0\textsuperscript{o}C). This package therefore
-allows the user to create and use a custom the extreme event definition
-used to identify events in the climate model output. Finally, this
-package allows the user to explore the extreme events identified in the
-climate model output with a function that can take a user-defined R
-function and apply it across all extreme event files generated for the
-separate ensemble members.
+allows the user to create and use a custom extreme event definition to
+identify events in the climate model output. Finally, this package
+allows the user to explore the extreme events identified in the climate
+model output with a function that can take a user-defined R function and
+apply it across all extreme event files generated for the separate
+ensemble members.
 
 \section{An overview of climate model output for R
 users}\label{an-overview-of-climate-model-output-for-r-users}
@@ -151,14 +152,14 @@ users}\label{an-overview-of-climate-model-output-for-r-users}
 \subsection{CMIP5 climate model output
 data}\label{cmip5-climate-model-output-data}
 
-For climate impact studies, a top source for climate model output files
-is the Coupled Model Intercomparison Project, which is currently in its
+For climate impact studies, a main source for climate model output is
+the Coupled Model Intercomparison Project, which is currently in its
 fifth phase (CMIP5). Over 20 climate modeling groups have created one or
 more climate models which, for this project, are run using standardized
 scenarios \citep{taylor2012overview}. The resulting output is uniform
 across modeling groups and has a consistent structure, which allows
 comparison of simulations from different models \citep{IPCCch9}. For
-CMIP5, each group created simulations under several experiments, with
+CMIP5, each group ran simulations under several experiments, with
 experiments varying in terms of the radiative forcing. This radiative
 forcing depends on time-varying model inputs (greenhouse gas emissions
 or concentrations, land use changes, etc.), which are specified for each
@@ -171,11 +172,11 @@ Some modeling groups created ensembles of output for a specific model
 and experiment, in which they ran the experiment multiple times with the
 model with very small changes to the initial conditions, resulting in
 multiple ensemble members for a single climate model and experiment.
-CMIP5 climate model output is created at a number of different time
+CMIP5 climate model output is archived at a number of different time
 steps (e.g., daily, monthly, seasonal, yearly) \citep{taylor2010cmip5},
-and some variables are reported at multiple depths in the ocean or
+and some variables are reported at multiple levels in the ocean or
 atmosphere (e.g., ocean temperature). Here, we will focus on data with a
-daily time step for variables reported at a single depth (e.g.,
+daily time step for variables reported at a single level (e.g.,
 near-surface air temperature).
 
 The CMIP5 climate model output data is distributed across data nodes at
@@ -205,11 +206,11 @@ tutorial on downloading files using wget).
 CMIP5 files are saved in Network Common Data Format (netCDF). NetCDF is
 a binary file format that allows storage of data representing a regular
 array. These climate model output files can be as large as several
-gigabytes {[}?{]}. For climate model output at a single depth (e.g.,
+gigabytes {[}?{]}. For climate model output at a single level (e.g.,
 near-surface air temperature), the data is a 3-dimensional array, with
-dimensions representing time and two metrics of location (e.g., latitude
-and longitude) (Figure \ref{fig:netcdfexample}). Global climate models
-generate output at regularly-spaced time steps, typically at
+dimensions representing time and two coordinates of location (e.g.,
+latitude and longitude) (Figure \ref{fig:netcdfexample}). Global climate
+models generate output at regularly-spaced time steps, typically at
 regularly-spaced grid points around the world. The latitude and
 longitude spacing of grid points vary by climate model, but are
 typically 1--2 degrees for atmospheric variables in CMIP5 models
@@ -219,7 +220,7 @@ point and location. For CMIP5 climate model output, the location units
 are in degrees east and degrees north for longitude and latitude,
 respectively. For daily output files, the time unit is in days since a
 specified origin date-time (e.g., days since 1850-01-01 00:00:00)
-\citep{taylor2010cmip5}. All CMIP5 output files are requred to include
+\citep{taylor2010cmip5}. All CMIP5 output files are required to include
 certain metadata \citep{taylor2010cmip5}. This required metadata
 includes the experiment, forcing agents input to the model to create the
 simulation, time step, institution and institutional contact
@@ -251,7 +252,7 @@ More recent packages, including \pkg{ncdf4} \citep{ncdf4} and
 required to conform with the earlier version (version 3)
 \citep{taylor2010cmip5} and so should work with any of these packages,
 although it is safer to write code using functions that can be used with
-version for in case future phases of CMIP do not require files to
+either version in case future phases of CMIP do not require files to
 conform with netCDF version 3.
 
 The netCDF format allows you to access metadata and variables describing
@@ -283,27 +284,27 @@ function from \pkg{ncdf4}).
 
 Since the late 1500s, Western dates have been set using the Gregorian
 calendar, which has 365.2425-day years. Some climate models, however,
-output to different calendars, including the Julian calendar (365.25-day
-years), a calendar where there are no leap years (365-day years), a
-calendar where every year is a leap year (366-day years), and a calendar
-of twelve 30-day months (360-day years) \citep{cfconventions}. With
-these non-Gregorian calendars, R's base functions for converting a
-vector to a Date class based on the number of days since an origin date
-(\code{as.Date}, \code{as.POSIXct}) do not return the desired values.
-The \pkg{PCICt} \citep{PCICt} and \pkg{ncdf4.helpers}
-\citep{ncdf4.helpers} packages provide further functionality with netCDF
-files that can be useful when working with climate model output data and
-provide particular help in working with different calendars. CMIP5
-netCDF files include information on the calendar used, which the
-\code{nc.get.time.series} function in \pkg{ncdf4.helpers} use to convert
-the ``time'' variable in the file to an object of the PCICt class, which
-provides Date-like functionality for 360- and 365-day calendars
-\citep{PCICt}. As a note, while these functions will help with handling
-most CMIP5 files, the CMIP5 standards allows use of other calendars
-which may not be succesfully handled by these functions, so it is
-important to assess whether the time variable range in the PCICt object
-correctly matches the expected date ranges for a file as you process
-CMIP5 data in R.
+are run using different calendars, including the Julian calendar
+(365.25-day years), a calendar where there are no leap years (365-day
+years), a calendar where every year is a leap year (366-day years), and
+a calendar of twelve 30-day months (360-day years)
+\citep{cfconventions}. With these non-Gregorian calendars, R's base
+functions for converting a vector to a Date class based on the number of
+days since an origin date (\code{as.Date}, \code{as.POSIXct}) do not
+return the desired values. The \pkg{PCICt} \citep{PCICt} and
+\pkg{ncdf4.helpers} \citep{ncdf4.helpers} packages provide further
+functionality with netCDF files that can be useful when working with
+climate model output data and provide particular help in working with
+different calendars. CMIP5 netCDF files include information on the
+calendar used, which the \code{nc.get.time.series} function in
+\pkg{ncdf4.helpers} use to convert the ``time'' variable in the file to
+an object of the PCICt class, which provides Date-like functionality for
+360- and 365-day calendars \citep{PCICt}. As a note, while these
+functions will help with handling most CMIP5 files, the CMIP5 standards
+allows use of other calendars which may not be succesfully handled by
+these functions, so it is important to assess whether the time variable
+range in the PCICt object correctly matches the expected date ranges for
+a file as you process CMIP5 data in R.
 
 The size of the climate model output files can be large enough that it
 may make more sense to work with smaller chunks of the data, rather than
@@ -312,16 +313,16 @@ reading all data into memory and working with the data all at once
 climate models and more than one ensemble member for each of those
 climate models.
 
-The following code gives an example of using a CMIP5 file and some of
-the R packages and functions discussed. Results include a map of
-near-surface air temperatures from a single climate model on a specific
-day in July 2075 (Figure \ref{fig:worldmap}) and a time series of daily
-near-surface air temperature simulations for the climate model grid
-point closest to Beijing, China (Figure \ref{fig:timeseries}). To try
-this example, you will need to download the file
-``tas\_day\_GFDL-ESM2G\_rcp85\_r1i1p1\_20710101-20751231.nc'' from
-\url{https://pcmdi.llnl.gov/search/cmip5/} and save it in the ``tmp''
-subdirectory of your home directory.
+The functions and packages described can be used to work with CMIP5
+netCDF files in R to do things like map near-surface air temperatures
+from a single climate model on a specific day in July 2075 (Figure
+\ref{fig:worldmap}) and pull a time series of daily near-surface air
+temperature simulations for the climate model grid point closest to
+Beijing, China (Figure \ref{fig:timeseries}). The
+``starting\_from\_netcdf'' vignette that comes with the
+``futureheatwaves'' package provides all code required to create these
+figures, as well as more details and code examples on working with CMIP5
+netCDF files in R.
 
 \begin{figure}
 \begin{center}
@@ -457,11 +458,11 @@ Column name & Description of characteristic \\
 
 \subsection{Example data}\label{example-data}
 
-We have included data files in the package to serve as example files, so
-users can try this package before applying it to their own directory of
-climate projection files. This example data comes from two climate
-models that are a part of CMIP5: (1) the model of the Beijing Climate
-Center, China Meteorological Administration (BCC)
+We have included data files in the package to serve as example files so
+that users can try this package before applying it to their own
+directory of climate projection files. This example data comes from two
+climate models that are a part of CMIP5: (1) the model of the Beijing
+Climate Center, China Meteorological Administration (BCC)
 \citep{xin2013introduction} and (2) the National Center for Atmospheric
 Research's (NCAR's) Community Climate System Model, version 4 (CCSM4)
 \citep{gent2011community}. We include one ensemble member from BCC
@@ -775,8 +776,8 @@ apply_all_models(out = out, FUN = excess_deaths, base_mortality = city_mortality
 \end{Soutput}
 \end{Schunk}
 
-\noindent While this example impact analysis is simplistic, it provides
-an example of how the \code{apply\_all\_models} function can be used in
+\noindent While the above impact analysis is simplistic, it provides an
+example of how the \code{apply\_all\_models} function can be used in
 conjunction with epidemiologic results to estimate the potential health
 impacts of extreme events with climate change.
 
@@ -785,7 +786,7 @@ temperatures}\label{customizing-dates-for-projections-and-reference-temperatures
 
 Depending on the climate model output data used and the research
 question, different projection periods may be of interest. For example,
-one research may want to explore extreme events in the 2050--2075
+one researcher may wish to explore extreme events in the 2050--2075
 period, while another may be interested in 2090--2100. The projection
 date range can be changed by specifying starting and ending years in the
 \code{projectionBoundaries} argument of the \code{gen\_hw\_set}

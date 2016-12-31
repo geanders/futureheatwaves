@@ -9,15 +9,12 @@
 #' @inheritParams apply_all_models
 #'
 #' @return A \code{ggplot2} object with a map of grid points for the climate
-#'    model that were used in processing heat waves for the study locations,
+#'    model that were used in processing extreme events for the study locations,
 #'    with a line drawn from each study locations to the grid point used for
 #'    it.
 #'
 #' @note This function creates a \code{ggplot2} object, so the output can be
-#'    edited using \code{ggplot2} functions. For this function to work
-#'    correctly, longitude must be expressed using non-negative decimal
-#'    degrees when setting up the climate projection files and community
-#'    location file for \code{\link{gen_hw_set}}.
+#'    edited using \code{ggplot2} functions.
 #'
 #' @examples
 #' out <- system.file("extdata/example_results", package = "futureheatwaves")
@@ -69,7 +66,7 @@ map_grid <- function(plot_model, out){
 #' @inheritParams apply_all_models
 #'
 #' @return A \code{leaflet} object with a map of grid points for the climate
-#'    model that were used in processing heat waves for the study locations,
+#'    model that were used in processing extreme events for the study locations,
 #'    with a line drawn from each study locations to the grid point used for
 #'    it. This map can be explored interactively.
 #'

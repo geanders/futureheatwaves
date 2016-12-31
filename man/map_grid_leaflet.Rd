@@ -9,14 +9,14 @@ map_grid_leaflet(plot_model, out)
 \arguments{
 \item{plot_model}{A character string with the name of the model to plot}
 
-\item{out}{Character string with pathname to which heat wave files were
+\item{out}{Character string with pathname to which extreme event files were
 written by \code{\link{gen_hw_set}}. Typically, this will be the same
 pathname as that specified with \code{out} when running
 \code{\link{gen_hw_set}}.}
 }
 \value{
 A \code{leaflet} object with a map of grid points for the climate
-   model that were used in processing heat waves for the study locations,
+   model that were used in processing extreme events for the study locations,
    with a line drawn from each study locations to the grid point used for
    it. This map can be explored interactively.
 }

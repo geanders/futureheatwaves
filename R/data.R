@@ -1,8 +1,8 @@
-#' Example data to input to heat wave identifier functions
+#' Example data to input to extreme event identifier functions
 #'
 #' This dataset provides an example of the dataframe to be input into a
-#' custom heat wave identification function. This dataset can be used to test a
-#' custom heat wave identification function before using the function
+#' custom extreme event identification function. This dataset can be used to test a
+#' custom extreme event identification function before using the function
 #' in \code{\link{gen_hw_set}}.
 #'
 #' @format A dataframe with 7,300 rows and 2 columns. The variables are:
@@ -13,10 +13,10 @@
 #' }
 "datafr"
 
-#' Example of heat wave characteristics dataset
+#' Example of extreme event characteristics dataset
 #'
 #' This dataset provides an example of the structure of the dataframe of
-#' heat waves and their characteristics, as created by \code{\link{gen_hw_set}}.
+#' extreme events and their characteristics, as created by \code{\link{gen_hw_set}}.
 #' This example dataset can be used in developing custom functions to use with
 #' \code{\link{apply_all_models}}.
 #'

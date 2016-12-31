@@ -3,7 +3,7 @@
 \docType{data}
 \name{hw_datafr}
 \alias{hw_datafr}
-\title{Example of heat wave characteristics dataset}
+\title{Example of extreme event characteristics dataset}
 \format{A dataframe with 258 rows and 23 columns. The variables are:
 \itemize{
    \item hw.number: A sequential number identifying each heat wave in a city;
@@ -71,7 +71,7 @@ hw_datafr
 }
 \description{
 This dataset provides an example of the structure of the dataframe of
-heat waves and their characteristics, as created by \code{\link{gen_hw_set}}.
+extreme events and their characteristics, as created by \code{\link{gen_hw_set}}.
 This example dataset can be used in developing custom functions to use with
 \code{\link{apply_all_models}}.
 }

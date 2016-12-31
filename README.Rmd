@@ -6,6 +6,8 @@ output:
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
+[![Build Status](https://travis-ci.org/geanders/futureheatwaves.svg?branch=master)](https://travis-ci.org/geanders/futureheatwaves)
+
 ```{r, echo = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
@@ -16,7 +18,7 @@ knitr::opts_chunk$set(
 
 # Overview 
 
-The `futureheatwaves` package takes a directory of climate projection files and, for each, identifies and characterizes all heat waves. The definition used to identify heat waves can be customized. Characterizations include several metrics of heat wave length, intensity, and timing in the year. Heat waves can be explored by applying custom functions across all generated heat wave files.
+The `futureheatwaves` package takes a directory of climate projection files and, for each, identifies and characterizes all of a certain type of multi-day extreme events (e.g., heat waves). The definition used to identify extreme events can be customized. Characterizations include several metrics of event length, intensity, and timing in the year. The identified extreme events can be explored by applying custom functions across all generated heat wave files.
 
 # Installing
 
@@ -44,7 +46,7 @@ There are extensive details on using this package in the package vignette, which
 vignette("futureheatwaves")
 ```
 
-A version of this vignette is also available through CRAN [here](https://cran.r-project.org/web/packages/futureheatwaves/vignettes/futureheatwaves.html).
+A version of this vignette is also available through CRAN [here](https://CRAN.R-project.org/package=futureheatwaves/vignettes/futureheatwaves.html).
 
 The development version of the package also includes a vignette with details on how to prepare CMIP5 netCDF climate model output files for use with this package. If you have downloaded the development version of the package directly from GitHub, you can access that vignette with: 
 

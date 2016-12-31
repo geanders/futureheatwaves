@@ -50,14 +50,14 @@ and RCP8.5 projections for 2060 to 2079).}
 \item{threshold_ensemble}{A character vector giving the name of the ensemble
 member that should be used when determining the city-specific threshold
 temperatures  for each climate model (e.g., \code{"r1i1p1"}). This
-threshold is used for relative heat wave definitions. See the
-\code{futureheatwaves} vignette for more on heat wave definitions.
+threshold is used for relative extreme event definitions. See the
+\code{futureheatwaves} vignette for more on extreme event definitions.
 If any climate model lacks that ensemble member for the specified
 dates for calculating the threshold, it will be excluded from the
 processing.}
 
 \item{thresholdBoundaries}{A numeric vector with the custom time boundaries
-to be used to determine the threshold temperatures for the heat wave
+to be used to determine the threshold variable values for the extreme event
 definition. The required format for this vector is c(start year, end
 year), with the restriction that bounds must be contained within the
 time boundaries of one of the two experiment subdirectories specified

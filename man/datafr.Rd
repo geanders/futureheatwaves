@@ -3,7 +3,7 @@
 \docType{data}
 \name{datafr}
 \alias{datafr}
-\title{Example data to input to heat wave identifier functions}
+\title{Example data to input to extreme event identifier functions}
 \format{A dataframe with 7,300 rows and 2 columns. The variables are:
 \itemize{
   \item date: A Date vector with the date of the projection
@@ -15,8 +15,8 @@ datafr
 }
 \description{
 This dataset provides an example of the dataframe to be input into a
-custom heat wave identification function. This dataset can be used to test a
-custom heat wave identification function before using the function
+custom extreme event identification function. This dataset can be used to test a
+custom extreme event identification function before using the function
 in \code{\link{gen_hw_set}}.
 }
 \keyword{datasets}

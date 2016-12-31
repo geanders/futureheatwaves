@@ -9,7 +9,7 @@ map_grid_leaflet(plot_model, out)
 \arguments{
 \item{plot_model}{A character string with the name of the model to plot}
 
-\item{out}{Character string with pathname to which heat wave files were
+\item{out}{Character string with pathname to which extreme event files were
 written by \code{\link{gen_hw_set}}. Typically, this will be the same
 pathname as that specified with \code{out} when running
 \code{\link{gen_hw_set}}.}

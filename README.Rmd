@@ -46,7 +46,7 @@ There are extensive details on using this package in the package vignette, which
 vignette("futureheatwaves")
 ```
 
-A version of this vignette is also available through CRAN [here](https://cran.r-project.org/web/packages/futureheatwaves/vignettes/futureheatwaves.html).
+A version of this vignette is also available through CRAN [here](https://CRAN.R-project.org/package=futureheatwaves/vignettes/futureheatwaves.html).
 
 The development version of the package also includes a vignette with details on how to prepare CMIP5 netCDF climate model output files for use with this package. If you have downloaded the development version of the package directly from GitHub, you can access that vignette with: 
 

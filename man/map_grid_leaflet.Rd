@@ -16,7 +16,7 @@ pathname as that specified with \code{out} when running
 }
 \value{
 A \code{leaflet} object with a map of grid points for the climate
-   model that were used in processing heat waves for the study locations,
+   model that were used in processing extreme events for the study locations,
    with a line drawn from each study locations to the grid point used for
    it. This map can be explored interactively.
 }

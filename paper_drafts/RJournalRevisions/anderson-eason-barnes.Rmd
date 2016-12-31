@@ -101,7 +101,7 @@ Since the late 1500s, Western dates have been set using the Gregorian calendar, 
 
 The size of the climate model output files can be large enough that it may make more sense to work with smaller chunks of the data, rather than reading all data into memory and working with the data all at once \citep{RCMIP5}. This problem aggregates when working with multiple climate models and more than one ensemble member for each of those climate models. 
 
-The functions and packages just described can be used to work with CMIP5 netCDF files in R to do things like map near-surface air temperatures from a single climate model on a specific day in July 2075 (Figure \ref{fig:worldmap}) and pull a time series of daily near-surface air temperature simulations for the climate model grid point closest to Beijing, China (Figure \ref{fig:timeseries}). The "starting_from_netcdf" vignette that comes with the "futureheatwaves" package provides all code required to create these figures, as well as more details and code examples on working with CMIP5 netCDF files in R.
+The functions and packages described can be used to work with CMIP5 netCDF files in R to do things like map near-surface air temperatures from a single climate model on a specific day in July 2075 (Figure \ref{fig:worldmap}) and pull a time series of daily near-surface air temperature simulations for the climate model grid point closest to Beijing, China (Figure \ref{fig:timeseries}). The "starting_from_netcdf" vignette that comes with the "futureheatwaves" package provides all code required to create these figures, as well as more details and code examples on working with CMIP5 netCDF files in R.
 
 ```{r eval = FALSE, echo = FALSE}
 # To try this example,you will need to download the file 

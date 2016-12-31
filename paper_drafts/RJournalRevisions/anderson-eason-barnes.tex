@@ -312,16 +312,16 @@ reading all data into memory and working with the data all at once
 climate models and more than one ensemble member for each of those
 climate models.
 
-The following code gives an example of using a CMIP5 file and some of
-the R packages and functions discussed. Results include a map of
-near-surface air temperatures from a single climate model on a specific
-day in July 2075 (Figure \ref{fig:worldmap}) and a time series of daily
-near-surface air temperature simulations for the climate model grid
-point closest to Beijing, China (Figure \ref{fig:timeseries}). To try
-this example, you will need to download the file
-``tas\_day\_GFDL-ESM2G\_rcp85\_r1i1p1\_20710101-20751231.nc'' from
-\url{https://pcmdi.llnl.gov/search/cmip5/} and save it in the ``tmp''
-subdirectory of your home directory.
+The functions and packages just described can be used to work with CMIP5
+netCDF files in R to do things like map near-surface air temperatures
+from a single climate model on a specific day in July 2075 (Figure
+\ref{fig:worldmap}) and pull a time series of daily near-surface air
+temperature simulations for the climate model grid point closest to
+Beijing, China (Figure \ref{fig:timeseries}). The
+``starting\_from\_netcdf'' vignette that comes with the
+``futureheatwaves'' package provides all code required to create these
+figures, as well as more details and code examples on working with CMIP5
+netCDF files in R.
 
 \begin{figure}
 \begin{center}

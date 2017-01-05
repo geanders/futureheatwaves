@@ -1,4 +1,4 @@
-# futureheatwaves 1.0.2.9000
+# futureheatwaves 1.0.3
 
 * Add a function to create interactive leaflet maps to explore relationship
 between study cities and associated climate model grid points for each 

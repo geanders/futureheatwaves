@@ -1,6 +1,8 @@
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 [![Build Status](https://travis-ci.org/geanders/futureheatwaves.svg?branch=master)](https://travis-ci.org/geanders/futureheatwaves)
 
+[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/futureheatwaves)](https://cran.r-project.org/package=futureheatwaves)
+
 Overview
 ========
 

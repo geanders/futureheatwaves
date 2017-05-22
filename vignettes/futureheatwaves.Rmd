@@ -604,16 +604,10 @@ As of version 1.0.3, the package has a new mapping function, `map_grid_leaflet`,
 map_grid_leaflet(plot_model = "bcc1", out = out)
 ```
 
-The development version, available on GitHub under the `devel` branch, also has the `map_grid_ggmap` function, which draws on `ggmap` functions to plot study cities and their matching climate model grid points on map background from Stamen Maps. The function is written to pull a background map just large enough to show all cities and climate model grid points. This mapping function works for study cities anywhere in the world. Here is the code to use to map study cities and matching climate model grid points for the example data included with the package:
+The package also has a function called `map_grid_ggmap` function, which draws on `ggmap` functions to plot study cities and their matching climate model grid points on map background from Stamen Maps. The function is written to pull a background map just large enough to show all cities and climate model grid points. This mapping function works for study cities anywhere in the world. Here is the code to use to map study cities and matching climate model grid points for the example data included with the package:
 
-```{r eval = FALSE, message = FALSE, warning = FALSE, fig.width = 5, echo = 2}
-png("figures/grid_map_example.png", height = 400, width = 600)
+```{r message = FALSE, warning = FALSE, fig.width = 5, echo = 2}
 map_grid_ggmap(plot_model = "bcc1", out = out)
-dev.off()
-```
-
-```{r echo = FALSE}
-knitr::include_graphics("figures/grid_map_example.png")
 ```
 
 ## Extensions

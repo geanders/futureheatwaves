@@ -19,7 +19,7 @@ Description: Inputs a directory of climate projection files and, for each,
     the National Institute of Environmental Health Sciences (R00ES022631), the
     National Science Foundation (1331399), and the Colorado State University
     Vice President for Research.
-License: GPL-2
+License: GPL>=2
 LazyData: TRUE
 Depends:
     R (>= 2.10)
@@ -28,7 +28,7 @@ Imports:
     dplyr (>= 0.4.3),
     ggplot2 (>= 2.0.0),
     ggthemes (>= 3.0.0),
-    leaflet (>= 1.0.1),
+    leaflet (>= 1.1.0),
     Rcpp (>= 0.12.5),
     stringr (>= 1.1.0),
     tidyr (>= 0.6.0)

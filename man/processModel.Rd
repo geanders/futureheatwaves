@@ -49,4 +49,3 @@ heat waves within projections for each of its ensemble members, writes
 those dataframes of heat wave projections out to the user-specified output
 directory, and stores information about the models and grid locations.
 }
-

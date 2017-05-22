@@ -38,4 +38,3 @@ comma-separated file in the directory specified by the user in the
 The closure created by this function closes over an incrementer variable
 for ensembles that advances each time the closure is called.
 }
-

@@ -34,4 +34,3 @@ data(hw_datafr)
 number_of_heatwaves(hw_datafr)
 
 }
-

@@ -22,4 +22,3 @@ numbers.}
 This is a helper function for IDHeatwavesCPP that adds entries
 to the data structures that track heatwave information
 }
-

@@ -20,4 +20,3 @@ custom extreme event identification function before using the function
 in \code{\link{gen_hw_set}}.
 }
 \keyword{datasets}
-

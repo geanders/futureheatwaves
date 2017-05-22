@@ -45,4 +45,3 @@ This function calls another function that uses Euclidean distance for
    \code{citycsv} file and the nearest grid point for the climate model
    for the specified ensemble member.
 }
-

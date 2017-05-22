@@ -56,4 +56,3 @@ This function generates a list object with the file structure of files
 in the \code{dataFolder} directory for a single experiment
 (e.g., "historical" or "rcp85").
 }
-

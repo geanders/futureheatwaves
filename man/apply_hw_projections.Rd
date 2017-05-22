@@ -41,4 +41,3 @@ The function input as \code{FUN} must follow a very specific
    applying a custom function to explore the extreme events identified and
    characterized by \code{\link{gen_hw_set}}.
 }
-

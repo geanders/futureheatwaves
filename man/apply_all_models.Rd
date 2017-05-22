@@ -55,4 +55,3 @@ apply_all_models(ex_results, FUN = average_mean_temp,
                  city_specific = TRUE)
 
 }
-

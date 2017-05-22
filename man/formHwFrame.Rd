@@ -103,4 +103,3 @@ the ensemble, and \code{global} and \code{custom} objects with user
 specifications. Using these inputs, the function creates a dataframe with
 heat waves identified and characterized for the ensemble member.
 }
-

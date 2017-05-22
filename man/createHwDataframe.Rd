@@ -126,4 +126,3 @@ time series from the date ranges specified by the user using the
 default, these references are based on projection data from 2070 to
 2079.
 }
-

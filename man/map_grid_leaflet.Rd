@@ -31,4 +31,3 @@ out <- system.file("extdata/example_results", package = "futureheatwaves")
 map_grid_leaflet(plot_model = "bcc1", out = out)
 
 }
-

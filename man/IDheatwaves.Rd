@@ -51,4 +51,3 @@ The function actually used to identify heat waves in the time series
    function using the argument \code{IDheatwavesFunction} in
    \code{\link{gen_hw_set}}.
 }
-

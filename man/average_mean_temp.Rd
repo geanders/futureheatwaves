@@ -34,4 +34,3 @@ data(hw_datafr)
 average_mean_temp(hw_datafr)
 
 }
-

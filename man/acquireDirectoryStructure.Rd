@@ -81,4 +81,3 @@ Projection, grid locations, and projection time files within the
    See the \code{futureheatwaves} vignette for more information about
    setting up the \code{dataFolder} directory.
 }
-

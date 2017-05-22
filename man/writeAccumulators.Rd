@@ -28,4 +28,3 @@ This function writes out a dataframe that accumulates information on all
 climate models included in the analysis, including the number of
 ensemble members in each of the two experiments.
 }
-

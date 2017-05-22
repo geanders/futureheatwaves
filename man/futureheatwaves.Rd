@@ -17,4 +17,3 @@ of Environmental Health Sciences (R00ES022631), the National Science
 Foundation (1331399), and the Colorado State University Vice President for
 Research.
 }
-

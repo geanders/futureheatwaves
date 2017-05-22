@@ -28,4 +28,3 @@ the user's selections in \code{lat_lon_colnames} for
 \code{\link{gen_hw_set}}. If there are extra columns besides those and the
 \code{city} column, this function removes them.
 }
-

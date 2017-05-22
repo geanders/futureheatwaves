@@ -26,4 +26,3 @@ This function identifies the closest grid points in a climate model to a
 city based on the city's latitude and longitude using the
 Euclidean distance.
 }
-

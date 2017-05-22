@@ -35,4 +35,3 @@ projection period. In that case, this function will acquire the time series
 of projected temperatures during the indicated reference period and pass
 that through to be used in a later function to characterize heat waves.
 }
-

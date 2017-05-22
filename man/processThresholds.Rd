@@ -39,4 +39,3 @@ heat waves in the climate projection data using the ensemble member specified
 by \code{threshold_ensemble} in \code{\link{gen_hw_set}}. This threshold is
 used in later functions to identify heat waves.
 }
-

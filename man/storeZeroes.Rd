@@ -21,4 +21,3 @@ numbers.}
 This function is a helper function that adds zeros to the data structures
 that track heat wave information
 }
-

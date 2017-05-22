@@ -22,4 +22,3 @@ A vector of the desired time boundaries, formatted as year-month-day.
 This function creates a vector that includes all the dates spanning the
 requested date range.
 }
-

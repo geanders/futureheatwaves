@@ -21,4 +21,3 @@ together into a single dataframe. This function is used to create a single
 dataframe with all heat waves from all study cities for an ensemble
 member.
 }
-

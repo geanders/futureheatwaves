@@ -31,4 +31,3 @@ A numeric vector containing the number of days spanned by the
 \description{
 This function acquires the boundaries of time series data.
 }
-

@@ -61,4 +61,3 @@ hw_ids <- IDHeatwavesCPPwrapper(threshold = 80, datafr = datafr,
                                 numDays = 3)
 
 }
-

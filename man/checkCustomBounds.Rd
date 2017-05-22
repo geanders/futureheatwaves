@@ -27,4 +27,3 @@ This function inputs the boundary lists specified in
 \code{referenceBoundaries}, and checks them for errors in structure of the
 input or in the years selected.
 }
-

@@ -63,4 +63,3 @@ file structure. This parsed file structure is later used to lead other
 code through all climate models and ensemble members in the input
 projection directory.
 }
-

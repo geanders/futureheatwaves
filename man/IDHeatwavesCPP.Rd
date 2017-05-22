@@ -22,4 +22,3 @@ A dataframe containing information about the heat waves for this
 \description{
 This function identifies heat waves that are a certain number of days long.
 }
-

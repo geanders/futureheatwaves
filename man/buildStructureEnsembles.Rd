@@ -49,4 +49,3 @@ This function reads through the user-specified \code{dataFolder} directory
 and creates a list with pathnames to all three files (projection times, grid
 points, and projections) for a single ensemble member.
 }
-

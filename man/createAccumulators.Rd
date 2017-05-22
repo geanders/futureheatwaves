@@ -36,4 +36,3 @@ similar manner to aggregate and then return meta-data on the models
 analyzed based on their inclusion in the user-specified projections
 directory.
 }
-

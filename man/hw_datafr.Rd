@@ -76,4 +76,3 @@ This example dataset can be used in developing custom functions to use with
 \code{\link{apply_all_models}}.
 }
 \keyword{datasets}
-

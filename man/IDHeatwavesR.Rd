@@ -56,4 +56,3 @@ hw_ids <- IDHeatwavesR(threshold = 80, datafr = datafr,
 }
 
 }
-

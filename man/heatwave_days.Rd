@@ -30,4 +30,3 @@ data(hw_datafr)
 heatwave_days(hw_datafr)
 
 }
-

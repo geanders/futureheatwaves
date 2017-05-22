@@ -28,4 +28,3 @@ model's grid pooints from a locally-stored comma-separated file located within
 the directory specified by the \code{dataFolder} argument of
 \code{\link{gen_hw_set}}.
 }
-

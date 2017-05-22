@@ -60,4 +60,3 @@ This function writes every heat wave dataframe to a .csv and returns
 This function, for each ensemble member, creates the heat wave dataframe and
 writes it to file. It also stores the locations for each ensemble.
 }
-

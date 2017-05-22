@@ -30,4 +30,3 @@ The closure encapsulates an incrementer varaible and advances it
    with every call. This variable is used to index into the \code{cities}
    vector from the \code{global} object passed into this function.
 }
-

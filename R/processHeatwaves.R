@@ -290,33 +290,30 @@ createHwDataframe <- function(city, threshold, heatwaves,
                 dplyr::summarize_(mean.var = ~ mean(tmpd),
                                  max.var = ~ max(tmpd),
                                  min.var = ~ min(tmpd),
-                                 length = ~ length(unique(date)),
-                                 end.date = ~ date[length(date)],
-                                 start.date.year = ~ ifelse(is.na(date[1]), # Feb. 30 problem in some climate data
-                                                            as.POSIXlt(date[length(date)])$year +
-                                                                    1900,
-                                                          NA),
+                                 length = ~ n(),
+                                 end.date = ~ last(date),
+                                 start.date.year = ~ ifelse(is.na(first(date)), # Feb. 30 problem in some climate data
+                                                            as.POSIXlt(last(date))$year + 1900,
+                                                            NA),
                                  start.date.2 = ~ as.Date(paste(start.date.year,
-                                                           "03", "01", sep = "-"),
+                                                                "03", "01", sep = "-"),
                                                           format = "%Y-%m-%d"),
-                                 start.date = ~ as.Date(ifelse(is.na(date[1]),
-                                                       start.date.2,
-                                                       date[1]),
-                                                       origin = c("1970-01-01")),
-                                 start.doy = ~ as.POSIXlt(as.Date(start.date,
-                                                          origin = "1970-01-01"))$yday,
-                                 start.month = ~ as.POSIXlt(as.Date(start.date,
-                                                            origin = "1970-01-01"))$mon + 1,
-                                 days.above.abs.thresh.1 = ~ length(date[tmpd > custom$absolute_thresholds[1]]),
-                                 days.above.abs.thresh.2 = ~ length(date[tmpd > custom$absolute_thresholds[2]]),
-                                 days.above.abs.thresh.3 = ~ length(date[tmpd > custom$absolute_thresholds[3]]),
-                                 days.above.abs.thresh.4 = ~ length(date[tmpd > custom$absolute_thresholds[4]]),
-                                 days.above.99th = ~ length(date[tmpd >
-                                                stats::quantile(ref_temps, .99,
-                                                         na.rm = TRUE)]),
-                                 days.above.99.5th = ~ length(date[tmpd >
-                                                stats::quantile(ref_temps, .995,
-                                                         na.rm = TRUE)])) %>%
+                                 start.date = ~ as.Date(ifelse(is.na(first(date)),
+                                                               start.date.2,
+                                                               first(date)),
+                                                        origin = c("1970-01-01")),
+
+
+
+
+                                 days.above.abs.thresh.1 = ~ sum(tmpd > custom$absolute_thresholds[1]),
+                                 days.above.abs.thresh.2 = ~ sum(tmpd > custom$absolute_thresholds[2]),
+                                 days.above.abs.thresh.3 = ~ sum(tmpd > custom$absolute_thresholds[3]),
+                                 days.above.abs.thresh.4 = ~ sum(tmpd > custom$absolute_thresholds[4]),
+                                 days.above.99th = ~ sum(tmpd > stats::quantile(ref_temps, .99, na.rm = TRUE)),
+                                 days.above.99.5th = ~ sum(tmpd > stats::quantile(ref_temps, .995, na.rm = TRUE))) %>%
+                dplyr::mutate_(start.doy = ~ lubridate::yday(start.date),
+                               start.month = ~ lubridate::month(start.date))  %>%
                 dplyr::select_(c("-start.date.year")) %>%
                 dplyr::select_(c("-start.date.2"))
 

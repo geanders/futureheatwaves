@@ -124,3 +124,16 @@ RcppExport SEXP futureheatwaves_RcppExport_registerCCallable() {
     R_RegisterCCallable("futureheatwaves", "futureheatwaves_RcppExport_validate", (DL_FUNC)futureheatwaves_RcppExport_validate);
     return R_NilValue;
 }
+
+static const R_CallMethodDef CallEntries[] = {
+    {"futureheatwaves_IDHeatwavesCPP", (DL_FUNC) &futureheatwaves_IDHeatwavesCPP, 2},
+    {"futureheatwaves_storeHeatwaveEntry", (DL_FUNC) &futureheatwaves_storeHeatwaveEntry, 5},
+    {"futureheatwaves_storeZeroes", (DL_FUNC) &futureheatwaves_storeZeroes, 4},
+    {"futureheatwaves_RcppExport_registerCCallable", (DL_FUNC) &futureheatwaves_RcppExport_registerCCallable, 0},
+    {NULL, NULL, 0}
+};
+
+RcppExport void R_init_futureheatwaves(DllInfo *dll) {
+    R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
+    R_useDynamicSymbols(dll, FALSE);
+}

@@ -1,3 +1,7 @@
+# futureheatwaves 1.0.4
+
+* Update version dependency for `leaflet`, so interactive mapping function (`map_grid_leaflet`) will work with `leaflet` installed from CRAN (rather than built from source).
+
 # futureheatwaves 1.0.3
 
 * Add a function to create interactive leaflet maps to explore relationship

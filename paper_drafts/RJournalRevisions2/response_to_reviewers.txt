@@ -1,0 +1,167 @@
+Thank you very much for the opportunity to revise and resubmit this manuscript. The
+reviewers made some excellent suggestions, and we have modified the manuscript to
+respond to these. In cases where suggested changes are beyond the scope of the described
+package, we have added text to the manuscript to explain how such proposed approaches could
+contribute as R programmers continue to evolve software solutions to working with climate model
+output in R, and we have tried to make some connections to how R-based approaches to working with
+large data continue to evolve in another topical areas with large, array-based data (flow
+cytometry). In addition, we have revised and updated the package that is described by this
+manuscript, both in response to reviewer suggestions and also to ensure functionality with recent
+updates to `dplyr` and other key imported packages that have undergone major updates since the
+original submission.
+
+Comments from Reviewer #1
+
+Comment: The authors answered quite satisfactory to the questions and also greatly
+improved the manuscript and the package. I recommend that the article
+should be published "as is" after solving a minor issue of the package: the
+function 'map_grid_leaflet' does not work correctly because it requires a
+local copy of the leaflet library.  Is it possible to put the http link of
+leaflet instead of a local one so that function works for any connected
+machine?
+
+Response: The current version of the package imports the latest version of
+`leaflet` from CRAN (version 1.1.0) and works with this version of leaflet,
+rather than a local copy of the leaflet library. The function will now
+work for any connected machine.
+
+... https://github.com/rstudio/leaflet/issues/192#issuecomment-286883019
+Also, "a network proxy which would block https requests" can cause problems?
+"Do you have a network proxy or VPN active on your machine or your network?"
+RStudio advice: https://support.rstudio.com/hc/en-us/articles/200488488-Configuring-R-to-Use-an-HTTP-or-HTTPS-Proxy
+
+Comments from Reviewer #2
+
+Comment: Climate science is fundamental to informing key societal decisions in the 21st
+century. The Climate Intercomparison Project (currently in Phase 5) is a valuable
+suite of Early system model outputs that continues to produce novel science. As
+such, R packages to ingest and analyze these outputs could be quite valuable to the
+community, particularly to field scientists and experimentalists who are not familiar
+with the more idiosyncratic pipelines traditionally used by Earth system modelers. That
+being said, this package does not address the most pressing barriers to data access and
+interpretation, and I'm unclear that this manuscript describes a package that is
+sufficiently novel to warrent publication.
+
+Response: We appreciate the reviewer's point that the described package does not
+resolve all the challenges of working with climate model output data in R.
+However, we think that the package described offers an important step forward in making the
+ensemble techniques that have become popular in climate science research more accessible to
+researchers who are conducting climate impact studies but are not themselves climate scientists.
+We have added a "Motivation" subsection to the manuscript section describing the `futureheatwaves`
+package to clarify this point:
+
+Added text: "We created the `futureheatwaves` package to aid in identifying, characterizing, and
+exploring multi-day extreme events in daily climate model output data. While most of the discrete
+tasks involved in identifying and characterizing multi-day extreme events are fairly
+straightforward, the full process can be code-intensive, especially for multi-city studies and
+studies that test sensitivity to how an event is defined or that incorporate different scenarios of
+adaptation in the case of events defined using a threshold relative to community climate. Our aim
+in developing this package was therefore to make the full process of identifying and characterizing
+these extreme events much more convenient and so facilitate the use of multi-model, multi-ensemble
+member analyses in climate impact studies conducted by non-climate scientists."
+
+Further, we have also added a section to the end of the paper ("Future directions for working
+with climate model output in R") that describes how future software development in R could
+tackle the challenges provided by climate data, to help put the package described in the current
+manuscript in context within the evolving use of R for research involving climate model output
+data.
+
+Comment: This article correctly identifies memory use and data format as a key issue for the
+usability of CMIP5 data, neither of which are addressed by this package. The user is required
+to use `ncdf4` to preprocess the CMIP5 outputs and script their own sub-setting routines. This
+sidesteps both the memory issue and data formatting. The comments on calendars being non-standard
+in the CMIP5 models is, again, useful and accurately identified but not addressed systematically
+in the package and left as an issue for the user to solve, albeit, with guidance. If parts of this
+process were hard coded (for example, Model A has a 365-day calendar starting from 1800 and model
+B has a leap-year calendar starting from 1900) this could be very useful to the community.
+
+Response: We appreciate the reviewer's point that having information at hand on which calendar
+a climate models uses might be useful to those working with climate model output in R. Such a
+table, however, would be fairly complex if it included both the calendar and the reference date
+from which days are counted for all CMIP5 data. This is because, for some
+of the CMIP5 climate models, different calendars are used for different
+experiments, and difference reference dates are also used for different experiments within climate
+models.
+
+To provide some guidance to R users, however, we have added a link to the manuscript for a table
+provided in the Frequently Asked Questions section of the Earth System CoG website. This table
+gives the calendar (although not all starting reference dates) for each of the CMIP5 models,
+including notes of exceptions for certain experiments within some models. Here is the sentence
+we added to the manuscript with this link:
+
+Added text: "While most CMIP5 climate models use the same calendar for all experiments, a few do not; a full table of the calendars used for each climate model and experiment, pulled from netCDF metadata, is available at https://www.earthsystemcog.org/projects/cog/faq_data."
+
+In terms of the challenges presented by the large file sizes of climate
+model output, we do recommend some pre-processing of data files to subset files down
+to the geographic area and time range required for a study (e.g., North America for a national
+study of the United States) which would help reduce data size prior to processing climate model
+output through the described package. As the reviewer notes, we offer suggestions and guidance for
+conducting this pre-processing in R, both through text in the manuscript. We offer additional
+guidance through a vignette provided with the package described in the manuscript
+(https://cran.r-project.org/web/packages/futureheatwaves/vignettes/starting_from_netcdf.html).
+Even after pre-processing the files prior to using the `futureheatwaves` package, many research
+applications will still involve working with very large files. For example, a national study of the
+United States may still use files with daily temperatures for many decades at a large number of
+grid points, and an analysis that uses multiple climate models, some with multiple ensemble
+members, would still need to process a number of very large files. The `futureheatwaves` package
+addresses these large file sizes by inputting and processing data from each ensemble member of each
+climate model separately, avoiding the memory problems created by trying to load all data from all
+ensemble members into memory at once and processing the data using `apply`, `map`, `plyr`, or
+similar tools applied across all data at once.
+
+We acknowledge, however, that while this approach is successful in terms of allowing the
+identification and characterization of sustained extreme events in R, future software development
+could continue refining and optimizing the handling of climate model data in R. We have added a
+section to the end of the manuscript on future directions for climate model output data in R and
+have included comments on how such future work might be able to successfully draw on CDF-backed
+approaches recently created for handling flow cytometry data in R or on "data vault"-style
+approaches geared to improve ...
+
+[Added text]
+
+Comment: Some acknowledgement of NCL or CDO for merging, sub-setting, averaging, and otherwise
+manipulating netCDF files is warranted in this manuscript. These processes are MUCH faster in
+these specialty languages and then done via R and not to mention this when dealing with CMIP5
+data is remiss. One idea, although this completely changes the focus of the package, would be
+to create a wrapper for these speciality languages in R to leverage that speed.
+
+Response: Thank you for this suggestion. In the revised version of the manuscript, we have
+added references to both software tools, as well as text describing the availability of
+NCL and CDO for initial processing of climate model output files, including both the computation speed advantages and the disadvantage of needing to learn the syntax of a new language:
+
+"CMIP5 data are available in the netCDF file format. Free specialty software exists to work with
+climate model output files in this format, including a collection of command line tools developed
+by the Max Planck Institute called Climate Model Operators (CDO) (Schulzweida, 2017) and an
+interpreted language developed by the National Center for Atmospheric Research (NCAR) called the
+NCAR Command Language (NCL) (UCAR/NCAR Computational and Information SystemsLaboratory, 2017).
+Although such software can be used to quickly process netCDF climate model output files, they
+require learning a new language syntax, and so for R users may not be worth the computational speed
+gain compared to alternative solutions that can be scripted in the R language."
+
+Further, we have added a section to the end of the paper, in response to this and other comments
+from this reviewer, called "Future directions for working with climate model output in R". In this
+section, we have added some text outlining the reviewer's idea that wrappers for these two
+speciality languages could be an interesting next step to pursue as R software for working with
+climate model output data evolves, including references to existing libraries with wrappers in
+other languages (Python and Ruby):
+
+Added text: "One important step in future development of R software to work with climate model output could be the development of R wrappers for some of the existing command line tools available
+through the Climate Data Operators (CDO) software (Schulzweida, 2017). Libraries already exist for
+Python and Ruby that allow the functionality of CDO tools to be used within these scripting
+languages (available from the Max Planck Institute at
+https://code.zmaw.de/projects/cdo/wiki/Cdo%7Brbpy%7D). While one R package (`ncdf4.helpers`;
+Bronaugh, 2014) already provides R wrappers for a few CDO operators, such functionality could be
+extended through future R software to capture more of the full functionality of the CDO toolkit."
+
+Comment: The analysis that this package does is fairly straightforward using `plyr` or other
+common R packages / functions. The main function described in this article is the identifying
+and summing ranges of events. If a user made it far enough to do the pre-processing of the CMIP5
+output data I doubt this would be a computational barrier to further analysis. If authors could
+show notable speed or memory requirement improvement then this could be interesting.
+
+Response:
+
+Comment: Readability of the article is excellent.
+
+Response: Thank you. We have tried to maintain the same level of readability through our revisions
+in response to reviewers' comments.

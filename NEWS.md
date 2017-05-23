@@ -1,6 +1,7 @@
 # futureheatwaves 1.0.4
 
 * Update version dependency for `leaflet`, so interactive mapping function (`map_grid_leaflet`) will work with `leaflet` installed from CRAN (rather than built from source).
+* Include `map_grid_ggmap` function to create map of locations and grid points using `ggmap`. 
 
 # futureheatwaves 1.0.3
 

@@ -25,11 +25,6 @@ Response: The current version of the package imports the latest version of
 rather than a local copy of the leaflet library. The function will now
 work for any connected machine.
 
-... https://github.com/rstudio/leaflet/issues/192#issuecomment-286883019
-Also, "a network proxy which would block https requests" can cause problems?
-"Do you have a network proxy or VPN active on your machine or your network?"
-RStudio advice: https://support.rstudio.com/hc/en-us/articles/200488488-Configuring-R-to-Use-an-HTTP-or-HTTPS-Proxy
-
 Comments from Reviewer #2
 
 Comment: Climate science is fundamental to informing key societal decisions in the 21st
@@ -113,11 +108,21 @@ We acknowledge, however, that while this approach is successful in terms of allo
 identification and characterization of sustained extreme events in R, future software development
 could continue refining and optimizing the handling of climate model data in R. We have added a
 section to the end of the manuscript on future directions for climate model output data in R and
-have included comments on how such future work might be able to successfully draw on CDF-backed
-approaches recently created for handling flow cytometry data in R or on "data vault"-style
-approaches geared to improve ...
+have included comments on how such future work could continue to tackle the challenges introduced
+by the large file sizes of climate model output data:
 
-[Added text]
+Added text: "Another important path for development could be through approaches that allow
+researchers to take advantage of the statistical tools offered by R while maintaining large climate
+model output files in a netCDF format. For example, Goncalves and coauthors recently described a
+"round table" approach of connecting as-needed data access from netCDF climate data files through
+to functionality available in R and CDO through the intermediary of a MonetDB database system
+(Goncalves et al., 2015). In other topical areas, R programmers are also improving the efficiency
+of working with data in large netCDF files through approaches that avoid loading all data
+in-memory. For example, the Bioconductor package `ncdfFlow` enables R users to conduct analyses of
+hundreds of large flow cytometry output files through the creation and use of an `ncdfFlowSet`
+class that stores the data in an HDF5 format rather than in-memory (Jiang et al., 2017;
+Finak et al., 2014). Such an approach could be promising for future R software development for
+working with large climate model files."
 
 Comment: Some acknowledgement of NCL or CDO for merging, sub-setting, averaging, and otherwise
 manipulating netCDF files is warranted in this manuscript. These processes are MUCH faster in

@@ -164,7 +164,22 @@ and summing ranges of events. If a user made it far enough to do the pre-process
 output data I doubt this would be a computational barrier to further analysis. If authors could
 show notable speed or memory requirement improvement then this could be interesting.
 
-Response:
+Response: As noted in a previous response, the advantage of this package is to improve
+convenience for researchers identifying and characterizing sustained, multi-day events in
+daily climate model output, especially for analyses that incorporate multiple climate
+models and ensemble members. We have added a paragraph to the manuscript making this
+motivation for the described package clearer:
+
+Added text: "We created the `futureheatwaves` package to aid in identifying,
+characterizing, and exploring multi-day extreme events in daily climate model output data.
+While most of the discrete tasks involved in identifying and characterizing multi-day extreme
+events are fairly straightforward, the full process can be code-intensive, especially for
+multi-city studies and studies that test sensitivity to how an event is defined or that incorporate
+different scenarios of adaptation in the case of events defined using a threshold relative to
+community climate. Our aim in developing this package was therefore to make the full process of
+identifying and characterizing these extreme events much more convenient and so facilitate the use
+of multi-model, multi-ensemble member analyses in climate impact studies conducted by non-climate
+scientists."
 
 Comment: Readability of the article is excellent.
 

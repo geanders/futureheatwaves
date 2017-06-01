@@ -4,11 +4,13 @@ respond to these. In cases where suggested changes are beyond the scope of the d
 package, we have added text to the manuscript to explain how such proposed approaches could
 contribute as R programmers continue to evolve software solutions to working with climate model
 output in R, and we have tried to make some connections to how R-based approaches to working with
-large data continue to evolve in another topical areas with large, array-based data (flow
+large data continue to evolve in other topical areas with large, array-based data (e.g., flow
 cytometry). In addition, we have revised and updated the package that is described by this
 manuscript, both in response to reviewer suggestions and also to ensure functionality with recent
 updates to `dplyr` and other key imported packages that have undergone major updates since the
-original submission.
+original submission. This updated version of the package is available through GitHub
+(https://www.github.com/geanders/futureheatwaves), and we will submit this updated package
+version to CRAN as soon as we have satisfactorily responded to reviewers.
 
 Comments from Reviewer #1
 
@@ -57,9 +59,9 @@ member analyses in climate impact studies conducted by non-climate scientists."
 
 Further, we have also added a section to the end of the paper ("Future directions for working
 with climate model output in R") that describes how future software development in R could
-tackle the challenges provided by climate data, to help put the package described in the current
-manuscript in context within the evolving use of R for research involving climate model output
-data.
+continue to tackle the challenges provided by climate data, to help put the package described in
+the current manuscript in context within the evolving use of R for research involving climate
+model output data.
 
 Comment: This article correctly identifies memory use and data format as a key issue for the
 usability of CMIP5 data, neither of which are addressed by this package. The user is required
